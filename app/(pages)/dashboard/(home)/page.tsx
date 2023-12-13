@@ -6,6 +6,7 @@ import { Box, Typography, TextField, Switch, Button, FormControl, FormControlLab
 import SaveIcon from '@mui/icons-material/Save';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import Image from 'next/image';
+import IOSSwitch from '../../../components/IOSSwitch';
 
 const formPlaceholderData = {
   name: "Crystalclaw Clowder",
@@ -51,23 +52,11 @@ export default function Dashboard() {
       <Typography variant="h1" sx={{ fontSize: "36px" }} className="text-md font-medium text-slate-500">Create card</Typography>
       <Box className="flex flex-row w-full p-6 space-x-8 rounded-xl bg-slate-800 border border-slate-700 shadow-xl">
         <Box className="flex flex-col w-full space-y-4">
-          <Box className="flex flex-row w-full justify-between" style={{ alignItems: "flex-end" }}>
-            <Box className="flex flex-col w-full justify-start">
-              <Typography variant="h2" sx={{ fontSize: "24px" }} className="font-medium text-gray-50">{formPlaceholderData.name}</Typography>
-              <Box className="flex flex-row w-full space-x-1">
-                <Typography variant="overline" sx={{ fontSize: "12px" }} className="font-regular text-slate-400">by</Typography>
-                <Typography variant="overline" sx={{ fontSize: "12px" }} className="font-medium text-gray-200">{formPlaceholderData.username}</Typography>
-              </Box>
-            </Box>
-            <Box className="flex flex-col w-1/3 justify-end">
-              <FormControl fullWidth component="fieldset">
-                <FormControlLabel
-                    value="ai-assist"
-                    control={<Switch color="primary" defaultChecked />}
-                    label="AI Assist"
-                    labelPlacement="start"
-                  />
-              </FormControl>
+          <Box className="flex flex-col w-full justify-start">
+            <Typography variant="h2" sx={{ fontSize: "24px" }} className="font-medium text-gray-50">{formPlaceholderData.name}</Typography>
+            <Box className="flex flex-row w-full space-x-1">
+              <Typography variant="overline" sx={{ fontSize: "12px" }} className="font-regular text-slate-400">by</Typography>
+              <Typography variant="overline" sx={{ fontSize: "12px" }} className="font-medium text-gray-200">{formPlaceholderData.username}</Typography>
             </Box>
           </Box>
           <Box className="flex flex-row w-full items-end space-x-4">
@@ -188,7 +177,20 @@ export default function Dashboard() {
               <Typography variant="body2" className="text-md font-medium text-slate-200">Let AI create or finish your card. You can still edit it. </Typography>
               <TextField fullWidth multiline id="text-field-prompt" label="Prompt" variant="outlined" rows={2} />
             </Box>
-            <Button variant="outlined" color="primary" size="large" endIcon={<AutoFixHighIcon />} className="w-full rounded-full text-center">AI Autocomplete</Button>
+            <Box className="flex flex-row justify-between items-center w-full space-x-4">
+              <Box className="flex flex-col justify-start w-1/4">
+                <FormControl fullWidth component="fieldset">
+                  <FormControlLabel
+                    value="ai-assist"
+                    control={<IOSSwitch defaultChecked />}
+                    label="Toggle AI"
+                    labelPlacement="start"
+                    className="flex flex-row space-x-2 mx-0"
+                  />
+                </FormControl>
+              </Box>
+              <Button variant="outlined" color="primary" size="large" endIcon={<AutoFixHighIcon />} className="w-full rounded-full text-center">AI Autocomplete</Button>
+            </Box>
           </Box>
         </Box>
         <Box className="flex flex-col h-full justify-between">
