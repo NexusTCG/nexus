@@ -1,7 +1,8 @@
-import { Inter } from 'next/font/google'
-import './globals.css'
+import { Inter, Roboto_Mono } from 'next/font/google'
+import './styles/globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
+const roboto_mono = Roboto_Mono({ subsets: ['latin'] })
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -19,9 +20,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="en" className={roboto_mono.className}>
       <body className="bg-background text-foreground">
-        <main className="min-h-screen flex flex-col items-center">
+        <main className="min-h-screen flex flex-col items-center bg-slate-900 text-white">
           {children}
         </main>
       </body>

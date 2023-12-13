@@ -15,7 +15,6 @@
     "ai": "^2.2.28",
     "autoprefixer": "10.4.15",
     "bcrypt": "^5.1.1",
-    "geist": "^1.0.0",
     "google-fonts": "^1.0.0",
     "next": "latest",
     "postcss": "^8.4.32",
