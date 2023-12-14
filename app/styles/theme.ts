@@ -1,8 +1,6 @@
-'use client';
+import { createTheme } from "@mui/material/styles";
 
-import { ThemeOptions } from '@mui/material/styles';
-
-export const theme: ThemeOptions = {
+export const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
@@ -74,6 +72,6 @@ export const theme: ThemeOptions = {
       fontWeight: 400,
     },
   },
-};
+});
 
 export default theme;
