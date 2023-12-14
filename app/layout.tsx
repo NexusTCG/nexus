@@ -1,6 +1,6 @@
-import './styles/globals.css'
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import { Inter } from 'next/font/google'
-import ThemeRegistry from './styles/ThemRregistry';
+import './styles/globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,20 +14,15 @@ export const metadata = {
   description: 'An AI-enabled digital TCG where players can make their own cards.',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout(props: any) {
+  const { children } = props;
   return (
     <html lang="en" className={inter.className}>
       <body className="bg-background text-foreground">
         <main className="min-h-screen flex flex-col items-center bg-slate-900 text-white">
-          <ThemeRegistry options={{ key: 'mui-theme' }}>
-            {children}
-          </ThemeRegistry>
+          <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
         </main>
       </body>
     </html>
-  )
+  );
 }

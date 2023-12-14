@@ -1,6 +1,7 @@
 import { createTheme } from "@mui/material/styles";
+import { ThemeOptions } from '@mui/material/styles';
 
-export const theme = createTheme({
+export const themeOptions: ThemeOptions = {
   palette: {
     mode: 'dark',
     primary: {
@@ -72,6 +73,7 @@ export const theme = createTheme({
       fontWeight: 400,
     },
   },
-});
-
-export default theme;
+  shape: {
+    borderRadius: 4,
+  },
+};

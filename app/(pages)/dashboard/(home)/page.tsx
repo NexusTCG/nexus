@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from 'react';
@@ -209,10 +208,10 @@ export default function Dashboard() {
                   label="Grade"
                   onChange={handleGradeChange}
                 >
-                  <MenuItem value="Prime" className="text-rose-500">Prime</MenuItem>
-                  <MenuItem value="Rare" className="text-amber-500">Rare</MenuItem>
-                  <MenuItem value="Uncommon" className="text-sky-500">Uncommon</MenuItem>
-                  <MenuItem value="Common" className="text-slate-500">Common</MenuItem>
+                  <MenuItem value="Prime" className="!text-rose-500">Prime</MenuItem>
+                  <MenuItem value="Rare" className="!text-amber-500">Rare</MenuItem>
+                  <MenuItem value="Uncommon" className="!text-sky-500">Uncommon</MenuItem>
+                  <MenuItem value="Common" className="!text-slate-500">Common</MenuItem>
                 </Select>
               </FormControl>
             </Box>
@@ -310,7 +309,7 @@ export default function Dashboard() {
                   color="primary"
                   size="large"
                   endIcon={<AutoFixHighIcon />}
-                  className="w-full rounded-full text-center"
+                  className="w-full !rounded-full text-center"
                 >
                   AI Autocomplete
                 </Button>
@@ -319,7 +318,7 @@ export default function Dashboard() {
           </Box>
         </Box>
         {/* CARD RENDER */}
-        <Box className="flex flex-col h-full justify-between">
+        <Box className="flex flex-col h-full justify-between space-y-6">
           <Box className="flex flex-col w-full space-y-4">
             {/* Image render */}
             <Image
@@ -340,7 +339,7 @@ export default function Dashboard() {
             color="primary"
             size="large"
             endIcon={<SaveIcon />}
-            className="w-full rounded-full text-center"
+            className="w-full !rounded-full text-center"
           >
             Save & share card
           </Button>
