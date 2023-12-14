@@ -20,7 +20,9 @@ export default function RootLayout(props: any) {
     <html lang="en" className={inter.className}>
       <body className="bg-background text-foreground">
         <main className="min-h-screen flex flex-col items-center bg-slate-900 text-white">
-          <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
+          <AppRouterCacheProvider>
+            {children}
+          </AppRouterCacheProvider>
         </main>
       </body>
     </html>

@@ -6,6 +6,7 @@ import { Box, Typography, TextField, Switch, Button, FormControl, FormControlLab
 import SaveIcon from '@mui/icons-material/Save';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import Image from 'next/image';
+import NexusCard from '../../../components/NexusCard';
 
 // Replace with React Hook form
 const formPlaceholderData = {
@@ -19,13 +20,16 @@ const formPlaceholderData = {
 // OpenAI API call
 // Form update on API call
 
-export default function Dashboard() {
+export default function Home() {
   // React Hook form state
   const [name, setName] = React.useState("");
-  const [grade, setGrade] = React.useState("");
+  const [cost, setCost] = React.useState("");
   const [typeSuper, setTypeSuper] = React.useState("");
   const [type, setType] = React.useState("");
   const [typeSub, setTypeSub] = React.useState("");
+  const [grade, setGrade] = React.useState("");
+  const [text, setText] = React.useState("");
+  const [flavor, setFlavor] = React.useState("");
   const [attack, setAttack] = React.useState("");
   const [defense, setDefense] = React.useState("");
 
@@ -37,8 +41,8 @@ export default function Dashboard() {
     setName(event.target.value);
   }
 
-  function handleGradeChange(event: any) {
-    setGrade(event.target.value);
+  function handleCostChange(event: any) {
+    setCost(event.target.value);
   }
 
   function handleTypeSuperChange(event: any) {
@@ -51,6 +55,18 @@ export default function Dashboard() {
 
   function handleTypeSubChange(event: any) {
     setTypeSub(event.target.value);
+  }
+
+  function handleGradeChange(event: any) {
+    setGrade(event.target.value);
+  }
+
+  function handleTextChange(event: any) {
+    setText(event.target.value);
+  }
+
+  function handleFlavorChange(event: any) {
+    setFlavor(event.target.value);
   }
 
   function handleAttackChange(event: any) {
@@ -130,6 +146,7 @@ export default function Dashboard() {
               id="outlined-basic"
               label="Cost"
               variant="outlined"
+              onChange={handleCostChange}
               className="w-1/3"
             />
           </Box>
@@ -223,6 +240,7 @@ export default function Dashboard() {
             label="Text"
             variant="outlined"
             rows={6}
+            onChange={handleTextChange}
           />
           <Box className="flex flex-row w-full items-end space-x-4">
             <TextField
@@ -230,7 +248,9 @@ export default function Dashboard() {
               multiline
               id="outlined-basic"
               label="Flavor"
+              value={flavor}
               variant="outlined"
+              onChange={handleFlavorChange}
             />
             {type === "Entity" && (<Box className="flex w-1/2 items-end space-x-2">
               <FormControl fullWidth>
@@ -267,12 +287,16 @@ export default function Dashboard() {
                 </FormControl>
             </Box>)}
           </Box>
-          {switchAiAutocomplete && (<Divider light className="px-24 py-2">
+          {switchAiAutocomplete && (
+          <Divider
+            light
+            className="px-24 py-2"
+          >
             <Typography
               variant="overline"
               className="text-md font-medium text-slate-200"
             >
-              Or
+              or
             </Typography>
           </Divider>)}
           <Box className="flex flex-col w-full space-y-4">
@@ -321,13 +345,26 @@ export default function Dashboard() {
         <Box className="flex flex-col h-full justify-between space-y-6">
           <Box className="flex flex-col w-full space-y-4">
             {/* Image render */}
-            <Image
+            <NexusCard
+              cardCreator={formPlaceholderData.username}
+              cardName={name}
+              cardCost={cost}
+              cardType={type}
+              cardSuperType={typeSuper}
+              cardSubType={typeSub}
+              cardGrade={grade}
+              cardText={text}
+              cardFlavor={flavor}
+              cardAttack={attack}
+              cardDefense={defense}
+            />
+            {/* <Image
               src="/images/cards/crystalclaw-clowder.png"
               width={320} height={448}
               alt="Crystalclaw Clowder"
               style={{ maxWidth: "620px" }}
               className="responsive rounded-xl shadow-lg"
-            />
+            /> */}
             {/* <Box className="flex flex-row w-full justify-between">
               <Image src="/images/cards/crystalclaw-clowder.png" width={100} height={140} alt="Crystalclaw Clowder" style={{ maxWidth: "194" }} className="responsive rounded-sm shadow-sm" />
               <Image src="/images/cards/crystalclaw-clowder.png" width={100} height={140} alt="Crystalclaw Clowder" style={{ maxWidth: "194" }} className="responsive rounded-sm shadow-sm" />
