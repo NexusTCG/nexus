@@ -6,10 +6,12 @@
     "start": "next start"
   },
   "dependencies": {
+    "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.19",
     "@mui/material": "^5.14.20",
+    "@mui/material-nextjs": "^5.15.0",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
     "ai": "^2.2.28",
