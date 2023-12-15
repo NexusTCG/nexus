@@ -10,7 +10,7 @@ import NexusCard from '../../../components/NexusCard';
 
 // Replace with React Hook form
 const formPlaceholderData = {
-  username: "NexusNils",
+  username: "Nexus_Nils",
 }
 
 // Type for form data
@@ -239,7 +239,7 @@ export default function Home() {
             id="outlined-basic"
             label="Text"
             variant="outlined"
-            rows={6}
+            rows={8}
             onChange={handleTextChange}
           />
           <Box className="flex flex-row w-full items-end space-x-4">
@@ -262,11 +262,11 @@ export default function Home() {
                     label="Attack"
                     onChange={handleAttackChange}
                   >
-                    <MenuItem value="AttackZero">0</MenuItem>
-                    <MenuItem value="AttackOne">1</MenuItem>
-                    <MenuItem value="AttackTwo">2</MenuItem>
-                    <MenuItem value="AttackThree">3</MenuItem>
-                    <MenuItem value="AttackFour">4</MenuItem>
+                    <MenuItem value="0">0</MenuItem>
+                    <MenuItem value="1">1</MenuItem>
+                    <MenuItem value="2">2</MenuItem>
+                    <MenuItem value="3">3</MenuItem>
+                    <MenuItem value="4">4</MenuItem>
                   </Select>
                 </FormControl>
                 <FormControl fullWidth>
@@ -278,11 +278,11 @@ export default function Home() {
                     label="Defense"
                     onChange={handleDefenseChange}
                   >
-                    <MenuItem value="DefenseZero">0</MenuItem>
-                    <MenuItem value="DefenseOne">1</MenuItem>
-                    <MenuItem value="DefenseTwo">2</MenuItem>
-                    <MenuItem value="DefenseThree">3</MenuItem>
-                    <MenuItem value="DefenseFour">4</MenuItem>
+                    <MenuItem value="0">0</MenuItem>
+                    <MenuItem value="1">1</MenuItem>
+                    <MenuItem value="2">2</MenuItem>
+                    <MenuItem value="3">3</MenuItem>
+                    <MenuItem value="4">4</MenuItem>
                   </Select>
                 </FormControl>
             </Box>)}

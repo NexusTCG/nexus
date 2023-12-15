@@ -1,3 +1,4 @@
+
 import { ThemeOptions } from '@mui/material/styles';
 
 export const themeOptions: ThemeOptions = {
@@ -76,3 +77,5 @@ export const themeOptions: ThemeOptions = {
     borderRadius: 4,
   },
 };
+
+export default themeOptions;

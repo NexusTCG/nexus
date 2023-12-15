@@ -36,12 +36,16 @@ export default function NexusCard({ cardCreator, cardName, cardCost, cardType, c
                 maxWidth: "635px",
                 height: "469px",
                 maxHeight: "889px",
+                position: "relative",
+                overflow: "hidden",
             }}>
-            <Box className="flex flex-col w-full h-full p-2 space-y-0 rounded-md bg-purple-300" sx={{ backgroundImage: "" }}>
-                <Box className="flex flex-col bg-yellow rounded-md space-y-0">
+            <Box
+                className="flex flex-col w-full h-full p-2 space-y-0 rounded-md bg-purple-300"
+                sx={{ backgroundImage: "" }}>
+                <Box className="flex flex-col bg-yellow rounded-md space-y-0" sx={{ zIndex: 1}}>
                     <Box
-                        className="flex flex-row justify-between items-center px-2 py-1 rounded-lg bg-purple-50 text-black border-4 border-black shadow-md shadow-black"
-                        sx={{ minHeight: "36px" }}
+                        className="flex flex-row justify-between items-center px-2 py-1 rounded-lg bg-purple-50 text-black shadow-md shadow-black"
+                        sx={{ minHeight: "36px", border: "3px solid black", zIndex: 2 }}
                     >
                         <Typography
                             variant="body2"
@@ -52,7 +56,7 @@ export default function NexusCard({ cardCreator, cardName, cardCost, cardType, c
                             className="font-medium text-black"
                         >{cost}</Typography>
                     </Box>
-                    <Box className="flex flex-col justify-center mx-2 border-4 border-black" sx={{ height: "200px", overflow: "hidden" }}>
+                    <Box className="flex flex-col justify-center mx-1 !-mt-1" sx={{ height: "200px", border: "3px solid black", overflow: "hidden" }}>
                         <Image
                             src="/images/card-art/cache-reclaimer.jpg"
                             width={350}
@@ -62,8 +66,8 @@ export default function NexusCard({ cardCreator, cardName, cardCost, cardType, c
                         />
                     </Box>
                     <Box
-                        className="flex flex-row justify-between items-center px-2 py-1 rounded-lg bg-purple-50 text-black border-4 border-black shadow-md shadow-black"
-                        sx={{ minHeight: "36px" }}
+                        className="flex flex-row justify-between items-center px-2 py-1 !-mt-1 rounded-lg bg-purple-50 text-black shadow-md shadow-black"
+                        sx={{ minHeight: "36px", border: "3px solid black", zIndex: 2 }}
                     >
                         <Box className="flex flex-row space-x-1">
                             <Typography
@@ -92,18 +96,67 @@ export default function NexusCard({ cardCreator, cardName, cardCost, cardType, c
                             className="font-medium text-black"
                         >{grade}</Typography>
                     </Box>
-                    <Box className="flex flex-col justify-start p-2 mx-2 space-y-2 bg-purple-50 rounded-b-lg border-4 border-black" sx={{ height: "140px" }}>
+                    <Box
+        className="flex flex-col justify-start p-2 mx-1 !-mt-1 space-y-2 bg-purple-50 rounded-b-lg"
+        sx={{ height: "140px", border: "3px solid black" }}
+      >
+        {text.split('\n').map((paragraph, index) => (
+          <Typography
+            key={index}
+            variant="body2"
+            className="font-medium text-black"
+            sx={{ fontSize: ".75rem" }}
+          >
+            {paragraph}
+          </Typography>
+        ))}
+        {flavor && (<Divider />)}
+        {flavor && (
+          <Typography
+            variant="body2"
+            className="italic font-medium text-black"
+            sx={{ fontSize: ".75rem" }}
+          >
+            {flavor}
+          </Typography>
+        )}
+      </Box>
+                    {(attack || defense) && (<Box
+                        className="flex flex-row justify-center items-center px-auto py-0 !-mt-5 space-x-1 bg-purple-50 text-black rounded-lg shadow-md shadow-black "
+                        sx={{ height: "36px", marginLeft: "75%", marginRight: "5%", border: "3px solid black", zIndex: 2 }}
+                    >
                         <Typography
-                            variant="body2"
-                            className="font-medium text-black"
-                        >{text}</Typography>
-                        {flavor && (<Divider />)}
-                        {flavor && (<Typography
-                            variant="body2"
-                            className="font-medium text-black"
-                        >{flavor}</Typography>)}
-                    </Box>
+                            variant="body1"
+                            sx={{ fontSize: "1.25rem" }}
+                            className="!font-medium"
+                        >
+                            {attack ? attack : "X"}
+                        </Typography>
+                        {<Typography
+                            variant="body1"
+                            sx={{ fontSize: "1.25rem" }}
+                            className="!font-medium"
+                        >
+                            /
+                        </Typography>}
+                        <Typography
+                            variant="body1"
+                            sx={{ fontSize: "1.25rem" }}
+                            className="!font-medium"
+                        >
+                            {defense ? defense : "X"}
+                        </Typography>
+                    </Box>)}
                 </Box>
+                <Box
+                    className="absolute bottom-0 left-0 w-full bg-black"
+                    sx={{
+                        height: "70px",
+                        zIndex: 0,
+                        borderTopLeftRadius: "1.5rem",
+                        borderTopRightRadius: "1.5rem",
+                    }}
+                ></Box>
             </Box>
         </Box>
     )
