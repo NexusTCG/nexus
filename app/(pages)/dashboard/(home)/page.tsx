@@ -32,7 +32,6 @@ const energyIcons = {
 };
 
 type EnergyIconKey = keyof typeof energyIcons;
-const iconKeys: EnergyIconKey[] = Object.keys(energyIcons) as EnergyIconKey[];
 
 // Type for form data
 
@@ -44,7 +43,6 @@ const iconKeys: EnergyIconKey[] = Object.keys(energyIcons) as EnergyIconKey[];
 export default function Home() {
   // React Hook form state
   const [name, setName] = React.useState("");
-  // const [cost, setCost] = React.useState("");
   const [cost, setCost] = useState<EnergyIconKey[]>([]);
   const [typeSuper, setTypeSuper] = React.useState("");
   const [type, setType] = React.useState("");
@@ -62,10 +60,6 @@ export default function Home() {
   function handleNameChange(event: any) {
     setName(event.target.value);
   }
-
-  // function handleCostChange(event: any) {
-  //   setCost(event.target.value);
-  // }
 
   const handleCostChange = (event: SelectChangeEvent<EnergyIconKey[]>) => {
     const {
@@ -192,41 +186,25 @@ export default function Home() {
               onChange={handleNameChange}
               className="w-full"
             />
-            {/* <TextField
-              id="outlined-basic"
-              label="Cost"
-              variant="outlined"
-              onChange={handleCostChange}
-              className="w-1/3"
-            /> */}
             <Select
               multiple
               value={cost}
               onChange={handleCostChange}
-              // renderValue={(selected: EnergyIconKey[]) => (
-              //   <div style={{ display: 'flex', gap: '5px' }}>
-              //     {selected.map((value) => (
-              //       <img key={value} src={energyIcons[value].imagePath} alt={value} style={{ width: 24 }} />
-              //     ))}
-              //   </div>
-              // )}
-              renderValue={(selected: EnergyIconKey[]) => {
-                // Log the selected values
-                console.log('Selected values:', selected);
-              
-                return (
-                  <div style={{ display: 'flex', gap: '5px' }}>
-                    {selected.map((value) => {
-                      // Log the current value
-                      console.log('Current value:', value);
-              
-                      return (
-                        <img key={value} src={energyIcons[value].imagePath} alt={value} style={{ width: 24 }} />
-                      );
-                    })}
-                  </div>
-                );
-              }}
+              renderValue={(selected: EnergyIconKey[]) => (
+                <div style={{ display: 'flex', gap: '5px' }}>
+                  {selected.map((value) => {
+                    console.log('Current value:', value);
+                    const icon = energyIcons[value];
+                    if (!icon) {
+                      console.error(`Invalid value: ${value}`);
+                      return null;
+                    }
+                    return (
+                      <img key={value} src={icon.imagePath} alt={value} style={{ width: 24 }} />
+                    );
+                  })}
+                </div>
+              )}
               className="flex w-1/3"
             >
               {Object.keys(energyIcons).map((key) => (
@@ -234,15 +212,6 @@ export default function Home() {
                   <img src={energyIcons[key as EnergyIconKey].imagePath} alt={key} style={{ width: 24, height: 24 }} />
                 </MenuItem>
               ))}
-              {/* {iconKeys.map((key) => (
-                <MenuItem key={key} value={energyIcons[key].value}>
-                  <Checkbox checked={cost.includes(energyIcons[key].value as EnergyIconKey)} />
-                  <ListItemIcon>
-                    <img src={energyIcons[key].imagePath} alt={key} style={{ width: 24 }} />
-                  </ListItemIcon>
-                  <ListItemText primary={key} />
-                </MenuItem>
-              ))} */}
             </Select>
           </Box>
           <Box className="flex flex-row w-full items-end space-x-4">
@@ -439,11 +408,14 @@ export default function Home() {
         {/* CARD RENDER */}
         <Box className="flex flex-col h-full justify-between space-y-6">
           <Box className="flex flex-col w-full space-y-4">
-            {/* Image render */}
             <NexusCard
               cardCreator={formPlaceholderData.username}
               cardName={name}
-              cardCost={cost.join(',')}
+              cardCost={cost}
+              cardCostIcons={cost.map(key => {
+                const icon = energyIcons[key];
+                return icon ? { imagePath: icon.imagePath, value: icon.value } : undefined;
+              }).filter((icon): icon is { imagePath: string; value: string } => icon !== undefined)}
               cardType={type}
               cardSuperType={typeSuper}
               cardSubType={typeSub}
@@ -453,18 +425,6 @@ export default function Home() {
               cardAttack={attack}
               cardDefense={defense}
             />
-            {/* <Image
-              src="/images/cards/crystalclaw-clowder.png"
-              width={320} height={448}
-              alt="Crystalclaw Clowder"
-              style={{ maxWidth: "620px" }}
-              className="responsive rounded-xl shadow-lg"
-            /> */}
-            {/* <Box className="flex flex-row w-full justify-between">
-              <Image src="/images/cards/crystalclaw-clowder.png" width={100} height={140} alt="Crystalclaw Clowder" style={{ maxWidth: "194" }} className="responsive rounded-sm shadow-sm" />
-              <Image src="/images/cards/crystalclaw-clowder.png" width={100} height={140} alt="Crystalclaw Clowder" style={{ maxWidth: "194" }} className="responsive rounded-sm shadow-sm" />
-              <Image src="/images/cards/crystalclaw-clowder.png" width={100} height={140} alt="Crystalclaw Clowder" style={{ maxWidth: "194" }} className="responsive rounded-sm shadow-sm" />
-            </Box> */}
           </Box>
           <Box className="flex flex-col w-100 space-y-4">
             {name && (<Button

@@ -4,7 +4,8 @@ import Image from "next/image";
 type NexusCardProps = {
     cardCreator: string;
     cardName: string;
-    cardCost: string;
+    cardCost: string[];
+    cardCostIcons: { imagePath: string; value: string; }[];
     cardType: string;
     cardSuperType: string;
     cardSubType: string;
@@ -15,10 +16,11 @@ type NexusCardProps = {
     cardDefense: string;
 }
 
-export default function NexusCard({ cardCreator, cardName, cardCost, cardType, cardSuperType, cardGrade, cardSubType, cardText, cardFlavor, cardAttack, cardDefense }: NexusCardProps) {
+export default function NexusCard({ cardCreator, cardName, cardCost, cardCostIcons, cardType, cardSuperType, cardGrade, cardSubType, cardText, cardFlavor, cardAttack, cardDefense }: NexusCardProps) {
     let creator = cardCreator;
     let name = cardName;
     let cost = Array.isArray(cardCost) ? cardCost.join("") : cardCost;
+    let costIcons = cardCostIcons;
     let type = Array.isArray(cardType) ? cardType.join(" ") : cardType
     let superType = cardSuperType;
     let subType = cardSubType;
@@ -48,7 +50,11 @@ export default function NexusCard({ cardCreator, cardName, cardCost, cardType, c
         },
     };
 
+    const isCostArray = Array.isArray(cardCost);
+
     // useEffect to switch cardBg depending on cost/color
+
+    console.log('costIcons', costIcons);
 
     return (
         <Box
@@ -84,10 +90,30 @@ export default function NexusCard({ cardCreator, cardName, cardCost, cardType, c
                             variant="body2"
                             className="font-semibold text-black"
                         >{name}</Typography>
-                        <Typography
+                        {/* <Typography
                             variant="body2"
                             className="font-medium text-black"
-                        >{cost}</Typography>
+                        >{cost}</Typography> */}
+                        {isCostArray ? (
+                            <div style={{ display: 'flex', gap: '5px' }}>
+                                {
+                                    costIcons.map((icon: { imagePath: string; value: string }) => {
+                                        if (!icon) {
+                                            console.error('Invalid icon:', icon);
+                                            return null;
+                                        }
+                                        return (
+                                            <img key={icon.value} src={icon.imagePath} alt={icon.value} style={{ width: 24 }} />
+                                        );
+                                    })
+                                }
+                            </div>
+                        ) : (
+                            <Typography
+                                variant="body2"
+                                className="font-medium text-black"
+                            >{cardCost}</Typography>
+                        )}
                     </Box>
                     <Box className="flex flex-col justify-center mx-1 !-mt-1" sx={{ height: "200px", border: "3px solid black", overflow: "hidden" }}>
                         <Image
