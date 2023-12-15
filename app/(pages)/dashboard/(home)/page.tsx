@@ -1,15 +1,14 @@
 "use client";
 
 import * as React from 'react';
-import { useState } from 'react';
-import { Box, Typography, TextField, Switch, Button, FormControl, FormControlLabel, InputLabel, Select, SelectChangeEvent, MenuItem, Divider, ListItemIcon, ListItemText, Checkbox } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Box, Typography, TextField, Switch, Button, FormControl, FormControlLabel, InputLabel, Select, SelectChangeEvent, MenuItem, Divider } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import DownloadIcon from '@mui/icons-material/Download';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import NexusCard from '../../../components/NexusCard';
 import * as htmlToImage from 'html-to-image';
 
-// Replace with React Hook form
 const formPlaceholderData = {
   username: "Nexus_Nils",
 }
@@ -31,7 +30,7 @@ const energyIcons = {
   x: { imagePath: '/images/icons-energy/energy-x.png', value: "X" },
 };
 
-type EnergyIconKey = keyof typeof energyIcons;
+export type EnergyIconKey = keyof typeof energyIcons;
 
 // Type for form data
 
@@ -65,11 +64,9 @@ export default function Home() {
     const {
       target: { value },
     } = event;
-    if (typeof value === 'string') {
-      setCost(value.split(',') as EnergyIconKey[]);
-    } else {
-      setCost(value as EnergyIconKey[]);
-    }
+    setCost(
+      typeof value === 'string' ? value.split(',') as EnergyIconKey[] : value
+    );
   };
 
   function handleTypeSuperChange(event: any) {
@@ -106,6 +103,17 @@ export default function Home() {
 
   const handleSwitchAiAutocomplete = (event: any) => {
     setSwitchAiAutocomplete(event.target.checked);
+  };
+
+  const renderIconSelection = (selected: EnergyIconKey[]) => {
+    return (
+      <div style={{ display: 'flex', gap: '5px' }}>
+        {selected.map((key) => {
+          const icon = energyIcons[key];
+          return icon ? <img key={key} src={icon.imagePath} alt={key} style={{ width: 24 }} /> : <span key={key}>{key}</span>;
+        })}
+      </div>
+    );
   };
 
   function downloadCardAsPng() {
@@ -190,26 +198,12 @@ export default function Home() {
               multiple
               value={cost}
               onChange={handleCostChange}
-              renderValue={(selected: EnergyIconKey[]) => (
-                <div style={{ display: 'flex', gap: '5px' }}>
-                  {selected.map((value) => {
-                    console.log('Current value:', value);
-                    const icon = energyIcons[value];
-                    if (!icon) {
-                      console.error(`Invalid value: ${value}`);
-                      return null;
-                    }
-                    return (
-                      <img key={value} src={icon.imagePath} alt={value} style={{ width: 24 }} />
-                    );
-                  })}
-                </div>
-              )}
+              renderValue={renderIconSelection}
               className="flex w-1/3"
             >
               {Object.keys(energyIcons).map((key) => (
-                <MenuItem key={key} value={energyIcons[key as EnergyIconKey].value}>
-                  <img src={energyIcons[key as EnergyIconKey].imagePath} alt={key} style={{ width: 24, height: 24 }} />
+                <MenuItem key={key} value={key}>
+                  {renderIconSelection([key as EnergyIconKey])}
                 </MenuItem>
               ))}
             </Select>
@@ -411,11 +405,7 @@ export default function Home() {
             <NexusCard
               cardCreator={formPlaceholderData.username}
               cardName={name}
-              cardCost={cost}
-              cardCostIcons={cost.map(key => {
-                const icon = energyIcons[key];
-                return icon ? { imagePath: icon.imagePath, value: icon.value } : undefined;
-              }).filter((icon): icon is { imagePath: string; value: string } => icon !== undefined)}
+              cardCostIcons={cost.map(key => energyIcons[key]).filter(Boolean)}
               cardType={type}
               cardSuperType={typeSuper}
               cardSubType={typeSub}
