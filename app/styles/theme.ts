@@ -1,11 +1,13 @@
 
-import { ThemeOptions } from '@mui/material/styles';
+'use client';
 
-export const themeOptions: ThemeOptions = {
+import { createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#ef4444',
+      main: '#818cf8',
     },
     secondary: {
       main: '#f472b6',
@@ -76,6 +78,6 @@ export const themeOptions: ThemeOptions = {
   shape: {
     borderRadius: 4,
   },
-};
+});
 
-export default themeOptions;
+export default theme;

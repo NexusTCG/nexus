@@ -75,7 +75,7 @@ export default function NexusCard({ cardCreator, cardName, cardCost, cardType, c
                     height: "100%",
                   }}
             >
-                <Box className="flex flex-col bg-yellow rounded-md space-y-0" sx={{ zIndex: 1}}>
+                <Box className="flex flex-col rounded-md space-y-0" sx={{ zIndex: 1}}>
                     <Box
                         className="flex flex-row justify-between items-center px-2 py-1 rounded-lg bg-purple-50 text-black shadow-md shadow-black"
                         sx={{ minHeight: "36px", border: "3px solid black", zIndex: 2 }}
@@ -99,34 +99,25 @@ export default function NexusCard({ cardCreator, cardName, cardCost, cardType, c
                         />
                     </Box>
                     <Box
-                        className="flex flex-row justify-between items-center px-2 py-1 !-mt-1 rounded-lg bg-purple-50 text-black shadow-md shadow-black"
+                        className="flex flex-row justify-between items-center px-2 py-1 !-mt-1 rounded-lg bg-purple-50 font-medium text-black shadow-md shadow-black"
                         sx={{ minHeight: "36px", border: "3px solid black", zIndex: 2 }}
                     >
                         <Box className="flex flex-row space-x-1">
                             <Typography
                                 variant="body2"
-                                className="font-semibold text-black"
                             >{superType}</Typography>
-                            {superType != "" && (<Typography
-                                variant="body2"
-                                className="font-semibold text-black"
-                            >–</Typography>)}
                             <Typography
                                 variant="body2"
-                                className="font-semibold text-black"
                             >{type}</Typography>
                             {subType != "" && (<Typography
                                 variant="body2"
-                                className="font-semibold text-black"
                             >–</Typography>)}
                             <Typography
                             variant="body2"
-                            className="font-medium text-black"
                             >{subType}</Typography>
                         </Box>
                         <Typography
                             variant="body2"
-                            className="font-medium text-black"
                         >{grade}</Typography>
                     </Box>
                     <Box
