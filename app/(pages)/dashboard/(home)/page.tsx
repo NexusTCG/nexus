@@ -4,9 +4,11 @@ import * as React from 'react';
 import { useState } from 'react';
 import { Box, Typography, TextField, Switch, Button, FormControl, FormControlLabel, InputLabel, Select, MenuItem, Divider } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
+import DownloadIcon from '@mui/icons-material/Download';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
-import Image from 'next/image';
 import NexusCard from '../../../components/NexusCard';
+import * as htmlToImage from 'html-to-image';
+import { toPng } from 'html-to-image';
 
 // Replace with React Hook form
 const formPlaceholderData = {
@@ -80,6 +82,23 @@ export default function Home() {
   const handleSwitchAiAutocomplete = (event: any) => {
     setSwitchAiAutocomplete(event.target.checked);
   };
+
+  function downloadCardAsPng() {
+    const node = document.getElementById('nexus-card-render');
+  
+    if (node) {
+    htmlToImage.toPng(node as HTMLElement)
+      .then((dataUrl) => {
+        const link = document.createElement('a');
+        link.download = `${name}`;
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((error) => {
+        console.error('oops, something went wrong!', error);
+      });
+    }
+  }
 
   return (
     <Box
@@ -371,15 +390,27 @@ export default function Home() {
               <Image src="/images/cards/crystalclaw-clowder.png" width={100} height={140} alt="Crystalclaw Clowder" style={{ maxWidth: "194" }} className="responsive rounded-sm shadow-sm" />
             </Box> */}
           </Box>
-          <Button
-            variant="outlined"
-            color="primary"
-            size="large"
-            endIcon={<SaveIcon />}
-            className="w-full !rounded-full text-center"
-          >
-            Save & share card
-          </Button>
+          <Box className="flex flex-col w-100 space-y-4">
+            {name && (<Button
+              variant="outlined"
+              color="primary"
+              size="large"
+              endIcon={<DownloadIcon />}
+              className="w-full !rounded-full text-center"
+              onClick={downloadCardAsPng}
+            >
+              Download card
+            </Button>)}
+            <Button
+              variant="outlined"
+              color="primary"
+              size="large"
+              endIcon={<SaveIcon />}
+              className="w-full !rounded-full text-center"
+            >
+              Save & share card
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Box>

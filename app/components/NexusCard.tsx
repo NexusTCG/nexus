@@ -28,8 +28,31 @@ export default function NexusCard({ cardCreator, cardName, cardCost, cardType, c
     let attack = cardAttack;
     let defense = cardDefense;
 
+    const styles = {
+        yellowBg: {
+            backgroundImage: `url("/images/card-bg/card_bg_yellow.png")`,
+        }, blueBg: {
+            backgroundImage: `url("/images/card-bg/card_bg_blue.png")`,
+        }, purpleBg: {
+            backgroundImage: `url("/images/card-bg/card_bg_purple.png")`,
+        }, redBg: {
+            backgroundImage: `url("/images/card-bg/card_bg_rede.png")`,
+        }, greenBg: {
+            backgroundImage: `url("/images/card-bg/card_bg_green.png")`,
+        }, multiBg: {
+            backgroundImage: `url("/images/card-bg/card_bg_multi.png")`,
+        }, colorlessBg: {
+            backgroundImage: `url("/images/card-bg/card_bg_colorless.png")`,
+        }, sourceBg: {
+            backgroundImage: `url("/images/card-bg/card_bg_source.png")`,
+        },
+    };
+
+    // useEffect to switch cardBg depending on cost/color
+
     return (
         <Box
+            id="nexus-card-render"
             className="flex flex-col p-3 bg-black rounded-xl shadow-lg shadow-slate-900"
             sx={{
                 width: "335px",
@@ -41,7 +64,17 @@ export default function NexusCard({ cardCreator, cardName, cardCost, cardType, c
             }}>
             <Box
                 className="flex flex-col w-full h-full p-2 space-y-0 rounded-md bg-purple-300"
-                sx={{ backgroundImage: "" }}>
+                sx={{
+                    backgroundImage: `${styles.purpleBg.backgroundImage}`,
+                    backgroundBlendMode: "multiply",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    filter: "contrast(120%) saturate(1.5)",
+                    width: "100%",
+                    height: "100%",
+                  }}
+            >
                 <Box className="flex flex-col bg-yellow rounded-md space-y-0" sx={{ zIndex: 1}}>
                     <Box
                         className="flex flex-row justify-between items-center px-2 py-1 rounded-lg bg-purple-50 text-black shadow-md shadow-black"
@@ -97,51 +130,51 @@ export default function NexusCard({ cardCreator, cardName, cardCost, cardType, c
                         >{grade}</Typography>
                     </Box>
                     <Box
-        className="flex flex-col justify-start p-2 mx-1 !-mt-1 space-y-2 bg-purple-50 rounded-b-lg"
-        sx={{ height: "140px", border: "3px solid black" }}
-      >
-        {text.split('\n').map((paragraph, index) => (
-          <Typography
-            key={index}
-            variant="body2"
-            className="font-medium text-black"
-            sx={{ fontSize: ".75rem" }}
-          >
-            {paragraph}
-          </Typography>
-        ))}
-        {flavor && (<Divider />)}
-        {flavor && (
-          <Typography
-            variant="body2"
-            className="italic font-medium text-black"
-            sx={{ fontSize: ".75rem" }}
-          >
-            {flavor}
-          </Typography>
-        )}
-      </Box>
+                        className="flex flex-col justify-start px-2 py-3 mx-1 !-mt-1 space-y-2 bg-purple-50 rounded-b-lg"
+                        sx={{ height: "160px", border: "3px solid black" }}
+                    >
+                        {text.split('\n').map((paragraph, index) => (
+                        <Typography
+                            key={index}
+                            variant="body2"
+                            className="font-medium text-black"
+                            sx={{ fontSize: ".75rem", lineHeight: "1rem" }}
+                        >
+                            {paragraph}
+                        </Typography>
+                        ))}
+                        {flavor && (<Divider />)}
+                        {flavor && (
+                        <Typography
+                            variant="body2"
+                            className="italic font-medium text-black"
+                            sx={{ fontSize: ".75rem", lineHeight: "1rem" }}
+                        >
+                            {flavor}
+                        </Typography>
+                        )}
+                    </Box>
                     {(attack || defense) && (<Box
-                        className="flex flex-row justify-center items-center px-auto py-0 !-mt-5 space-x-1 bg-purple-50 text-black rounded-lg shadow-md shadow-black "
-                        sx={{ height: "36px", marginLeft: "75%", marginRight: "5%", border: "3px solid black", zIndex: 2 }}
+                        className="flex flex-row justify-center items-center px-1 py-0 !-mt-5 space-x-1 bg-purple-50 text-black rounded-lg shadow-md shadow-black "
+                        sx={{ marginLeft: "75%", marginRight: "5%", border: "3px solid black", zIndex: 2 }}
                     >
                         <Typography
                             variant="body1"
-                            sx={{ fontSize: "1.25rem" }}
+                            sx={{ fontSize: "1rem" }}
                             className="!font-medium"
                         >
                             {attack ? attack : "X"}
                         </Typography>
                         {<Typography
                             variant="body1"
-                            sx={{ fontSize: "1.25rem" }}
+                            sx={{ fontSize: "1rem" }}
                             className="!font-medium"
                         >
                             /
                         </Typography>}
                         <Typography
                             variant="body1"
-                            sx={{ fontSize: "1.25rem" }}
+                            sx={{ fontSize: "1rem" }}
                             className="!font-medium"
                         >
                             {defense ? defense : "X"}
@@ -153,10 +186,18 @@ export default function NexusCard({ cardCreator, cardName, cardCost, cardType, c
                     sx={{
                         height: "70px",
                         zIndex: 0,
-                        borderTopLeftRadius: "1.5rem",
-                        borderTopRightRadius: "1.5rem",
+                        borderTopLeftRadius: "0.5rem",
+                        borderTopRightRadius: "0.5rem",
                     }}
-                ></Box>
+                >
+                    {name && (<Typography
+                        variant="subtitle2"
+                        sx={{ fontSize: ".70rem" }}
+                        className="pl-4 pb-2 pt-14 pr-auto text-gray-400"
+                    >
+                        Creator: {creator}
+                    </Typography>)}
+                </Box>
             </Box>
         </Box>
     )
