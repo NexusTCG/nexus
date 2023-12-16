@@ -1,6 +1,7 @@
 import { Box, Typography, Divider } from "@mui/material";
 import Image from "next/image";
 import DesignServicesIcon from '@mui/icons-material/DesignServices';
+import clsx from 'clsx';
 
 type NexusCardProps = {
     cardCreator: string;
@@ -9,8 +10,8 @@ type NexusCardProps = {
     cardType: string;
     cardSuperType: string;
     cardSubType: string;
+    cardGradeIcons: { imagePath: string; value: string } | null;
     cardText: string;
-    cardGrade: string;
     cardFlavor: string;
     cardAttack: string;
     cardDefense: string;
@@ -22,7 +23,7 @@ export default function NexusCard({
     cardCostIcons,
     cardType,
     cardSuperType,
-    cardGrade,
+    cardGradeIcons,
     cardSubType,
     cardText,
     cardFlavor,
@@ -36,35 +37,106 @@ export default function NexusCard({
     let type = Array.isArray(cardType) ? cardType.join(" ") : cardType
     let superType = cardSuperType;
     let subType = cardSubType;
-    let grade = cardGrade;
+    let gradeIcons = cardGradeIcons;
     let text = cardText;
     let flavor = cardFlavor;
     let attack = cardAttack;
     let defense = cardDefense;
 
-    const styles = {
+    type CardBackgroundStyle = {
+        backgroundColor?: string;
+        backgroundImage: string;
+        linearGradient?: string;
+    };
+
+    const styles: Record<string, CardBackgroundStyle> = {
         yellowBg: {
+            backgroundColor: "#facc15",
             backgroundImage: `url("/images/card-bg/card_bg_yellow.png")`,
         }, blueBg: {
+            backgroundColor: "#38bdf8",
             backgroundImage: `url("/images/card-bg/card_bg_blue.png")`,
         }, purpleBg: {
+            backgroundColor: "#c084fc",
             backgroundImage: `url("/images/card-bg/card_bg_purple.png")`,
         }, redBg: {
-            backgroundImage: `url("/images/card-bg/card_bg_rede.png")`,
+            backgroundColor: "#f87171",
+            backgroundImage: `url("/images/card-bg/card_bg_red.png")`,
         }, greenBg: {
+            backgroundColor: "#a3e635",
             backgroundImage: `url("/images/card-bg/card_bg_green.png")`,
         }, multiBg: {
+            linearGradient: "#fde047, #bef264, #fdba74",
             backgroundImage: `url("/images/card-bg/card_bg_multi.png")`,
         }, colorlessBg: {
+            backgroundColor: "#64748b",
             backgroundImage: `url("/images/card-bg/card_bg_colorless.png")`,
         }, sourceBg: {
+            backgroundColor: "#78716c",
             backgroundImage: `url("/images/card-bg/card_bg_source.png")`,
+        }, defaultBg: {
+            backgroundColor: "#ffffff",
+            backgroundImage: `url("/images/card-bg/card_bg_default.png")`,
         },
     };
 
-    // useEffect to switch cardBg depending on cost/color
+    const determineCardBackground = () => {
+        const iconValues = costIcons.map(icon => icon.value);
+
+        const uniqueColors = new Set(iconValues.filter(value => ['Y', 'B', 'P', 'R', 'G'].includes(value)));
+        if (uniqueColors.size > 1) {
+            return styles.multiBg;
+        }
+
+        if (iconValues.includes('Y')) {
+            return styles.yellowBg;
+        } else if (iconValues.includes('B')) {
+            return styles.blueBg;
+        } else if (iconValues.includes('P')) {
+            return styles.purpleBg;
+        } else if (iconValues.includes('R')) {
+            return styles.redBg;
+        } else if (iconValues.includes('G')) {
+            return styles.greenBg;
+        }
+
+        const hasNumberedIconsOnly = iconValues.every(value => !['Y', 'B', 'P', 'R', 'G'].includes(value));
+        if (hasNumberedIconsOnly && iconValues.length > 0) {
+            return styles.colorlessBg;
+        }
+
+        if (iconValues.length === 0) {
+            return styles.defaultBg;
+        }
+
+        if (type === 'Source') {
+            return styles.sourceBg;
+        }
+
+        return styles.defaultBg;
+    };
+
+    const cardBg: CardBackgroundStyle = determineCardBackground();
+
+    let cardBackgroundStyles: Record<string, any> = {
+        backgroundImage: cardBg.backgroundImage,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        filter: "contrast(1.25)",
+        backgroundBlendMode: "multiply",
+    };
+
+    if (cardBg.backgroundColor) {
+        cardBackgroundStyles.backgroundColor = cardBg.backgroundColor;
+    }
+    
+    if (cardBg.linearGradient) {
+        cardBackgroundStyles.backgroundImage = `linear-gradient(${cardBg.linearGradient}), ${cardBg.backgroundImage}`;
+    }
 
     console.log('costIcons', costIcons);
+    console.log('gradeIcons', gradeIcons);
 
     return (
         <Box
@@ -79,28 +151,36 @@ export default function NexusCard({
                 overflow: "hidden",
             }}>
             <Box
-                className="flex flex-col w-full h-full p-2 space-y-0 rounded-md bg-purple-400"
+                className="flex flex-col w-full h-full p-2 space-y-0 rounded-md"
                 sx={{
-                    backgroundImage: `${styles.purpleBg.backgroundImage}`,
-                    backgroundBlendMode: "multiply",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
-                    filter: "contrast(120%) saturate(1.5)",
+                    ...cardBackgroundStyles,
                     width: "100%",
                     height: "100%",
                   }}
             >
                 <Box className="flex flex-col rounded-md space-y-0" sx={{ zIndex: 1}}>
                     <Box
-                        className="flex flex-row justify-between items-center px-1 py-1 rounded-lg bg-purple-50 text-black shadow-md shadow-black"
-                        sx={{ minHeight: "36px", border: "3px solid black", zIndex: 2 }}
+                        className={clsx(
+                            "flex flex-row justify-between items-center px-1 py-1 rounded-lg text-black shadow-lg",
+                            {
+                                "bg-yellow-100": cardBg.backgroundColor === styles.yellowBg.backgroundColor,
+                                "bg-blue-100": cardBg.backgroundColor === styles.blueBg.backgroundColor,
+                                "bg-purple-100": cardBg.backgroundColor === styles.purpleBg.backgroundColor,
+                                "bg-red-100": cardBg.backgroundColor === styles.redBg.backgroundColor,
+                                "bg-lime-100": cardBg.backgroundColor === styles.greenBg.backgroundColor,
+                                "bg-orange-100": cardBg.linearGradient === styles.multiBg.linearGradient,
+                                "bg-slate-100": cardBg.backgroundColor === styles.colorlessBg.backgroundColor,
+                                "bg-white": cardBg.backgroundColor === styles.defaultBg.backgroundColor,
+                                "shadow-color-black": true,
+                            }
+                        )}
+                        sx={{ height: "36px", border: "3px solid black", zIndex: 2 }}
                     >
                         <Typography
                             variant="body2"
                             className="font-medium text-black"
                         >{cardName}</Typography>
-                        <div style={{ display: 'flex', gap: '5px' }}>
+                        <div style={{ display: 'flex', gap: '4px' }}>
                             {costIcons.map(icon => <img key={icon.value} src={icon.imagePath} alt={icon.value} style={{ width: 20, boxShadow: "0px 2px 0px rgba(0, 0, 0, .75)", borderRadius: "50%" }} />)}
                         </div>
                     </Box>
@@ -114,8 +194,21 @@ export default function NexusCard({
                         />
                     </Box>
                     <Box
-                        className="flex flex-row justify-between items-center px-1 py-1 !-mt-1 rounded-lg bg-purple-50 font-medium text-black shadow-md shadow-black"
-                        sx={{ minHeight: "36px", border: "3px solid black", zIndex: 2 }}
+                        className={clsx(
+                            "flex flex-row justify-between items-center px-1 py-auto !-mt-1 rounded-lg font-medium shadow-lg text-black",
+                            {
+                                "bg-yellow-100": cardBg.backgroundColor === styles.yellowBg.backgroundColor,
+                                "bg-blue-100": cardBg.backgroundColor === styles.blueBg.backgroundColor,
+                                "bg-purple-100": cardBg.backgroundColor === styles.purpleBg.backgroundColor,
+                                "bg-red-100": cardBg.backgroundColor === styles.redBg.backgroundColor,
+                                "bg-lime-100": cardBg.backgroundColor === styles.greenBg.backgroundColor,
+                                "bg-orange-100": cardBg.linearGradient === styles.multiBg.linearGradient,
+                                "bg-slate-100": cardBg.backgroundColor === styles.colorlessBg.backgroundColor,
+                                "bg-white": cardBg.backgroundColor === styles.defaultBg.backgroundColor,
+                                "shadow-color-black": true,
+                            }
+                        )}
+                        sx={{ height: "36px", border: "3px solid black", zIndex: 2 }}
                     >
                         <Box className="flex flex-row space-x-1">
                             <Typography
@@ -131,12 +224,31 @@ export default function NexusCard({
                             variant="body2"
                             >{subType}</Typography>
                         </Box>
-                        <Typography
-                            variant="body2"
-                        >{grade}</Typography>
+                        <div>
+                            {cardGradeIcons && (
+                                <img
+                                    key={cardGradeIcons.value}
+                                    src={cardGradeIcons.imagePath}
+                                    alt={cardGradeIcons.value}
+                                    style={{ width: 24 }}
+                                />
+                            )}
+                        </div>
                     </Box>
                     <Box
-                        className="flex flex-col justify-start px-2 py-3 mx-1 !-mt-1 space-y-2 bg-purple-50 rounded-b-lg"
+                        className={clsx("flex flex-col justify-start px-2 py-3 mx-1 !-mt-1 space-y-2 rounded-b-lg shadow-lg",
+                            {
+                                "bg-yellow-100": cardBg === styles.yellowBg,
+                                "bg-blue-100": cardBg === styles.blueBg,
+                                "bg-purple-100": cardBg === styles.purpleBg,
+                                "bg-red-100": cardBg === styles.redBg,
+                                "bg-lime-100": cardBg === styles.greenBg,
+                                "bg-orange-100": cardBg === styles.multiBg,
+                                "bg-slate-100": cardBg === styles.colorlessBg,
+                                "bg-white": cardBg.backgroundColor === "#ffffff",
+                                "shadow-color-black": true,
+                            }
+                        )}
                         sx={{ height: "160px", border: "3px solid black" }}
                     >
                         {text.split('\n').map((paragraph, index) => (
@@ -161,7 +273,20 @@ export default function NexusCard({
                         )}
                     </Box>
                     {(attack || defense) && (<Box
-                        className="flex flex-row justify-center items-center px-1 py-0 !-mt-5 space-x-2 bg-purple-50 text-black rounded-lg shadow-md shadow-black "
+                        className={clsx(
+                            "flex flex-row justify-center items-center px-1 py-0 !-mt-5 space-x-1 text-black rounded-lg shadow-lg",
+                            {
+                                "bg-yellow-100": cardBg.backgroundColor === styles.yellowBg.backgroundColor,
+                                "bg-blue-100": cardBg.backgroundColor === styles.blueBg.backgroundColor,
+                                "bg-purple-100": cardBg.backgroundColor === styles.purpleBg.backgroundColor,
+                                "bg-red-100": cardBg.backgroundColor === styles.redBg.backgroundColor,
+                                "bg-lime-100": cardBg.backgroundColor === styles.greenBg.backgroundColor,
+                                "bg-orange-100": cardBg.linearGradient === styles.multiBg.linearGradient,
+                                "bg-slate-100": cardBg.backgroundColor === styles.colorlessBg.backgroundColor,
+                                "bg-white": cardBg.backgroundColor === styles.defaultBg.backgroundColor,
+                                "shadow-color-black": true,
+                            }
+                        )}
                         sx={{ marginLeft: "75%", marginRight: "5%", border: "3px solid black", zIndex: 2 }}
                     >
                         <Typography
@@ -196,7 +321,7 @@ export default function NexusCard({
                         borderTopRightRadius: ".75rem",
                     }}
                 >
-                    {name && (<Box className="flex flex-row items-center pt-14 pl-4 space-x-1 text-gray-500">
+                    {name && (<Box className="flex flex-row items-center pt-14 pl-4 space-x-1 text-gray-400">
                         <DesignServicesIcon sx={{ width: "12px", height: "12px" }} />
                         <Typography
                             variant="subtitle2"

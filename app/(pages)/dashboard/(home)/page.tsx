@@ -17,7 +17,7 @@ const energyIcons = {
   yellow: { imagePath: '/images/icons-energy/energy-yellow.png', value: "Y" },
   blue: { imagePath: '/images/icons-energy/energy-blue.png', value: "B" },
   purple: { imagePath: '/images/icons-energy/energy-purple.png', value: "P" },
-  red: { imagePath: '/images/icons-energy/energy-red.png', value: "YR" },
+  red: { imagePath: '/images/icons-energy/energy-red.png', value: "R" },
   green: { imagePath: '/images/icons-energy/energy-green.png', value: "G" },
   zero: { imagePath: '/images/icons-energy/energy-zero.png', value: "0" },
   one: { imagePath: '/images/icons-energy/energy-one.png', value: "1" },
@@ -30,7 +30,15 @@ const energyIcons = {
   x: { imagePath: '/images/icons-energy/energy-x.png', value: "X" },
 };
 
+const gradeIcons = {
+  prime: { imagePath: '/images/icons-grade/grade-prime.png', value: "Prime" },
+  rare: { imagePath: '/images/icons-grade/grade-rare.png', value: "Rare" },
+  uncommon: { imagePath: '/images/icons-grade/grade-uncommon.png', value: "Uncommon" },
+  common: { imagePath: '/images/icons-grade/grade-common.png', value: "Common" },
+};
+
 export type EnergyIconKey = keyof typeof energyIcons;
+export type GradeIconKey = keyof typeof gradeIcons;
 
 // Type for form data
 
@@ -46,15 +54,12 @@ export default function Home() {
   const [typeSuper, setTypeSuper] = React.useState("");
   const [type, setType] = React.useState("");
   const [typeSub, setTypeSub] = React.useState("");
-  const [grade, setGrade] = React.useState("");
+  const [grade, setGrade] = useState<GradeIconKey>("common");
   const [text, setText] = React.useState("");
   const [flavor, setFlavor] = React.useState("");
   const [attack, setAttack] = React.useState("");
   const [defense, setDefense] = React.useState("");
-
   const [switchAiAutocomplete, setSwitchAiAutocomplete] = useState(true);
-
-  const label = { inputProps: { 'aria-label': 'AI switch' } };
 
   function handleNameChange(event: any) {
     setName(event.target.value);
@@ -64,11 +69,25 @@ export default function Home() {
     const {
       target: { value },
     } = event;
-    setCost(
-      typeof value === 'string' ? value.split(',') as EnergyIconKey[] : value
-    );
+    
+    let newCost = typeof value === 'string' ? value.split(',') as EnergyIconKey[] : value;
+  
+    const numberedIcons = newCost.filter(icon => !isNaN(parseInt(energyIcons[icon].value)));
+    if (numberedIcons.length > 1) {
+      newCost = newCost.filter(icon => isNaN(parseInt(energyIcons[icon].value)) || icon === numberedIcons[numberedIcons.length - 1]);
+    }
+    
+    const colorIcons = newCost.filter(icon => isNaN(parseInt(energyIcons[icon].value)));
+    if (colorIcons.length > 5) {
+      newCost = [...numberedIcons, ...colorIcons.slice(0, 5)];
+    }
+    
+    const order = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'x', 'yellow', 'blue', 'purple', 'red', 'green'];
+    newCost.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+  
+    setCost(newCost);
   };
-
+  
   function handleTypeSuperChange(event: any) {
     setTypeSuper(event.target.value);
   }
@@ -81,8 +100,8 @@ export default function Home() {
     setTypeSub(event.target.value);
   }
 
-  function handleGradeChange(event: any) {
-    setGrade(event.target.value);
+  function handleGradeChange(event: SelectChangeEvent<GradeIconKey>) {
+    setGrade(event.target.value as GradeIconKey);
   }
 
   function handleTextChange(event: any) {
@@ -105,13 +124,31 @@ export default function Home() {
     setSwitchAiAutocomplete(event.target.checked);
   };
 
-  const renderIconSelection = (selected: EnergyIconKey[]) => {
+  const renderEnergyIconSelection = (selected: EnergyIconKey[]) => {
     return (
       <div style={{ display: 'flex', gap: '5px' }}>
         {selected.map((key) => {
           const icon = energyIcons[key];
           return icon ? <img key={key} src={icon.imagePath} alt={key} style={{ width: 24 }} /> : <span key={key}>{key}</span>;
         })}
+      </div>
+    );
+  };
+
+  const renderGradeIconSelection = (value: GradeIconKey | GradeIconKey[]) => {
+    const icon = gradeIcons[value as GradeIconKey];
+    return (
+      <div style={{ display: 'flex', gap: '4px' }}>
+        {icon ? (
+          <img
+            key={icon.value}
+            src={icon.imagePath}
+            alt={icon.value}
+            style={{ width: 24 }}
+          />
+        ) : (
+          <span>{value}</span>
+        )}
       </div>
     );
   };
@@ -185,27 +222,33 @@ export default function Home() {
             </Box>)}
           </Box>
           <Box className="flex flex-row w-full items-end space-x-4">
-            <TextField
-              fullWidth
-              id="outlined-basic"
-              label="Name"
-              variant="outlined"
-              onChange={handleNameChange}
-              className="w-full"
-            />
-            <Select
-              multiple
-              value={cost}
-              onChange={handleCostChange}
-              renderValue={renderIconSelection}
-              className="flex w-1/3"
-            >
-              {Object.keys(energyIcons).map((key) => (
-                <MenuItem key={key} value={key}>
-                  {renderIconSelection([key as EnergyIconKey])}
-                </MenuItem>
-              ))}
-            </Select>
+            <Box className="flex w-full">
+              <TextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="Name"
+                  variant="outlined"
+                  onChange={handleNameChange}
+                />
+            </Box>
+            <Box className="flex w-1/3">
+              <FormControl className="w-full">
+                <InputLabel id="cost-select-label">Cost</InputLabel>
+                <Select
+                  multiple
+                  id="cost-select"
+                  value={cost}
+                  onChange={handleCostChange}
+                  renderValue={renderEnergyIconSelection}
+                >
+                  {Object.keys(energyIcons).map((key) => (
+                    <MenuItem key={key} value={key}>
+                      {renderEnergyIconSelection([key as EnergyIconKey])}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
           </Box>
           <Box className="flex flex-row w-full items-end space-x-4">
             <Box className="flex flex-row w-full items-end space-x-2">
@@ -276,16 +319,16 @@ export default function Home() {
               <FormControl fullWidth>
                 <InputLabel id="grade-select-label">Grade</InputLabel>
                 <Select
-                  labelId="grade-select-label"
                   id="grade-select"
                   value={grade}
-                  label="Grade"
                   onChange={handleGradeChange}
+                  renderValue={(value) => renderGradeIconSelection(value as GradeIconKey)}
                 >
-                  <MenuItem value="Prime" className="!text-rose-500">Prime</MenuItem>
-                  <MenuItem value="Rare" className="!text-amber-500">Rare</MenuItem>
-                  <MenuItem value="Uncommon" className="!text-sky-500">Uncommon</MenuItem>
-                  <MenuItem value="Common" className="!text-gray-500">Common</MenuItem>
+                  {Object.keys(gradeIcons).map((key) => (
+                    <MenuItem key={key} value={key}>
+                      {renderGradeIconSelection(key as GradeIconKey)}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Box>
@@ -408,7 +451,7 @@ export default function Home() {
               cardType={type}
               cardSuperType={typeSuper}
               cardSubType={typeSub}
-              cardGrade={grade}
+              cardGradeIcons={grade ? gradeIcons[grade] : null}
               cardText={text}
               cardFlavor={flavor}
               cardAttack={attack}
