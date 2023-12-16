@@ -1,0 +1,30 @@
+export const entityTypes = [
+    {
+        id: 1,
+        name: "",
+        description: "",
+        isPermanent: false,
+        primaryColors: ["", ""],
+        secondaryyColors: ["", ""],
+        planets: ["", ""],
+        frequency: "",
+    }, {
+        id: 2,
+        name: "",
+        description: "",
+        isPermanent: false,
+        primaryColors: ["", ""],
+        secondaryyColors: ["", ""],
+        planets: ["", ""],
+        frequency: "",
+    }, {
+        id: 3,
+        name: "",
+        description: "",
+        isPermanent: false,
+        primaryColors: ["", ""],
+        secondaryyColors: ["", ""],
+        planets: ["", ""],
+        frequency: "",
+    },
+];

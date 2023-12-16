@@ -2,45 +2,40 @@
 
 import * as React from 'react';
 import { useState } from 'react';
-import { useForm, SubmitHandler } from "react-hook-form"
-import { Box, Typography, TextField, Switch, Button, FormControl, FormControlLabel, InputLabel, Select, SelectChangeEvent, MenuItem, Divider } from '@mui/material';
-import SaveIcon from '@mui/icons-material/Save';
-import DownloadIcon from '@mui/icons-material/Download';
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import {
+  Box,
+  Typography,
+  TextField,
+  Switch,
+  Button,
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  Select,
+  SelectChangeEvent,
+  MenuItem,
+  Divider,
+} from '@mui/material';
+import {
+  Save as SaveIcon,
+  Download as DownloadIcon,
+  AutoFixHigh as AutoFixHighIcon,
+} from '@mui/icons-material';
 import NexusCard from '../../../components/NexusCard';
 import * as htmlToImage from 'html-to-image';
 import clsx from 'clsx';
 
-const formPlaceholderData = {
-  username: "Nexus_Nils",
-}
+// TYPES
+import { EnergyIconKey, GradeIconKey } from '../../../types/types';
 
-const energyIcons = {
-  yellow: { imagePath: '/images/icons-energy/energy-yellow.png', value: "Y" },
-  blue: { imagePath: '/images/icons-energy/energy-blue.png', value: "B" },
-  purple: { imagePath: '/images/icons-energy/energy-purple.png', value: "P" },
-  red: { imagePath: '/images/icons-energy/energy-red.png', value: "R" },
-  green: { imagePath: '/images/icons-energy/energy-green.png', value: "G" },
-  zero: { imagePath: '/images/icons-energy/energy-zero.png', value: "0" },
-  one: { imagePath: '/images/icons-energy/energy-one.png', value: "1" },
-  two: { imagePath: '/images/icons-energy/energy-two.png', value: "2" },
-  three: { imagePath: '/images/icons-energy/energy-three.png', value: "3" },
-  four: { imagePath: '/images/icons-energy/energy-four.png', value: "4" },
-  five: { imagePath: '/images/icons-energy/energy-five.png', value: "5" },
-  six: { imagePath: '/images/icons-energy/energy-six.png', value: "6" },
-  seven: { imagePath: '/images/icons-energy/energy-seven.png', value: "7" },
-  x: { imagePath: '/images/icons-energy/energy-x.png', value: "X" },
-};
+// CONSTANTS
+import { energyIcons, gradeIcons } from '../../../constants/iconData';
+import { placeholderData } from '../../../constants/placeholderData';
 
-const gradeIcons = {
-  prime: { imagePath: '/images/icons-grade/grade-prime.png', value: "Prime" },
-  rare: { imagePath: '/images/icons-grade/grade-rare.png', value: "Rare" },
-  uncommon: { imagePath: '/images/icons-grade/grade-uncommon.png', value: "Uncommon" },
-  common: { imagePath: '/images/icons-grade/grade-common.png', value: "Common" },
-};
-
-export type EnergyIconKey = keyof typeof energyIcons;
-export type GradeIconKey = keyof typeof gradeIcons;
+// UTILS
+import { renderEnergyIconSelection, renderGradeIconSelection } from '../../../utils/iconUtils'; 
+import { downloadCardAsPng } from '../../../utils/imageUtils';
 
 // Type for form data
 
@@ -126,51 +121,8 @@ export default function Home() {
     setSwitchAiAutocomplete(event.target.checked);
   };
 
-  const renderEnergyIconSelection = (selected: EnergyIconKey[]) => {
-    return (
-      <div style={{ display: 'flex', gap: '5px' }}>
-        {selected.map((key) => {
-          const icon = energyIcons[key];
-          return icon ? <img key={key} src={icon.imagePath} alt={key} style={{ width: 24 }} /> : <span key={key}>{key}</span>;
-        })}
-      </div>
-    );
-  };
-
-  const renderGradeIconSelection = (value: GradeIconKey | GradeIconKey[]) => {
-    const icon = gradeIcons[value as GradeIconKey];
-    return (
-      <div style={{ display: 'flex', gap: '4px' }}>
-        {icon ? (
-          <img
-            key={icon.value}
-            src={icon.imagePath}
-            alt={icon.value}
-            style={{ width: 24 }}
-          />
-        ) : (
-          <span>{value}</span>
-        )}
-      </div>
-    );
-  };
-
-  function downloadCardAsPng() {
-    const node = document.getElementById('nexus-card-render');
-  
-    if (node) {
-    htmlToImage.toPng(node as HTMLElement)
-      .then((dataUrl) => {
-        const link = document.createElement('a');
-        link.download = `${name}`;
-        link.href = dataUrl;
-        link.click();
-      })
-      .catch((error) => {
-        console.error('oops, something went wrong!', error);
-      });
-    }
-  }
+  renderEnergyIconSelection([]);
+  renderGradeIconSelection([])
 
   return (
     <Box
@@ -219,7 +171,7 @@ export default function Home() {
                 sx={{ fontSize: "12px", marginTop: 0, paddingTop: 0 }}
                 className="font-medium text-gray-200"
               >
-                {formPlaceholderData.username}
+                {placeholderData.username}
               </Typography>
             </Box>)}
           </Box>
@@ -462,13 +414,13 @@ export default function Home() {
         <Box className="flex flex-col justify-between space-y-6">
           <Box className="flex flex-col w-full space-y-4">
             <NexusCard
-              cardCreator={formPlaceholderData.username}
+              cardCreator={placeholderData.username}
               cardName={name}
-              cardCostIcons={cost.map(key => energyIcons[key]).filter(Boolean)}
+              cardCost={cost.map(key => energyIcons[key]).filter(Boolean)}
               cardType={type}
               cardSuperType={typeSuper}
               cardSubType={typeSub}
-              cardGradeIcons={grade ? gradeIcons[grade] : null}
+              cardGrade={grade ? gradeIcons[grade] : null}
               cardText={text}
               cardFlavor={flavor}
               cardAttack={attack}
@@ -482,7 +434,7 @@ export default function Home() {
               size="large"
               endIcon={<DownloadIcon />}
               className="w-full !rounded-full text-center"
-              onClick={downloadCardAsPng}
+              onClick={() => downloadCardAsPng('nexus-card-render', name)} // Wrap the call to downloadCardAsPng
             >
               {/* Download {name && name.length <= 14 && name.length >= 3 ? name : "card"} */}
               Download card

@@ -6,11 +6,11 @@ import clsx from 'clsx';
 type NexusCardProps = {
     cardCreator: string;
     cardName: string;
-    cardCostIcons: { imagePath: string; value: string }[];
+    cardCost: { imagePath: string; value: string }[];
     cardType: string;
     cardSuperType: string;
     cardSubType: string;
-    cardGradeIcons: { imagePath: string; value: string } | null;
+    cardGrade: { imagePath: string; value: string } | null;
     cardText: string;
     cardFlavor: string;
     cardAttack: string;
@@ -20,10 +20,10 @@ type NexusCardProps = {
 export default function NexusCard({
     cardCreator,
     cardName,
-    cardCostIcons,
+    cardCost,
     cardType,
     cardSuperType,
-    cardGradeIcons,
+    cardGrade,
     cardSubType,
     cardText,
     cardFlavor,
@@ -33,11 +33,11 @@ export default function NexusCard({
 
     let creator = cardCreator;
     let name = cardName;
-    let costIcons = cardCostIcons;
+    let costIcons = cardCost;
     let type = Array.isArray(cardType) ? cardType.join(" ") : cardType
     let superType = cardSuperType;
     let subType = cardSubType;
-    let gradeIcons = cardGradeIcons;
+    let gradeIcons = cardGrade;
     let text = cardText;
     let flavor = cardFlavor;
     let attack = cardAttack;
@@ -225,11 +225,11 @@ export default function NexusCard({
                             >{subType}</Typography>
                         </Box>
                         <div>
-                            {cardGradeIcons && (
+                            {cardGrade && (
                                 <img
-                                    key={cardGradeIcons.value}
-                                    src={cardGradeIcons.imagePath}
-                                    alt={cardGradeIcons.value}
+                                    key={cardGrade.value}
+                                    src={cardGrade.imagePath}
+                                    alt={cardGrade.value}
                                     style={{ width: 24 }}
                                 />
                             )}
