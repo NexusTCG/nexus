@@ -1,13 +1,15 @@
 "use client";
 
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useForm, SubmitHandler } from "react-hook-form"
 import { Box, Typography, TextField, Switch, Button, FormControl, FormControlLabel, InputLabel, Select, SelectChangeEvent, MenuItem, Divider } from '@mui/material';
 import SaveIcon from '@mui/icons-material/Save';
 import DownloadIcon from '@mui/icons-material/Download';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import NexusCard from '../../../components/NexusCard';
 import * as htmlToImage from 'html-to-image';
+import clsx from 'clsx';
 
 const formPlaceholderData = {
   username: "Nexus_Nils",
@@ -347,17 +349,27 @@ export default function Home() {
             rows={6}
             onChange={handleTextChange}
           />
-          <Box className="flex flex-row w-full items-end space-x-4">
-            <TextField
-              fullWidth
-              multiline
-              id="outlined-basic"
-              label="Flavor"
-              value={flavor}
-              variant="outlined"
-              onChange={handleFlavorChange}
-            />
-            {type === "Entity" && (<Box className="flex w-1/2 items-end space-x-2">
+          <Box className="flex flex-col md:flex-row w-full items-end space-y-4 md:space-y-0 space-x-0 md:space-x-4">
+            <Box className={clsx("flex w-full",
+              {
+                "lg:w-2/3": type === "Entity"
+              }
+            )}>
+              <TextField
+                fullWidth
+                multiline
+                id="outlined-basic"
+                label="Flavor"
+                value={flavor}
+                variant="outlined"
+                onChange={handleFlavorChange}
+              />
+            </Box>
+            {type === "Entity" && (<Box className={clsx("flex flex-row w-full items-end space-x-2",
+              {
+                "lg:w-1/3": type === "Entity"
+              }
+            )}>
               <FormControl fullWidth>
                   <InputLabel id="attack-select-label">Attack</InputLabel>
                   <Select
