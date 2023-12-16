@@ -1,6 +1,5 @@
 import { Box, Typography, Divider } from "@mui/material";
 import Image from "next/image";
-import EnergyIconKey from "../(pages)/dashboard/(home)/page";
 
 type NexusCardProps = {
     cardCreator: string;
@@ -16,7 +15,20 @@ type NexusCardProps = {
     cardDefense: string;
 }
 
-export default function NexusCard({ cardCreator, cardName, cardCostIcons, cardType, cardSuperType, cardGrade, cardSubType, cardText, cardFlavor, cardAttack, cardDefense }: NexusCardProps) {
+export default function NexusCard({
+    cardCreator,
+    cardName,
+    cardCostIcons,
+    cardType,
+    cardSuperType,
+    cardGrade,
+    cardSubType,
+    cardText,
+    cardFlavor,
+    cardAttack,
+    cardDefense
+}: NexusCardProps) {
+
     let creator = cardCreator;
     let name = cardName;
     let costIcons = cardCostIcons;
@@ -88,7 +100,7 @@ export default function NexusCard({ cardCreator, cardName, cardCostIcons, cardTy
                             className="font-semibold text-black"
                         >{cardName}</Typography>
                         <div style={{ display: 'flex', gap: '5px' }}>
-                            {cardCostIcons.map(icon => <img key={icon.value} src={icon.imagePath} alt={icon.value} style={{ width: 24 }} />)}
+                            {costIcons.map(icon => <img key={icon.value} src={icon.imagePath} alt={icon.value} style={{ width: 20, boxShadow: "0px 2px 0px rgba(0, 0, 0, .75)", borderRadius: "50%" }} />)}
                         </div>
                     </Box>
                     <Box className="flex flex-col justify-center mx-1 !-mt-1" sx={{ height: "200px", border: "3px solid black", overflow: "hidden" }}>

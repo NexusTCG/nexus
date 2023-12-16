@@ -135,7 +135,6 @@ export default function Home() {
 
   return (
     <Box
-      sx={{ width: "100%", maxWidth: "1200px" }}
       className="flex flex-col w-full space-y-6 "
     >
       <Typography
