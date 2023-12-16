@@ -266,6 +266,7 @@ export default function Home() {
                   label="Super type"
                   onChange={handleTypeSuperChange}
                 >
+                  <MenuItem value="">None</MenuItem>
                   <MenuItem value="Mythic">Mythic</MenuItem>
                   <MenuItem value="Base">Base</MenuItem>
                 </Select>
@@ -278,6 +279,7 @@ export default function Home() {
               ) ? "1/2" : "full"}`}>
                 <InputLabel id="type-select-label">Type</InputLabel>
                 <Select
+                  required
                   labelId="type-select-label"
                   id="type-select"
                   value={type}
@@ -301,12 +303,14 @@ export default function Home() {
               ) && (<FormControl fullWidth className="w-full">
                 <InputLabel id="type-sub-select-label">Sub type</InputLabel>
                 <Select
+                  required
                   labelId="type-sub-select-label"
                   id="type-sub-select"
                   value={typeSub}
                   label="Sub type"
                   onChange={handleTypeSubChange}
                 >
+                  <MenuItem value="">None</MenuItem>
                   <MenuItem value="Dragon">Dragon</MenuItem>
                   <MenuItem value="Elf">Elf</MenuItem>
                   <MenuItem value="Goblin">Goblin</MenuItem>
@@ -334,6 +338,7 @@ export default function Home() {
             </Box>
           </Box>
           <TextField
+            required
             fullWidth
             multiline
             id="outlined-basic"
@@ -394,7 +399,7 @@ export default function Home() {
           >
             <Typography
               variant="overline"
-              className="text-md font-medium text-gray-200"
+              className="text-md font-medium text-gray-400"
             >
               or
             </Typography>

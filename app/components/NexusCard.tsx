@@ -236,7 +236,7 @@ export default function NexusCard({
                         </div>
                     </Box>
                     <Box
-                        className={clsx("flex flex-col justify-start px-2 py-3 mx-1 !-mt-1 space-y-2 rounded-b-lg shadow-lg",
+                        className={clsx("flex flex-col justify-start p-2 mx-1 !-mt-1 space-y-2 rounded-b-lg shadow-lg",
                             {
                                 "bg-yellow-100": cardBg === styles.yellowBg,
                                 "bg-blue-100": cardBg === styles.blueBg,
@@ -292,7 +292,7 @@ export default function NexusCard({
                         <Typography
                             variant="body1"
                             sx={{ fontSize: "1rem" }}
-                            className="!font-medium"
+                            className="!font-semibold"
                         >
                             {attack ? attack : "X"}
                         </Typography>
@@ -306,7 +306,7 @@ export default function NexusCard({
                         <Typography
                             variant="body1"
                             sx={{ fontSize: "1rem" }}
-                            className="!font-medium"
+                            className="!font-semibold"
                         >
                             {defense ? defense : "X"}
                         </Typography>
