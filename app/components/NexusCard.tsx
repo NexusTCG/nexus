@@ -1,5 +1,6 @@
 import { Box, Typography, Divider } from "@mui/material";
 import Image from "next/image";
+import DesignServicesIcon from '@mui/icons-material/DesignServices';
 
 type NexusCardProps = {
     cardCreator: string;
@@ -78,7 +79,7 @@ export default function NexusCard({
                 overflow: "hidden",
             }}>
             <Box
-                className="flex flex-col w-full h-full p-2 space-y-0 rounded-md bg-purple-300"
+                className="flex flex-col w-full h-full p-2 space-y-0 rounded-md bg-purple-400"
                 sx={{
                     backgroundImage: `${styles.purpleBg.backgroundImage}`,
                     backgroundBlendMode: "multiply",
@@ -92,12 +93,12 @@ export default function NexusCard({
             >
                 <Box className="flex flex-col rounded-md space-y-0" sx={{ zIndex: 1}}>
                     <Box
-                        className="flex flex-row justify-between items-center px-2 py-1 rounded-lg bg-purple-50 text-black shadow-md shadow-black"
+                        className="flex flex-row justify-between items-center px-1 py-1 rounded-lg bg-purple-50 text-black shadow-md shadow-black"
                         sx={{ minHeight: "36px", border: "3px solid black", zIndex: 2 }}
                     >
                         <Typography
                             variant="body2"
-                            className="font-semibold text-black"
+                            className="font-medium text-black"
                         >{cardName}</Typography>
                         <div style={{ display: 'flex', gap: '5px' }}>
                             {costIcons.map(icon => <img key={icon.value} src={icon.imagePath} alt={icon.value} style={{ width: 20, boxShadow: "0px 2px 0px rgba(0, 0, 0, .75)", borderRadius: "50%" }} />)}
@@ -113,7 +114,7 @@ export default function NexusCard({
                         />
                     </Box>
                     <Box
-                        className="flex flex-row justify-between items-center px-2 py-1 !-mt-1 rounded-lg bg-purple-50 font-medium text-black shadow-md shadow-black"
+                        className="flex flex-row justify-between items-center px-1 py-1 !-mt-1 rounded-lg bg-purple-50 font-medium text-black shadow-md shadow-black"
                         sx={{ minHeight: "36px", border: "3px solid black", zIndex: 2 }}
                     >
                         <Box className="flex flex-row space-x-1">
@@ -160,7 +161,7 @@ export default function NexusCard({
                         )}
                     </Box>
                     {(attack || defense) && (<Box
-                        className="flex flex-row justify-center items-center px-1 py-0 !-mt-5 space-x-1 bg-purple-50 text-black rounded-lg shadow-md shadow-black "
+                        className="flex flex-row justify-center items-center px-1 py-0 !-mt-5 space-x-2 bg-purple-50 text-black rounded-lg shadow-md shadow-black "
                         sx={{ marginLeft: "75%", marginRight: "5%", border: "3px solid black", zIndex: 2 }}
                     >
                         <Typography
@@ -191,17 +192,19 @@ export default function NexusCard({
                     sx={{
                         height: "70px",
                         zIndex: 0,
-                        borderTopLeftRadius: "0.5rem",
-                        borderTopRightRadius: "0.5rem",
+                        borderTopLeftRadius: ".75rem",
+                        borderTopRightRadius: ".75rem",
                     }}
                 >
-                    {name && (<Typography
-                        variant="subtitle2"
-                        sx={{ fontSize: ".70rem" }}
-                        className="pl-4 pb-2 pt-14 pr-auto text-gray-400"
-                    >
-                        Creator: {creator}
-                    </Typography>)}
+                    {name && (<Box className="flex flex-row items-center pt-14 pl-4 space-x-1 text-gray-500">
+                        <DesignServicesIcon sx={{ width: "12px", height: "12px" }} />
+                        <Typography
+                            variant="subtitle2"
+                            sx={{ fontSize: ".7rem" }}
+                        >
+                             {creator}
+                        </Typography>
+                    </Box>)}
                 </Box>
             </Box>
         </Box>

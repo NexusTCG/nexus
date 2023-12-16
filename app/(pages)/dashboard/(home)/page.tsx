@@ -140,7 +140,7 @@ export default function Home() {
       <Typography
         variant="h1"
         sx={{ fontSize: "36px" }}
-        className="text-md font-medium text-gray-500"
+        className="text-md font-medium text-gray-50"
       >
         Create card
       </Typography>
@@ -296,7 +296,7 @@ export default function Home() {
             id="outlined-basic"
             label="Text"
             variant="outlined"
-            rows={8}
+            rows={6}
             onChange={handleTextChange}
           />
           <Box className="flex flex-row w-full items-end space-x-4">
@@ -347,7 +347,7 @@ export default function Home() {
           {switchAiAutocomplete && (
           <Divider
             light
-            className="px-24 py-2"
+            className="px-24 py-6"
           >
             <Typography
               variant="overline"
@@ -399,7 +399,7 @@ export default function Home() {
           </Box>
         </Box>
         {/* CARD RENDER */}
-        <Box className="flex flex-col h-full justify-between space-y-6">
+        <Box className="flex flex-col justify-between space-y-6">
           <Box className="flex flex-col w-full space-y-4">
             <NexusCard
               cardCreator={formPlaceholderData.username}
@@ -415,7 +415,7 @@ export default function Home() {
               cardDefense={defense}
             />
           </Box>
-          <Box className="flex flex-col w-100 space-y-4">
+          <Box className="flex flex-col w-full space-y-4">
             {name && (<Button
               variant="outlined"
               color="primary"
@@ -424,7 +424,8 @@ export default function Home() {
               className="w-full !rounded-full text-center"
               onClick={downloadCardAsPng}
             >
-              Download {name && name.length <= 14 && name.length >= 3 ? name : "card"}
+              {/* Download {name && name.length <= 14 && name.length >= 3 ? name : "card"} */}
+              Download card
             </Button>)}
             <Button
               variant="outlined"
@@ -433,7 +434,8 @@ export default function Home() {
               endIcon={<SaveIcon />}
               className="w-full !rounded-full text-center"
             >
-              Save {name && name.length <= 14 && name.length >= 3 ? name : "card"}
+              {/* Save {name && name.length <= 14 && name.length >= 3 ? name : "card"} */}
+              Save card
             </Button>
           </Box>
         </Box>
