@@ -11,7 +11,7 @@ const keywordAbilities = [
 
 export default function Gallery() {
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full justify-center items-center space-y-24">
       <TextfieldWithSlashMenu textfieldLabel="Game" textfieldWidth="600px" textfieldFullWidth={false} menuOptions={keywordAbilities} />
     </div>
   );

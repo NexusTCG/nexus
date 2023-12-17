@@ -75,16 +75,13 @@ export default function Home() {
   
     let selectedCost = typeof value === 'string' ? value.split(',') as EnergyIconKey[] : value;
   
-    // Separate colored and colorless selections
     let newColoredSelection = selectedCost.filter(icon => energyIcons[icon].value.includes('energy') && !energyIcons[icon].value.includes('Colorless'));
     let newColorlessSelection = selectedCost.filter(icon => energyIcons[icon].value.includes('Colorless'));
   
-    // If there's more than one colorless selection, keep only the last one
     if (newColorlessSelection.length > 1) {
       newColorlessSelection = [newColorlessSelection.pop() as EnergyIconKey];
     }
   
-    // Combine the new colorless selection with the colored selections
     let newCost = [...newColoredSelection, ...newColorlessSelection];
   
     setCost(newCost);
