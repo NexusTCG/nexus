@@ -9,7 +9,7 @@ type NexusCardProps = {
     cardCost: { imagePath: string; value: string }[];
     cardType: string;
     cardSuperType: string;
-    cardSubType: string;
+    cardSubType: string[];
     cardGrade: { imagePath: string; value: string } | null;
     cardText: string;
     cardFlavor: string;
@@ -17,14 +17,15 @@ type NexusCardProps = {
     cardDefense: string;
 }
 
+// NEXUS CARD COMPONENT
 export default function NexusCard({
     cardCreator,
     cardName,
     cardCost,
     cardType,
     cardSuperType,
-    cardGrade,
     cardSubType,
+    cardGrade,
     cardText,
     cardFlavor,
     cardAttack,
@@ -82,25 +83,37 @@ export default function NexusCard({
 
     const determineCardBackground = () => {
         const iconValues = costIcons.map(icon => icon.value);
-
-        const uniqueColors = new Set(iconValues.filter(value => ['Y', 'B', 'P', 'R', 'G'].includes(value)));
+        console.log(iconValues);
+        const uniqueColors = new Set(iconValues.filter(value => [
+            'Yellow energy',
+            'Blue energy',
+            'Purple energy',
+            'Red energy',
+            'Green energy'
+        ].includes(value)));
         if (uniqueColors.size > 1) {
             return styles.multiBg;
         }
 
-        if (iconValues.includes('Y')) {
+        if (iconValues.includes('Yellow energy')) {
             return styles.yellowBg;
-        } else if (iconValues.includes('B')) {
+        } else if (iconValues.includes('Blue energy')) {
             return styles.blueBg;
-        } else if (iconValues.includes('P')) {
+        } else if (iconValues.includes('Purple energy')) {
             return styles.purpleBg;
-        } else if (iconValues.includes('R')) {
+        } else if (iconValues.includes('Red energy')) {
             return styles.redBg;
-        } else if (iconValues.includes('G')) {
+        } else if (iconValues.includes('Green energy')) {
             return styles.greenBg;
         }
 
-        const hasNumberedIconsOnly = iconValues.every(value => !['Y', 'B', 'P', 'R', 'G'].includes(value));
+        const hasNumberedIconsOnly = iconValues.every(value => ![
+            'Yellow energy',
+            'Blue energy',
+            'Purple energy',
+            'Red energy',
+            'Green energy'
+        ].includes(value));
         if (hasNumberedIconsOnly && iconValues.length > 0) {
             return styles.colorlessBg;
         }
@@ -134,9 +147,6 @@ export default function NexusCard({
     if (cardBg.linearGradient) {
         cardBackgroundStyles.backgroundImage = `linear-gradient(${cardBg.linearGradient}), ${cardBg.backgroundImage}`;
     }
-
-    console.log('costIcons', costIcons);
-    console.log('gradeIcons', gradeIcons);
 
     return (
         <Box
@@ -217,7 +227,7 @@ export default function NexusCard({
                             <Typography
                                 variant="body2"
                             >{type}</Typography>
-                            {subType != "" && (<Typography
+                            {subType.length > 0 && (<Typography
                                 variant="body2"
                             >–</Typography>)}
                             <Typography

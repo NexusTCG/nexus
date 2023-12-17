@@ -16,11 +16,14 @@ import {
   SelectChangeEvent,
   MenuItem,
   Divider,
+  ListItemIcon,
+  ListItemText,
 } from '@mui/material';
 import {
   Save as SaveIcon,
   Download as DownloadIcon,
   AutoFixHigh as AutoFixHighIcon,
+  Shield as ShieldIcon,
 } from '@mui/icons-material';
 import NexusCard from '../../../components/NexusCard';
 import * as htmlToImage from 'html-to-image';
@@ -31,6 +34,9 @@ import { EnergyIconKey, GradeIconKey } from '../../../types/types';
 
 // CONSTANTS
 import { energyIcons, gradeIcons } from '../../../constants/iconData';
+import { cardTypes } from "../../../constants/cardTypes";
+import { entityTypes } from "../../../constants/entityTypes";
+//Replace placeholder data
 import { placeholderData } from '../../../constants/placeholderData';
 
 // UTILS
@@ -50,7 +56,7 @@ export default function Home() {
   const [cost, setCost] = useState<EnergyIconKey[]>([]);
   const [typeSuper, setTypeSuper] = React.useState("");
   const [type, setType] = React.useState("");
-  const [typeSub, setTypeSub] = React.useState("");
+  const [typeSub, setTypeSub] = React.useState<string[]>([]);
   const [grade, setGrade] = useState<GradeIconKey>("common");
   const [text, setText] = React.useState("");
   const [flavor, setFlavor] = React.useState("");
@@ -66,21 +72,17 @@ export default function Home() {
     const {
       target: { value },
     } = event;
-    
-    let newCost = typeof value === 'string' ? value.split(',') as EnergyIconKey[] : value;
   
-    const numberedIcons = newCost.filter(icon => !isNaN(parseInt(energyIcons[icon].value)));
-    if (numberedIcons.length > 1) {
-      newCost = newCost.filter(icon => isNaN(parseInt(energyIcons[icon].value)) || icon === numberedIcons[numberedIcons.length - 1]);
-    }
-    
-    const colorIcons = newCost.filter(icon => isNaN(parseInt(energyIcons[icon].value)));
-    if (colorIcons.length > 5) {
-      newCost = [...numberedIcons, ...colorIcons.slice(0, 5)];
-    }
-    
-    const order = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'x', 'yellow', 'blue', 'purple', 'red', 'green'];
-    newCost.sort((a, b) => order.indexOf(a) - order.indexOf(b));
+    // Convert the value to an array if it's a string
+    let selectedCost = typeof value === 'string' ? value.split(',') as EnergyIconKey[] : value;
+  
+    // Separate colored and colorless selections
+    let newColoredSelection = selectedCost.filter(icon => energyIcons[icon].value.includes('energy') && !energyIcons[icon].value.includes('Colorless'));
+    let colorlessSelection = selectedCost.find(icon => energyIcons[icon].value.includes('Colorless'));
+  
+    // If there's a colorless selection, keep only that one in the array
+    let newCost = colorlessSelection ? [colorlessSelection] : [];
+    newCost = [...newCost, ...newColoredSelection];
   
     setCost(newCost);
   };
@@ -93,8 +95,9 @@ export default function Home() {
     setType(event.target.value);
   }
 
-  function handleTypeSubChange(event: any) {
-    setTypeSub(event.target.value);
+  function handleTypeSubChange(event: SelectChangeEvent<typeof entityTypes[number]['name'][]>) {
+    const value = event.target.value;
+    setTypeSub(typeof value === 'string' ? value.split(',') : value);
   }
 
   function handleGradeChange(event: SelectChangeEvent<GradeIconKey>) {
@@ -183,6 +186,7 @@ export default function Home() {
                   label="Name"
                   variant="outlined"
                   onChange={handleNameChange}
+                  sx={{ maxHeight: "56px"}}
                 />
             </Box>
             <Box className="flex w-1/3">
@@ -194,10 +198,14 @@ export default function Home() {
                   value={cost}
                   onChange={handleCostChange}
                   renderValue={renderEnergyIconSelection}
+                  sx={{ maxHeight: "56px"}}
                 >
                   {Object.keys(energyIcons).map((key) => (
                     <MenuItem key={key} value={key}>
-                      {renderEnergyIconSelection([key as EnergyIconKey])}
+                      <ListItemIcon>
+                        {renderEnergyIconSelection([key as EnergyIconKey])}
+                      </ListItemIcon>
+                      <ListItemText primary={energyIcons[key as EnergyIconKey].value} />
                     </MenuItem>
                   ))}
                 </Select>
@@ -219,6 +227,7 @@ export default function Home() {
                   value={typeSuper}
                   label="Super type"
                   onChange={handleTypeSuperChange}
+                  sx={{ maxHeight: "56px"}}
                 >
                   <MenuItem value="">None</MenuItem>
                   <MenuItem value="Mythic">Mythic</MenuItem>
@@ -239,16 +248,27 @@ export default function Home() {
                   value={type}
                   label="Type"
                   onChange={handleTypeChange}
+                  sx={{ maxHeight: "56px"}}
+                  renderValue={(selected) => {
+                    const selectedType = cardTypes.find((cardType) => cardType.name === selected);
+                    return selectedType ? selectedType.name : '';
+                  }}
                 >
-                  <MenuItem value="Entity">Entity</MenuItem>
-                  <MenuItem value="Interrupt">Interrupt</MenuItem>
-                  <MenuItem value="Sequence">Sequence</MenuItem>
-                  <MenuItem value="Enhancement">Enhancement</MenuItem>
-                  <MenuItem value="Machine">Machine</MenuItem>
-                  <MenuItem value="Source">Source</MenuItem>
+                  {cardTypes.map((cardType) => (
+                    <MenuItem
+                      key={cardType.id}
+                      value={cardType.name}
+                    >
+                      <ListItemIcon>
+                        <cardType.icon />
+                      </ListItemIcon>
+                      <ListItemText>
+                        {cardType.name}
+                      </ListItemText>
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
-              {/* Make Sub multi select and searchable */}
               {(
                 type === "Entity" ||
                 type === "Machine" ||
@@ -257,19 +277,26 @@ export default function Home() {
               ) && (<FormControl fullWidth className="w-full">
                 <InputLabel id="type-sub-select-label">Sub type</InputLabel>
                 <Select
-                  required
+                  multiple
                   labelId="type-sub-select-label"
                   id="type-sub-select"
                   value={typeSub}
                   label="Sub type"
                   onChange={handleTypeSubChange}
+                  renderValue={(selected) => selected.join(', ')}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        maxHeight: 360,
+                      },
+                    },
+                  }}
                 >
-                  <MenuItem value="">None</MenuItem>
-                  <MenuItem value="Dragon">Dragon</MenuItem>
-                  <MenuItem value="Elf">Elf</MenuItem>
-                  <MenuItem value="Goblin">Goblin</MenuItem>
-                  <MenuItem value="Zombie">Zombie</MenuItem>
-                  <MenuItem value="Crab">Crab</MenuItem>
+                  {entityTypes.map((entityType) => (
+                    <MenuItem key={entityType.id} value={entityType.name}>
+                      <ListItemText primary={entityType.name} />
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>)}
             </Box>
@@ -280,11 +307,15 @@ export default function Home() {
                   id="grade-select"
                   value={grade}
                   onChange={handleGradeChange}
+                  sx={{ maxHeight: "56px"}}
                   renderValue={(value) => renderGradeIconSelection(value as GradeIconKey)}
                 >
                   {Object.keys(gradeIcons).map((key) => (
                     <MenuItem key={key} value={key}>
-                      {renderGradeIconSelection(key as GradeIconKey)}
+                      <ListItemIcon>
+                        {renderGradeIconSelection([key as GradeIconKey])}
+                      </ListItemIcon>
+                      <ListItemText primary={gradeIcons[key as GradeIconKey].value} />
                     </MenuItem>
                   ))}
                 </Select>
@@ -314,6 +345,7 @@ export default function Home() {
                 label="Flavor"
                 value={flavor}
                 variant="outlined"
+                sx={{ maxHeight: "56px"}}
                 onChange={handleFlavorChange}
               />
             </Box>
@@ -329,13 +361,18 @@ export default function Home() {
                     id="attack-select"
                     value={attack}
                     label="Attack"
+                    sx={{ maxHeight: "56px"}}
                     onChange={handleAttackChange}
                   >
-                    <MenuItem value="0">0</MenuItem>
-                    <MenuItem value="1">1</MenuItem>
-                    <MenuItem value="2">2</MenuItem>
-                    <MenuItem value="3">3</MenuItem>
-                    <MenuItem value="4">4</MenuItem>
+                    <MenuItem value="X">X</MenuItem>
+                    {[...Array(17)].map((_, index) => {
+                      const i = index + 0;
+                      return (
+                        <MenuItem key={i} value={i.toString()}>
+                          {i}
+                        </MenuItem>
+                      );
+                    })}
                   </Select>
                 </FormControl>
                 <FormControl fullWidth>
@@ -345,13 +382,25 @@ export default function Home() {
                     id="defense-select"
                     value={defense}
                     label="Defense"
+                    sx={{ maxHeight: "56px"}}
                     onChange={handleDefenseChange}
+                    MenuProps={{
+                      PaperProps: {
+                        style: {
+                          maxHeight: 360,
+                        },
+                      },
+                    }}
                   >
-                    <MenuItem value="0">0</MenuItem>
-                    <MenuItem value="1">1</MenuItem>
-                    <MenuItem value="2">2</MenuItem>
-                    <MenuItem value="3">3</MenuItem>
-                    <MenuItem value="4">4</MenuItem>
+                    <MenuItem value="X">X</MenuItem>
+                    {[...Array(17)].map((_, index) => {
+                      const i = index + 0;
+                      return (
+                        <MenuItem key={i} value={i.toString()}>
+                          {i}
+                        </MenuItem>
+                      );
+                    })}
                   </Select>
                 </FormControl>
             </Box>)}
@@ -434,9 +483,8 @@ export default function Home() {
               size="large"
               endIcon={<DownloadIcon />}
               className="w-full !rounded-full text-center"
-              onClick={() => downloadCardAsPng('nexus-card-render', name)} // Wrap the call to downloadCardAsPng
+              onClick={() => downloadCardAsPng('nexus-card-render', name)}
             >
-              {/* Download {name && name.length <= 14 && name.length >= 3 ? name : "card"} */}
               Download card
             </Button>)}
             <Button
@@ -446,7 +494,6 @@ export default function Home() {
               endIcon={<SaveIcon />}
               className="w-full !rounded-full text-center"
             >
-              {/* Save {name && name.length <= 14 && name.length >= 3 ? name : "card"} */}
               Save card
             </Button>
           </Box>
