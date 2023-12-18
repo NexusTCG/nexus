@@ -1,30 +1,25 @@
+// CostControl.tsx
 "use client";
 
 import * as React from 'react';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import IconButton from '@mui/material/IconButton';
-import { Box } from '@mui/material';
-import {
-  Remove as RemoveIcon,
-  Add as AddIcon,
-  BrightnessHigh as BrightnessHighIcon,
-  ElectricBolt as ElectricBoltIcon,
-  DarkMode as DarkModeIcon,
-  LocalFireDepartment as LocalFireDepartmentIcon,
-  Spa as SpaIcon,
-  FilterTiltShift as FilterTiltShiftIcon,
-} from '@mui/icons-material';
+import { Box, ButtonGroup, IconButton } from '@mui/material';
+import { energyIcons } from '@/app/constants/iconData';
+import { EnergyType, EnergyCount } from '@/app/types/types';
+import { Remove as RemoveIcon, Add as AddIcon } from '@mui/icons-material';
 
-type EnergyType = 'yellow' | 'blue' | 'purple' | 'red' | 'green' | 'colorless';
-
+// TYPES
 type EnergyValues = {
   [key in EnergyType]: number;
 };
 
 const energyTypes: EnergyType[] = ['yellow', 'blue', 'purple', 'red', 'green', 'colorless'];
 
-// Main component
-export default function CostControl() {
+type CostControlProps = {
+  onEnergyChange: (newEnergyValues: EnergyCount) => void;
+};
+
+// COMPONENT
+export default function CostControl({ onEnergyChange }: CostControlProps) {
   const maxIconsPerType = 5;
   const maxTotalIcons = 6;
 
@@ -40,47 +35,22 @@ export default function CostControl() {
   const handleEnergyChange = (type: EnergyType, delta: number) => () => {
     const newValue = energyValues[type] + delta;
     const maxPerType = type === 'colorless' ? 10 : maxIconsPerType;
-    
-    if (type === 'colorless') {
-      if (newValue < 0 || newValue > maxPerType) {
-        return;
-      }
-    } else {
-      if (newValue < 0 || newValue > maxPerType || totalEnergyIcons + delta > maxTotalIcons) {
-        return;
-      }
+
+    if ((type === 'colorless' && (newValue < 0 || newValue > maxPerType)) ||
+        (type !== 'colorless' && (newValue < 0 || newValue > maxPerType || totalEnergyIcons + delta > maxTotalIcons))) {
+      return;
     }
-  
-    setEnergyValues({ ...energyValues, [type]: newValue });
+
+    const newEnergyValues = { ...energyValues, [type]: newValue };
+    setEnergyValues(newEnergyValues);
+    onEnergyChange(newEnergyValues);
   };
 
-  const iconMapping: { [key in EnergyType]: JSX.Element } = {
-    yellow: <BrightnessHighIcon
-      className="bg-yellow-300 hover:bg-yellow-200 text-black rounded-full hover:shadow-md hover:shadow-black"
-      sx={{ height: "30px", width: "30px", padding: "2px" }}
-    />,
-    blue: <ElectricBoltIcon
-      className="bg-sky-400 text-black rounded-full hover:shadow-md hover:shadow-black"
-      sx={{ height: "30px", width: "30px", padding: "2px" }}
-    />,
-    purple: <DarkModeIcon
-      className="bg-purple-400 text-black rounded-full hover:shadow-md hover:shadow-black"
-      sx={{ height: "30px", width: "30px", padding: "2px" }}
-    />,
-    red: <LocalFireDepartmentIcon
-      className="bg-red-300 text-black rounded-full hover:shadow-md hover:shadow-black"
-      sx={{ height: "30px", width: "30px", padding: "2px" }}
-    />,
-    green: <SpaIcon
-      className="bg-lime-400 text-black rounded-full hover:shadow-md hover:shadow-black"
-      sx={{ height: "30px", width: "30px", padding: "2px" }}
-    />,
-    colorless: <FilterTiltShiftIcon
-      className="bg-slate-400 text-black rounded-full hover:shadow-md hover:shadow-black"
-      sx={{ height: "30px", width: "30px", padding: "2px" }}
-    />,
+  const renderEnergyIcon = (type: EnergyType): JSX.Element => {
+    const Icon = energyIcons[type].icon;
+    return <Icon className={energyIcons[type].tailwindClass} sx={{ height: '30px', width: '30px', padding: '2px' }} />;
   };
-  
+
   const renderEnergyControl = (type: EnergyType): JSX.Element => {
     return (
       <ButtonGroup
@@ -93,7 +63,7 @@ export default function CostControl() {
           <RemoveIcon />
         </IconButton>
 
-        {iconMapping[type]}
+        {renderEnergyIcon(type)}
 
         <IconButton onClick={handleEnergyChange(type, 1)} className="text-gray-400">
           <AddIcon />

@@ -27,7 +27,7 @@ import CostControl from '@/app/components/CostControl';
 import clsx from 'clsx';
 
 // TYPES
-import { EnergyIconKey, GradeIconKey } from '@/app/types/types';
+import { EnergyIconKey, GradeIconKey, EnergyType } from '@/app/types/types';
 
 // CONSTANTS
 import { energyIcons, gradeIcons } from '@/app/constants/iconData';
@@ -39,19 +39,11 @@ import { placeholderData } from '@/app/constants/placeholderData';
 // UTILS
 import { renderEnergyIconSelection, renderGradeIconSelection } from '@/app/utils/iconUtils'; 
 import { downloadCardAsPng } from '@/app/utils/imageUtils';
-import * as htmlToImage from 'html-to-image';
 
-// Type for form data
-
-// Zod schema for form data
-
-// OpenAI API call
-// Form update on API call
-
-export default function Home() {
+export default function CardCreator() {
   // React Hook form state
   const [name, setName] = React.useState("");
-  const [cost, setCost] = useState<EnergyIconKey[]>([]);
+  const [cost, setCost] = useState<EnergyType>({});
   const [typeSuper, setTypeSuper] = React.useState("");
   const [type, setType] = React.useState("");
   const [typeSub, setTypeSub] = React.useState<string[]>([]);
@@ -62,28 +54,13 @@ export default function Home() {
   const [defense, setDefense] = React.useState("");
   const [aiAutoComplete, setAiAutoComplete] = useState(true);
 
+  const handleCostChange = (newEnergyValues: EnergyType) => {
+    setCost(newEnergyValues);
+  };
+
   function handleNameChange(event: any) {
     setName(event.target.value);
   }
-
-  // const handleCostChange = (event: SelectChangeEvent<EnergyIconKey[]>) => {
-  //   const {
-  //     target: { value },
-  //   } = event;
-  
-  //   let selectedCost = typeof value === 'string' ? value.split(',') as EnergyIconKey[] : value;
-  
-  //   let newColoredSelection = selectedCost.filter(icon => energyIcons[icon].value.includes('energy') && !energyIcons[icon].value.includes('Colorless'));
-  //   let newColorlessSelection = selectedCost.filter(icon => energyIcons[icon].value.includes('Colorless'));
-  
-  //   if (newColorlessSelection.length > 1) {
-  //     newColorlessSelection = [newColorlessSelection.pop() as EnergyIconKey];
-  //   }
-  
-  //   let newCost = [...newColoredSelection, ...newColorlessSelection];
-  
-  //   setCost(newCost);
-  // };
   
   function handleTypeSuperChange(event: any) {
     setTypeSuper(event.target.value);
@@ -499,7 +476,7 @@ export default function Home() {
                 lg:w-1/6
                 "
               >
-                <CostControl />
+                <CostControl onEnergyChange={handleCostChange}  />
               </Box>
             </Box>
             {/* END OF FORM CONTENT */}
@@ -521,7 +498,7 @@ export default function Home() {
             <NexusCard
               cardCreator={placeholderData.username}
               cardName={name}
-              cardCost={cost.map(key => energyIcons[key]).filter(Boolean)}
+              cardCost={cost}
               cardType={type}
               cardSuperType={typeSuper}
               cardSubType={typeSub}
