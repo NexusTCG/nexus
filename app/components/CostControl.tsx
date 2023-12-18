@@ -101,7 +101,7 @@ export default function CostControl() {
   };
 
   return (
-    <Box className="flex flex-row lg:flex-col justify-center items-center border border-gray-500 hover:border-white rounded-md">
+    <Box className="flex flex-row lg:flex-col lg:h-full justify-center items-center mb-4 lg:mb-0 border border-gray-500 hover:border-white rounded-md">
       {energyTypes.map((type) => (
         <Box key={type} className="w-full py-2 px-3">{renderEnergyControl(type)}</Box>
       ))}
