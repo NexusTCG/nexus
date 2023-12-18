@@ -126,20 +126,20 @@ export default function Home() {
   renderGradeIconSelection([])
 
   return (
-
     // MAIN CONTAINER
     <Box className="
       flex
       flex-col
       justify-start
       w-full
-      space-y-6
+      space-y-0
+      md:space-y-6
       "
     > 
       <Typography
         variant="h1"
         sx={{ fontSize: "36px" }}
-        className="text-md font-medium text-gray-50 px-6 md:px-0 "
+        className="text-md font-medium text-gray-50 px-6 md:px-0 hidden md:block"
       >
         Create a Nexus card
       </Typography>
@@ -150,12 +150,13 @@ export default function Home() {
         flex-col
         w-full
         p-6
-        space-y-8
+        space-y-4
+        md:space-y-8
         md:rounded-xl
-        bg-gray-800
-        border
-        border-gray-700
-        shadow-xl
+        md:bg-gray-800
+        md:border
+        md:border-gray-700
+        md:shadow-xl
         "
       >
         {/* FORM & CARD SECTION */}
@@ -313,10 +314,10 @@ export default function Home() {
 
                   {/* TYPE */}
                   <FormControl className={`w-full lg:w-${(
-                    type === "Entity" ||
-                    type === "Machine" ||
-                    type === "Enhancement" ||
-                    type === "Source"
+                      type === "Entity" ||
+                      type === "Machine" ||
+                      type === "Enhancement" ||
+                      type === "Source"
                     ) ? "1/2" : "full"}`}>
                     <InputLabel id="type-select-label">
                       Type
@@ -352,10 +353,10 @@ export default function Home() {
 
                   {/* SUBTYPE */}
                   {(
-                  type === "Entity" ||
-                  type === "Machine" ||
-                  type === "Enhancement" ||
-                  type === "Source"
+                    type === "Entity" ||
+                    type === "Machine" ||
+                    type === "Enhancement" ||
+                    type === "Source"
                   ) && (
                   <FormControl className="w-full">
                     <InputLabel id="type-sub-select-label">Sub type</InputLabel>
@@ -489,7 +490,6 @@ export default function Home() {
                   </Box>)}
                 </Box>
               </Box>
-
               
               {/* COST */}
               <Box className="
@@ -595,16 +595,6 @@ export default function Home() {
               >
                 Download card
               </Button>
-              {/* Hiding Save button until DB implementation */}
-              {/* <Button
-                variant="outlined"
-                color="primary"
-                size="large"
-                endIcon={<SaveIcon />}
-                className="w-full !rounded-full text-center"
-              >
-                Save card
-              </Button> */}
             </Box>
           </Box>)}
           {/* END OF SWTICH & BUTTON */}

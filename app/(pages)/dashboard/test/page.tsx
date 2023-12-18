@@ -1,9 +1,9 @@
-import ColorCostControl from "../../../components/CostControl";
+import CostControl from "../../../components/CostControl";
 
 export default function Test() {
     return (
         <div>
-            <ColorCostControl />
+            <CostControl />
         </div>
     )
 }
