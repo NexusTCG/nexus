@@ -83,7 +83,6 @@ export default function NexusCard({
 
     const determineCardBackground = () => {
         const iconValues = costIcons.map(icon => icon.value);
-        console.log(iconValues);
         const uniqueColors = new Set(iconValues.filter(value => [
             'Yellow energy',
             'Blue energy',

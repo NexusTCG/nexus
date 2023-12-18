@@ -131,10 +131,9 @@ export default function Home() {
     <Box className="
       flex
       flex-col
+      justify-start
       w-full
       space-y-6
-      border
-      border-red-500
       "
     > 
       <Typography
@@ -150,7 +149,8 @@ export default function Home() {
         flex
         flex-col
         w-full
-        p-6
+        p-4
+        lg:p-6
         space-y-8
         md:rounded-xl
         bg-gray-800
@@ -162,21 +162,24 @@ export default function Home() {
         {/* FORM & CARD SECTION */}
         <Box className="
           flex
-          flex-row
-          border
-        border-sky-400
+          flex-col
+          lg:flex-row
+          space-x-0
+          lg:space-x-12
+          space-y-6
+          lg:space-y-0
           "
         >
           {/* FORM SECTION */}
           <Box className="
             flex
-            flex-row
+            flex-col
+            lg:flex-row
             w-full
             space-x-0
-            lg:space-x-12
-            space-y-6
+            lg:space-x-4
+            space-y-4
             lg:space-y-0
-            border border-red-500
             "
           >
             {/* FORM CONTENT */}
@@ -184,17 +187,20 @@ export default function Home() {
               flex
               flex-col
               w-full
-              space-x-0
-              lg:space-x-4
-              space-y-4
-              lg:space-y-0
-              border border-lime-500
+              space-y-3
+              lg:space-y-4
               "
             > 
               {/* FORM HEADER */}
-              <Box className="flex flex-col w-full justify-start mb-4 lg:mb-0 border border-red-500">
+              <Box className="
+                flex
+                flex-col
+                w-full
+                justify-start
+                "
+              >
                 {/*  CARD NAME */}
-                <Box className="flex flex-col w-full border border-red-500">
+                <Box className="flex flex-col w-full">
                   <Typography
                     variant="h2"
                     sx={{ fontSize: "24px" }}
@@ -204,7 +210,7 @@ export default function Home() {
                   </Typography>
                 </Box>
                 {/* CREATOR */}
-                <Box className="flex flex-row w-full space-x-1 border border-red-500">
+                <Box className="flex flex-row w-full space-x-1"> 
                   <Typography
                     variant="overline"
                     sx={{ fontSize: "12px", marginTop: 0, paddingTop: 0 }}
@@ -222,25 +228,51 @@ export default function Home() {
                 </Box>
               </Box>
 
-              {/* NAME */}
+              {/* NAME & GRADE */}
               <Box className="
                 flex
                 flex-col
+                lg:flex-row
                 w-full
-                lg:w-5/6
-                space-between
+                space-x-0
+                lg:space-x-4
                 space-y-4
-                border border-lime-500
+                lg:space-y-0
                 "
-              > 
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Name"
-                  variant="outlined"
-                  onChange={handleNameChange}
-                  sx={{ maxHeight: "56px"}}
-                />
+              >
+                {/* NAME */}
+                <Box className="w-full lg:w-3/4">
+                  <TextField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Name"
+                    variant="outlined"
+                    onChange={handleNameChange}
+                    sx={{ maxHeight: "56px"}}
+                  />
+                </Box>
+                {/* GRADE */}
+                <FormControl className="w-full lg:w-1/4">
+                  <InputLabel id="grade-select-label">
+                    Grade
+                  </InputLabel>
+                  <Select
+                    id="grade-select"
+                    value={grade}
+                    onChange={handleGradeChange}
+                    sx={{ maxHeight: "56px"}}
+                    renderValue={(value) => renderGradeIconSelection(value as GradeIconKey)}
+                  >
+                    {Object.keys(gradeIcons).map((key) => (
+                      <MenuItem key={key} value={key}>
+                      <ListItemIcon>
+                        {renderGradeIconSelection([key as GradeIconKey])}
+                      </ListItemIcon>
+                      <ListItemText primary={gradeIcons[key as GradeIconKey].value} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Box>
 
               {/* TYPES */}
@@ -254,7 +286,6 @@ export default function Home() {
                 md:space-x-2
                 space-y-4
                 lg:space-y-0
-                border border-lime-500
                 "
               > 
                 {/* SUPERTYPE */}
@@ -356,7 +387,7 @@ export default function Home() {
               </Box>
 
               {/* TEXT */}
-              <Box className="border border-lime-500"> 
+              <Box className=""> 
                 <TextField
                   required
                   fullWidth
@@ -364,7 +395,7 @@ export default function Home() {
                   id="outlined-basic"
                   label="Text"
                   variant="outlined"
-                  rows={7}
+                  rows={5}
                   onChange={handleTextChange}
                 />
               </Box>
@@ -379,7 +410,6 @@ export default function Home() {
                 lg:space-x-4
                 space-y-4
                 lg:space-y-0
-                border border-lime-500
                 "
               > 
                 {/* FLAVOR */}
@@ -462,41 +492,16 @@ export default function Home() {
               </Box>
             </Box>
 
-            {/* COST & GRADE */}
+            {/* COST */}
             <Box className="
               flex
               flex-col
               w-full
               lg:w-1/6
-              space-y-0
-              lg:space-y-4
-              border border-pink-500
+              border border-red-500
               "
             >
-              {/* COST */}
               <CostControl />
-              {/* GRADE */}
-              <FormControl className="w-full">
-                <InputLabel id="grade-select-label">
-                  Grade
-                </InputLabel>
-                <Select
-                  id="grade-select"
-                  value={grade}
-                  onChange={handleGradeChange}
-                  sx={{ maxHeight: "56px"}}
-                  renderValue={(value) => renderGradeIconSelection(value as GradeIconKey)}
-                >
-                  {Object.keys(gradeIcons).map((key) => (
-                    <MenuItem key={key} value={key}>
-                    <ListItemIcon>
-                      {renderGradeIconSelection([key as GradeIconKey])}
-                    </ListItemIcon>
-                    <ListItemText primary={gradeIcons[key as GradeIconKey].value} />
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
             </Box>
             {/* END OF FORM CONTENT */}
           </Box>
@@ -506,10 +511,10 @@ export default function Home() {
           <Box className="
             flex
             flex-col
+            justify-center
             items-center
             w-full
             lg:w-1/3
-            py-4
             lg:py-0
             "
           >
@@ -541,7 +546,7 @@ export default function Home() {
           md:space-x-12
           space-y-4
           md:space-y-0
-          border border-pink-500
+          
           "
         >
           {/* AI PROMPT */}
