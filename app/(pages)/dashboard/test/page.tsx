@@ -1,4 +1,4 @@
-import ColorCostControl from "../../../components/ColorCostControl";
+import ColorCostControl from "../../../components/CostControl";
 
 export default function Test() {
     return (
