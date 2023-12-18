@@ -25,23 +25,24 @@ import {
   AutoFixHigh as AutoFixHighIcon,
   Shield as ShieldIcon,
 } from '@mui/icons-material';
-import NexusCard from '../../../components/NexusCard';
+import NexusCard from '@/app/components/NexusCard';
+import ColorCostControl from '@/app/components/ColorCostControl';
 import * as htmlToImage from 'html-to-image';
 import clsx from 'clsx';
 
 // TYPES
-import { EnergyIconKey, GradeIconKey } from '../../../types/types';
+import { EnergyIconKey, GradeIconKey } from '@/app/types/types';
 
 // CONSTANTS
-import { energyIcons, gradeIcons } from '../../../constants/iconData';
-import { cardTypes } from "../../../constants/cardTypes";
-import { entityTypes } from "../../../constants/entityTypes";
+import { energyIcons, gradeIcons } from '@/app/constants/iconData';
+import { cardTypes } from "@/app/constants/cardTypes";
+import { entityTypes } from "@/app/constants/entityTypes";
 //Replace placeholder data
-import { placeholderData } from '../../../constants/placeholderData';
+import { placeholderData } from '@/app/constants/placeholderData';
 
 // UTILS
-import { renderEnergyIconSelection, renderGradeIconSelection } from '../../../utils/iconUtils'; 
-import { downloadCardAsPng } from '../../../utils/imageUtils';
+import { renderEnergyIconSelection, renderGradeIconSelection } from '@/app/utils/iconUtils'; 
+import { downloadCardAsPng } from '@/app/utils/imageUtils';
 
 // Type for form data
 
@@ -68,24 +69,24 @@ export default function Home() {
     setName(event.target.value);
   }
 
-  const handleCostChange = (event: SelectChangeEvent<EnergyIconKey[]>) => {
-    const {
-      target: { value },
-    } = event;
+  // const handleCostChange = (event: SelectChangeEvent<EnergyIconKey[]>) => {
+  //   const {
+  //     target: { value },
+  //   } = event;
   
-    let selectedCost = typeof value === 'string' ? value.split(',') as EnergyIconKey[] : value;
+  //   let selectedCost = typeof value === 'string' ? value.split(',') as EnergyIconKey[] : value;
   
-    let newColoredSelection = selectedCost.filter(icon => energyIcons[icon].value.includes('energy') && !energyIcons[icon].value.includes('Colorless'));
-    let newColorlessSelection = selectedCost.filter(icon => energyIcons[icon].value.includes('Colorless'));
+  //   let newColoredSelection = selectedCost.filter(icon => energyIcons[icon].value.includes('energy') && !energyIcons[icon].value.includes('Colorless'));
+  //   let newColorlessSelection = selectedCost.filter(icon => energyIcons[icon].value.includes('Colorless'));
   
-    if (newColorlessSelection.length > 1) {
-      newColorlessSelection = [newColorlessSelection.pop() as EnergyIconKey];
-    }
+  //   if (newColorlessSelection.length > 1) {
+  //     newColorlessSelection = [newColorlessSelection.pop() as EnergyIconKey];
+  //   }
   
-    let newCost = [...newColoredSelection, ...newColorlessSelection];
+  //   let newCost = [...newColoredSelection, ...newColorlessSelection];
   
-    setCost(newCost);
-  };
+  //   setCost(newCost);
+  // };
   
   function handleTypeSuperChange(event: any) {
     setTypeSuper(event.target.value);
@@ -151,6 +152,7 @@ export default function Home() {
         shadow-xl"
       >
         <Box className="flex flex-col w-full space-y-4">
+          {/* FORM HEADER */}
           <Box className="flex flex-col w-full justify-start">
             <Box className="flex flex-col w-full">
               <Typography
@@ -178,17 +180,219 @@ export default function Home() {
               </Typography>
             </Box>)}
           </Box>
-          <Box className="flex flex-row w-full items-end space-x-4">
-            <Box className="flex w-full">
+          {/* FORM */}
+          <Box className="flex flex-row w/full space-x-4 border border-red-500">
+            <Box className="flex flex-col md:w-2/3 lg:w-4/5 space-y-4 border border-red-500">
+              {/* NAME */}
+              <Box className="flex w-full">
+                <TextField
+                    fullWidth
+                    id="outlined-basic"
+                    label="Name"
+                    variant="outlined"
+                    onChange={handleNameChange}
+                    sx={{ maxHeight: "56px"}}
+                  />
+              </Box>
+              {/* TYPES */}
+              <Box className="flex flex-row w-full items-end space-x-2">
+                {(
+                  type === "Entity" ||
+                  type === "Machine" ||
+                  type === "Enhancement" ||
+                  type === "Source"
+                ) && (<FormControl className="w-1/2">
+                  <InputLabel id="type-super-select-label">Super type</InputLabel>
+                  <Select
+                    labelId="type-super-select-label"
+                    id="type-super-select"
+                    value={typeSuper}
+                    label="Super type"
+                    onChange={handleTypeSuperChange}
+                    sx={{ maxHeight: "56px"}}
+                  >
+                    <MenuItem value="">None</MenuItem>
+                    <MenuItem value="Mythic">Mythic</MenuItem>
+                    <MenuItem value="Base">Base</MenuItem>
+                  </Select>
+                </FormControl>)}
+                <FormControl className={`w-${(
+                  type === "Entity" ||
+                  type === "Machine" ||
+                  type === "Enhancement" ||
+                  type === "Source"
+                ) ? "1/2" : "full"}`}>
+                  <InputLabel id="type-select-label">Type</InputLabel>
+                  <Select
+                    required
+                    labelId="type-select-label"
+                    id="type-select"
+                    value={type}
+                    label="Type"
+                    onChange={handleTypeChange}
+                    sx={{ maxHeight: "56px"}}
+                    renderValue={(selected) => {
+                      const selectedType = cardTypes.find((cardType) => cardType.name === selected);
+                      return selectedType ? selectedType.name : '';
+                    }}
+                  >
+                    {cardTypes.map((cardType) => (
+                      <MenuItem
+                        key={cardType.id}
+                        value={cardType.name}
+                      >
+                        <ListItemIcon>
+                          <cardType.icon />
+                        </ListItemIcon>
+                        <ListItemText>
+                          {cardType.name}
+                        </ListItemText>
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                {(
+                  type === "Entity" ||
+                  type === "Machine" ||
+                  type === "Enhancement" ||
+                  type === "Source"
+                ) && (<FormControl fullWidth className="w-full">
+                  <InputLabel id="type-sub-select-label">Sub type</InputLabel>
+                  <Select
+                    multiple
+                    labelId="type-sub-select-label"
+                    id="type-sub-select"
+                    value={typeSub}
+                    label="Sub type"
+                    onChange={handleTypeSubChange}
+                    renderValue={(selected) => selected.join(', ')}
+                    MenuProps={{
+                      PaperProps: {
+                        style: {
+                          maxHeight: 360,
+                        },
+                      },
+                    }}
+                  >
+                    {entityTypes.map((entityType) => (
+                      <MenuItem key={entityType.id} value={entityType.name}>
+                        <ListItemText primary={entityType.name} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>)}
+              </Box>
+              {/* TEXT */}
               <TextField
+                required
+                fullWidth
+                multiline
+                id="outlined-basic"
+                label="Text"
+                variant="outlined"
+                rows={6}
+                onChange={handleTextChange}
+              />
+              <Box className="flex flex-row w-full space-x-4">
+                <TextField
                   fullWidth
+                  multiline
                   id="outlined-basic"
-                  label="Name"
+                  label="Flavor"
+                  value={flavor}
                   variant="outlined"
-                  onChange={handleNameChange}
                   sx={{ maxHeight: "56px"}}
+                  onChange={handleFlavorChange}
+                  className="w-3/4"
                 />
+                {/* GRADE */}
+                <FormControl className="w-1/4">
+                  <InputLabel id="grade-select-label">Grade</InputLabel>
+                  <Select
+                    id="grade-select"
+                    value={grade}
+                    onChange={handleGradeChange}
+                    sx={{ maxHeight: "56px"}}
+                    renderValue={(value) => renderGradeIconSelection(value as GradeIconKey)}
+                  >
+                    {Object.keys(gradeIcons).map((key) => (
+                      <MenuItem key={key} value={key}>
+                        <ListItemIcon>
+                          {renderGradeIconSelection([key as GradeIconKey])}
+                        </ListItemIcon>
+                        <ListItemText primary={gradeIcons[key as GradeIconKey].value} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
             </Box>
+            <Box className="flex flex-col md:w-1/3 lg:w-1/5 space-y-4 border border-red-500">
+              {/* COLORED COST */}
+              <ColorCostControl />
+              {/* COLORLESS COST */}
+              
+              {/* ATTACK / DEFENSE */}
+                {type === "Entity" && (<Box className={clsx("flex flex-col w-full items-end space-y-2",
+                {
+                  "lg:w-1/3": type === "Entity"
+                }
+              )}>
+                <FormControl fullWidth>
+                    <InputLabel id="attack-select-label">Attack</InputLabel>
+                    <Select
+                      labelId="attack-select-label"
+                      id="attack-select"
+                      value={attack}
+                      label="Attack"
+                      sx={{ maxHeight: "56px"}}
+                      onChange={handleAttackChange}
+                    >
+                      <MenuItem value="X">X</MenuItem>
+                      {[...Array(17)].map((_, index) => {
+                        const i = index + 0;
+                        return (
+                          <MenuItem key={i} value={i.toString()}>
+                            {i}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                  <FormControl fullWidth>
+                    <InputLabel id="defense-select-label">Defense</InputLabel>
+                    <Select
+                      labelId="defense-select-label"
+                      id="defense-select"
+                      value={defense}
+                      label="Defense"
+                      sx={{ maxHeight: "56px"}}
+                      onChange={handleDefenseChange}
+                      MenuProps={{
+                        PaperProps: {
+                          style: {
+                            maxHeight: 360,
+                          },
+                        },
+                      }}
+                    >
+                      <MenuItem value="X">X</MenuItem>
+                      {[...Array(17)].map((_, index) => {
+                        const i = index + 0;
+                        return (
+                          <MenuItem key={i} value={i.toString()}>
+                            {i}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+              </Box>)}
+            </Box>
+          </Box>
+          
+          {/* <Box className="flex flex-row w-full items-end space-x-4 border border-red-500">
+            
             <Box className="flex w-1/3">
               <FormControl className="w-full">
                 <InputLabel id="cost-select-label">Cost</InputLabel>
@@ -211,199 +415,17 @@ export default function Home() {
                 </Select>
               </FormControl>
             </Box>
-          </Box>
-          <Box className="flex flex-row w-full items-end space-x-4">
-            <Box className="flex flex-row w-full items-end space-x-2">
-              {(
-                type === "Entity" ||
-                type === "Machine" ||
-                type === "Enhancement" ||
-                type === "Source"
-              ) && (<FormControl className="w-1/2">
-                <InputLabel id="type-super-select-label">Super type</InputLabel>
-                <Select
-                  labelId="type-super-select-label"
-                  id="type-super-select"
-                  value={typeSuper}
-                  label="Super type"
-                  onChange={handleTypeSuperChange}
-                  sx={{ maxHeight: "56px"}}
-                >
-                  <MenuItem value="">None</MenuItem>
-                  <MenuItem value="Mythic">Mythic</MenuItem>
-                  <MenuItem value="Base">Base</MenuItem>
-                </Select>
-              </FormControl>)}
-              <FormControl className={`w-${(
-                type === "Entity" ||
-                type === "Machine" ||
-                type === "Enhancement" ||
-                type === "Source"
-              ) ? "1/2" : "full"}`}>
-                <InputLabel id="type-select-label">Type</InputLabel>
-                <Select
-                  required
-                  labelId="type-select-label"
-                  id="type-select"
-                  value={type}
-                  label="Type"
-                  onChange={handleTypeChange}
-                  sx={{ maxHeight: "56px"}}
-                  renderValue={(selected) => {
-                    const selectedType = cardTypes.find((cardType) => cardType.name === selected);
-                    return selectedType ? selectedType.name : '';
-                  }}
-                >
-                  {cardTypes.map((cardType) => (
-                    <MenuItem
-                      key={cardType.id}
-                      value={cardType.name}
-                    >
-                      <ListItemIcon>
-                        <cardType.icon />
-                      </ListItemIcon>
-                      <ListItemText>
-                        {cardType.name}
-                      </ListItemText>
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              {(
-                type === "Entity" ||
-                type === "Machine" ||
-                type === "Enhancement" ||
-                type === "Source"
-              ) && (<FormControl fullWidth className="w-full">
-                <InputLabel id="type-sub-select-label">Sub type</InputLabel>
-                <Select
-                  multiple
-                  labelId="type-sub-select-label"
-                  id="type-sub-select"
-                  value={typeSub}
-                  label="Sub type"
-                  onChange={handleTypeSubChange}
-                  renderValue={(selected) => selected.join(', ')}
-                  MenuProps={{
-                    PaperProps: {
-                      style: {
-                        maxHeight: 360,
-                      },
-                    },
-                  }}
-                >
-                  {entityTypes.map((entityType) => (
-                    <MenuItem key={entityType.id} value={entityType.name}>
-                      <ListItemText primary={entityType.name} />
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>)}
-            </Box>
-            <Box className="flex w-1/3 items-end space-x-2">
-              <FormControl fullWidth>
-                <InputLabel id="grade-select-label">Grade</InputLabel>
-                <Select
-                  id="grade-select"
-                  value={grade}
-                  onChange={handleGradeChange}
-                  sx={{ maxHeight: "56px"}}
-                  renderValue={(value) => renderGradeIconSelection(value as GradeIconKey)}
-                >
-                  {Object.keys(gradeIcons).map((key) => (
-                    <MenuItem key={key} value={key}>
-                      <ListItemIcon>
-                        {renderGradeIconSelection([key as GradeIconKey])}
-                      </ListItemIcon>
-                      <ListItemText primary={gradeIcons[key as GradeIconKey].value} />
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-          </Box>
-          <TextField
-            required
-            fullWidth
-            multiline
-            id="outlined-basic"
-            label="Text"
-            variant="outlined"
-            rows={6}
-            onChange={handleTextChange}
-          />
+          </Box> */}
+          
           <Box className="flex flex-col md:flex-row w-full items-end space-y-4 md:space-y-0 space-x-0 md:space-x-4">
             <Box className={clsx("flex w-full",
               {
                 "lg:w-2/3": type === "Entity"
               }
             )}>
-              <TextField
-                fullWidth
-                multiline
-                id="outlined-basic"
-                label="Flavor"
-                value={flavor}
-                variant="outlined"
-                sx={{ maxHeight: "56px"}}
-                onChange={handleFlavorChange}
-              />
+              
             </Box>
-            {type === "Entity" && (<Box className={clsx("flex flex-row w-full items-end space-x-2",
-              {
-                "lg:w-1/3": type === "Entity"
-              }
-            )}>
-              <FormControl fullWidth>
-                  <InputLabel id="attack-select-label">Attack</InputLabel>
-                  <Select
-                    labelId="attack-select-label"
-                    id="attack-select"
-                    value={attack}
-                    label="Attack"
-                    sx={{ maxHeight: "56px"}}
-                    onChange={handleAttackChange}
-                  >
-                    <MenuItem value="X">X</MenuItem>
-                    {[...Array(17)].map((_, index) => {
-                      const i = index + 0;
-                      return (
-                        <MenuItem key={i} value={i.toString()}>
-                          {i}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-                <FormControl fullWidth>
-                  <InputLabel id="defense-select-label">Defense</InputLabel>
-                  <Select
-                    labelId="defense-select-label"
-                    id="defense-select"
-                    value={defense}
-                    label="Defense"
-                    sx={{ maxHeight: "56px"}}
-                    onChange={handleDefenseChange}
-                    MenuProps={{
-                      PaperProps: {
-                        style: {
-                          maxHeight: 360,
-                        },
-                      },
-                    }}
-                  >
-                    <MenuItem value="X">X</MenuItem>
-                    {[...Array(17)].map((_, index) => {
-                      const i = index + 0;
-                      return (
-                        <MenuItem key={i} value={i.toString()}>
-                          {i}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-            </Box>)}
+            
           </Box>
           {switchAiAutocomplete && (
           <Divider

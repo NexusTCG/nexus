@@ -7,7 +7,6 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import FlareIcon from '@mui/icons-material/Flare';
 import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
-import CycloneIcon from '@mui/icons-material/Cyclone';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import EnergySavingsLeafIcon from '@mui/icons-material/EnergySavingsLeaf';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
@@ -19,6 +18,10 @@ type EnergyValues = {
 };
 
 export default function ColorCostControl() {
+  const [decrementHoveredButton, setDecrementHoveredButton] = React.useState<string | null>(null);
+  const decrementHover = decrementHoveredButton === "decrease" ? "error" : "primary";
+  const [incrementHoveredButton, setIncrementHoveredButton] = React.useState<string | null>(null);
+  const incrementHover = incrementHoveredButton === "increase" ? "success" : "primary";
   const maxIconsPerType = 5;
   const maxTotalIcons = 6;
   const energyTypes: string[] = ['yellow', 'blue', 'purple', 'red', 'green'];
@@ -47,13 +50,22 @@ export default function ColorCostControl() {
       key={type}
       variant="outlined"
       aria-label={`${type} energy control`}
-      className="p-2 flex items-center space-x-2 bg-slate-800"
+      className="flex flex-row justify-between items-center px-8 py-auto hover:bg-gray-900 hover:bg-opacity-50"
+      sx={{ height: "56px" }}
     >
       <IconButton
-        color="primary"
+        color={decrementHover}
         size="small"
         onClick={handleEnergyChange(type, -1)}
-    >
+        onMouseEnter={() => setDecrementHoveredButton("decrease")}
+        onMouseLeave={() => {
+          setTimeout(() => {
+            if (decrementHoveredButton === "decrease") {
+              setDecrementHoveredButton(null);
+            }
+          }, 500);
+        }}
+      >
         <RemoveIcon />
       </IconButton>
 
@@ -104,17 +116,25 @@ export default function ColorCostControl() {
       />)}
 
       <IconButton
-        color="primary"
+        color={incrementHover}
         size="small"
         onClick={handleEnergyChange(type, 1)}
-    >
+        onMouseEnter={() => setIncrementHoveredButton("increase")}
+        onMouseLeave={() => {
+          setTimeout(() => {
+            if (incrementHoveredButton === "increase") {
+              setIncrementHoveredButton(null);
+            }
+          }, 500);
+        }}
+      >
         <AddIcon />
       </IconButton>
     </ButtonGroup>
   );
 
   return (
-    <Box className="flex flex-col w-full space-y-2">
+    <Box className="flex flex-col w-full h-full rounded-md border border-gray-500 hover:border-white">
       {energyTypes.map((type) => (
         <div key={type}>
           {renderEnergyControl(type)}
