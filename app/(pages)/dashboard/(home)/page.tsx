@@ -27,7 +27,7 @@ import CostControl from '@/app/components/CostControl';
 import clsx from 'clsx';
 
 // TYPES
-import { EnergyIconKey, GradeIconKey, EnergyType } from '@/app/types/types';
+import { EnergyIconKey, GradeIconKey, EnergyType, EnergyCount } from '@/app/types/types';
 
 // CONSTANTS
 import { energyIcons, gradeIcons } from '@/app/constants/iconData';
@@ -43,7 +43,7 @@ import { downloadCardAsPng } from '@/app/utils/imageUtils';
 export default function CardCreator() {
   // React Hook form state
   const [name, setName] = React.useState("");
-  const [cost, setCost] = useState<EnergyType>({});
+  const [cost, setCost] = useState<EnergyCount | null>(null);
   const [typeSuper, setTypeSuper] = React.useState("");
   const [type, setType] = React.useState("");
   const [typeSub, setTypeSub] = React.useState<string[]>([]);
@@ -54,7 +54,7 @@ export default function CardCreator() {
   const [defense, setDefense] = React.useState("");
   const [aiAutoComplete, setAiAutoComplete] = useState(true);
 
-  const handleCostChange = (newEnergyValues: EnergyType) => {
+  const handleCostChange = (newEnergyValues: EnergyCount) => {
     setCost(newEnergyValues);
   };
 

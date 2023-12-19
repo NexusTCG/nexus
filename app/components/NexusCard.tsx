@@ -8,7 +8,7 @@ import { energyIcons } from '@/app/constants/iconData';
 type NexusCardProps = {
     cardCreator: string;
     cardName: string;
-    cardCost: { [key in EnergyType]?: number };
+    cardCost: { [key in EnergyType]?: number } | null;
     cardType: string;
     cardSuperType: string;
     cardSubType: string[];
@@ -35,6 +35,8 @@ export default function NexusCard({
 
     // Function to render the cost icons based on the cardCost object
     const renderCostIcons = () => {
+        if (!cardCost) return []; // Return empty if cardCost is null
+    
         return Object.entries(cardCost).flatMap(([energyType, count]) => {
             const IconComponent = energyIcons[energyType as keyof typeof energyIcons].icon;
             return Array.from({ length: count || 0 }, (_, index) => (
@@ -56,6 +58,8 @@ export default function NexusCard({
 
     // Function to get the dynamic background class
     const getCardBackgroundClass = () => {
+        if (!cardCost) return ""; // Return default class or empty string if cardCost is null
+    
         const energyTypes = Object.keys(cardCost) as (keyof typeof tailwindClasses)[];
     
         // Mapping energy types to Tailwind classes
@@ -138,7 +142,7 @@ export default function NexusCard({
                         <Typography variant="body2">{cardSuperType}</Typography>
                         <Typography variant="body2">{cardType}</Typography>
                         {cardSubType.length > 0 && <Typography variant="body2">–</Typography>}
-                        <Typography variant="body2">{cardSubType.join(', ')}</Typography>
+                        <Typography variant="body2">{cardSubType.join(" ")}</Typography>
                     </Box>
                     <div>
                         {cardGrade && (
