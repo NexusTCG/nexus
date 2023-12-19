@@ -5,7 +5,6 @@ import { energyIcons, gradeIcons } from "@/app/constants/iconData";
 export type EnergyIconKey = keyof typeof energyIcons;
 export type GradeIconKey = keyof typeof gradeIcons;
 export type EnergyType = keyof typeof energyIcons;
-export type EnergyCount = { [K in EnergyType]?: number };
 
 export type CardType = {
   id: number;
@@ -40,4 +39,13 @@ export type EntityType = {
     height: string;
     width: string;
     padding: string;
+  };
+
+  export type CostValues = {
+    yellow?: number;
+    blue?: number;
+    purple?: number;
+    red?: number;
+    green?: number;
+    colorless?: number;
   };

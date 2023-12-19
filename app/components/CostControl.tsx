@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { Box, ButtonGroup, IconButton } from '@mui/material';
 import { energyIcons } from '@/app/constants/iconData';
-import { EnergyType, EnergyCount } from '@/app/types/types';
+import { EnergyType, CostValues } from '@/app/types/types';
 import { Remove as RemoveIcon, Add as AddIcon } from '@mui/icons-material';
 
 // TYPES
@@ -15,11 +15,11 @@ type EnergyValues = {
 const energyTypes: EnergyType[] = ['yellow', 'blue', 'purple', 'red', 'green', 'colorless'];
 
 type CostControlProps = {
-  onEnergyChange: (newEnergyValues: EnergyCount) => void;
+  onCostChange: (newCostValues: CostValues) => void;
 };
 
 // COMPONENT
-export default function CostControl({ onEnergyChange }: CostControlProps) {
+export default function CostControl({ onCostChange }: CostControlProps) {
   const maxIconsPerType = 5;
   const maxTotalIcons = 6;
 
@@ -43,7 +43,7 @@ export default function CostControl({ onEnergyChange }: CostControlProps) {
 
     const newEnergyValues = { ...energyValues, [type]: newValue };
     setEnergyValues(newEnergyValues);
-    onEnergyChange(newEnergyValues);
+    onCostChange(newEnergyValues);
   };
 
   const renderEnergyIcon = (type: EnergyType): JSX.Element => {

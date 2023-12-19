@@ -2,13 +2,13 @@ import { Box, Typography, Divider } from "@mui/material";
 import Image from "next/image";
 import DesignServicesIcon from '@mui/icons-material/DesignServices';
 import clsx from 'clsx';
-import { EnergyType } from '@/app/types/types';
+import { EnergyType, CostValues } from '@/app/types/types';
 import { energyIcons } from '@/app/constants/iconData';
 
 type NexusCardProps = {
     cardCreator: string;
     cardName: string;
-    cardCost: { [key in EnergyType]?: number } | null;
+    cardCost: CostValues | null;
     cardType: string;
     cardSuperType: string;
     cardSubType: string[];
@@ -35,22 +35,15 @@ export default function NexusCard({
 
     // Function to render the cost icons based on the cardCost object
     const renderCostIcons = () => {
-        if (!cardCost) return []; // Return empty if cardCost is null
-    
+        if (!cardCost) return [];
+
         return Object.entries(cardCost).flatMap(([energyType, count]) => {
             const IconComponent = energyIcons[energyType as keyof typeof energyIcons].icon;
             return Array.from({ length: count || 0 }, (_, index) => (
                 <IconComponent 
                     key={`${energyType}-${index}`}
-                    style={{ 
-                        width: 20, 
-                        height: 20, 
-                        boxShadow: "0px 2px 0px rgba(0, 0, 0, .75)", 
-                        borderRadius: "50%",
-                        padding: "2px",
-                        color: "black"
-                    }}
-                    className={energyIcons[energyType as keyof typeof energyIcons].tailwindClass as string}
+                    style={{ width: 20, height: 20 }}
+                    className={energyIcons[energyType as keyof typeof energyIcons].tailwindClass}
                 />
             ));
         });

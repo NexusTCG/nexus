@@ -1,3 +1,4 @@
+import React from 'react';
 import { energyIcons, gradeIcons } from '../constants/iconData';
 import { EnergyIconKey, GradeIconKey } from '../types/types';
 
@@ -5,8 +6,12 @@ export const renderEnergyIconSelection = (selected: EnergyIconKey[]) => {
     return (
         <div style={{ display: 'flex', gap: '5px' }}>
             {selected.map((key) => {
-                const icon = energyIcons[key];
-                return icon ? <img key={key} src={icon.imagePath} alt={key} style={{ width: 24 }} /> : <span key={key}>{key}</span>;
+                const IconComponent = energyIcons[key].icon;
+                return IconComponent ? (
+                    <IconComponent key={key} style={{ width: 24, height: 24 }} className={energyIcons[key].tailwindClass} />
+                ) : (
+                    <span key={key}>{key}</span>
+                );
             })}
         </div>
     );

@@ -27,7 +27,7 @@ import CostControl from '@/app/components/CostControl';
 import clsx from 'clsx';
 
 // TYPES
-import { EnergyIconKey, GradeIconKey, EnergyType, EnergyCount } from '@/app/types/types';
+import { EnergyIconKey, GradeIconKey, CostValues } from '@/app/types/types';
 
 // CONSTANTS
 import { energyIcons, gradeIcons } from '@/app/constants/iconData';
@@ -39,11 +39,27 @@ import { placeholderData } from '@/app/constants/placeholderData';
 // UTILS
 import { renderEnergyIconSelection, renderGradeIconSelection } from '@/app/utils/iconUtils'; 
 import { downloadCardAsPng } from '@/app/utils/imageUtils';
+import * as htmlToImage from 'html-to-image';
 
-export default function CardCreator() {
+// Type for form data
+
+// Zod schema for form data
+
+// OpenAI API call
+// Form update on API call
+
+export default function Home() {
   // React Hook form state
   const [name, setName] = React.useState("");
-  const [cost, setCost] = useState<EnergyCount | null>(null);
+  // const [cost, setCost] = useState<EnergyIconKey[]>([]);
+  const [cost, setCost] = useState<CostValues>({
+    yellow: 0,
+    blue: 0,
+    purple: 0,
+    red: 0,
+    green: 0,
+    colorless: 0
+  });
   const [typeSuper, setTypeSuper] = React.useState("");
   const [type, setType] = React.useState("");
   const [typeSub, setTypeSub] = React.useState<string[]>([]);
@@ -54,14 +70,14 @@ export default function CardCreator() {
   const [defense, setDefense] = React.useState("");
   const [aiAutoComplete, setAiAutoComplete] = useState(true);
 
-  const handleCostChange = (newEnergyValues: EnergyCount) => {
-    setCost(newEnergyValues);
-  };
-
   function handleNameChange(event: any) {
     setName(event.target.value);
   }
-  
+
+  const handleCostChange = (newCostValues: CostValues) => {
+    setCost(newCostValues);
+  };
+
   function handleTypeSuperChange(event: any) {
     setTypeSuper(event.target.value);
   }
@@ -103,20 +119,20 @@ export default function CardCreator() {
   renderGradeIconSelection([])
 
   return (
+
     // MAIN CONTAINER
     <Box className="
       flex
       flex-col
       justify-start
       w-full
-      space-y-0
-      md:space-y-6
+      space-y-6
       "
     > 
       <Typography
         variant="h1"
         sx={{ fontSize: "36px" }}
-        className="text-md font-medium text-gray-50 px-6 md:px-0 hidden md:block"
+        className="text-md font-medium text-gray-50 px-6 md:px-0 "
       >
         Create a Nexus card
       </Typography>
@@ -127,13 +143,12 @@ export default function CardCreator() {
         flex-col
         w-full
         p-6
-        space-y-4
-        md:space-y-8
+        space-y-8
         md:rounded-xl
-        md:bg-gray-800
-        md:border
-        md:border-gray-700
-        md:shadow-xl
+        bg-gray-800
+        border
+        border-gray-700
+        shadow-xl
         "
       >
         {/* FORM & CARD SECTION */}
@@ -291,10 +306,10 @@ export default function CardCreator() {
 
                   {/* TYPE */}
                   <FormControl className={`w-full lg:w-${(
-                      type === "Entity" ||
-                      type === "Machine" ||
-                      type === "Enhancement" ||
-                      type === "Source"
+                    type === "Entity" ||
+                    type === "Machine" ||
+                    type === "Enhancement" ||
+                    type === "Source"
                     ) ? "1/2" : "full"}`}>
                     <InputLabel id="type-select-label">
                       Type
@@ -330,10 +345,10 @@ export default function CardCreator() {
 
                   {/* SUBTYPE */}
                   {(
-                    type === "Entity" ||
-                    type === "Machine" ||
-                    type === "Enhancement" ||
-                    type === "Source"
+                  type === "Entity" ||
+                  type === "Machine" ||
+                  type === "Enhancement" ||
+                  type === "Source"
                   ) && (
                   <FormControl className="w-full">
                     <InputLabel id="type-sub-select-label">Sub type</InputLabel>
@@ -467,6 +482,7 @@ export default function CardCreator() {
                   </Box>)}
                 </Box>
               </Box>
+
               
               {/* COST */}
               <Box className="
@@ -476,7 +492,7 @@ export default function CardCreator() {
                 lg:w-1/6
                 "
               >
-                <CostControl onEnergyChange={handleCostChange}  />
+                <CostControl onCostChange={handleCostChange} />
               </Box>
             </Box>
             {/* END OF FORM CONTENT */}
@@ -543,14 +559,18 @@ export default function CardCreator() {
           {name && (<Box className="
             flex
             flex-col
+            justify-center
+            lg:justify-start
+            items-center
+            lg:items-start
             w-full
             md:w-1/4
             space-y-2
             "
           >
             {/* AI SWITCH & SUBMIT */}
-            <Box className="flex flex-col">
-              <FormControl fullWidth component="fieldset" className="flex items-center">
+            <Box className="flex flex-col w-full js-center">
+              <FormControl fullWidth component="fieldset">
               <FormControlLabel
                 control={<Switch defaultChecked size="medium" />}
                 defaultChecked={aiAutoComplete}
@@ -572,6 +592,16 @@ export default function CardCreator() {
               >
                 Download card
               </Button>
+              {/* Hiding Save button until DB implementation */}
+              {/* <Button
+                variant="outlined"
+                color="primary"
+                size="large"
+                endIcon={<SaveIcon />}
+                className="w-full !rounded-full text-center"
+              >
+                Save card
+              </Button> */}
             </Box>
           </Box>)}
           {/* END OF SWTICH & BUTTON */}
