@@ -48,7 +48,7 @@ export default function CostControl({ onCostChange }: CostControlProps) {
 
   const renderEnergyIcon = (type: EnergyType): JSX.Element => {
     const Icon = energyIcons[type].icon;
-    return <Icon className={energyIcons[type].tailwindClass} sx={{ height: '30px', width: '30px', padding: '2px' }} />;
+    return <Icon className={energyIcons[type].tailwindClass} sx={{ height: '30px', width: '30px', padding: '3px' }} />;
   };
 
   const renderEnergyControl = (type: EnergyType): JSX.Element => {

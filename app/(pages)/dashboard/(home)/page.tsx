@@ -51,7 +51,6 @@ import * as htmlToImage from 'html-to-image';
 export default function Home() {
   // React Hook form state
   const [name, setName] = React.useState("");
-  // const [cost, setCost] = useState<EnergyIconKey[]>([]);
   const [cost, setCost] = useState<CostValues>({
     yellow: 0,
     blue: 0,
