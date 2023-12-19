@@ -85,22 +85,22 @@ export default function NexusCard({
       };
 
       const gradientShadesMap: { [key: string]: { light: string, medium: string, dark: string } } = {
-        yellow_blue: {
+        blue_yellow: {
             light: 'bg-gradient-to-r from-yellow-50 to-sky-50',
             medium: 'bg-gradient-to-r from-yellow-100 to-sky-100',
             dark: 'bg-gradient-to-r from-yellow-400 to-sky-400',
         },
-        yellow_purple: {
+        purple_yellow: {
             light: 'bg-gradient-to-r from-yellow-50 to-purple-50',
             medium: 'bg-gradient-to-r from-yellow-100 to-purple-100',
             dark: 'bg-gradient-to-r from-yellow-400 to-purple-400',
         },
-        yellow_red: {
+        red_yellow: {
             light: 'bg-gradient-to-r from-yellow-50 to-red-50',
             medium: 'bg-gradient-to-r from-yellow-100 to-red-100',
             dark: 'bg-gradient-to-r from-yellow-400 to-red-400',
         },
-        yellow_green: {
+        green_yellow: {
             light: 'bg-gradient-to-r from-yellow-50 to-lime-50',
             medium: 'bg-gradient-to-r from-yellow-100 to-lime-100',
             dark: 'bg-gradient-to-r from-yellow-400 to-lime-400',
@@ -120,17 +120,17 @@ export default function NexusCard({
             medium: 'bg-gradient-to-r from-sky-100 to-lime-100',
             dark: 'bg-gradient-to-r from-sky-400 to-lime-400',
         },
-        purple_red: {
+        red_purple: {
             light: 'bg-gradient-to-r from-purple-50 to-red-50',
             medium: 'bg-gradient-to-r from-purple-100 to-red-100',
             dark: 'bg-gradient-to-r from-purple-400 to-red-400',
         },
-        purple_green: {
+        green_purple: {
             light: 'bg-gradient-to-r from-purple-50 to-lime-50',
             medium: 'bg-gradient-to-r from-purple-100 to-lime-100',
             dark: 'bg-gradient-to-r from-purple-400 to-lime-400',
         },
-        red_green: {
+        green_red: {
             light: 'bg-gradient-to-r from-red-50 to-lime-50',
             medium: 'bg-gradient-to-r from-red-100 to-lime-100',
             dark: 'bg-gradient-to-r from-red-400 to-lime-400',
@@ -188,6 +188,9 @@ export default function NexusCard({
                 // Construct the key for the gradient map
                 const gradientKey = colorsWithCost.sort().join('_');
                 // Check if this gradient exists
+
+                console.log('Gradient Key:', gradientKey, 'Available:', gradientKey in gradientShadesMap);
+
                 if (gradientKey in gradientShadesMap) {
                     return gradientShadesMap[gradientKey as keyof typeof gradientShadesMap] || defaultShades;
                 }
@@ -226,6 +229,7 @@ export default function NexusCard({
 
     // MAIN COMPONENT
     return (
+
         <Box
             id="card-border"
             className={clsx(
