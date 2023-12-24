@@ -1,6 +1,7 @@
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './styles/theme';
 import { Inter } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/react';
 import './styles/globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -28,6 +29,7 @@ export default function RootLayout(props: RootLayoutProps) {
         <main className="min-h-screen flex flex-col items-center bg-gray-900 text-white">
           <ThemeProvider theme={theme}>
             {children}
+            <Analytics />
           </ThemeProvider>
         </main>
       </body>
