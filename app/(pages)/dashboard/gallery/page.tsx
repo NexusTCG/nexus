@@ -2,6 +2,7 @@ import TextfieldWithSlashMenu from "../../../components/TextfieldWithSlashMenu";
 import FlightIcon from '@mui/icons-material/Flight';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import BugReportIcon from '@mui/icons-material/BugReport';
+import EditableNexusCard from '../../../components/EditableNexusCard';
 
 const keywordAbilities = [
   { icon: <FlightIcon />, title: "Flight", description: "This entity can’t be defended except by entities with flight or intercept." },
@@ -11,8 +12,9 @@ const keywordAbilities = [
 
 export default function Gallery() {
   return (
-    <div className="flex flex-col w-full justify-center items-center space-y-24">
+    <div className="flex flex-col w-full justify-center items-center space-y-24 px-6">
       <TextfieldWithSlashMenu textfieldLabel="Game" textfieldWidth="600px" textfieldFullWidth={false} menuOptions={keywordAbilities} />
+      <EditableNexusCard />
     </div>
   );
 }
