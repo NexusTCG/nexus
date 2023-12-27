@@ -22,7 +22,7 @@ import {
   Save as SaveIcon,
   Download as DownloadIcon,
 } from '@mui/icons-material';
-import NexusCard from '@/app/components/NexusCard';
+import NexusCard from '@/app/components/Card Creator Form/NexusCard';
 import CostControl from '@/app/components/CostControl';
 import clsx from 'clsx';
 

@@ -6,6 +6,24 @@ export type EnergyIconKey = keyof typeof energyIcons;
 export type GradeIconKey = keyof typeof gradeIcons;
 export type EnergyType = keyof typeof energyIcons;
 
+// Nexus Card Creator Form Data
+export type CardFormData = {
+  cardCreator: string;
+  cardName: string;
+  cardCost: string[];
+  cardColor: string;
+  cardArt: string;
+  cardType: string;
+  cardSuperType: string;
+  cardSubType: string[];
+  cardGrade: string;
+  cardText: string;
+  cardFlavorText: string;
+  cardAttack: string;
+  cardDefense: string;
+};
+
+// Nexus Card Types
 export type CardType = {
   id: number;
   name: string;
@@ -18,6 +36,7 @@ export type CardType = {
   icon: ComponentType;
 };
 
+// Nexus Entity Types
 export type EntityType = {
     id: number;
     name: string;
@@ -31,6 +50,7 @@ export type EntityType = {
     // icon: ComponentType;
   };
 
+  // Nexus Energy Types
   export type EnergyIcon = {
     name: string;
     value: string;
@@ -41,6 +61,7 @@ export type EntityType = {
     padding: string;
   };
 
+  // Nexus Cost Types
   export type CostValues = {
     yellow?: number;
     blue?: number;
@@ -49,3 +70,5 @@ export type EntityType = {
     green?: number;
     colorless?: number;
   };
+
+  

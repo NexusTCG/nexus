@@ -2,7 +2,8 @@ import TextfieldWithSlashMenu from "../../../components/TextfieldWithSlashMenu";
 import FlightIcon from '@mui/icons-material/Flight';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import BugReportIcon from '@mui/icons-material/BugReport';
-import EditableNexusCard from '../../../components/EditableNexusCard';
+import EditableNexusCard from '../../../components/Card Creator Form/EditableNexusCard';
+import { Box } from "@mui/material";
 
 const keywordAbilities = [
   { icon: <FlightIcon />, title: "Flight", description: "This entity can’t be defended except by entities with flight or intercept." },

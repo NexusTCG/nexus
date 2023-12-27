@@ -16,6 +16,18 @@ module.exports = {
         },
       },
     },
+    aspectRatio: {
+      55: '55',
+      108: '108',
+    },
+    variants: {
+      aspectRatio: ['responsive', 'hover']
+    }
   },
-  plugins: [],
+  corePlugins: {
+    aspectRatio: false,
+  },
+  plugins: [
+    require('@tailwindcss/aspect-ratio'),
+  ],
 }
