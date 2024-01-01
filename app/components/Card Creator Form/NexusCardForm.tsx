@@ -1,7 +1,8 @@
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import cardSchema from '../../schemas/cardSchema'; 
 import EditableNexusCard from './EditableNexusCard';
+import { CardData } from "../../types/types";
 
 export default function NexusCardForm() {
   const {
@@ -9,19 +10,22 @@ export default function NexusCardForm() {
     handleSubmit,
     watch,
     formState: { errors }
-  } = useForm({
+  } = useForm<CardData>({
     resolver: zodResolver(cardSchema)
   });
 
-  const nexusCardData = watch();
+  const cardData = watch();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: CardData) => {
     console.log(data);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-        <EditableNexusCard cardData={cardData} />
+        <EditableNexusCard
+          control={control}
+            nexusCardData={cardData}
+        />
     </form>
   );
-}
+};

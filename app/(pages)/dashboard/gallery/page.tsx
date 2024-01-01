@@ -2,7 +2,7 @@ import TextfieldWithSlashMenu from "../../../components/TextfieldWithSlashMenu";
 import FlightIcon from '@mui/icons-material/Flight';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import BugReportIcon from '@mui/icons-material/BugReport';
-import EditableNexusCard from '../../../components/Card Creator Form/EditableNexusCard';
+import NexusCardForm from '../../../components/Card Creator Form/NexusCardForm';
 import { Box } from "@mui/material";
 
 const keywordAbilities = [
@@ -15,7 +15,7 @@ export default function Gallery() {
   return (
     <div className="flex flex-col w-full justify-center items-center space-y-24 px-6">
       <TextfieldWithSlashMenu textfieldLabel="Game" textfieldWidth="600px" textfieldFullWidth={false} menuOptions={keywordAbilities} />
-      <EditableNexusCard />
+      <NexusCardForm />
     </div>
   );
 }

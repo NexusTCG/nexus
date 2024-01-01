@@ -3,63 +3,24 @@
 import React from "react";
 import { Box, TextField, Select, FormControl, InputLabel, MenuItem, Input } from "@mui/material";
 import { Controller, Control } from "react-hook-form";
-import { CardFormData } from "../../types/types";
+import { CardData, CardType } from "../../types/types";
 import Image from "next/image";
 import clsx from "clsx";
 
+// DATA IMPORTS
+import { cardTypes } from "../../constants/cardTypes";
+
+const cardTypeOptions: Record<number, string> = cardTypes.reduce((acc: Record<number, string>, type: CardType) => {
+    acc[type.id] = type.name;
+    return acc;
+  }, {});
+
 type NexusCardProps = {
-    nexusCardData: CardFormData;
-    control: Control<CardFormData>;
+    nexusCardData: CardData;
+    control: Control<CardData>;
 };
 
-const cardSuperTypeOptions = {
-    type1: "Super Type 1",
-    type2: "Super Type 2",
-    // ... other super types
-  };
-  
-  const cardTypeOptions = {
-    type1: "Type 1",
-    type2: "Type 2",
-    // ... other types
-  };
-  
-  const cardSubTypeOptions = {
-    subtype1: "Sub Type 1",
-    subtype2: "Sub Type 2",
-    // ... other sub types
-  };
-  
-  const cardGradeOptions = {
-    grade1: "Grade 1",
-    grade2: "Grade 2",
-    // ... other grades
-  };
-
 export default function EditableNexusCard({ nexusCardData, control }: NexusCardProps) {
-    const cardSuperTypeOptions = {
-        // Define your super types here
-    };
-    const cardTypeOptions = {
-        // Define your types here
-    };
-    const cardSubTypeOptions = {
-        // Define your sub types here
-    };
-    const cardGradeOptions = {
-        // Define your grades here
-    };
-    
-    // Move to consts and import
-    const colors = {
-        default: '#F5C518',
-        yellow: '#F5C518',
-        blue: '#3A8DE8',
-        purple: '#A95EC4',
-        red: '#E03E3E',
-        green: '#1DB954',
-        colorless: '#FFFFFF',
-    };
 
     function handleColorChange() {
         // Logic to handle color change
@@ -79,12 +40,6 @@ export default function EditableNexusCard({ nexusCardData, control }: NexusCardP
             <Box id="card-back" className={clsx("flex flex-col w-full h-full p-3 md:p-4 rounded-lg md:rounded-xl",
                 // cardColor === "default" && "bg-[#F5C518]",
                 // cardColor === "yellow" && "bg-[#F5C518]",
-                // cardColor === "blue" && "bg-[#3A8DE8]",
-                // cardColor === "purple" && "bg-[#A95EC4]",
-                // cardColor === "red" && "bg-[#E03E3E]",
-                // cardColor === "green" && "bg-[#1DB954]",
-                // cardColor === "colorless" && "bg-[#FFFFFF]",
-                // cardColor === "yellow_blue" && "bg-gradient-to-r from-[#3A8DE8] to-[#F5C518]"
             )}>
                 <Box
                     id="card-title"
@@ -126,7 +81,7 @@ export default function EditableNexusCard({ nexusCardData, control }: NexusCardP
                             />
                         )}
                     />
-                    <Controller
+                    {/* <Controller
                         name="cardColor"
                         control={control}
                         render={({ field }) => (
@@ -148,7 +103,7 @@ export default function EditableNexusCard({ nexusCardData, control }: NexusCardP
                                 </Select>
                             </FormControl>
                         )}
-                    />
+                    /> */}
                 </Box>
                 <Box
                     id="card-image"
@@ -202,7 +157,7 @@ export default function EditableNexusCard({ nexusCardData, control }: NexusCardP
                     }}
                 >
                     <Box id="card-types" className="flex flex-row w-full">
-                        <Controller
+                        {/* <Controller
                             name="cardSuperType"
                             control={control}
                             render={({ field }) => (
@@ -215,7 +170,7 @@ export default function EditableNexusCard({ nexusCardData, control }: NexusCardP
                                     </Select>
                                 </FormControl>
                             )}
-                        />
+                        /> */}
                         <Controller
                             name="cardType"
                             control={control}
@@ -230,7 +185,7 @@ export default function EditableNexusCard({ nexusCardData, control }: NexusCardP
                                 </FormControl>
                             )}
                         />
-                        <Controller
+                        {/* <Controller
                             name="cardSubType"
                             control={control}
                             render={({ field }) => (
@@ -243,9 +198,9 @@ export default function EditableNexusCard({ nexusCardData, control }: NexusCardP
                                     </Select>
                                 </FormControl>
                             )}
-                        />
+                        /> */}
                     </Box>
-                    <Controller
+                    {/* <Controller
                         name="cardGrade"
                         control={control}
                         render={({ field }) => (
@@ -258,7 +213,7 @@ export default function EditableNexusCard({ nexusCardData, control }: NexusCardP
                                 </Select>
                             </FormControl>
                         )}
-                    />
+                    /> */}
                 </Box>
                 <Box className="
                     flex
@@ -287,7 +242,7 @@ export default function EditableNexusCard({ nexusCardData, control }: NexusCardP
                             disableUnderline: true,
                         }}
                     />
-                    <Box className="bg-black h-[1px] w-full my-4" />
+                    {/* <Box className="bg-black h-[1px] w-full my-4" /> */}
                     <TextField
                         id="card-flavor-input"
                         variant="standard"
@@ -325,8 +280,6 @@ export default function EditableNexusCard({ nexusCardData, control }: NexusCardP
                         <option key={0} value="0">0</option>
                         <option key={1} value="1">1</option>
                         <option key={2} value="2">2</option>
-                        <option key={3} value="3">3</option>
-                        <option key={4} value="4">4</option>
                     </Select>
                     /
                     <Select
@@ -338,8 +291,6 @@ export default function EditableNexusCard({ nexusCardData, control }: NexusCardP
                         <option key={0} value="0">0</option>
                         <option key={1} value="1">1</option>
                         <option key={2} value="2">2</option>
-                        <option key={3} value="3">3</option>
-                        <option key={4} value="4">4</option>
                     </Select>
                 </Box>
             </Box>

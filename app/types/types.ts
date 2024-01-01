@@ -7,7 +7,7 @@ export type GradeIconKey = keyof typeof gradeIcons;
 export type EnergyType = keyof typeof energyIcons;
 
 // Nexus Card Creator Form Data
-export type CardFormData = {
+export type CardData = {
   cardCreator: string;
   cardName: string;
   cardCost: string[];
