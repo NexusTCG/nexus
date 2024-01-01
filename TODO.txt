@@ -1,0 +1,4 @@
+1. Replace NexusCard.tsx with EditableNexusCard.tsx (responsive, embedded input)
+2. Create new card creator form with react hook form, replacing dashboard/page.tsx
+3. Add context
+4. Implement Supabase
