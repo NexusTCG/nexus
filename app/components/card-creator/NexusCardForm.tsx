@@ -33,7 +33,7 @@ export default function NexusCardForm() {
       <form onSubmit={handleSubmit(onSubmit)}>
           <EditableNexusCard
             control={control}
-            nexusCardData={cardData}
+            cardData={cardData}
           />
       </form>
     </>

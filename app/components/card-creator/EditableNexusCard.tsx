@@ -16,11 +16,11 @@ const cardTypeOptions: Record<number, string> = cardTypes.reduce((acc: Record<nu
   }, {});
 
 type NexusCardProps = {
-    nexusCardData: CardData;
     control: Control<CardData>;
+    cardData: CardData;
 };
 
-export default function EditableNexusCard({ nexusCardData, control }: NexusCardProps) {
+export default function EditableNexusCard({ cardData, control }: NexusCardProps) {
 
     function handleColorChange() {
         // Logic to handle color change

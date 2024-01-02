@@ -1,4 +1,4 @@
-export const entityTypes = [
+export const keywordAbilityTypes = [
     {
         id: 1,
         name: "",
