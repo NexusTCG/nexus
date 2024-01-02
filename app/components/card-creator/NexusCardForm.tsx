@@ -1,8 +1,15 @@
+"use client";
+
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import cardSchema from '../../schemas/cardSchema'; 
-import EditableNexusCard from './EditableNexusCard';
+import { Typography } from "@mui/material/";
+
+// TYPES
 import { CardData } from "../../types/types";
+import cardSchema from '../../schemas/cardSchema';
+
+// COMPONENTS
+import EditableNexusCard from './EditableNexusCard';
 
 export default function NexusCardForm() {
   const {
@@ -21,11 +28,15 @@ export default function NexusCardForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-        <EditableNexusCard
-          control={control}
+    <>
+      <Typography variant="h2">{cardData.cardName}</Typography>
+      <form onSubmit={handleSubmit(onSubmit)}>
+          <EditableNexusCard
+            control={control}
             nexusCardData={cardData}
-        />
-    </form>
+          />
+      </form>
+    </>
+    
   );
 };
