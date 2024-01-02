@@ -20,7 +20,7 @@ type NexusCardProps = {
     cardData: CardData;
 };
 
-export default function EditableNexusCard({ cardData, control }: NexusCardProps) {
+export default function EditableNexusCard({ control, cardData }: NexusCardProps) {
 
     function handleColorChange() {
         // Logic to handle color change
