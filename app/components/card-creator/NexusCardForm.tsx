@@ -11,7 +11,7 @@ import EditableNexusCard from "./EditableNexusCard"
 import cardSchema from "@/app/schemas/cardSchema"
 import { CardData } from "@/app/types/types"
 
-export default function NexusCardForm(): JSX.Element {
+const CardForm: React.FC = () => {
   const {
     register,
     control,
@@ -41,6 +41,8 @@ return (
     </>
   )
 };
+
+export default CardForm;
 
 // import { useForm } from 'react-hook-form';
 // import { zodResolver } from '@hookform/resolvers/zod';
