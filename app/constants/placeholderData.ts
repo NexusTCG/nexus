@@ -1,4 +1,4 @@
-// Placeholder
-export const placeholderData = {
-    username: "NexusNils",
-}
+// // Placeholder
+// export const placeholderData = {
+//     username: "NexusNils",
+// }

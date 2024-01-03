@@ -7,5 +7,5 @@ export default function DashboardHome() {
             <Typography variant="h1">Dashboard Home</Typography>
             <NexusCardForm />
         </Box>
-    )
-}
+    );
+};
