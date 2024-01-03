@@ -5,8 +5,10 @@ export default function DashboardHome() {
     return (
         // <Box>
         //     <Typography variant="h1">Dashboard Home</Typography>
-        //     {/* <NexusCardForm /> */}
+        //     <NexusCardForm />
         // </Box>
+        <>
         <h1>Dashboard</h1>
+        </>
     );
 };

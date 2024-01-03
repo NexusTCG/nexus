@@ -39,7 +39,7 @@ export default function NexusCard({ control, cardData }: NexusCardProps) {
                                 error={!!fieldState.error}
                                 helperText={fieldState.error ? fieldState.error.message : "Card name is required!"}
                                 fullWidth
-                                InputProps={{ disableUnderline: true }}
+                                // InputProps={{ disableUnderline: true }} caused error
                             />
                         )}
                     />
@@ -54,7 +54,7 @@ export default function NexusCard({ control, cardData }: NexusCardProps) {
                                 error={!!fieldState.error}
                                 helperText={fieldState.error ? fieldState.error.message : "Card cost is required!"}
                                 fullWidth
-                                InputProps={{ disableUnderline: true }}
+                                // InputProps={{ disableUnderline: true }} caused error
                             />
                         )}
                     />
