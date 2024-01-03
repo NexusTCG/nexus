@@ -1,5 +1,3 @@
-// Some export / import or component in here is causing the error:
-
 "use client";
 
 import React from "react";
@@ -36,7 +34,7 @@ return (
           control={control}
           formCardData={formCardData}
         />
-        <Button type="submit" variant="contained">Submit</Button>
+        <Button type="submit" variant="outlined">Submit</Button>
       </form>
     </>
   )
