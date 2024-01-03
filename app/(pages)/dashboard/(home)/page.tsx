@@ -3,10 +3,11 @@ import { Box, Typography } from "@mui/material/";
 
 export default function DashboardHome() {
     return (
-        <Box>
-            <Typography variant="h1">Dashboard Home</Typography>
-            <NexusCardForm />
-        </Box>
+        // <Box>
+        //     <Typography variant="h1">Dashboard Home</Typography>
+            
+        // </Box>
+        <NexusCardForm />
         // <h1>Dashboard</h1>
     );
 };
