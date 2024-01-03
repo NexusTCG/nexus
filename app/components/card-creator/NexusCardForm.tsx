@@ -11,7 +11,7 @@ import EditableNexusCard from "./EditableNexusCard"
 import cardSchema from "@/app/schemas/cardSchema"
 import { CardData } from "@/app/types/types"
 
-export default function NexusCardForm() {
+export default function NexusCardForm(): JSX.Element {
   const {
     register,
     control,
