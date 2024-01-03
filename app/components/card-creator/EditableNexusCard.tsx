@@ -12,11 +12,11 @@ import { CardData } from "../../types/types";
 
 type NexusCardProps = {
     control: Control<CardData>;
-    cardData: CardData;
+    formCardData: CardData;
 }
 
-export default function NexusCard({ control, cardData }: NexusCardProps) {
-    console.log(cardData);
+export default function NexusCard({ control, formCardData }: NexusCardProps) {
+    console.log(formCardData);
 
     return (
         <Box
