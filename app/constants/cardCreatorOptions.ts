@@ -1,16 +1,29 @@
 export const cardSuperTypeOptions = {
-    type1: 'Type 1',
-    type2: 'Type 2',
+    mythic: "Mythic",
+    base: "Base",
  };
 
  export const cardTypeOptions = {
-    type1: 'Type 1',
-    type2: 'Type 2',
+    entity: "Entity",
+    interrupt: "Interrupt",
+    sequence: "Sequence",
+    machine: "Machine",
+    enhancement: "Enhancement",
+    source: "Source",
  };
 
  export const cardSubTypeOptions = {
-    type1: 'Type 1',
-    type2: 'Type 2',
+    entity: {
+        type1: "Craft",
+        type2: 'Type 2',
+    },
+    machine: {
+        type1: "Craft",
+        type2: 'Type 2',
+    },
+    enhancement: {
+        augmentation: "Augmentation",
+    },
  };
 
  export const cardGradeOptions = {

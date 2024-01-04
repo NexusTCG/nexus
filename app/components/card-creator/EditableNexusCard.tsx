@@ -2,21 +2,21 @@
 
 import React from "react";
 import { Controller, Control } from "react-hook-form";
-import { TextField, Box, FormControl, Input, InputLabel, MenuItem, Select, Typography } from "@mui/material";
-import { CardData } from "../../types/types";
+import { TextField, Box, FormControl, InputLabel, MenuItem, Select, Typography, Input } from "@mui/material";
+import { CardData } from "@/app/types/types";
 import { cardSuperTypeOptions, cardTypeOptions, cardSubTypeOptions, cardGradeOptions, cardAttackOptions, cardDefenseOptions } from "@/app/constants/cardCreatorOptions";
 import Image from "next/image";
 import clsx from "clsx";
 
-// DATA IMPORTS
-
 type NexusCardProps = {
     control: Control<CardData>;
+    watch: (name: string) => any;
     formCardData: CardData;
-}
+};
 
-export default function NexusCard({ control, formCardData }: NexusCardProps) {
+export default function NexusCard({ control, watch, formCardData }: NexusCardProps) {
     console.log(`formCardData: ${formCardData}`);
+    const cardType = watch("cardType");
 
     // handlerFunctions
 
@@ -149,48 +149,43 @@ export default function NexusCard({ control, formCardData }: NexusCardProps) {
                     }}
                 >
                     <Box id="card-types" className="flex flex-row w-full">
+                        {/* Super Type */}
                         <Controller
                             name="cardSuperType"
                             control={control}
                             render={({ field }) => (
                                 <FormControl fullWidth>
                                     <InputLabel>Super Type</InputLabel>
-                                    <Select
-                                        {...field}
-                                        label="Super Type"
-                                        size="small"
-                                    >
-                                    {Object.entries(cardSuperTypeOptions).map(([value, label]) => (
-                                        <MenuItem key={value} value={value}>
-                                            <Typography variant="body2">{label}</Typography>
-                                        </MenuItem>
+                                    <Select {...field} label="Super Type" size="small">
+                                        {Object.entries(cardSuperTypeOptions).map(([value, label]) => (
+                                            <MenuItem key={value} value={value}>
+                                                <Typography variant="body2">{label}</Typography>
+                                            </MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
                             )}
                         />
+                        {/* Type */}
                         <Controller
-                            name="cardSuperType"
+                            name="cardType"
                             control={control}
                             render={({ field }) => (
                                 <FormControl fullWidth>
                                     <InputLabel>Type</InputLabel>
-                                    <Select
-                                        {...field}
-                                        label="Type"
-                                        size="small"
-                                    >
-                                    {Object.entries(cardTypeOptions).map(([value, label]) => (
-                                        <MenuItem key={value} value={value}>
-                                            <Typography variant="body2">{label}</Typography>
-                                        </MenuItem>
+                                    <Select {...field} label="Type" size="small">
+                                        {Object.entries(cardTypeOptions).map(([value, label]) => (
+                                            <MenuItem key={value} value={value}>
+                                                <Typography variant="body2">{label}</Typography>
+                                            </MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
                             )}
                         />
+                        {["machine", "entity", "enhancement"].includes(cardType) && (
                         <Controller
-                            name="cardSuperType"
+                            name="cardSubType"
                             control={control}
                             render={({ field }) => (
                                 <FormControl fullWidth>
@@ -200,15 +195,32 @@ export default function NexusCard({ control, formCardData }: NexusCardProps) {
                                         label="Sub Type"
                                         size="small"
                                     >
-                                    {Object.entries(cardSubTypeOptions).map(([value, label]) => (
-                                        <MenuItem key={value} value={value}>
-                                            <Typography variant="body2">{label}</Typography>
-                                        </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            )}
-                        />
+                                            {cardType === "entity" && 
+                                                Object.entries(cardSubTypeOptions.entity).map(([value, label]) => (
+                                                    <MenuItem key={value} value={value}>
+                                                        <Typography variant="body2">{label}</Typography>
+                                                    </MenuItem>
+                                                ))
+                                            }
+                                            {cardType === "machine" && 
+                                                Object.entries(cardSubTypeOptions.machine).map(([value, label]) => (
+                                                    <MenuItem key={value} value={value}>
+                                                        <Typography variant="body2">{label}</Typography>
+                                                    </MenuItem>
+                                                ))
+                                            }
+                                            {cardType === "enhancement" && 
+                                                Object.entries(cardSubTypeOptions.enhancement).map(([value, label]) => (
+                                                    <MenuItem key={value} value={value}>
+                                                        <Typography variant="body2">{label}</Typography>
+                                                    </MenuItem>
+                                                ))
+                                            }
+                                        </Select>
+                                    </FormControl>
+                                )}
+                            />
+                        )}
                     </Box>
                     <Box id="card-grade" className="flex w-full">
                         <Controller
@@ -217,11 +229,7 @@ export default function NexusCard({ control, formCardData }: NexusCardProps) {
                             render={({ field }) => (
                                 <FormControl fullWidth>
                                     <InputLabel>Grade</InputLabel>
-                                    <Select
-                                        {...field}
-                                        label="Grade"
-                                        size="small"
-                                    >
+                                    <Select {...field} label="Grade" size="small">
                                         {Object.entries(cardGradeOptions).map(([value, label]) => (
                                             <MenuItem key={value} value={value}>
                                                 <Typography variant="body2">{label}</Typography>
