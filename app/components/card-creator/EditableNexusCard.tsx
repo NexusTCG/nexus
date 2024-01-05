@@ -4,7 +4,7 @@ import React from "react";
 import { Controller, Control } from "react-hook-form";
 import { TextField, Box, FormControl, InputLabel, MenuItem, Select, Typography, Input } from "@mui/material";
 import { CardData } from "@/app/types/types";
-import { cardSuperTypeOptions, cardTypeOptions, cardSubTypeOptions, cardGradeOptions, cardAttackOptions, cardDefenseOptions } from "@/app/constants/cardCreatorOptions";
+import { cardSuperTypeOptions, cardTypeOptions, cardSubTypeOptions, cardGradeOptions, cardStatsOptions } from "@/app/constants/cardCreatorOptions";
 import Image from "next/image";
 import clsx from "clsx";
 
@@ -19,6 +19,7 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
     const cardType = watch("cardType");
 
     // handlerFunctions
+    // Function to handle card color change based on card cost
 
     return (
         <Box
@@ -73,6 +74,7 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                                 label="Card Name"
                                 variant="outlined"
                                 size="small"
+                                className="w-3/4"
                                 error={!!fieldState.error}
                                 // helperText={fieldState.error ? fieldState.error.message : "Card name is required!"}
                                 fullWidth
@@ -89,6 +91,7 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                                 label="Card Cost"
                                 variant="outlined"
                                 size="small"
+                                className="w-1/4"
                                 error={!!fieldState.error}
                                 // helperText={fieldState.error ? fieldState.error.message : "Card cost is required!"}
                                 fullWidth
@@ -150,13 +153,19 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                 >
                     <Box id="card-types" className="flex flex-row w-full">
                         {/* Super Type */}
+                        {["machine", "entity", "enhancement", "source"].includes(cardType) && (
                         <Controller
                             name="cardSuperType"
                             control={control}
                             render={({ field }) => (
                                 <FormControl fullWidth>
                                     <InputLabel>Super Type</InputLabel>
-                                    <Select {...field} label="Super Type" size="small">
+                                    <Select
+                                        {...field}
+                                        label="Super Type"
+                                        size="small"
+                                        className="w-full"
+                                    >
                                         {Object.entries(cardSuperTypeOptions).map(([value, label]) => (
                                             <MenuItem key={value} value={value}>
                                                 <Typography variant="body2">{label}</Typography>
@@ -166,6 +175,7 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                                 </FormControl>
                             )}
                         />
+                        )}
                         {/* Type */}
                         <Controller
                             name="cardType"
@@ -173,7 +183,12 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                             render={({ field }) => (
                                 <FormControl fullWidth>
                                     <InputLabel>Type</InputLabel>
-                                    <Select {...field} label="Type" size="small">
+                                    <Select
+                                        {...field}
+                                        label="Type"
+                                        size="small"
+                                        className="w-full"
+                                    >
                                         {Object.entries(cardTypeOptions).map(([value, label]) => (
                                             <MenuItem key={value} value={value}>
                                                 <Typography variant="body2">{label}</Typography>
@@ -191,9 +206,12 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                                 <FormControl fullWidth>
                                     <InputLabel>Sub Type</InputLabel>
                                     <Select
+                                        multiple
                                         {...field}
+                                        value={Array.isArray(field.value) ? field.value : []}
                                         label="Sub Type"
                                         size="small"
+                                        // renderValue={(selected) => selected.join(' ')}
                                     >
                                             {cardType === "entity" && 
                                                 Object.entries(cardSubTypeOptions.entity).map(([value, label]) => (
@@ -222,7 +240,7 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                             />
                         )}
                     </Box>
-                    <Box id="card-grade" className="flex w-full">
+                    <Box id="card-grade" className="flex w-1/5">
                         <Controller
                             name="cardGrade"
                             control={control}
@@ -232,6 +250,7 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                                     <Select {...field} label="Grade" size="small">
                                         {Object.entries(cardGradeOptions).map(([value, label]) => (
                                             <MenuItem key={value} value={value}>
+                                                {/* Map through icons instead */}
                                                 <Typography variant="body2">{label}</Typography>
                                             </MenuItem>
                                         ))}
@@ -305,7 +324,7 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                         className="w-1/2"
                         input={<Input disableUnderline />}
                     >
-                        {Object.entries(cardAttackOptions).map(([value, label]) => (
+                        {Object.entries(cardStatsOptions).map(([value, label]) => (
                             <MenuItem key={value} value={value}>
                                 <Typography variant="body2">{label}</Typography>
                             </MenuItem>
@@ -318,7 +337,7 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                         className="w-1/2"
                         input={<Input disableUnderline />}
                     >
-                        {Object.entries(cardDefenseOptions).map(([value, label]) => (
+                        {Object.entries(cardStatsOptions).map(([value, label]) => (
                             <MenuItem key={value} value={value}>
                                 <Typography variant="body2">{label}</Typography>
                             </MenuItem>

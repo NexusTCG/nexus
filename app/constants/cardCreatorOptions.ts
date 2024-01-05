@@ -1,3 +1,6 @@
+import { EntityType } from '../types/types';
+import entityTypes from "./entityTypes";
+
 export const cardSuperTypeOptions = {
     mythic: "Mythic",
     base: "Base",
@@ -13,30 +16,29 @@ export const cardSuperTypeOptions = {
  };
 
  export const cardSubTypeOptions = {
-    entity: {
-        type1: "Craft",
-        type2: 'Type 2',
-    },
-    machine: {
-        type1: "Craft",
-        type2: 'Type 2',
-    },
-    enhancement: {
-        augmentation: "Augmentation",
-    },
+   entity: Object.fromEntries(
+      entityTypes.map((entityType: EntityType) => [
+        entityType.name.toLowerCase(),
+        entityType.name,
+      ])
+    ),
+   machine: {
+      craft: "Craft",
+      gear: 'Gear',
+   },
+   enhancement: {
+      augmentation: "Augmentation",
+   },
  };
 
  export const cardGradeOptions = {
-    type1: 'Type 1',
-    type2: 'Type 2',
+    common: 'C',
+    uncommon: 'UC',
+    rare: 'R',
+    prime: 'P',
  };
 
- export const cardAttackOptions = {
-    type1: 'Type 1',
-    type2: 'Type 2',
- };
-
- export const cardDefenseOptions = {
-    type1: 'Type 1',
-    type2: 'Type 2',
+ export const cardStatsOptions = {
+    0: '0',
+    1: '1',
  };
