@@ -24,17 +24,16 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
     return (
         <Box
             id="card-border"
-            className="flex flex-col justify-start items-center p-5 md:p-6 rounded-2xl bg-black"
+            className="flex flex-col justify-start items-center p-5 rounded-2xl bg-black"
             sx={{
                 aspectRatio: "635 / 889",
-                width: "100%",
-                maxWidth: "635px",
-                maxHeight: "calc(889px * (100vw / 635px))"
+                width: "400px",
+                // maxHeight: "calc(889px * (100vw / 635px))"
             }}
         >
             <Box
                 id="card-frame"
-                className={clsx("flex flex-col w-full h-full p-3 md:p-4 rounded-lg md:rounded-xl",
+                className={clsx("flex flex-col w-full h-full p-2 rounded-lg",
                     // cardColor === "default" && "bg-[#F5C518]",
                     // cardColor === "yellow" && "bg-[#F5C518]",
                     "bg-yellow-200"
@@ -48,21 +47,16 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                         justify-between
                         items-center
                         w-full
-                        gap-4
+                        gap-2
                         bg-gray-600
                         py-1
                         px-2
-                            md:py-2
-                            md:px-3
                         border-2
                         border-black
                         rounded-md
-                            md:rounded-xl
                     "
                     sx={{
                         aspectRatio: "550 / 50",
-                        width: "100%",
-                        maxHeight: "calc(550 * (100vw / 50))"
                     }}
                 >
                     <Controller
@@ -71,9 +65,8 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                         render={({ field, fieldState }) => (
                             <TextField
                                 {...field}
-                                label="Card Name"
-                                variant="outlined"
                                 size="small"
+                                placeholder="Card name"
                                 className="w-3/4"
                                 error={!!fieldState.error}
                                 // helperText={fieldState.error ? fieldState.error.message : "Card name is required!"}
@@ -88,9 +81,8 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                         render={({ field, fieldState }) => (
                             <TextField
                                 {...field}
-                                label="Card Cost"
-                                variant="outlined"
                                 size="small"
+                                placeholder="0"
                                 className="w-1/4"
                                 error={!!fieldState.error}
                                 // helperText={fieldState.error ? fieldState.error.message : "Card cost is required!"}
@@ -104,25 +96,26 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                     id="card-image"
                     className="
                         flex
+                        flex-col
                         justify-center
                         items-center
                         w-full
                         overflow-hidden
                         relative
+                        mx-auto
+                        px-2
                         border-2
                         border-black
-                        mx-2
                     "
                     sx={{
                         aspectRatio: "4 / 3",
-                        maxWidth: "540px",
-                        maxHeight: "calc(350px * (100vw / 540px))"
                     }}
                 >
                     <Image
                         src="/images/card-art/cache-reclaimer.jpg"
                         fill={true}
                         alt="Card name"
+                        className="w-full h-full"
                         style={{ objectFit: "cover" }}
                     />
                 </Box>
@@ -138,17 +131,12 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                         bg-gray-600
                         py-1
                         px-2
-                            md:py-2
-                            md:px-3
                         border-2
                         border-black
                         rounded-md
-                            md:rounded-xl
                     "
                     sx={{
                         aspectRatio: "550 / 50",
-                        width: "100%",
-                        maxHeight: "calc(550 * (100vw / 50))"
                     }}
                 >
                     <Box id="card-types" className="flex flex-row w-full">
@@ -274,13 +262,12 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                     "
                     sx={{
                         aspectRatio: "540 / 275",
-                        width: "100%",
-                        maxHeight: "calc(540 * (100vw / 275))"
                     }}
                 >
                     <TextField
                         multiline
                         id="card-text-input"
+                        size="small"
                         variant="standard"
                         placeholder='Type "/" to insert a keyword ability.'
                         className="w-full"
@@ -292,9 +279,11 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                     <Box className="bg-black h-[1px] w-full my-4" />
                     <TextField
                         id="card-flavor-input"
+                        size="small"
                         variant="standard"
                         placeholder="Flavor text"
                         className="w-full"
+                        rows={2}
                         InputProps={{
                             disableUnderline: true,
                         }}
@@ -312,10 +301,10 @@ export default function NexusCard({ control, watch, formCardData }: NexusCardPro
                     px-1
                     rounded-tl-lg
                     text-black
+                    bg-yellow-200
                     "
                     sx={{
                         zIndex: 1,
-                        backgroundColor: "#F5C518",
                     }}
                 >
                     <Select

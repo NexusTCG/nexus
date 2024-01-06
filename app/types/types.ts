@@ -21,6 +21,7 @@ export type CardData = {
   cardFlavorText: string;
   cardAttack: string;
   cardDefense: string;
+  cardPrompt: string;
 };
 
 // Nexus Card Types

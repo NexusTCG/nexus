@@ -3,7 +3,7 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Typography, TextField, Button } from "@mui/material/";
+import { Box, Typography, TextField, Button, InputLabel } from "@mui/material/";
 import EditableNexusCard from "./EditableNexusCard";
 import cardSchema from "@/app/schemas/cardSchema";
 import { CardData } from "@/app/types/types";
@@ -26,19 +26,69 @@ const CardForm: React.FC = () => {
   }
 
   return (
-    <Box className="flex flex-col p-0 md:p-6 space-y-4 md:bg-gray-800 md:rounded-xl md:border md:border-gray-700 md:shadow-xl">
-      <Typography variant="h2">{formCardData.cardName}</Typography>
-      <Typography variant="h3">by {formCardData.cardCreator}</Typography>
+    <Box className="
+      flex
+      flex-col
+      p-0
+      md:p-6
+      space-y-4
+      md:bg-gray-800
+      md:rounded-xl
+      md:border
+      md:border-gray-700
+      md:shadow-xl
+      "
+    >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TextField {...register("cardCreator")} />
-        {/* AI prompt input field */}
-        {/* AI prompt button */}
-        <EditableNexusCard
-          control={control}
-          watch={watch}
-          formCardData={formCardData}
-        />
-        <Button type="submit" variant="outlined">Submit</Button>
+        <Box className="flex flex-row justify-between gap-4">
+          <Box className="flex flex-col w-full gap-4">
+            <Typography variant="h2">
+              {formCardData.cardName ? formCardData.cardName : "Card Name"}
+            </Typography>
+            <Typography variant="subtitle1">
+              by {formCardData.cardCreator ? formCardData.cardCreator : "Card Creator"}
+            </Typography>
+            <TextField
+              label="Card creator"
+              variant="outlined"
+              {...register("cardCreator")}
+            />
+            <TextField
+              multiline
+              rows={4}
+              label="Card prompt"
+              variant="outlined"
+              {...register("cardPrompt")}
+            />
+            <Box className="flex flex-row gap-4">
+              {/* AI prompt button */}
+              <Button
+                type="button"
+                variant="outlined"
+                size="large"
+                className="w-full rounded-full"
+              >
+                Prompt
+              </Button>
+              <Button
+                // {!isValid && true(disabled)}
+                type="submit"
+                variant="outlined"
+                size="large"
+                className="w-full rounded-full"
+              >
+                Submit
+              </Button>
+            </Box>
+          </Box>
+          <Box className="flex fler-col">
+          <EditableNexusCard
+            control={control}
+            watch={watch}
+            formCardData={formCardData}
+          />
+          </Box>
+        </Box>
       </form>
     </Box>
   );
