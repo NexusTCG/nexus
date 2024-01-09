@@ -5,7 +5,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Alert, Button, FormControl, FormHelperText, Input, Snackbar, TextField } from "@mui/material";
 
 import { cn } from "@/app/lib/utils";
-import { signUpWithEmailAndPassword } from "./actions";
+import { signUpWithEmailAndPassword } from "../actions";
 import React from "react";
 
 const FormSchema = z
