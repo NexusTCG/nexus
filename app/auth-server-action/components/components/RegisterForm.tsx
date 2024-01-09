@@ -81,8 +81,6 @@ export default function RegisterForm() {
 				</Alert>
 			</Snackbar>
         }
-
-        setSnackbarOpen(true);
 	}
 
 	return (
@@ -121,13 +119,6 @@ export default function RegisterForm() {
 				Register
 				<AiOutlineLoading3Quarters className={cn("animate-spin")} />
 			</Button>
-			{/* <Snackbar
-				open={snackbarOpen}
-				autoHideDuration={6000}
-				onClose={() => setSnackbarOpen(false)}
-				message={snackbarMessage}
-				severity={snackbarVariant}
-			/> */}
 		</form>
 	);
 }
