@@ -2,22 +2,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { Alert, Button, FormControl, FormHelperText, Input, Snackbar, TextField } from "@mui/material";
 
-import {
-	Form,
-	FormControl,
-	FormDescription,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-
-import { toast } from "@/components/ui/use-toast";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 import { signUpWithEmailAndPassword } from "./actions";
+import React from "react";
 
 const FormSchema = z
 	.object({
@@ -44,104 +33,101 @@ export default function RegisterForm() {
 	});
 
 	async function onSubmit(data: z.infer<typeof FormSchema>) {
+		const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+		const [errorAlertOpen, setErrorAlertOpen] = React.useState(false);
+		const [successAlertOpen, setSuccessAlertOpen] = React.useState(false);
 
         const result = await signUpWithEmailAndPassword(data);
-
         const { error } = JSON.parse(result);
 
+		function handleSnackbarClose() {
+			setSnackbarOpen(!snackbarOpen);
+		};
+
+		function handleErrorAlertClose() {
+			setErrorAlertOpen(!errorAlertOpen);
+		};
+
+		function handleSuccessAlertClose() {
+			setSuccessAlertOpen(!successAlertOpen);
+		};
+
         if (error?.message) {
-            toast({
-                variant: "destructive",
-                title: "You submitted the following values:",
-                description: (
-                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                        <code className="text-white">
-                            {error.message}
-                        </code>
-                    </pre>
-                ),
-            });
+			<Snackbar
+				open={snackbarOpen}
+				autoHideDuration={6000}
+				onClose={handleSnackbarClose}
+			>
+				<Alert
+					onClose={handleErrorAlertClose}
+					severity="error"
+					sx={{ width: '100%' }}
+				>
+					{error.message}
+				</Alert>
+			</Snackbar>
         } else {
-            toast({
-                title: "You submitted the following values:",
-                description: (
-                    <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-                        <code className="text-white">
-                            Register successfully!
-                        </code>
-                    </pre>
-                ),
-            });
+			<Snackbar
+				open={snackbarOpen}
+				autoHideDuration={6000}
+				onClose={handleSnackbarClose}
+			>
+				<Alert
+					onClose={handleSuccessAlertClose}
+					severity="success"
+					sx={{ width: '100%' }}
+				>
+					"Registered successfully!"
+				</Alert>
+			</Snackbar>
         }
+
+        setSnackbarOpen(true);
 	}
 
 	return (
-		<Form {...form}>
-			<form
-				onSubmit={form.handleSubmit(onSubmit)}
-				className="w-full space-y-6"
-			>
-				<FormField
-					control={form.control}
-					name="email"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Email</FormLabel>
-							<FormControl>
-								<Input
-									placeholder="example@gmail.com"
-									{...field}
-									type="email"
-									onChange={field.onChange}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
+		<form
+			onSubmit={form.handleSubmit(onSubmit)}
+			className="w-full space-y-6"
+		>
+			<FormControl>
+				<TextField
+					label="Email"
+					placeholder="example@gmail.com"
+					{...form.register("email")}
+					type="email"
 				/>
-				<FormField
-					control={form.control}
-					name="password"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Password</FormLabel>
-							<FormControl>
-								<Input
-									placeholder="password"
-									{...field}
-									type="password"
-									onChange={field.onChange}
-								/>
-							</FormControl>
-
-							<FormMessage />
-						</FormItem>
-					)}
+				<FormHelperText>{form.formState.errors.email?.message}</FormHelperText>
+			</FormControl>
+			<FormControl>
+				<TextField
+					label="Password"
+					placeholder="password"
+					{...form.register("password")}
+					type="password"
 				/>
-				<FormField
-					control={form.control}
-					name="confirm"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Confirm Password</FormLabel>
-							<FormControl>
-								<Input
-									placeholder="Confirm Password"
-									{...field}
-									type="password"
-									onChange={field.onChange}
-								/>
-							</FormControl>
-
-							<FormMessage />
-						</FormItem>
-					)}
+				<FormHelperText>{form.formState.errors.password?.message}</FormHelperText>
+			</FormControl>
+			<FormControl>
+				<TextField
+					label="Confirm Password"
+					placeholder="Confirm Password"
+					{...form.register("confirm")}
+					type="password"
 				/>
-				<Button type="submit" className="w-full flex gap-2">
-					Register
-					<AiOutlineLoading3Quarters className={cn("animate-spin")} />
-				</Button>
-			</form>
-		</Form>
+				<FormHelperText>{form.formState.errors.confirm?.message}</FormHelperText>
+			</FormControl>
+			<Button type="submit" className="w-full flex gap-2">
+				Register
+				<AiOutlineLoading3Quarters className={cn("animate-spin")} />
+			</Button>
+			{/* <Snackbar
+				open={snackbarOpen}
+				autoHideDuration={6000}
+				onClose={() => setSnackbarOpen(false)}
+				message={snackbarMessage}
+				severity={snackbarVariant}
+			/> */}
+		</form>
 	);
 }
