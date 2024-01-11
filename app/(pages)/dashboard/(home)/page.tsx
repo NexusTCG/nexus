@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
 import { Box, Typography } from "@mui/material/";

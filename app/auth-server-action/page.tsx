@@ -7,7 +7,7 @@ export default async function page() {
 	const {data} = await readUserSession();
 	if (data.session) {
 		// If there is a session, redirect
-		return redirect("/dashboard");
+		return redirect("/login");
 	}
 
 	return (
