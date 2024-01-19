@@ -1,7 +1,9 @@
 export default function Dashboard() {
   return (
-    <div>
-      <h1>Login</h1>
-    </div>
+    <form action="submit">
+      <p>Logout</p>
+      <button type="submit">Logout</button>
+      {/* Need to create sign up sign in and sign out options */}
+    </form>
   ) 
 }

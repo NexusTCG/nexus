@@ -1,9 +1,7 @@
-// "use client";
-
-import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
 import { Box, Typography } from "@mui/material/";
-import readUserSession from "@/app/lib/actions";
 import { redirect } from "next/navigation";
+import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
+import readUserSession from "@/app/lib/actions/readSession";
 
 export default async function DashboardHome() {
     const {data} = await readUserSession();
@@ -18,3 +16,6 @@ export default async function DashboardHome() {
         </Box>
     );
 };
+
+// Something is broken here. Getting this error:
+//  ⨯ Internal error: Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.

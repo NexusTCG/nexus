@@ -3,17 +3,22 @@ import entityTypes from "./entityTypes";
 
 export const cardSuperTypeOptions = {
     mythic: "Mythic",
-    base: "Base",
+    core: "Core",
  };
 
  export const cardTypeOptions = {
     entity: "Entity",
-    interrupt: "Interrupt",
-    sequence: "Sequence",
-    machine: "Machine",
-    enhancement: "Enhancement",
-    source: "Source",
+    event: "Event",
+    effect: "Effect",
+    object: "Object",
+    anomaly: "Anomaly",
  };
+
+ export const cardSpeedOptions = {
+   speedOne: "1",
+   speedTwo: "2",
+   speedThree: "3"
+};
 
  export const cardSubTypeOptions = {
    entity: Object.fromEntries(
@@ -23,19 +28,18 @@ export const cardSuperTypeOptions = {
       ])
     ),
    machine: {
-      craft: "Craft",
       gear: 'Gear',
    },
    enhancement: {
-      augmentation: "Augmentation",
+      alteration: "Alteration",
    },
  };
 
  export const cardGradeOptions = {
-    common: 'C',
-    uncommon: 'UC',
-    rare: 'R',
-    prime: 'P',
+    common: 'Common',
+    rare: 'Rare',
+    epic: 'Epic',
+    prime: 'Prime',
  };
 
  export const cardStatsOptions = {

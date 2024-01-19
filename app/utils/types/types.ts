@@ -1,6 +1,6 @@
 import React from 'react';
 import { ComponentType } from 'react';
-import { energyIcons, gradeIcons } from "@/app/constants/iconData";
+import { energyIcons, gradeIcons } from "@/app/utils/data/iconData";
 
 export type EnergyIconKey = keyof typeof energyIcons;
 export type GradeIconKey = keyof typeof gradeIcons;

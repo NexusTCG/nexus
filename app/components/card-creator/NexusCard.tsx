@@ -3,8 +3,8 @@
 import React from "react";
 import { Controller, Control } from "react-hook-form";
 import { TextField, Box, FormControl, InputLabel, MenuItem, Select, Typography, Input } from "@mui/material";
-import { CardData } from "@/app/types/types";
-import { cardSuperTypeOptions, cardTypeOptions, cardSubTypeOptions, cardGradeOptions, cardStatsOptions } from "@/app/constants/cardCreatorOptions";
+import { CardData } from "@/app/utils/types/types";
+import { cardSuperTypeOptions, cardTypeOptions, cardSubTypeOptions, cardGradeOptions, cardStatsOptions } from "@/app/utils/data/cardCreatorOptions";
 import Image from "next/image";
 import clsx from "clsx";
 

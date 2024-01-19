@@ -4,9 +4,9 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Typography, TextField, Button, InputLabel } from "@mui/material/";
-import EditableNexusCard from "./EditableNexusCard";
-import cardSchema from "@/app/schemas/cardSchema";
-import { CardData } from "@/app/types/types";
+import EditableNexusCard from "./NexusCard";
+import cardSchema from "@/app/utils/schemas/cardSchema";
+import { CardData } from "@/app/utils/types/types";
 
 const CardForm: React.FC = () => {
   const {

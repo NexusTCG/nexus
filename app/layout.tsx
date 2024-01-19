@@ -13,7 +13,7 @@ const defaultUrl = process.env.VERCEL_URL
 export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: 'Nexus TCG',
-  description: 'An AI-enabled digital TCG where players can make their own cards.',
+  description: 'Nexus is an open source digital trading card game where players can make playable custom TCG cards with the help of generative AI.',
 }
 
 type RootLayoutProps = {
