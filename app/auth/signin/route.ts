@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 
 import type { NextRequest } from 'next/server'
 
-export default async function POST(req: NextRequest) {
+export async function POST(req: NextRequest) {
   const url = new URL(req.url)
   const cookieStore = cookies();
 
