@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import type { NextRequest } from 'next/server'
 
 export async function POST(req: NextRequest) {
-  const url = new URL(req.url)
+  const url = new URL(req.url).origin;
   const formData = await req.formData();
   const email = String(formData.get("email"));
   const password = String(formData.get("password"));
@@ -27,5 +27,5 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    return NextResponse.redirect("/dashboard");
+    return NextResponse.redirect(`${url}/dashboard`);
 };

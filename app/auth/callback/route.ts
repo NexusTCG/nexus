@@ -10,11 +10,16 @@ export async function GET(req: NextRequest) {
     if (code) {
         const cookieStore = cookies();
         const supabase = createClient(cookieStore);
-        await supabase
+        const { error } = await supabase
             .auth
             .exchangeCodeForSession(code);
+        if (error) {
+            return NextResponse.redirect(
+                `${url.origin}/login?error=${encodeURIComponent(error.message)}`
+            );
+        }
     };
 
     // URL to redirect to after sign in process completes
-    return NextResponse.redirect(url.origin);
+    return NextResponse.redirect(`${url.origin}/dashboard`);
 };
