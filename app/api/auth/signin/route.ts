@@ -1,3 +1,5 @@
+"use server";
+
 import { createClient } from "@/app/utils/supabase/server";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
@@ -15,12 +17,9 @@ export async function POST(req: NextRequest) {
 
   const { error } = await supabase
     .auth
-    .signUp({
+    .signInWithPassword({
         email,
-        password,
-        options: {
-          emailRedirectTo: `${url}/auth/callback`,
-        },
+        password
     });
 
     if (error) {
@@ -30,7 +29,5 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    return NextResponse.redirect(
-      `${url}/login?message=Check your email to continue sign in process!`
-    );
+    return NextResponse.redirect(`${url}/dashboard`);
 };

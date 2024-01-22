@@ -9,30 +9,47 @@
 //         </Box>
 //     );
 // };
-
+"use client"
+import { useState, useEffect } from 'react';
 import { createClient } from '@/app/utils/supabase/server'
 import { cookies } from 'next/headers'
+import fetchCards from "@/app/lib/fetchCards"
 import clsx from 'clsx';
 
-export default async function DashboardHome() {
-    const cookieStore = cookies()
-    const supabase = createClient(cookieStore)
-    const { data: cards } = await supabase.from('cards').select()
+type Card = {
+    id: number;
+    created_at: string;
+    user_id: string;
+    name: string;
+    color: string;
+}
+
+export default function DashboardHome() {
+    const [cards, setCards] = useState<Card[]>([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await fetchCards();
+            if (data) {
+                setCards(data);
+            }
+        };
+        fetchData();
+    }, []);
 
     return (
         <div>
             <h1>Dashboard</h1>
             <div>
-                {cards!.map((card) => (
+                {cards.map((card) => (
                     <div className="card" key={card.id}>
-                    <h2 className={clsx(
-                        'text-2xl font-bold',
-                        card.color === 'Red' && 'text-red-500',
-                        card.color === 'Blue' && 'text-blue-500',
-                        card.color === 'Yellow' && 'text-yellow-500',
-                    )}>{card.name}</h2>
-                    {/* <p>{card.color}</p> */}
-                    <p>{card.name} is very cool!</p>
+                        <h2 className={clsx(
+                            'text-2xl font-bold',
+                            card.color === 'Red' && 'text-red-500',
+                            card.color === 'Blue' && 'text-blue-500',
+                            card.color === 'Yellow' && 'text-yellow-500',
+                        )}>{card.name}</h2>
+                        <p>{card.name} is very cool!</p>
                     </div>
                 ))}
             </div>
