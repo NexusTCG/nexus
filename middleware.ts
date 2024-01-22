@@ -1,22 +1,38 @@
-import { createMiddlewareClient} from "@supabase/auth-helpers-nextjs";
-import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/app/utils/supabase/middleware";
+import { NextResponse, type NextRequest } from "next/server";
 
-export async function middleware(req: NextRequest) {
-    const res = NextResponse.next();
-    const supabase = createMiddlewareClient({ req, res });
+export async function middleware(request: NextRequest) {
+    try {
+        const { supabase, response } = createClient(request);
+        const { data:
+            { session }, error } = await supabase
+                .auth
+                .getSession();
+        const path = new URL(request.url).pathname;
 
-    const { data: {
-        session
-    }, error } = await supabase
-        .auth
-        .getSession();
+        // Redirect logged-in users trying to access
+        // '/' or '/login' to '/dashboard'
+        if (session && (
+            path === '/' || path === '/login'
+        )) {
+            return NextResponse.redirect(
+                new URL('/dashboard', request.url
+            ));
+        }
 
-    if (!session) {
-        return NextResponse.rewrite(new URL("/login", req.url));
+        // If there's no session and the path is not
+        // '/login' or '/', redirect to '/login'
+        if (!session && path !== '/' && path !== '/login') {
+            return NextResponse.redirect(new URL('/login', request.url));
+        }
+
+        return response;
+
+    } catch (error) {
+        console.error(error);
+        return NextResponse.next();
     }
-
-    return res;
- }
+}
 
 export const config = {
     matcher: [

@@ -1,31 +1,36 @@
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
+import { createClient } from "@/app/utils/supabase/server";
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { headers, cookies } from "next/headers";
 
 import type { NextRequest } from 'next/server'
 
 export async function POST(req: NextRequest) {
-  const url = new URL(req.url)
-  const cookieStore = cookies();
-
+  const origin = headers().get("origin");
   const formData = await req.formData();
   const email = String(formData.get("email"));
   const password = String(formData.get("password"));
 
-  const supabase = createRouteHandlerClient({
-      cookies: () => cookieStore
-  });
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
 
-  const response = await supabase
+  const { error } = await supabase
     .auth
     .signUp({
-        email, password,
+        email,
+        password,
         options: {
-            emailRedirectTo: `${url.origin}/auth/callback`
-        }
+          emailRedirectTo: `${origin}/auth/callback`,
+        },
     });
 
-  return NextResponse.redirect(url.origin, {
-    status: 301
-  });
+    if (error) {
+      const errorMessage = encodeURIComponent(error.message);
+      return NextResponse.redirect(
+        `/login?error=${errorMessage}`
+      );
+    }
+
+    return NextResponse.redirect(
+      "/login?message=Check your email to continue sign in process!"
+    );
 };
