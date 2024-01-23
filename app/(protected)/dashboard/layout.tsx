@@ -1,3 +1,7 @@
+"use client";
+
+import useSession from "@/app/hooks/useSession";
+import { useEffect } from 'react';
 import AuthButton from '@/app/components/auth/AuthButton';
 // import { Box } from '@mui/material';
 
@@ -6,6 +10,15 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
+  
+  useEffect(() => {
+    const session = useSession()?.user;
+    if (!session) {
+        console.log("User session active.");
+    } else {
+        console.log("User session inactive.");
+    };
+  }, []);
   
   return (
     <div className="flex flex-row justify-start items-start w-full">

@@ -11,7 +11,7 @@
 // };
 "use client";
 
-import useSession from "@/app/hooks/useSession";
+// import useSession from "@/app/hooks/useSession";
 import { useState, useEffect } from 'react';
 import fetchCards from "@/app/lib/fetchCards"
 import clsx from 'clsx';
@@ -27,12 +27,12 @@ type Card = {
 export default function DashboardHome() {
     const [cards, setCards] = useState<Card[]>([]);
 
-    const session = useSession()?.user;
-    if (!session) {
-        console.log("User session active.");
-    } else {
-        console.log("User session inactive.");
-    };
+    // const session = useSession()?.user;
+    // if (!session) {
+    //     console.log("User session active.");
+    // } else {
+    //     console.log("User session inactive.");
+    // };
 
     useEffect(() => {
         const fetchData = async () => {
