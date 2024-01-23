@@ -25,11 +25,11 @@ type Card = {
 }
 
 const session = useSession()?.user;
-  if (!session) {
-      console.log("User session active.");
-  } else {
-      console.log("User session inactive.");
-  };
+if (!session) {
+    console.log("User session active.");
+} else {
+    console.log("User session inactive.");
+};
 
 export default function DashboardHome() {
     const [cards, setCards] = useState<Card[]>([]);

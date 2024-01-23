@@ -1,6 +1,6 @@
 import { createClient } from "@/app/lib/supabase/server";
-import Link from "next/link";
 import { cookies } from "next/headers";
+import Link from "next/link";
 
 export default async function AuthButton() {
   const cookieStore = cookies();
