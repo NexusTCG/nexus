@@ -9,10 +9,9 @@
 //         </Box>
 //     );
 // };
-"use client"
+"use client";
+
 import { useState, useEffect } from 'react';
-import { createClient } from '@/app/lib/supabase/server'
-import { cookies } from 'next/headers'
 import fetchCards from "@/app/lib/fetchCards"
 import clsx from 'clsx';
 

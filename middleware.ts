@@ -9,10 +9,13 @@ export async function middleware(request: NextRequest) {
         return response;
     };
 
-    const { data:
-        { session }, error } = await supabase
-            .auth
-            .getSession();
+    const {
+        data: {
+            session
+        }, error
+    } = await supabase
+        .auth
+        .getSession();
 
     // console.log(`User session: ${JSON.stringify(session, null, 2)}`);
 
