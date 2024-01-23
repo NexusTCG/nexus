@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
             .auth
             .exchangeCodeForSession(code);
         if (error) {
+            console.log(`Error when attempting to exchange code for session: ${error.message}`);
             return NextResponse.redirect(
                 `${url.origin}/login?error=${encodeURIComponent(error.message)}`
             );

@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (error) {
+      console.log(`Error when attempting sign up: ${error.message}`);
       const errorMessage = encodeURIComponent(error.message);
       return NextResponse.redirect(
         `${url}/login?error=${errorMessage}`
