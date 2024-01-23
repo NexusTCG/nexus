@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import { Typography } from "@mui/material";
+import { time } from "console";
 
 export default function ResetPassword() {
   const [data, setData] = useState<{
@@ -17,6 +18,7 @@ export default function ResetPassword() {
     confirmPassword: "",
 });
 const [showPassword, setShowPassword] = useState<boolean>(false);
+const [success, setSuccess] = useState<boolean>(false);
 
 const supabase = createClient();
 const router = useRouter();
@@ -34,6 +36,13 @@ async function confirmPasswords() {
     });
 
     if (resetData) {
+      // Toast success message
+      setSuccess(true);
+      if (success) {
+        setTimeout(() => {
+          console.log("Hello, World!");
+        }, 2000);
+      }
       router.push("/")
     };
     if (error) console.log(error);
@@ -75,7 +84,7 @@ async function confirmPasswords() {
             value={data?.confirmPassword}
             onChange={handlePasswordChange}
         />
-        <p
+        {!success && (<p
         className={clsx(
             "text-sm text-gray-400 cursor-pointer hover:underline",
             !showPassword && "hover:text-red-400",
@@ -83,7 +92,14 @@ async function confirmPasswords() {
         )}
         onClick={handlePasswordVisibilityChange}>
             {showPassword ? "Hide password" : "Show password"}
-        </p>
+        </p>)}
+        {success && (
+          <p
+          className="text-sm text-green-400"
+          >
+            Password reset successful!
+          </p>
+        )}
       </div>
       <div>
         <button
