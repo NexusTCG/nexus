@@ -4,20 +4,19 @@
 
 import { createClient } from "@/app/lib/supabase/client"
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import { Typography } from "@mui/material";
 
 export default function ResetPassword() {
-
-const [showPassword, setShowPassword] = useState<boolean>(false);
-const [data, setData] = useState<{
+  const [data, setData] = useState<{
     password: string;
     confirmPassword: string;
 }>({
     password: "",
     confirmPassword: "",
 });
+const [showPassword, setShowPassword] = useState<boolean>(false);
 
 const supabase = createClient();
 const router = useRouter();
