@@ -11,7 +11,7 @@
 // };
 "use client";
 
-import useSession from "@/app/lib/supabase/useSession";
+import useSession from "@/app/hooks/useSession";
 import { useState, useEffect } from 'react';
 import fetchCards from "@/app/lib/fetchCards"
 import clsx from 'clsx';
