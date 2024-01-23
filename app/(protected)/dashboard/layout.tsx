@@ -1,7 +1,3 @@
-
-"use client"
-
-import useSession from "@/app/lib/supabase/useSession";
 import AuthButton from '@/app/components/auth/AuthButton';
 // import { Box } from '@mui/material';
 
@@ -10,12 +6,7 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session = useSession()?.user;
-  if (!session) {
-      console.log("User session active.");
-  } else {
-      console.log("User session inactive.");
-  };
+  
 
   return (
     <div className="flex flex-row justify-start items-start w-full">
