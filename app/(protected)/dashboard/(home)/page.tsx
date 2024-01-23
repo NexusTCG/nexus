@@ -11,7 +11,7 @@
 // };
 "use client"
 import { useState, useEffect } from 'react';
-import { createClient } from '@/app/utils/supabase/server'
+import { createClient } from '@/app/lib/supabase/server'
 import { cookies } from 'next/headers'
 import fetchCards from "@/app/lib/fetchCards"
 import clsx from 'clsx';

@@ -1,6 +1,6 @@
 "use server";
 
-import { createClient } from "@/app/utils/supabase/server";
+import { createClient } from "@/app/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
