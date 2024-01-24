@@ -48,10 +48,6 @@ export default function Login({
     }));
   };
 
-  function handleSignUp() {
-    router.push("/register-user");
-  }
-
   return (
     <div className="flex-1 flex flex-col w-full px-8 my-24 sm:max-w-md justify-center gap-2 rounded-xl shadow-xl bg-gray-800 border border-gray-700">
       <Typography
@@ -70,6 +66,11 @@ export default function Login({
           <Typography variant="subtitle1">
             Sign in to Nexus
           </Typography>
+          <NewAuthButton
+            cta="Sign in with Google"
+            provider="google"
+            disabled={false}
+          />
           <NewAuthButton
             cta="Sign in with GitHub"
             provider="github"
@@ -135,7 +136,11 @@ export default function Login({
       >
         {resetPassword ? "Login" : "Reset password"}
       </p>
-      <Typography variant="subtitle1" onClick={handleSignUp}>
+      {/* Conditionally render & Move inside form */}
+      <Typography
+        variant="subtitle1"
+        className="cursor-pointer hover:underline"
+      >
         Don't have an account? Sign up
       </Typography>
       <button
