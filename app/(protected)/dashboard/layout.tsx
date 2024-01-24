@@ -1,5 +1,5 @@
 import AuthButton from '@/app/components/auth/AuthButton';
-// import { Box } from '@mui/material';
+import SignOutButton from '@/app/components/auth/SignOutButton';
 
 export default function DashboardLayout({
   children,
@@ -16,6 +16,7 @@ export default function DashboardLayout({
         Sidebar
         <div className="flex w-full h-full bg-slate-800 rounded-lg">
           <AuthButton />
+          <SignOutButton />
           Sidebar content
         </div>
       </div>

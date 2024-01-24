@@ -6,6 +6,7 @@ import { useState } from "react";
 import Link from "next/link";
 import clsx from "clsx";
 import { Typography } from "@mui/material";
+import NewAuthButton from "@/app/components/auth/OAuthButton";
 
 export default function Login({
   searchParams,
@@ -106,6 +107,11 @@ export default function Login({
           <button className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2">
             Sign In
           </button>
+          <NewAuthButton
+            cta="Sign in with GitHub"
+            provider="github"
+            disabled={false}
+          />
           <button
             formAction={"/auth/signup"}
             className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
