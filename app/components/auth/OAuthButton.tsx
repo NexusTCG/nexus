@@ -5,6 +5,7 @@ import { createClient } from "@/app/lib/supabase/client";
 import { Button } from "@mui/material";
 import GoogleIcon from '@mui/icons-material/Google';
 import GitHubIcon from '@mui/icons-material/GitHub';
+// MUI doesn't have a Discord icon
 
 type NewAuthButtonProps = {
     cta: string | null;

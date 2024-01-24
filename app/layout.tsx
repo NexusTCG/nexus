@@ -26,7 +26,7 @@ export default function RootLayout(props: RootLayoutProps) {
   return (
     <html lang="en" className={inter.className}>
       <body className="bg-background text-foreground">
-        <main className="min-h-screen flex flex-col items-center bg-gray-900 text-white">
+        <main className="min-h-screen flex flex-col items-center bg-gray-950 text-white">
           <ThemeProvider theme={theme}>
             {children}
             <Analytics />

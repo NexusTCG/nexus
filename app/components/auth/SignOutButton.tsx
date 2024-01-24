@@ -28,6 +28,7 @@ export default function SignOutButton() {
             size="large"
             color={buttonDisabled ? "warning" : "primary"}
             disabled={buttonDisabled}
+            className="w-full"
         >
             {buttonDisabled ? "Logging out.." : "Log out"}
         </Button>

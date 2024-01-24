@@ -15,7 +15,6 @@ import useSession from "@/app/hooks/useSession";
 import { useState, useEffect } from 'react';
 import fetchCards from "@/app/lib/fetchCards"
 import clsx from 'clsx';
-import OAuthButton from "@/app/components/auth/OAuthButton";
 
 type Card = {
     id: number;
@@ -28,8 +27,8 @@ type Card = {
 export default function DashboardHome() {
     const [cards, setCards] = useState<Card[]>([]);
 
-    const session = useSession()?.user;
-    if (!session) {
+    const user = useSession()?.user;
+    if (!user) {
         console.log("User session active.");
     } else {
         console.log("User session inactive.");
@@ -49,6 +48,7 @@ export default function DashboardHome() {
         <div>
             <h1>Dashboard</h1>
             <div>
+                {/* Turn into components: UserCardList / PublishedCardList */}
                 {cards.map((card) => (
                     <div className="card" key={card.id}>
                         <h2 className={clsx(
