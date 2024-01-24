@@ -1,11 +1,10 @@
 "use client";
 
 import { createClient } from "@/app/lib/supabase/client"
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Typography, Box, Divider } from "@mui/material";
 import clsx from "clsx";
-import { Typography } from "@mui/material";
 import NewAuthButton from "@/app/components/auth/OAuthButton";
 
 export default function Login({
@@ -15,9 +14,6 @@ export default function Login({
 },
 
 ) {
-
-  const supabase = createClient();
-
   const [data, setData] = useState<{
     email: string;
     password: string;
@@ -27,6 +23,8 @@ export default function Login({
   });
   const [resetPassword, setResetPassword] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
+
+  const supabase = createClient();
   const router = useRouter();
 
   async function sendResetPassword() {
@@ -50,41 +48,34 @@ export default function Login({
     }));
   };
 
+  function handleSignUp() {
+    router.push("/register-user");
+  }
+
   return (
     <div className="flex-1 flex flex-col w-full px-8 my-24 sm:max-w-md justify-center gap-2 rounded-xl shadow-xl bg-gray-800 border border-gray-700">
       <Typography
-        variant="h1"
+        variant="h4"
         className="text-left mb-6"
       >
         Login
       </Typography>
-      <Link
-        href="/"
-        className="absolute left-8 top-8 py-2 px-4 rounded-md no-underline text-foreground bg-btn-background hover:bg-btn-background-hover flex items-center group text-sm"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
-        >
-          <polyline points="15 18 9 12 15 6" />
-        </svg>{" "}
-        Back
-      </Link>
 
       {!resetPassword && (<div>
         <form
           className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground"
-          action={"/auth/signin"}
+          action={"/auth/login-user"}
           method="post"
         >
+          <Typography variant="subtitle1">
+            Sign in to Nexus
+          </Typography>
+          <NewAuthButton
+            cta="Sign in with GitHub"
+            provider="github"
+            disabled={false}
+          />
+          <Divider />
           <label className="text-md" htmlFor="email">
             Email
           </label>
@@ -107,17 +98,7 @@ export default function Login({
           <button className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2">
             Sign In
           </button>
-          <NewAuthButton
-            cta="Sign in with GitHub"
-            provider="github"
-            disabled={false}
-          />
-          <button
-            formAction={"/auth/signup"}
-            className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
-          >
-            Sign Up
-          </button>
+          
           {searchParams?.message && (
             <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
               {searchParams.message}
@@ -154,6 +135,15 @@ export default function Login({
       >
         {resetPassword ? "Login" : "Reset password"}
       </p>
+      <Typography variant="subtitle1" onClick={handleSignUp}>
+        Don't have an account? Sign up
+      </Typography>
+      <button
+        formAction={"/auth/register-user"}
+        className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
+      >
+        Sign Up
+      </button>
     </div>
   );
 }

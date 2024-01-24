@@ -7,7 +7,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import { Typography } from "@mui/material";
-import { time } from "console";
 
 export default function ResetPassword() {
   const [data, setData] = useState<{
