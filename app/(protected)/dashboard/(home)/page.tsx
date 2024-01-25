@@ -1,14 +1,3 @@
-// import { Box, Typography } from "@mui/material/";
-// import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
-
-// export default async function DashboardHome() {
-//     return (
-//         <Box className="flex flex-col w-full h-full gap-4 p-6 bg-gray-800 md:bg-gray-900">
-//             <Typography variant="h1">Dashboard</Typography>
-//             <NexusCardForm />
-//         </Box>
-//     );
-// };
 "use client";
 
 import useSession from "@/app/hooks/useSession";
@@ -16,6 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Box, Button, Typography, TextField, ToggleButton, ToggleButtonGroup } from "@mui/material/";
 import fetchCards from "@/app/lib/fetchCards"
 import clsx from 'clsx';
+import CardCreatorForm from "@/app/components/card-creator/CardCreatorForm";
 
 type Card = {
     id: number;
@@ -100,6 +90,9 @@ export default function DashboardHome() {
                 ))}
                 
             </Box>
+
+            <CardCreatorForm />
+
             <ToggleButtonGroup
                 value={promptType}
                 exclusive
