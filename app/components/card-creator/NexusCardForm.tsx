@@ -41,6 +41,15 @@ type NexusCardFormProps = {
     formCardData: CardData;
 };
 
+const cardPartPath = {
+    base: "/images",
+    frame: "/card-frames",
+    icon: "/card-icons",
+    grade: "/card-grades",
+    stats: "/card-stats",
+    art: "/card-art",
+};
+
 export default function NexusCardForm({
     control,
     watch,
@@ -49,6 +58,8 @@ export default function NexusCardForm({
     const cardCost: CardCost = watch("cardCost");
     const cardType: CardType = watch("cardType");
     const cardText: string = watch("cardText");
+    const cardGrade: string = watch("cardGrade");
+    const cardCreator: string = watch("cardCreator");
     const [activeCardColors, setActiveCardColors] = useState<string | null>(null);
     const [cardColorClass, setCardColorClass] = useState<string | null>(null);
     const [cardColorBgImage, setCardColorBgImage] = useState<string | null>(null);
@@ -131,9 +142,12 @@ export default function NexusCardForm({
             {/* Card frame */}
             <Box
                 id="card-frame"
-                sx={{
-                    backgroundImage: `/images/card-frames/${cardColorBgImage}-frame.png`
-                }}
+                sx={{ backgroundImage: `
+                        ${cardPartPath.base}
+                        ${cardPartPath.frame}
+                        ${cardColorBgImage}
+                        -frame.png
+                `}}
                 className="
                     flex
                     flex-col
@@ -389,7 +403,8 @@ export default function NexusCardForm({
                         border-black
                 ">
                     <Image
-                        src="/images/card-art/default-art.jpg"
+                        // Update to the art from DALL-E
+                        src="/images/card-art/default-art.jpg" 
                         fill={true}
                         alt="Card name"
                         className="w-full h-full"
@@ -496,7 +511,11 @@ export default function NexusCardForm({
                             )}
                         />)}
                         <Image
-                            src="/images/card-stats/attack.png"
+                            src={`
+                                ${cardPartPath.base}
+                                ${cardPartPath.stats}
+                                /attack.png
+                            `}
                             fill={true}
                             alt="Card attack icon"
                             className="w-full h-full"
@@ -513,6 +532,50 @@ export default function NexusCardForm({
                             items-center
                     ">
                         {/* Card grade */}
+                        <Box
+                            id="stats-grade"
+                            className="
+                                flex
+                                flex-col
+                                justify-start
+                                items-center
+                                px-2
+                        ">
+                            <Image
+                                src={`
+                                    ${cardPartPath.base}
+                                    ${cardPartPath.icon}
+                                    ${cardPartPath.grade}
+                                    /${cardGrade.toLowerCase()}
+                                    .png
+                                `}
+                                height={48}
+                                width={48}
+                                alt="Card grade icon"
+                            />
+                            <Box className="
+                                flex
+                                flex-row
+                                justify-between
+                                items-center
+                                text-white
+                                text-xs
+                                font-medium
+                            ">
+                                <Typography variant="caption">
+                                    Creator: {
+                                    cardCreator ? 
+                                    cardCreator : 
+                                    "Card Creator"
+                                    }
+                                </Typography>
+                                <Typography variant="caption">
+                                    Copyright Nexus {
+                                        new Date().getFullYear()
+                                    } ©
+                                </Typography>
+                            </Box>
+                        </Box>
                     </Box>
                     {/* Card defense */}
                     <Box
@@ -542,7 +605,11 @@ export default function NexusCardForm({
                             )}
                         />)}
                         <Image
-                            src="/images/card-stats/defense.png"
+                            src={`
+                                ${cardPartPath.base}
+                                ${cardPartPath.stats}
+                                /defense.png
+                            `}
                             fill={true}
                             alt="Card defense icon"
                             className="w-full h-full"

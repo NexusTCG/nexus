@@ -8,7 +8,6 @@ import { CardData } from "@/app/utils/types/types";
 import cardSchema from "@/app/utils/schemas/cardSchema";
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
 import PromptInput from "@/app/components/card-creator/PromptInput";
-// Import editable card form component
 
 export default function CardCreatorForm() {
     const {
@@ -18,6 +17,28 @@ export default function CardCreatorForm() {
       watch,
       formState: { errors },
     } = useForm<CardData>({
+      defaultValues: {
+        cardCreator: "",
+        cardName: "",
+        cardCost: {
+          yellow: 0,
+          blue: 0,
+          purple: 0,
+          red: 0,
+          green: 0,
+          void: 0,
+        },
+        cardColor: "",
+        cardArt: "/images/card-art/default-art.jpg",
+        cardType: "",
+        cardSuperType: "",
+        cardSubType: [""],
+        cardGrade: "common",
+        cardText: "",
+        cardFlavorText: "",
+        cardAttack: "0",
+        cardDefense: "0",
+      },
       resolver: zodResolver(cardSchema),
     });
 

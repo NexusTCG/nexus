@@ -91,8 +91,7 @@ export default function DashboardHome() {
                 
             </Box>
 
-            <CardCreatorForm />
-
+            {/* Move Toggle to CardCreatorForm */}
             <ToggleButtonGroup
                 value={promptType}
                 exclusive
@@ -123,6 +122,7 @@ export default function DashboardHome() {
                     </Typography>
                 </ToggleButton>
             </ToggleButtonGroup>
+
             <TextField
                 id="prompt"
                 label="AI Prompt"
