@@ -126,6 +126,7 @@ export default function NexusCardForm({
                 rounded-2xl
                 bg-black
         ">
+            {/* Card frame */}
             <Box
                 id="card-frame"
                 sx={{
@@ -139,6 +140,7 @@ export default function NexusCardForm({
                     p-2
                     rounded-lg
             ">
+                {/* Card header */}
                 <Box
                     id="card-header"
                     sx={{
@@ -147,20 +149,199 @@ export default function NexusCardForm({
                     className={`
                         ${monoColorClass[`${cardColorClass}`]["500"]}
                         flex
-                        flex-row
-                        justify-between
-                        items-center
+                        flex-col
                         w-full
-                        gap-2
+                        gap-1
                         py-1
                         px-2
                         border-2
                         border-black
                         rounded-md`
                 }>
-
+                    {/* Card name and cost */}
+                    <Box
+                        id="card-header-name-cost"
+                        className={`
+                            ${monoColorClass[`${cardColorClass}`]["500"]}
+                            flex
+                            flex-row
+                            justify-between
+                            items-center
+                            w-full
+                            gap-1
+                            py-1
+                            px-2
+                            border-2
+                            border-black
+                            rounded-md`
+                    }>
+                        <Controller
+                            name="cardName"
+                            control={control}
+                            render={({ field, fieldState }) => (
+                                <TextField
+                                    {...field}
+                                    size="small"
+                                    placeholder="Card name"
+                                    className="w-3/4"
+                                    error={!!fieldState.error}
+                                    helperText={
+                                        fieldState.error ? 
+                                        fieldState.error.message : null
+                                    }
+                                    // inputProps={{ disableUnderline: true }}
+                                    // Caused error
+                                />
+                            )}
+                        />
+                        <Controller
+                            name="cardCost"
+                            control={control}
+                            render={({ field, fieldState }) => (
+                                <TextField
+                                    {...field}
+                                    size="small"
+                                    placeholder="Card cost"
+                                    className="w-1/4"
+                                    error={!!fieldState.error}
+                                    helperText={
+                                        fieldState.error ? 
+                                        fieldState.error.message : null
+                                    }
+                                    // inputProps={{ disableUnderline: true }}
+                                    // Caused error
+                                />
+                            )}
+                        />
+                    </Box>
+                    {/* Card types and speed */}
+                    <Box
+                        id="card-header-types-speed"
+                        className={`
+                            ${monoColorClass[`${cardColorClass}`]["500"]}
+                            flex
+                            flex-row
+                            justify-between
+                            items-center
+                            w-full
+                            gap-1
+                            py-1
+                            px-2
+                            border-2
+                            border-black
+                            rounded-md`
+                    }>
+                        {/* Super type */}
+                        <Box
+                            id="card-header-types"
+                            className="
+                                flex
+                                flex-row
+                                w-full
+                        ">
+                        {["object", "entity", "effect", "node"].includes(cardType.toString()) && (
+                        <Controller
+                            name="cardSuperType"
+                            control={control}
+                            render={({ field }) => (
+                                <FormControl fullWidth>
+                                    <InputLabel>Super Type</InputLabel>
+                                    <Select
+                                        {...field}
+                                        label="Super type"
+                                        size="small"
+                                        className="w-full"
+                                    >
+                                        {Object.entries(cardSuperTypeOptions).map(([value, label]) => (
+                                            <MenuItem key={value} value={value}>
+                                                <Typography variant="body2">{label}</Typography>
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            )}
+                        />
+                        )}
+                        {/* Type */}
+                        <Controller
+                            name="cardType"
+                            control={control}
+                            render={({ field }) => (
+                                <FormControl fullWidth>
+                                    <InputLabel>Type</InputLabel>
+                                    <Select
+                                        {...field}
+                                        label="Type"
+                                        size="small"
+                                        className="w-full"
+                                    >
+                                        {Object.entries(cardTypeOptions).map(([value, label]) => (
+                                            <MenuItem key={value} value={value}>
+                                                <Typography variant="body2">{label}</Typography>
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            )}
+                        />
+                        {["object", "entity", "effect"].includes(cardType.toString()) && (
+                            <Controller
+                                name="cardSubType"
+                                control={control}
+                                render={({ field }) => (
+                                    <FormControl fullWidth>
+                                        <InputLabel>Sub Type</InputLabel>
+                                        <Select
+                                            multiple
+                                            {...field}
+                                            value={Array.isArray(field.value) ? field.value : []}
+                                            label="Sub type"
+                                            size="small"
+                                            // renderValue={(selected) => selected.join(' ')}
+                                        >
+                                            {cardType.toString() === "entity" && 
+                                                Object.entries(
+                                                    cardSubTypeOptions.entity
+                                                ).map(([value, label]) => (
+                                                    <MenuItem key={value} value={value}>
+                                                        <Typography variant="body2">
+                                                            {label}
+                                                        </Typography>
+                                                    </MenuItem>
+                                                ))
+                                            }
+                                            {cardType.toString() === "object" && 
+                                                Object.entries(
+                                                    cardSubTypeOptions.machine
+                                                ).map(([value, label]) => (
+                                                    <MenuItem key={value} value={value}>
+                                                        <Typography variant="body2">
+                                                            {label}
+                                                        </Typography>
+                                                    </MenuItem>
+                                                ))
+                                            }
+                                            {cardType.toString() === "effect" && 
+                                                Object.entries(
+                                                    cardSubTypeOptions.enhancement
+                                                ).map(([value, label]) => (
+                                                    <MenuItem key={value} value={value}>
+                                                        <Typography variant="body2">
+                                                            {label}
+                                                        </Typography>
+                                                    </MenuItem>
+                                                ))
+                                            }
+                                        </Select>
+                                    </FormControl>
+                                )}
+                            />
+                        )}
+                    </Box>
+                        {/* Select: Speed */}
+                    </Box>
                 </Box>
-
+                {/* Card image */}
             </Box>
         </Box>
     );

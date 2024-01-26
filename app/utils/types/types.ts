@@ -7,17 +7,17 @@ import { ComponentType } from 'react';
 
 // Nexus Card Creator Form Data
 export type CardData = {
-  cardCreator: string;
-  cardName: string;
-  cardCost: string[];
+  cardCreator?: string;
+  cardName?: string;
+  cardCost?: CardCost;
   cardColor: string;
-  cardArt: string;
-  cardType: string;
+  cardArt?: string;
+  cardType?: string;
   cardSuperType: string;
   cardSubType: string[];
-  cardGrade: string;
-  cardText: string;
-  cardFlavorText?: string;
+  cardGrade?: string;
+  cardText?: string;
+  cardFlavorText: string;
   cardAttack: string;
   cardDefense: string;
   cardPrompt: string;
