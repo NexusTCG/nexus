@@ -142,12 +142,7 @@ export default function NexusCardForm({
             {/* Card frame */}
             <Box
                 id="card-frame"
-                sx={{ backgroundImage: `
-                        ${cardPartPath.base}
-                        ${cardPartPath.frame}
-                        ${cardColorBgImage}
-                        -frame.png
-                `}}
+                sx={{ backgroundImage: `${cardPartPath.base}${cardPartPath.frame}${cardColorBgImage}-frame.png`}}
                 className="
                     flex
                     flex-col
@@ -163,7 +158,7 @@ export default function NexusCardForm({
                         aspectRatio: "55 / 5"
                     }}
                     className={`
-                        ${monoColorClass[`${cardColorClass}`]["500"]}
+                        ${monoColorClass[`${cardColorClass}`]?.["500"] ?? "bg-gray-500"}
                         flex
                         flex-col
                         w-full
@@ -178,7 +173,7 @@ export default function NexusCardForm({
                     <Box
                         id="card-header-name-cost"
                         className={`
-                            ${monoColorClass[`${cardColorClass}`]["500"]}
+                            ${monoColorClass[`${cardColorClass}`]?.["500"] ?? "bg-gray-500"}
                             flex
                             flex-row
                             justify-between
@@ -234,7 +229,7 @@ export default function NexusCardForm({
                     <Box
                         id="card-header-types-speed"
                         className={`
-                            ${monoColorClass[`${cardColorClass}`]["500"]}
+                            ${monoColorClass[`${cardColorClass}`]?.["500"] ?? "bg-gray-500"}
                             flex
                             flex-row
                             justify-between
@@ -511,11 +506,7 @@ export default function NexusCardForm({
                             )}
                         />)}
                         <Image
-                            src={`
-                                ${cardPartPath.base}
-                                ${cardPartPath.stats}
-                                /attack.png
-                            `}
+                            src={`${cardPartPath.base}${cardPartPath.stats}/attack.png`}
                             fill={true}
                             alt="Card attack icon"
                             className="w-full h-full"
@@ -542,13 +533,7 @@ export default function NexusCardForm({
                                 px-2
                         ">
                             <Image
-                                src={`
-                                    ${cardPartPath.base}
-                                    ${cardPartPath.icon}
-                                    ${cardPartPath.grade}
-                                    /${cardGrade.toLowerCase()}
-                                    .png
-                                `}
+                                src={`${cardPartPath.base}${cardPartPath.icon}${cardPartPath.grade}/${cardGrade.toLowerCase()}.png`}
                                 height={48}
                                 width={48}
                                 alt="Card grade icon"
@@ -605,11 +590,7 @@ export default function NexusCardForm({
                             )}
                         />)}
                         <Image
-                            src={`
-                                ${cardPartPath.base}
-                                ${cardPartPath.stats}
-                                /defense.png
-                            `}
+                            src={`${cardPartPath.base}${cardPartPath.stats}/defense.png`}
                             fill={true}
                             alt="Card defense icon"
                             className="w-full h-full"
