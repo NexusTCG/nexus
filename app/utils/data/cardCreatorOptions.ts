@@ -11,7 +11,7 @@ export const cardSuperTypeOptions = {
     event: "Event",
     effect: "Effect",
     object: "Object",
-    anomaly: "Anomaly",
+    node: "Node",
  };
 
  export const cardSpeedOptions = {
@@ -27,10 +27,10 @@ export const cardSuperTypeOptions = {
         entityType.name,
       ])
     ),
-   machine: {
+   object: {
       gear: 'Gear',
    },
-   enhancement: {
+   effect: {
       alteration: "Alteration",
    },
  };

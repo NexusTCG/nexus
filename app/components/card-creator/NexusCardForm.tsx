@@ -328,7 +328,7 @@ export default function NexusCardForm({
                                             }
                                             {cardType.toString() === "object" && 
                                                 Object.entries(
-                                                    cardSubTypeOptions.machine
+                                                    cardSubTypeOptions.object
                                                 ).map(([value, label]) => (
                                                     <MenuItem key={value} value={value}>
                                                         <Typography variant="body2">
@@ -339,7 +339,7 @@ export default function NexusCardForm({
                                             }
                                             {cardType.toString() === "effect" && 
                                                 Object.entries(
-                                                    cardSubTypeOptions.enhancement
+                                                    cardSubTypeOptions.effect
                                                 ).map(([value, label]) => (
                                                     <MenuItem key={value} value={value}>
                                                         <Typography variant="body2">

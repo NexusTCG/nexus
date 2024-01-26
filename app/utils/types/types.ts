@@ -7,22 +7,23 @@ import { ComponentType } from 'react';
 
 // Nexus Card Creator Form Data
 export type CardData = {
-  cardCreator?: string;
-  cardName?: string;
-  cardCost?: CardCost;
-  cardColor: string;
-  cardArt?: string;
-  cardType?: string;
-  cardSuperType: string;
-  cardSubType: string[];
-  cardSpeed: string;
-  cardGrade?: string;
-  cardText?: string;
-  cardFlavorText: string;
-  cardAttack: string;
-  cardDefense: string;
-  cardPrompt: string;
+  cardCreator: string; // Required
+  cardName: string; // Required
+  cardCost?: { [key: string]: number }; // Optional, required if cardType is not "node"
+  cardColor: string; // Not required
+  cardArt: string; // Required
+  cardType: string; // Required
+  cardSuperType: string; // Not required
+  cardSubType: string[]; // Not required
+  cardSpeed?: string;  // Optional, required if cardType is not "node"
+  cardGrade: string; // Required, default: "Common"
+  cardText: string; // Required
+  cardFlavorText: string; // Not required
+  cardAttack: string; // Not required
+  cardDefense: string; // Not required
+  cardPrompt: string; // Not required
 };
+
 
 // Nexus Card Types
 export type CardType = {

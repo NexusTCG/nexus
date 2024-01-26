@@ -1,6 +1,6 @@
 "use client";
 
-import useSession from "@/app/hooks/useSession";
+import useSession from "@/app/components/card-creator/hooks/useSession";
 import { useState, useEffect, useRef } from 'react';
 import { Box, Button, Typography, TextField, ToggleButton, ToggleButtonGroup } from "@mui/material/";
 import fetchCards from "@/app/lib/fetchCards"
