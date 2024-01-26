@@ -20,6 +20,8 @@ export default function SidebarDesktop() {
             bg-gray-900
             border-r
             border-gray-800
+            sticky
+            top-0
         "
     >
         <Box

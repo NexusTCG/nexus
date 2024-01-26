@@ -51,11 +51,19 @@ export default function NexusCardForm({
     const [cardColorClass, setCardColorClass] = useState<string | null>(null);
     const [cardColorBgImage, setCardColorBgImage] = useState<string | null>(null);
 
-    function findDualColorKey(colors: string[] | null, dualColorOptions: DualColorOptions): string | null {
+    // Find dual color key that matches active colors
+    // if active colors is equal to two colors
+    function findDualColorKey(
+        colors: string[] | null,
+        dualColorOptions: DualColorOptions
+    ): string | null {
         let foundKey: string | null = null;
         Object.keys(dualColorOptions).forEach(key => {
-            // Check if both colors are in the key
-            if (colors && colors.every(color => key.includes(color))) {
+            // Check if both colors are in the dual color options key
+            if (colors && colors.every(color => key
+                .toLowerCase()
+                .includes(color)
+            )) {
                 foundKey = key;
                 return;
             };
@@ -63,25 +71,38 @@ export default function NexusCardForm({
         return foundKey;
     };
 
+    // Set active card colors
     useEffect(() => {
         if (cardCost) {
             let colorsWithCost = Object.entries(cardCost)
-                .filter(([color, value]) => value > 0 && (color !== monoColorOptions.void || Object.keys(cardCost).length === 1))
-                .map(([color]) => color);
+                .filter(([color, value]) => value > 0 && (
+                    color !== monoColorOptions.void ||
+                    Object.keys(cardCost).length === 1
+                )).map(([color]) => color);
+
             if (colorsWithCost.length === 0) {
                 setActiveCardColors(monoColorOptions.void);
+
             } else if (colorsWithCost.length === 1) {
-                setActiveCardColors(monoColorOptions[colorsWithCost[0] as keyof typeof monoColorOptions]);
+                setActiveCardColors(monoColorOptions[
+                    colorsWithCost[0] as keyof typeof monoColorOptions
+                ]);
+
             } else if (colorsWithCost.length === 2) {
+                // Compare colors with dual color options
                 const dualKey = findDualColorKey(colorsWithCost, dualColorOptions);
-                setActiveCardColors(dualColorOptions[dualKey as keyof typeof dualColorOptions]);
+                setActiveCardColors(dualColorOptions[
+                    dualKey as keyof typeof dualColorOptions
+                ]);
+
             } else {
                 setActiveCardColors(multiColor);
             };
         };
     }, [cardCost]);
 
-    // Set card
+    // Set card color class and bg image
+    // based on active card colors
     useEffect(() => {
         if (activeCardColors && monoColorClass[`${activeCardColors}`]) {
             setCardColorClass(activeCardColors);
