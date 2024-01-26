@@ -28,7 +28,7 @@ export default function TestPage() {
                             flex-col
                             gap-2
                     ">
-                        <Typography variant="body1">
+                        <Typography component="span" variant="body1">
                             <KeywordTooltip keyword={key} />
                         </Typography>
                         <Typography
