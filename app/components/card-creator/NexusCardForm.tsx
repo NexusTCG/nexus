@@ -28,8 +28,9 @@ import {
     cardSuperTypeOptions,
     cardTypeOptions,
     cardSubTypeOptions,
+    cardSpeedOptions,
     cardGradeOptions,
-    cardStatsOptions
+    // cardStatsOptions
 } from "@/app/utils/data/cardCreatorOptions";
 import Image from "next/image";
 import clsx from "clsx";
@@ -45,8 +46,9 @@ export default function NexusCardForm({
     watch,
     formCardData
 }: NexusCardFormProps) {
-    const cardType: CardType = watch("cardType");
     const cardCost: CardCost = watch("cardCost");
+    const cardType: CardType = watch("cardType");
+    const cardText: string = watch("cardText");
     const [activeCardColors, setActiveCardColors] = useState<string | null>(null);
     const [cardColorClass, setCardColorClass] = useState<string | null>(null);
     const [cardColorBgImage, setCardColorBgImage] = useState<string | null>(null);
@@ -339,9 +341,215 @@ export default function NexusCardForm({
                         )}
                     </Box>
                         {/* Select: Speed */}
+                        <Controller
+                            name="cardSpeed"
+                            control={control}
+                            render={({ field }) => (
+                                <FormControl fullWidth>
+                                    <InputLabel>Speed</InputLabel>
+                                    <Select
+                                        multiple
+                                        {...field}
+                                        value={Array.isArray(
+                                            field.value
+                                        ) ? field.value : []}
+                                        label="Speed"
+                                        size="small"
+                                    >
+                                        {Object.entries(
+                                            cardSpeedOptions
+                                        ).map(([value, label]) => (
+                                            <MenuItem key={value} value={value}>
+                                                <Typography variant="body2">
+                                                    {label}
+                                                    </Typography>
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            )}
+                        />
                     </Box>
                 </Box>
                 {/* Card image */}
+                <Box
+                    id="card-image"
+                    sx={{ aspectRatio: "4 / 3" }}
+                    className="
+                        flex
+                        flex-col
+                        justify-center
+                        items-center
+                        w-full
+                        overflow-hidden
+                        relative
+                        mx-auto
+                        px-2
+                        border-2
+                        border-black
+                ">
+                    <Image
+                        src="/images/card-art/default-art.jpg"
+                        fill={true}
+                        alt="Card name"
+                        className="w-full h-full"
+                        style={{ objectFit: "cover" }}
+                    />
+                </Box>
+                {/* Card text and flavor text */}
+                <Box
+                    id="card-text-flavor"
+                    sx={{ aspectRatio: "540 / 275" }}
+                    className="
+                        flex
+                        flex-col
+                        p-2
+                        bg-gray-600
+                        text-black
+                        border-2
+                        border-black
+                        mx-2
+                ">
+                    {/* Card text */}
+                    <Controller
+                        name="cardText"
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <TextField
+                                {...field}
+                                multiline
+                                size="small"
+                                variant="standard"
+                                placeholder='Type "/" to insert a keyword ability.'
+                                className="w-full"
+                                rows={4}
+                                error={!!fieldState.error}
+                                // helperText={fieldState.error ? fieldState.error.message : "Card text is required!"}
+                                // InputProps={{ disableUnderline: true }} caused error
+                            />
+                        )}
+                    />
+                    <Box className="bg-black h-[1px] w-full my-4" />
+                    {/* Card flavor text */}
+                    {cardText.length <= 200 && (<Controller
+                        name="cardFlavorText"
+                        control={control}
+                        render={({ field, fieldState }) => (
+                            <TextField
+                                {...field}
+                                multiline
+                                size="small"
+                                variant="standard"
+                                placeholder='Write some flavor text here.'
+                                className="w-full"
+                                rows={2}
+                                error={!!fieldState.error}
+                                inputProps={{ maxLength: 75 }}
+                                // helperText={fieldState.error ? fieldState.error.message : "Card text is required!"}
+                                // InputProps={{ disableUnderline: true }} caused error
+                            />
+                        )}
+                    />)}
+                </Box>
+                {/* Card stats, grade, creator and copyright */}
+                <Box
+                    id="card-stats-grade-creator-info"
+                    sx={{ zIndex: 1 }}
+                    className="
+                        flex
+                        flex-row
+                        justify-between
+                        items-center
+                        w-full
+                        ml-auto
+                        mr-0
+                        pr-2
+                        -mt-8
+                        px-1
+                        rounded-tl-lg
+                ">
+                    {/* Card attack */}
+                    <Box
+                        id="stats-attack"
+                        className="
+                            flex
+                            flex-col
+                            justify-center
+                            items-center
+                            relative
+                    ">
+                        {cardType.entity && (<Controller
+                            name="cardAttack"
+                            control={control}
+                            render={({ field, fieldState }) => (
+                                <TextField
+                                    {...field}
+                                    size="small"
+                                    variant="standard"
+                                    placeholder='0'
+                                    className="w-full"
+                                    error={!!fieldState.error}
+                                    inputProps={{ maxLength: 2 }}
+                                    // helperText={fieldState.error ? fieldState.error.message : "Card text is required!"}
+                                    // InputProps={{ disableUnderline: true }} caused error
+                                />
+                            )}
+                        />)}
+                        <Image
+                            src="/images/card-stats/attack.png"
+                            fill={true}
+                            alt="Card attack icon"
+                            className="w-full h-full"
+                            // style={{ objectFit: "cover" }}
+                        />
+                    </Box>
+                    {/* Card grade + info */}
+                    <Box
+                        id="stats-grade-info"
+                        className="
+                            flex
+                            flex-col
+                            justify-center
+                            items-center
+                    ">
+                        {/* Card grade */}
+                    </Box>
+                    {/* Card defense */}
+                    <Box
+                        id="stats-defense"
+                        className="
+                            flex
+                            flex-col
+                            justify-center
+                            items-center
+                            relative
+                    ">
+                        {cardType.entity && (<Controller
+                            name="cardDefense"
+                            control={control}
+                            render={({ field, fieldState }) => (
+                                <TextField
+                                    {...field}
+                                    size="small"
+                                    variant="standard"
+                                    placeholder='0'
+                                    className="w-full"
+                                    error={!!fieldState.error}
+                                    inputProps={{ maxLength: 2 }}
+                                    // helperText={fieldState.error ? fieldState.error.message : "Card text is required!"}
+                                    // InputProps={{ disableUnderline: true }} caused error
+                                />
+                            )}
+                        />)}
+                        <Image
+                            src="/images/card-stats/defense.png"
+                            fill={true}
+                            alt="Card defense icon"
+                            className="w-full h-full"
+                            // style={{ objectFit: "cover" }}
+                        />
+                    </Box>
+                </Box>
             </Box>
         </Box>
     );

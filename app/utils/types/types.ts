@@ -15,6 +15,7 @@ export type CardData = {
   cardType?: string;
   cardSuperType: string;
   cardSubType: string[];
+  cardSpeed: string;
   cardGrade?: string;
   cardText?: string;
   cardFlavorText: string;
