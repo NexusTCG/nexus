@@ -12,13 +12,13 @@ import PromptInput from "@/app/components/card-creator/PromptInput";
 
 export default function CardCreatorForm() {
     const {
-        register,
-        control,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm<CardData>({ 
-        resolver: zodResolver(cardSchema),
+      register,
+      control,
+      handleSubmit,
+      watch,
+      formState: { errors },
+    } = useForm<CardData>({
+      resolver: zodResolver(cardSchema),
     });
 
     const formNexusCardData = watch();
