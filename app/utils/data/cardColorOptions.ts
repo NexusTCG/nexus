@@ -19,9 +19,3 @@ export const dualColorOptions = {
     purpleGreen: "purple-green",
     redGreen: "red-green"
 };
-
-// export const multiColor = "multi";
-
-// export const nodeColor = "node";
-
-// export const defaultColor = "default";

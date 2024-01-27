@@ -443,8 +443,9 @@ export default function NexusCardForm({
                 ">
                     <Image
                         // Update to the art from DALL-E
-                        src="/images/card-art/default-art.jpg" 
+                        src="/images/card-parts/card-art/default-art.jpg" 
                         fill={true}
+                        sizes="100%"
                         alt="Card name"
                         className="w-full h-full"
                         style={{ objectFit: "cover" }}
@@ -550,8 +551,9 @@ export default function NexusCardForm({
                             )}
                         />)}
                         <Image
-                            src={`${cardPartPath.base}${cardPartPath.stats}/attack.png`}
+                            src={`${cardPartPath.base}card-parts/${cardPartPath.stats}/attack.png`}
                             fill={true}
+                            sizes="100%"
                             alt="Card attack icon"
                             className="w-full h-full"
                             // style={{ objectFit: "cover" }}
@@ -577,7 +579,7 @@ export default function NexusCardForm({
                                 px-2
                         ">
                             <Image
-                                src={`${cardPartPath.base}${cardPartPath.icon}${cardPartPath.grade}/${cardGrade.toLowerCase()}.png`}
+                                src={`${cardPartPath.base}/card-parts${cardPartPath.icon}${cardPartPath.grade}/${cardGrade.toLowerCase()}.png`}
                                 height={48}
                                 width={48}
                                 alt="Card grade icon"
@@ -634,8 +636,9 @@ export default function NexusCardForm({
                             )}
                         />)}
                         <Image
-                            src={`${cardPartPath.base}${cardPartPath.stats}/defense.png`}
+                            src={`${cardPartPath.base}card-parts/${cardPartPath.stats}/defense.png`}
                             fill={true}
+                            sizes="100%"
                             alt="Card defense icon"
                             className="w-full h-full"
                             // style={{ objectFit: "cover" }}
