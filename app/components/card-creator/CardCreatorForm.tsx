@@ -20,7 +20,14 @@ export default function CardCreatorForm() {
       defaultValues: {
         cardCreator: "",
         cardName: "",
-        cardCost: [],
+        cardCost: {
+          yellow: 0,
+          blue: 0,
+          purple: 0,
+          red: 0,
+          green: 0,
+          void: 0,
+        },
         cardColor: "",
         cardArt: "",
         cardType: "",
