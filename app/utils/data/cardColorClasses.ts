@@ -1,7 +1,9 @@
 import {
     monoColorOptions,
     dualColorOptions,
-    multiColor
+    multiColor,
+    nodeColor,
+    defaultColor
 } from "@/app/utils/data/cardColorOptions";
 
 export const monoColorClass = Object.entries(monoColorOptions).reduce((acc, [key, color]) => {
@@ -43,3 +45,7 @@ export const monoColorClass = Object.entries(monoColorOptions).reduce((acc, [key
 //     "50": `bg-${color}-50`,
 //     // Gradient
 // }
+
+// export nodeColorClass
+
+// export const defaultColorClass

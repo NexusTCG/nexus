@@ -2,7 +2,13 @@
 
 import React, { useState, useEffect} from "react";
 import { Controller, Control } from "react-hook-form";
-import { monoColorClass } from "@/app/utils/data/cardColorClasses";
+import {
+    monoColorClass,
+    dualColorClass,
+    multiColorClass,
+    nodeColorClass,
+    defaultColorClass
+} from "@/app/utils/data/cardColorClasses";
 import {
     monoColorOptions,
     dualColorOptions,
@@ -60,9 +66,10 @@ export default function NexusCardForm({
     const cardText: string = watch("cardText");
     const cardGrade: string = watch("cardGrade");
     const cardCreator: string = watch("cardCreator");
+    const [activeCardColorsType, setActiveCardColorsType] = useState<string | null>(null);
     const [activeCardColors, setActiveCardColors] = useState<string | null>(null);
-    const [cardColorClass, setCardColorClass] = useState<string | null>(null);
-    const [cardColorBgImage, setCardColorBgImage] = useState<string | null>(null);
+    const [cardColorClass, setCardColorClass] = useState<string | null>(null); // make an object
+    const [cardBgImage, setCardBgImage] = useState<string | null>(null);
 
     // Find dual color key that matches active colors
     // if active colors is equal to two colors
@@ -97,18 +104,20 @@ export default function NexusCardForm({
                 setActiveCardColors(monoColorOptions.void);
 
             } else if (colorsWithCost.length === 1) {
+                setActiveCardColorsType("mono");
                 setActiveCardColors(monoColorOptions[
                     colorsWithCost[0] as keyof typeof monoColorOptions
                 ]);
 
             } else if (colorsWithCost.length === 2) {
+                setActiveCardColorsType("dual");
                 // Compare colors with dual color options
                 const dualKey = findDualColorKey(colorsWithCost, dualColorOptions);
                 setActiveCardColors(dualColorOptions[
                     dualKey as keyof typeof dualColorOptions
                 ]);
-
             } else {
+                setActiveCardColorsType("multi");
                 setActiveCardColors(multiColor);
             };
         };
@@ -117,10 +126,46 @@ export default function NexusCardForm({
     // Set card color class and bg image
     // based on active card colors
     useEffect(() => {
-        if (activeCardColors && monoColorClass[`${activeCardColors}`]) {
+        const path = `${cardPartPath.base}${cardPartPath.frame}`;
+
+        if (!activeCardColorsType && cardType.node) {
+            setCardColorClass(nodeColorClass[`${activeCardColors}`]?.["500"] ?? "bg-gray-500"); // set to object
+            setCardBgImage(`${path}/other/node.png`);
+        } else if (activeCardColorsType === "mono") {
+            if (cardType.object) {
+                setCardBgImage(`${path}/mono/object/object-${activeCardColors}.png`);
+            } else if (cardType.effect) {
+                setCardBgImage(`${path}/mono/effect/effect-${activeCardColors}.png`);
+            } else {
+                setCardBgImage(`${path}/mono/${activeCardColors}.png`);
+            }
+        } else if (activeCardColorsType === "dual") {
+            if (cardType.object) {
+                setCardBgImage(`${path}/dual/object/object-${activeCardColors}.png`);
+            } else if (cardType.effect) {
+                setCardBgImage(`${path}/dual/effect/effect-${activeCardColors}.png`);
+            } else {
+                setCardBgImage(`${path}/dual/${activeCardColors}.png`);
+            }
+        } else if (activeCardColorsType === "multi") {
+            if (cardType.object) {
+                setCardBgImage(`${path}/other/object/object-${activeCardColors}.png`);
+            } else if (cardType.effect) {
+                setCardBgImage(`${path}/other/effect/effect-${activeCardColors}.png`);
+            } else {
+                setCardBgImage(`${path}/other/${activeCardColors}.png`);
+            }
+        } else {
             setCardColorClass(activeCardColors);
-            setCardColorBgImage(activeCardColors);
-        };
+            if (cardType.object) {
+                setCardBgImage(`${path}/other/object/object-default.png`);
+            } else if (cardType.effect) {
+                setCardBgImage(`${path}/other/effect/effect-default.png`);
+            } else {
+                setCardBgImage(`${path}/other/default.png`);
+            }
+        }
+        setCardColorClass(activeCardColors);
     });
 
     return (
@@ -142,7 +187,8 @@ export default function NexusCardForm({
             {/* Card frame */}
             <Box
                 id="card-frame"
-                sx={{ backgroundImage: `${cardPartPath.base}${cardPartPath.frame}${cardColorBgImage}-frame.png`}}
+                // function that dynamically sets bg image based on type and color
+                sx={{ backgroundImage: `${cardBgImage}.png`}}
                 className="
                     flex
                     flex-col
@@ -157,8 +203,9 @@ export default function NexusCardForm({
                     sx={{
                         aspectRatio: "55 / 5"
                     }}
+                    // set to cardColorClass object .number
                     className={`
-                        ${monoColorClass[`${cardColorClass}`]?.["500"] ?? "bg-gray-500"}
+                        ${monoColorClass[`bg-${cardColorClass}`]?.["-500"] ?? "bg-gray-500"} 
                         flex
                         flex-col
                         w-full
@@ -173,7 +220,7 @@ export default function NexusCardForm({
                     <Box
                         id="card-header-name-cost"
                         className={`
-                            ${monoColorClass[`${cardColorClass}`]?.["500"] ?? "bg-gray-500"}
+                            ${monoColorClass[`bg-${cardColorClass}`]?.[-"500"] ?? "bg-gray-500"}
                             flex
                             flex-row
                             justify-between
@@ -186,6 +233,7 @@ export default function NexusCardForm({
                             border-black
                             rounded-md`
                     }>
+                        {/* Card name */}
                         <Controller
                             name="cardName"
                             control={control}
@@ -200,11 +248,11 @@ export default function NexusCardForm({
                                         fieldState.error ? 
                                         fieldState.error.message : null
                                     }
-                                    // inputProps={{ disableUnderline: true }}
-                                    // Caused error
                                 />
                             )}
                         />
+                        {/* Card cost */}
+                        {/* Select multiple - order selected cost symbols */}
                         <Controller
                             name="cardCost"
                             control={control}
@@ -229,7 +277,7 @@ export default function NexusCardForm({
                     <Box
                         id="card-header-types-speed"
                         className={`
-                            ${monoColorClass[`${cardColorClass}`]?.["500"] ?? "bg-gray-500"}
+                            ${monoColorClass[`bg-${cardColorClass}`]?.["-500"] ?? "bg-gray-500"}
                             flex
                             flex-row
                             justify-between
