@@ -4,7 +4,7 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Typography, TextField, Button, InputLabel } from "@mui/material/";
-import { CardData } from "@/app/utils/types/types";
+import { CardDataType } from "@/app/utils/types/types";
 import cardSchema from "@/app/utils/schemas/cardSchema";
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
 import PromptInput from "@/app/components/card-creator/PromptInput";
@@ -16,18 +16,11 @@ export default function CardCreatorForm() {
       handleSubmit,
       watch,
       formState: { errors },
-    } = useForm<CardData>({
+    } = useForm<CardDataType>({
       defaultValues: {
         cardCreator: "",
         cardName: "",
-        cardCost: {
-          yellow: 0,
-          blue: 0,
-          purple: 0,
-          red: 0,
-          green: 0,
-          void: 0,
-        },
+        cardCost: [],
         cardColor: "",
         cardArt: "",
         cardType: "",
@@ -51,7 +44,7 @@ export default function CardCreatorForm() {
         // Display image in card preview
     };
 
-    function onSubmit(data: CardData) {
+    function onSubmit(data: CardDataType) {
         console.log(data);
         // Generate png image from code / card data
         // Write card data to database (with image url)

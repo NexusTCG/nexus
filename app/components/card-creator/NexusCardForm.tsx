@@ -7,10 +7,10 @@ import {
     dualColorOptions
 } from "@/app/utils/data/cardColorOptions";
 import {
-    CardData,
-    CardType,
-    CardCost,
-    DualColorOptions
+    CardDataType,
+    CardTypeType,
+    CardCostType,
+    DualColorOptionsType
 } from "@/app/utils/types/types";
 import {
     Box,
@@ -20,8 +20,11 @@ import {
     Input,
     InputLabel,
     MenuItem,
-    Select
+    Select,
+    IconButton,
+    Popover
 } from "@mui/material/";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import {
     cardSuperTypeOptions,
     cardTypeOptions,
@@ -34,9 +37,9 @@ import Image from "next/image";
 import clsx from "clsx";
 
 type NexusCardFormProps = {
-    control: Control<CardData>;
+    control: Control<CardDataType>;
     watch: (name: string) => any;
-    formCardData: CardData;
+    formCardData: CardDataType;
 };
 
 const cardPartPath = {
@@ -53,21 +56,23 @@ export default function NexusCardForm({
     watch,
     formCardData
 }: NexusCardFormProps) {
-    const cardCost: CardCost = watch("cardCost");
-    const cardType: CardType = watch("cardType");
+    const cardCost: CardCostType = watch("cardCost");
+    const cardType: CardTypeType = watch("cardType");
     const cardText: string = watch("cardText");
     const cardGrade: string = watch("cardGrade");
     const cardCreator: string = watch("cardCreator");
+    let cardColor: string | null = watch("cardColor");
     const [activeCardColorsType, setActiveCardColorsType] = useState<string | null>(null);
     const [activeCardColors, setActiveCardColors] = useState<string | null>(null);
     const [cardColorClass, setCardColorClass] = useState<string | null>(null); // make an object
     const [cardBgImage, setCardBgImage] = useState<string | null>(null);
+    const [anchorEl, setAnchorEl] = useState(null);
 
     // Find dual color key that matches active colors
     // if active colors is equal to two colors
     function findDualColorKey(
         colors: string[] | null,
-        dualColorOptions: DualColorOptions
+        dualColorOptions: DualColorOptionsType
     ): string | null {
         let foundKey: string | null = null;
         Object.keys(dualColorOptions).forEach(key => {
@@ -164,6 +169,17 @@ export default function NexusCardForm({
         };
     });
 
+    // Costhandler function to dynamically display the right icons in the right order
+    const handleClick = (event: React.MouseEvent) => {
+        const [anchorEl, setAnchorEl] = useState<EventTarget & Element | null>(null);
+      };
+    
+      const handleClose = () => {
+        setAnchorEl(null)
+      };
+    
+      const open = Boolean(anchorEl);
+
     return (
         <Box
             id="card-border"
@@ -249,7 +265,7 @@ export default function NexusCardForm({
                         />
                         {/* Card cost */}
                         {/* Select multiple - order selected cost symbols */}
-                        <Controller
+                        {/* <Controller
                             name="cardCost"
                             control={control}
                             render={({ field, fieldState }) => (
@@ -267,7 +283,29 @@ export default function NexusCardForm({
                                     // Caused error
                                 />
                             )}
-                        />
+                        /> */}
+                        <IconButton
+                            aria-label="add cost"
+                            size="large"
+                            onClick={handleClick}
+                        >
+                            <AddCircleIcon />
+                        </IconButton>
+                        <Popover
+                            open={open}
+                            anchorEl={anchorEl}
+                            onClose={handleClose}
+                            anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                            }}
+                        >
+                            The content of the Popover.
+                        </Popover>
                     </Box>
                     {/* Card types and speed */}
                     <Box
@@ -551,9 +589,9 @@ export default function NexusCardForm({
                             )}
                         />)}
                         <Image
-                            src={`${cardPartPath.base}card-parts/${cardPartPath.stats}/attack.png`}
-                            fill={true}
-                            sizes="100%"
+                            src={`${cardPartPath.base}/card-parts${cardPartPath.stats}/attack.png`}
+                            width={96}
+                            height={72}
                             alt="Card attack icon"
                             className="w-full h-full"
                             // style={{ objectFit: "cover" }}
@@ -579,7 +617,7 @@ export default function NexusCardForm({
                                 px-2
                         ">
                             <Image
-                                src={`${cardPartPath.base}/card-parts${cardPartPath.icon}${cardPartPath.grade}/${cardGrade.toLowerCase()}.png`}
+                                src={`${cardPartPath.base}/card-parts${cardPartPath.icon}${cardPartPath.grade}/grade-${cardGrade.toLowerCase()}.png`}
                                 height={48}
                                 width={48}
                                 alt="Card grade icon"
@@ -636,9 +674,9 @@ export default function NexusCardForm({
                             )}
                         />)}
                         <Image
-                            src={`${cardPartPath.base}card-parts/${cardPartPath.stats}/defense.png`}
-                            fill={true}
-                            sizes="100%"
+                            src={`${cardPartPath.base}/card-parts${cardPartPath.stats}/defense.png`}
+                            width={96}
+                            height={72}
                             alt="Card defense icon"
                             className="w-full h-full"
                             // style={{ objectFit: "cover" }}

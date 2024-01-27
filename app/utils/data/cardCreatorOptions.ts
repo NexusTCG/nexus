@@ -1,5 +1,5 @@
 import entityTypes from "@/app/utils/data/entityTypes";
-import { EntityType } from "@/app/utils/types/types";
+import { EntityTypeType } from "@/app/utils/types/types";
 
 export const cardSuperTypeOptions = {
     mythic: "Mythic",
@@ -22,7 +22,7 @@ export const cardSuperTypeOptions = {
 
  export const cardSubTypeOptions = {
    entity: Object.fromEntries(
-      entityTypes.map((entityType: EntityType) => [
+      entityTypes.map((entityType: EntityTypeType) => [
         entityType.name.toLowerCase(),
         entityType.name,
       ])

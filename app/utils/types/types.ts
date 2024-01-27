@@ -6,7 +6,7 @@ import { ComponentType } from 'react';
 // export type EnergyType = keyof typeof energyIcons;
 
 // Nexus Card Creator Form Data
-export type CardData = {
+export type CardDataType = {
   cardCreator: string; // Required
   cardName: string; // Required
   cardCost?: { [key: string]: number }; // Optional, required if cardType is not "node"
@@ -26,7 +26,7 @@ export type CardData = {
 
 
 // Nexus Card Types
-export type CardType = {
+export type CardTypeType = {
   event: string;
   entity: string;
   effect: string;
@@ -48,7 +48,7 @@ export type CardType = {
 // };
 
 // Nexus Entity Types
-export type EntityType = {
+export type EntityTypeType = {
     id: number;
     name: string;
     description: string;
@@ -73,7 +73,7 @@ export type EntityType = {
   // };
 
   // Nexus Cost Types
-  export type CardCost = {
+  export type CardCostType = {
     yellow: number;
     blue: number;
     purple: number;
@@ -82,7 +82,7 @@ export type EntityType = {
     void: number;
   };
 
-  export type DualColorOptions = {
+  export type DualColorOptionsType = {
     [key: string]: string;
   };
   
