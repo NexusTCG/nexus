@@ -155,6 +155,10 @@ export default function NexusCardForm() {
         };
     });
 
+    function handleEnergyCostPopeoverOpen(event: React.MouseEvent<HTMLButtonElement>) {
+        // setAnchorEl(event.currentTarget);
+    };
+
     return (
         <Box
             id="card-border"
@@ -242,24 +246,13 @@ export default function NexusCardForm() {
                         <IconButton
                             aria-label="add cost"
                             size="large"
-                            onClick={handleClick}
+                            onClick={handleEnergyCostPopeoverOpen}
                         >
                             <AddCircleIcon />
                         </IconButton>
                         <EnergyCostPopover
-                            name="cardEnergyCost"
-                            // update the below props
-                            // open={open}
-                            // anchorEl={anchorEl}
-                            // onClose={handleClose}
-                            // anchorOrigin={{
-                            // vertical: 'top',
-                            // horizontal: 'center',
-                            // }}
-                            // transformOrigin={{
-                            // vertical: 'bottom',
-                            // horizontal: 'center',
-                            // }}
+                            anchorEl={anchorEl}
+                            onClose={handleClose}
                         />
                     </Box>
                     {/* Card types and speed */}

@@ -1,6 +1,5 @@
 "use client";
 
-import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Popover, Box, IconButton, Typography, ButtonGroup } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -12,39 +11,43 @@ import clsx from "clsx";
 type EnergyCostPopoverProps = {
   anchorEl: HTMLElement | null;
   handleClose: () => void;
-  name: string; // This is the field name in the form
 };
 
 export default function EnergyCostPopover({
   anchorEl,
   handleClose,
-  name,
 }: EnergyCostPopoverProps) {
 
   const {
-    control,
     setValue,
     getValues,
     watch,
   } = useFormContext();
 
-  const watchCardEnergyValue = watch("cardEnergyValue");
+  const open = Boolean(anchorEl);
+  const id = open ? "energy-cost-popover" : undefined;
+
   const watchCardEnergyCost = watch("cardEnergyCost");
+  const watchCardEnergyValue = watch("cardEnergyValue");
 
   const handleCostChange = (color: string, delta: number) => {
-    const energyCosts = getValues(`${name}.cardEnergyCost`);
-    const newCost = Math.max(0, Math.min(energyCosts[color] + delta, color === 'void' ? 15 : 6));
-    const newEnergyCosts = { ...energyCosts, [color]: newCost };
-    const newEnergyValue = Object.values(newEnergyCosts).reduce((acc, value) => acc + value, 0);
-  
-    if (newEnergyValue <= 15) {
-      setValue(`${name}.cardEnergyCost.${color}`, newCost); // Update the individual energy count
-      setValue(`${name}.cardEnergyValue`, newEnergyValue); // Update the total energy value
-    }
-  };
+    const energyCosts = getValues("cardEnergyCost");
 
-  const open = Boolean(anchorEl);
-  const id = open ? 'energy-cost-popover' : undefined;
+    let newCost = Math.max(0, energyCosts[color] + delta);
+    if (color !== "void") newCost = Math.min(newCost, 6);
+    else newCost = Math.min(newCost, 15);
+
+    const updatedEnergyCosts = { ...energyCosts, [color]: newCost };
+
+    const newTotalEnergyValue = Object
+      .values(updatedEnergyCosts)
+      .reduce((acc: number, value) => acc + (value as number), 0);
+
+    if (typeof newTotalEnergyValue === 'number' && newTotalEnergyValue <= 15) {
+        setValue("cardEnergyCost." + color, newCost);
+        setValue("cardEnergyValue", newTotalEnergyValue);
+    }
+};
 
   return (
     <Popover
@@ -53,12 +56,12 @@ export default function EnergyCostPopover({
       anchorEl={anchorEl}
       onClose={handleClose}
       anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'center',
+        vertical: "top",
+        horizontal: "center",
       }}
       transformOrigin={{
-        vertical: 'bottom',
-        horizontal: 'center',
+        vertical: "bottom",
+        horizontal: "center",
       }}
     >
       <Box
@@ -98,7 +101,7 @@ export default function EnergyCostPopover({
           </Typography>)}
         </Box>
         
-        {Object.keys(monoColorOptions).map((color, value) => (
+        {Object.keys(monoColorOptions).map((color) => (
           <Box key={color} sx={{ display: 'flex', alignItems: 'center', margin: 1 }}>
             <Box
               className="
@@ -112,7 +115,10 @@ export default function EnergyCostPopover({
                 rounded-md
             ">
               <Image
-                src={color !== "void" ? `/images/card-parts/card-icons/${color}.png` : `/images/card-parts/card-icons/void-${watchCardEnergyCost.void}.png`}
+                src={color !== "void"
+                  ? `/images/card-parts/card-icons/${color}.png`
+                  : `/images/card-parts/card-icons/void-${watchCardEnergyCost.void}.png`
+                }
                 width={34}
                 height={34}
                 alt={`${color} energy icon`}
@@ -124,7 +130,7 @@ export default function EnergyCostPopover({
                   text-gray-300
                   text-center
               ">
-                {watchCardEnergyCost[color][value]}
+                {watchCardEnergyCost[color]}
               </Typography>
             </Box>
 
@@ -135,19 +141,18 @@ export default function EnergyCostPopover({
               <IconButton
                 onClick={() => handleCostChange(color, +1)}
                 size="small"
-                className="
-                  hover:bg-green-700
-                  hover:text-white
-              ">
+                className={clsx("hover:bg-green-700 hover:text-white",
+                  watchCardEnergyCost[color] === 0 && "opacity-50"
+                )}>
                 <AddIcon />
               </IconButton>
               
               <IconButton
-                disabled={watchCardEnergyCost[color][value] === 0}
+                disabled={watchCardEnergyCost[color] === 0}
                 onClick={() => handleCostChange(color, -1)}
                 size="small"
-                className={clsx("hover:bg-green-700 hover:text-white",
-                  watchCardEnergyCost[color][value] === 0 && "opacity-50 cursor-default"
+                className={clsx("hover:bg-red-700 hover:text-white",
+                  watchCardEnergyCost[color] === 0 && "opacity-50"
                 )}>
                 <RemoveIcon />
               </IconButton>
