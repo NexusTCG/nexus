@@ -1,7 +1,7 @@
 "use client";
 
 import SidebarDesktop from '@/app/components/sidebar/SidebarDesktop';
-import useSession from "@/app/components/card-creator/hooks/useSession";
+import useSession from "@/app/hooks/useSession";
 import { Box } from '@mui/material';
 
 export default function DashboardLayout({

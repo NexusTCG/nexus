@@ -158,6 +158,7 @@ export default function NexusCardForm() {
         };
     });
 
+    // create separate popover functions
     function handlePopoverOpen(event: React.MouseEvent<HTMLButtonElement>) {
         setAnchorEl(event.currentTarget);
     };
