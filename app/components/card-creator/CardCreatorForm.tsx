@@ -1,67 +1,84 @@
 "use client";
 
 import React from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Typography, TextField, Button, InputLabel } from "@mui/material/";
-import { CardDataType } from "@/app/utils/types/types";
-import cardSchema from "@/app/utils/schemas/cardSchema";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+} from "@mui/material/";
+import { CardFormDataType } from "@/app/utils/types/types";
+import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
-import PromptInput from "@/app/components/card-creator/PromptInput";
 
 export default function CardCreatorForm() {
-    const {
-      register,
-      control,
-      handleSubmit,
-      watch,
-      formState: { errors },
-    } = useForm<CardDataType>({
-      defaultValues: {
-        cardCreator: "",
-        cardName: "",
-        cardCost: {
-          yellow: 0,
-          blue: 0,
-          purple: 0,
-          red: 0,
-          green: 0,
-          void: 0,
-        },
-        cardColor: "",
-        cardArt: "",
-        cardType: "",
-        cardSuperType: "",
-        cardSubType: [],
-        cardGrade: "Common",
-        cardText: "",
-        cardFlavorText: "",
-        cardAttack: "",
-        cardDefense: "",
+  const methods = useForm<CardFormDataType>({
+    defaultValues: {
+      cardCreator: "",
+      cardName: "",
+      cardEnergyValue: 0,
+      cardEnergyCost: {
+        yellow: 0,
+        blue: 0,
+        purple: 0,
+        red: 0,
+        green: 0,
+        void: 0,
       },
-      resolver: zodResolver(cardSchema),
-    });
+      cardColor: "",
+      cardArt: "",
+      cardType: "",
+      cardSuperType: "",
+      cardSubType: [],
+      cardGrade: "common",
+      cardText: "",
+      cardFlavorText: "",
+      cardAttack: "",
+      cardDefense: "",
+      cardPrompt: "",
+    },
+    resolver: zodResolver(cardFormSchema),
+    mode: "onChange",
+  });
 
-    const formNexusCardData = watch();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: {
+      isValid
+    }
+  } = methods;
 
-    function onImageGeneration() {
-        // Call OpenAI API to generate image
-        // Store image url in state
-        // Add image url to card data
-        // Display image in card preview
-    };
+  const formNexusCardData = watch();
 
-    function onSubmit(data: CardDataType) {
-        console.log(data);
-        // Generate png image from code / card data
-        // Write card data to database (with image url)
-        // Write finished card image to database
-        // Fetch finished card image from database
-        // Open modal to see & share card
-    };
+  function sendPromptToOpenAI() {
+    // Send prompt to OpenAI API
+    // Store response in state
+    // Add response to card data
+  };
 
-    return (
-        <Box className="
+  function onImageGeneration() {
+    // Call OpenAI API to generate image
+    // Store image url in state
+    // Add image url to card data
+    // Display image in card preview
+  }
+
+  function onSubmit(data: CardFormDataType) {
+    console.log(data);
+    // Generate png image from code / card data
+    // Write card data to database (with image url)
+    // Write finished card image to database
+    // Fetch finished card image from database
+    // Open modal to see & share card
+  }
+
+  return (
+    <Box
+      className="
             flex
             flex-col
             w-full
@@ -73,16 +90,23 @@ export default function CardCreatorForm() {
             md:border
             md:border-gray-700
             md:shadow-xl    
-        ">
-            <form onSubmit={handleSubmit(onSubmit)}>
-            <Box className="flex flex-col w-full gap-4">
+        "
+    >
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Box className="flex flex-col w-full gap-4">
             <Typography variant="h2">
-               {formNexusCardData.cardName ? formNexusCardData.cardName : "Card Name"}
-             </Typography>
-             <Typography variant="subtitle1">
-               by {formNexusCardData.cardCreator ? formNexusCardData.cardCreator : "Card Creator"}
-             </Typography>
-             <TextField
+              {formNexusCardData.cardName
+                ? formNexusCardData.cardName
+                : "Card name"}
+            </Typography>
+            <Typography variant="subtitle1">
+              by{" "}
+              {formNexusCardData.cardCreator
+                ? formNexusCardData.cardCreator
+                : "Card creator"}
+            </Typography>
+            <TextField
               label="Card creator"
               variant="outlined"
               {...register("cardCreator")}
@@ -95,9 +119,9 @@ export default function CardCreatorForm() {
               {...register("cardPrompt")}
             />
             <Box className="flex flex-row gap-4">
-            {/* <PromptInput register={register} errors={errors} /> */}
+              {/* <PromptInput /> */}
               <Button
-                // {!isValid && true(disabled)}
+                disabled={!isValid}
                 type="submit"
                 variant="outlined"
                 size="large"
@@ -108,13 +132,10 @@ export default function CardCreatorForm() {
             </Box>
           </Box>
           <Box className="flex flex-col">
-          <NexusCardForm
-            control={control}
-            watch={watch}
-            formCardData={formNexusCardData}
-          />
+            <NexusCardForm />
           </Box>
-            </form>
-        </Box>
-    );
-};
+        </form>
+      </FormProvider>
+    </Box>
+  );
+}

@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState, useEffect} from "react";
-import { Controller, Control } from "react-hook-form";
+import { useFormContext, Controller } from "react-hook-form";
 import {
     monoColorOptions,
     dualColorOptions
 } from "@/app/utils/data/cardColorOptions";
 import {
-    CardDataType,
-    CardTypeType,
-    CardCostType,
+    CardFormDataType,
+    CardTypesType,
+    EnergyTypesType,
     DualColorOptionsType
 } from "@/app/utils/types/types";
 import {
@@ -17,30 +17,24 @@ import {
     FormControl,
     Typography,
     TextField,
-    Input,
     InputLabel,
     MenuItem,
     Select,
     IconButton,
     Popover
 } from "@mui/material/";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+
 import {
     cardSuperTypeOptions,
     cardTypeOptions,
     cardSubTypeOptions,
     cardSpeedOptions,
-    cardGradeOptions,
-    // cardStatsOptions
+    cardGradeOptions
 } from "@/app/utils/data/cardCreatorOptions";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { EnergyCostPopover } from "@/app/components/card-creator/EnergyCostPopover";
 import Image from "next/image";
 import clsx from "clsx";
-
-type NexusCardFormProps = {
-    control: Control<CardDataType>;
-    watch: (name: string) => any;
-    formCardData: CardDataType;
-};
 
 const cardPartPath = {
     base: "/images",
@@ -51,22 +45,14 @@ const cardPartPath = {
     art: "/card-art",
 };
 
-export default function NexusCardForm({
-    control,
-    watch,
-    formCardData
-}: NexusCardFormProps) {
-    const cardCost: CardCostType = watch("cardCost");
-    const cardType: CardTypeType = watch("cardType");
-    const cardText: string = watch("cardText");
-    const cardGrade: string = watch("cardGrade");
-    const cardCreator: string = watch("cardCreator");
-    let cardColor: string | null = watch("cardColor");
+export default function NexusCardForm() {
+    const { register, setValue, control, watch } = useFormContext<CardFormDataType>();
+    const formCardData = watch();
+
     const [activeCardColorsType, setActiveCardColorsType] = useState<string | null>(null);
     const [activeCardColors, setActiveCardColors] = useState<string | null>(null);
     const [cardColorClass, setCardColorClass] = useState<string | null>(null); // make an object
     const [cardBgImage, setCardBgImage] = useState<string | null>(null);
-    const [anchorEl, setAnchorEl] = useState(null);
 
     // Find dual color key that matches active colors
     // if active colors is equal to two colors
@@ -91,12 +77,12 @@ export default function NexusCardForm({
     // Determine what the card cost is, then
     // set the active card colors based on cost
     useEffect(() => {
-        if (cardCost) {
+        if (formCardData.cardEnergyCost) {
             // Filter out colors with no cost
-            let colorsWithCost = Object.entries(cardCost)
+            let colorsWithCost = Object.entries(formCardData.cardEnergyCost)
                 .filter(([color, value]) => value > 0 && (
                     color !== monoColorOptions.void ||
-                    Object.keys(cardCost).length === 1
+                    Object.keys(formCardData.cardEnergyCost).length === 1
                 )).map(([color]) => color);
 
             // If one color has cost, set active colors to that color
@@ -121,7 +107,7 @@ export default function NexusCardForm({
                 setActiveCardColors("multi");
             };
         };
-    }, [cardCost]);
+    }, [formCardData.cardEnergyCost]);
 
     // Set card color class and bg image
     // based on active card colors
@@ -168,17 +154,6 @@ export default function NexusCardForm({
             }
         };
     });
-
-    // Costhandler function to dynamically display the right icons in the right order
-    const handleClick = (event: React.MouseEvent) => {
-        const [anchorEl, setAnchorEl] = useState<EventTarget & Element | null>(null);
-      };
-    
-      const handleClose = () => {
-        setAnchorEl(null)
-      };
-    
-      const open = Boolean(anchorEl);
 
     return (
         <Box
@@ -264,26 +239,6 @@ export default function NexusCardForm({
                             )}
                         />
                         {/* Card cost */}
-                        {/* Select multiple - order selected cost symbols */}
-                        {/* <Controller
-                            name="cardCost"
-                            control={control}
-                            render={({ field, fieldState }) => (
-                                <TextField
-                                    {...field}
-                                    size="small"
-                                    placeholder="Card cost"
-                                    className="w-1/4"
-                                    error={!!fieldState.error}
-                                    helperText={
-                                        fieldState.error ? 
-                                        fieldState.error.message : null
-                                    }
-                                    // inputProps={{ disableUnderline: true }}
-                                    // Caused error
-                                />
-                            )}
-                        /> */}
                         <IconButton
                             aria-label="add cost"
                             size="large"
@@ -291,21 +246,21 @@ export default function NexusCardForm({
                         >
                             <AddCircleIcon />
                         </IconButton>
-                        <Popover
-                            open={open}
-                            anchorEl={anchorEl}
-                            onClose={handleClose}
-                            anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
-                            }}
-                            transformOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                            }}
-                        >
-                            The content of the Popover.
-                        </Popover>
+                        <EnergyCostPopover
+                            name="cardEnergyCost"
+                            // update the below props
+                            // open={open}
+                            // anchorEl={anchorEl}
+                            // onClose={handleClose}
+                            // anchorOrigin={{
+                            // vertical: 'top',
+                            // horizontal: 'center',
+                            // }}
+                            // transformOrigin={{
+                            // vertical: 'bottom',
+                            // horizontal: 'center',
+                            // }}
+                        />
                     </Box>
                     {/* Card types and speed */}
                     <Box

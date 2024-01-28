@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const cardCostSchema = z.object({
+const EnergyCostSchema = z.object({
     yellow: z.number().int().min(0).optional(),
     blue: z.number().int().min(0).optional(),
     purple: z.number().int().min(0).optional(),
@@ -9,10 +9,11 @@ const cardCostSchema = z.object({
     void: z.number().int().min(0).optional(),
   }).optional();
 
-const cardSchema = z.object({
+const CardFormSchema = z.object({
     cardCreator: z.string().min(1, "Card creator is required."),
     cardName: z.string().min(1, "Card name is required."),
-    cardCost: cardCostSchema,
+    cardEnergyValue: z.number().optional(),
+    cardEnergyCost: EnergyCostSchema,
     cardColor: z.string().optional(),
     cardArt: z.string().min(1, "Card art is required.").default("/images/card-parts/card-art/default-art.jpg"),
     cardType: z.string().min(1, "Card type is required."),
@@ -27,7 +28,7 @@ const cardSchema = z.object({
     cardPrompt: z.string().optional(),
   }).superRefine((data, ctx) => {
     if (data.cardType !== "node") {
-      if (!data.cardCost) {
+      if (!data.cardEnergyCost) {
         ctx.addIssue({
           path: ["cardCost"],
           message: "Card cost is required for this card type.",
@@ -45,4 +46,4 @@ const cardSchema = z.object({
     }
   });
   
-  export default cardSchema;
+  export default CardFormSchema;
