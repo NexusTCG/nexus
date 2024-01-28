@@ -32,7 +32,8 @@ import {
     cardGradeOptions
 } from "@/app/utils/data/cardCreatorOptions";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { EnergyCostPopover } from "@/app/components/card-creator/EnergyCostPopover";
+import EnergyCostPopover from "@/app/components/card-creator/EnergyCostPopover";
+import GradePopover from "@/app/components/card-creator/GradePopover";
 import Image from "next/image";
 import clsx from "clsx";
 
@@ -51,8 +52,10 @@ export default function NexusCardForm() {
 
     const [activeCardColorsType, setActiveCardColorsType] = useState<string | null>(null);
     const [activeCardColors, setActiveCardColors] = useState<string | null>(null);
-    const [cardColorClass, setCardColorClass] = useState<string | null>(null); // make an object
+    const [cardColorClass, setCardColorClass] = useState<string | null>(null);
     const [cardBgImage, setCardBgImage] = useState<string | null>(null);
+
+    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
     // Find dual color key that matches active colors
     // if active colors is equal to two colors
@@ -82,7 +85,7 @@ export default function NexusCardForm() {
             let colorsWithCost = Object.entries(formCardData.cardEnergyCost)
                 .filter(([color, value]) => value > 0 && (
                     color !== monoColorOptions.void ||
-                    Object.keys(formCardData.cardEnergyCost).length === 1
+                    Object.keys(formCardData.cardEnergyCost || {}).length === 1
                 )).map(([color]) => color);
 
             // If one color has cost, set active colors to that color
@@ -114,40 +117,40 @@ export default function NexusCardForm() {
     useEffect(() => {
         const path = `${cardPartPath.base}${cardPartPath.frame}`;
 
-        if (!activeCardColorsType && cardType.node) {
+        if (!activeCardColorsType && formCardData.cardType === "node") {
             setCardColorClass("amber");
             setCardBgImage(`${path}/other/node.png`);
         } else if (activeCardColorsType === "mono") {
-            if (cardType.object) {
+            if (formCardData.cardType === "object") {
                 setCardBgImage(`${path}/mono/object/object-${activeCardColors}.png`);
-            } else if (cardType.effect) {
+            } else if (formCardData.cardType === "effect") {
                 setCardBgImage(`${path}/mono/effect/effect-${activeCardColors}.png`);
             } else {
                 setCardBgImage(`${path}/mono/${activeCardColors}.png`);
             }
         } else if (activeCardColorsType === "dual") {
             setCardColorClass(`${activeCardColors}`);
-            if (cardType.object) {
+            if (formCardData.cardType === "object") {
                 setCardBgImage(`${path}/dual/object/object-${activeCardColors}.png`);
-            } else if (cardType.effect) {
+            } else if (formCardData.cardType === "effect") {
                 setCardBgImage(`${path}/dual/effect/effect-${activeCardColors}.png`);
             } else {
                 setCardBgImage(`${path}/dual/${activeCardColors}.png`);
             }
         } else if (activeCardColorsType === "multi") {
             setCardColorClass("multi");
-            if (cardType.object) {
+            if (formCardData.cardType === "object") {
                 setCardBgImage(`${path}/other/object/object-${activeCardColors}.png`);
-            } else if (cardType.effect) {
+            } else if (formCardData.cardType === "effect") {
                 setCardBgImage(`${path}/other/effect/effect-${activeCardColors}.png`);
             } else {
                 setCardBgImage(`${path}/other/${activeCardColors}.png`);
             }
         } else {
             setCardColorClass("gray");
-            if (cardType.object) {
+            if (formCardData.cardType === "object") {
                 setCardBgImage(`${path}/other/object/object-default.png`);
-            } else if (cardType.effect) {
+            } else if (formCardData.cardType === "effect") {
                 setCardBgImage(`${path}/other/effect/effect-default.png`);
             } else {
                 setCardBgImage(`${path}/other/default.png`);
@@ -155,9 +158,13 @@ export default function NexusCardForm() {
         };
     });
 
-    function handleEnergyCostPopeoverOpen(event: React.MouseEvent<HTMLButtonElement>) {
-        // setAnchorEl(event.currentTarget);
+    function handlePopoverOpen(event: React.MouseEvent<HTMLButtonElement>) {
+        setAnchorEl(event.currentTarget);
     };
+
+    function handlePopoverClose() {
+        setAnchorEl(null);
+    }
 
     return (
         <Box
@@ -246,13 +253,13 @@ export default function NexusCardForm() {
                         <IconButton
                             aria-label="add cost"
                             size="large"
-                            onClick={handleEnergyCostPopeoverOpen}
+                            onClick={handlePopoverOpen}
                         >
                             <AddCircleIcon />
                         </IconButton>
                         <EnergyCostPopover
                             anchorEl={anchorEl}
-                            onClose={handleClose}
+                            handleClose={handlePopoverClose}
                         />
                     </Box>
                     {/* Card types and speed */}
@@ -280,7 +287,7 @@ export default function NexusCardForm() {
                                 flex-row
                                 w-full
                         ">
-                        {["object", "entity", "effect", "node"].includes(cardType.toString()) && (
+                        {["object", "entity", "effect", "node"].includes(formCardData.cardType) && (
                         <Controller
                             name="cardSuperType"
                             control={control}
@@ -325,7 +332,7 @@ export default function NexusCardForm() {
                                 </FormControl>
                             )}
                         />
-                        {["object", "entity", "effect"].includes(cardType.toString()) && (
+                        {["object", "entity", "effect"].includes(formCardData.cardType) && (
                             <Controller
                                 name="cardSubType"
                                 control={control}
@@ -340,35 +347,35 @@ export default function NexusCardForm() {
                                             size="small"
                                             // renderValue={(selected) => selected.join(' ')}
                                         >
-                                            {cardType.toString() === "entity" && 
+                                            {formCardData.cardType === "entity" && 
                                                 Object.entries(
                                                     cardSubTypeOptions.entity
                                                 ).map(([value, label]) => (
                                                     <MenuItem key={value} value={value}>
                                                         <Typography variant="body2">
-                                                            {label}
+                                                            {label as string}
                                                         </Typography>
                                                     </MenuItem>
                                                 ))
                                             }
-                                            {cardType.toString() === "object" && 
+                                            {formCardData.cardType === "object" && 
                                                 Object.entries(
                                                     cardSubTypeOptions.object
                                                 ).map(([value, label]) => (
                                                     <MenuItem key={value} value={value}>
                                                         <Typography variant="body2">
-                                                            {label}
+                                                            {label as string}
                                                         </Typography>
                                                     </MenuItem>
                                                 ))
                                             }
-                                            {cardType.toString() === "effect" && 
+                                            {formCardData.cardType === "effect" && 
                                                 Object.entries(
                                                     cardSubTypeOptions.effect
                                                 ).map(([value, label]) => (
                                                     <MenuItem key={value} value={value}>
                                                         <Typography variant="body2">
-                                                            {label}
+                                                            {label as string}
                                                         </Typography>
                                                     </MenuItem>
                                                 ))
@@ -472,7 +479,7 @@ export default function NexusCardForm() {
                     />
                     <Box className="bg-black h-[1px] w-full my-4" />
                     {/* Card flavor text */}
-                    {cardText.length <= 200 && (<Controller
+                    {formCardData.cardText.length <= 200 && (<Controller
                         name="cardFlavorText"
                         control={control}
                         render={({ field, fieldState }) => (
@@ -519,7 +526,7 @@ export default function NexusCardForm() {
                             items-center
                             relative
                     ">
-                        {cardType.entity && (<Controller
+                        {formCardData.cardType === "entity" && (<Controller
                             name="cardAttack"
                             control={control}
                             render={({ field, fieldState }) => (
@@ -564,11 +571,22 @@ export default function NexusCardForm() {
                                 items-center
                                 px-2
                         ">
-                            <Image
-                                src={`${cardPartPath.base}/card-parts${cardPartPath.icon}${cardPartPath.grade}/grade-${cardGrade.toLowerCase()}.png`}
-                                height={48}
-                                width={48}
-                                alt="Card grade icon"
+                            
+                            <IconButton
+                                aria-label="add cost"
+                                size="large"
+                                onClick={handlePopoverOpen}
+                            >
+                                <Image
+                                    src={`${cardPartPath.base}/card-parts${cardPartPath.icon}${cardPartPath.grade}/grade-${formCardData.cardGrade.toLowerCase()}.png`}
+                                    height={48}
+                                    width={48}
+                                    alt="Card grade icon"
+                                />
+                            </IconButton>
+                            <GradePopover
+                                anchorEl={anchorEl}
+                                handleClose={handlePopoverClose}
                             />
                             <Box className="
                                 flex
@@ -581,8 +599,8 @@ export default function NexusCardForm() {
                             ">
                                 <Typography variant="caption">
                                     Creator: {
-                                    cardCreator ? 
-                                    cardCreator : 
+                                    formCardData.cardCreator ? 
+                                    formCardData.cardCreator : 
                                     "Card Creator"
                                     }
                                 </Typography>
@@ -604,7 +622,7 @@ export default function NexusCardForm() {
                             items-center
                             relative
                     ">
-                        {cardType.entity && (<Controller
+                        {formCardData.cardType === "entity" && (<Controller
                             name="cardDefense"
                             control={control}
                             render={({ field, fieldState }) => (

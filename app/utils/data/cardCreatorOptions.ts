@@ -1,5 +1,5 @@
 import entityTypes from "@/app/utils/data/entityTypes";
-import { EntityTypeType } from "@/app/utils/types/types";
+import { EntityTypesType } from "@/app/utils/types/types";
 
 export const cardSuperTypeOptions = {
     mythic: "Mythic",
@@ -22,7 +22,7 @@ export const cardSuperTypeOptions = {
 
  export const cardSubTypeOptions = {
    entity: Object.fromEntries(
-      entityTypes.map((entityType: EntityTypeType) => [
+      entityTypes.map((entityType: EntityTypesType) => [
         entityType.name.toLowerCase(),
         entityType.name,
       ])
@@ -41,23 +41,3 @@ export const cardSuperTypeOptions = {
     epic: 'Epic',
     prime: 'Prime',
  };
-
-//  Make a text field for card stats
-//  export const cardStatsOptions = {
-//    "0": "0",
-//    "1": "1",
-//    "2": "2",
-//    "3": "3",
-//    "4": "4",
-//    "5": "5",
-//    "6": "6",
-//    "7": "7",
-//    "8": "8",
-//    "9": "9",
-//    "10": "10",
-//    "11": "11",
-//    "12": "12",
-//    "13": "13",
-//    "14": "14",
-//    "15": "15",
-//  };

@@ -1,10 +1,16 @@
 "use client";
 
 import { useFormContext } from 'react-hook-form';
-import { Popover, Box, IconButton, Typography, ButtonGroup } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
 import { monoColorOptions } from '@/app/utils/data/cardColorOptions';
+import {
+  Popover,
+  Box,
+  IconButton,
+  Typography,
+  ButtonGroup
+} from '@mui/material';
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
 import Image from "next/image";
 import clsx from "clsx";
 
@@ -26,11 +32,10 @@ export default function EnergyCostPopover({
 
   const open = Boolean(anchorEl);
   const id = open ? "energy-cost-popover" : undefined;
-
   const watchCardEnergyCost = watch("cardEnergyCost");
   const watchCardEnergyValue = watch("cardEnergyValue");
 
-  const handleCostChange = (color: string, delta: number) => {
+  function handleCostChange(color: string, delta: number) {
     const energyCosts = getValues("cardEnergyCost");
 
     let newCost = Math.max(0, energyCosts[color] + delta);
