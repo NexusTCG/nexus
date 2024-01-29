@@ -3,12 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import {
-  monoColorOptions,
-  dualColorOptions,
-} from "@/app/utils/data/cardColorOptions";
-import {
-  CardFormDataType,
-  DualColorOptionsType,
+  CardFormDataType
 } from "@/app/utils/types/types";
 import {
   Box,
@@ -20,13 +15,17 @@ import {
   Select,
   IconButton
 } from "@mui/material/";
-
 import {
   cardSuperTypeOptions,
   cardTypeOptions,
   cardSubTypeOptions,
   cardSpeedOptions
 } from "@/app/utils/data/cardCreatorOptions";
+import determineColorType from "@/app/lib/actions/determineColorType";
+import determineColor from "@/app/lib/actions/determineColor";
+import determineColorClass from "@/app/lib/actions/determineColorClass";
+import determineBgImage from "@/app/lib/actions/determineBgImage";
+
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EnergyCostPopover from "@/app/components/card-creator/EnergyCostPopover";
 import GradePopover from "@/app/components/card-creator/GradePopover";
@@ -34,6 +33,7 @@ import Image from "next/image";
 
 const cardPartPath = {
   base: "/images",
+  parts: "/card-parts",
   frame: "/card-frames",
   icon: "/card-icons",
   grade: "/card-grades",
@@ -47,128 +47,86 @@ export default function NexusCardForm() {
     useFormContext<CardFormDataType>();
   const formCardData = watch();
 
-  const [activeCardColorsType, setActiveCardColorsType] = useState<
-    string | null
-  >(null);
-  const [activeCardColors, setActiveCardColors] = useState<string | null>(null);
-  const [cardColorClass, setCardColorClass] = useState<string | null>(null);
-  const [cardBgImage, setCardBgImage] = useState<string | null>(null);
+  const activeCardType = formCardData.cardType;
 
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
+  // const [activeCardColorsType, setActiveCardColorsType] = useState<
+  //   string | null
+  // >(null);
+  // const [activeCardColors, setActiveCardColors] = useState<string | null>(null);
+  // const [cardColorClass, setCardColorClass] = useState<string | null>(null);
+  // const [cardBgImage, setCardBgImage] = useState<string | null>(null);
+  // state to track and clear the energy cost if the type changes to node and there is a cost
+  const [energyCostAnchorEl, setEnergyCostAnchorEl] = React.useState<HTMLButtonElement | null>(
     null,
   );
 
-  // Find dual color key that matches active colors
-  // if active colors is equal to two colors
-  function findDualColorKey(
-    colors: string[] | null,
-    dualColorOptions: DualColorOptionsType,
-  ): string | null {
-    let foundKey: string | null = null;
-    Object.keys(dualColorOptions).forEach((key) => {
-      // Check if both colors are in the dual color options key
-      if (
-        colors &&
-        colors.every((color) => key.toLowerCase().includes(color))
-      ) {
-        foundKey = key;
-        return;
-      }
-    });
-    return foundKey;
-  }
+  const [gradeAnchorEl, setGradeAnchorEl] = React.useState<HTMLButtonElement | null>(
+    null,
+  );
 
-  // Determine what the card cost is, then
-  // set the active card colors based on cost
+  const [cardColorType, setCardColorType] = useState<string | null>(null);
+  const [cardColor, setCardColor] = useState<string | null>(null);
+  const [cardColorClass, setCardColorClass] = useState<string | null>(null);
+  const [cardBgImage, setCardBgImage] = useState<string | null>(null);
+
+
+  // Determine color type based on cost
   useEffect(() => {
-    if (formCardData.cardEnergyCost) {
-      // Filter out colors with no cost
-      const colorsWithCost = Object.entries(formCardData.cardEnergyCost)
-        .filter(
-          ([color, value]) =>
-            value > 0 &&
-            (color !== monoColorOptions.void ||
-              Object.keys(formCardData.cardEnergyCost || {}).length === 1),
-        )
-        .map(([color]) => color);
-
-      // If one color has cost, set active colors to that color
-      if (colorsWithCost.length === 1) {
-        setActiveCardColorsType("mono");
-        setActiveCardColors(
-          monoColorOptions[colorsWithCost[0] as keyof typeof monoColorOptions],
-        );
-
-        // If two colors have cost, set active colors to dual color
-      } else if (colorsWithCost.length === 2) {
-        setActiveCardColorsType("dual");
-        // Compare colors with dual color options
-        const dualKey = findDualColorKey(colorsWithCost, dualColorOptions);
-        setActiveCardColors(
-          dualColorOptions[dualKey as keyof typeof dualColorOptions],
-        );
-
-        // If more than two colors have cost, set active colors to multi color
-      } else {
-        setActiveCardColorsType("multi");
-        setActiveCardColors("multi");
-      }
-    }
+    const colorType = determineColorType(
+      formCardData.cardEnergyCost
+    );
+    setCardColorType(colorType);
   }, [formCardData.cardEnergyCost]);
 
-  // Set card color class and bg image
-  // based on active card colors
+  // Determine color based on cost and color type
   useEffect(() => {
-    const path = `${cardPartPath.base}${cardPartPath.frame}`;
+    const color = determineColor(
+      formCardData.cardEnergyCost,
+      cardColorType || ""
+    );
+    setCardColor(color);
+  }, [formCardData.cardEnergyCost, cardColorType]);
 
-    if (!activeCardColorsType && formCardData.cardType === "node") {
-      setCardColorClass("amber");
-      setCardBgImage(`${path}/other/node.png`);
-    } else if (activeCardColorsType === "mono") {
-      if (formCardData.cardType === "object") {
-        setCardBgImage(`${path}/mono/object/object-${activeCardColors}.png`);
-      } else if (formCardData.cardType === "effect") {
-        setCardBgImage(`${path}/mono/effect/effect-${activeCardColors}.png`);
-      } else {
-        setCardBgImage(`${path}/mono/${activeCardColors}.png`);
-      }
-    } else if (activeCardColorsType === "dual") {
-      setCardColorClass(`${activeCardColors}`);
-      if (formCardData.cardType === "object") {
-        setCardBgImage(`${path}/dual/object/object-${activeCardColors}.png`);
-      } else if (formCardData.cardType === "effect") {
-        setCardBgImage(`${path}/dual/effect/effect-${activeCardColors}.png`);
-      } else {
-        setCardBgImage(`${path}/dual/${activeCardColors}.png`);
-      }
-    } else if (activeCardColorsType === "multi") {
-      setCardColorClass("multi");
-      if (formCardData.cardType === "object") {
-        setCardBgImage(`${path}/other/object/object-${activeCardColors}.png`);
-      } else if (formCardData.cardType === "effect") {
-        setCardBgImage(`${path}/other/effect/effect-${activeCardColors}.png`);
-      } else {
-        setCardBgImage(`${path}/other/${activeCardColors}.png`);
-      }
-    } else {
-      setCardColorClass("gray");
-      if (formCardData.cardType === "object") {
-        setCardBgImage(`${path}/other/object/object-default.png`);
-      } else if (formCardData.cardType === "effect") {
-        setCardBgImage(`${path}/other/effect/effect-default.png`);
-      } else {
-        setCardBgImage(`${path}/other/default.png`);
-      }
-    }
-  });
+  // Determine color class based on color type and color
+  useEffect(() => {
+    const colorClass = determineColorClass(
+      activeCardType,
+      cardColorType || "",
+      cardColor || "",
+    );
+    setCardColorClass(colorClass);
+  }, [activeCardType, cardColorType, cardColor]); 
 
-  // create separate popover functions
-  function handlePopoverOpen(event: React.MouseEvent<HTMLButtonElement>) {
-    setAnchorEl(event.currentTarget);
+  // Determine bg image based on color type and color
+  useEffect(() => {
+    const bgImage = determineBgImage(
+      activeCardType,
+      cardColorType || "",
+      cardColor || "",
+    );
+    setCardBgImage(bgImage);
+  }, [activeCardType, cardColorType, cardColor]);
+
+  // Handle energy cost popover
+  function handleEnergyCostPopoverOpen(
+    event: React.MouseEvent<HTMLButtonElement>
+  ) {
+    setEnergyCostAnchorEl(event.currentTarget);
+  }
+  function handleEnergyCostPopoverClose() {
+    setEnergyCostAnchorEl(null);
   }
 
-  function handlePopoverClose() {
-    setAnchorEl(null);
+  // Handle grade popover
+  function handleGradePopoverOpen(
+    event: React.MouseEvent<HTMLButtonElement>
+  ) {
+    setGradeAnchorEl(event.currentTarget);
+    console.log(formCardData.cardGrade)
+  }
+  function handleGradePopoverClose() {
+    setGradeAnchorEl(null);
+    console.log(formCardData.cardGrade)
   }
 
   return (
@@ -261,13 +219,13 @@ export default function NexusCardForm() {
             <IconButton
               aria-label="add cost"
               size="large"
-              onClick={handlePopoverOpen}
+              onClick={handleEnergyCostPopoverOpen}
             >
               <AddCircleIcon />
             </IconButton>
             <EnergyCostPopover
-              anchorEl={anchorEl}
-              handleClose={handlePopoverClose}
+              anchorEl={energyCostAnchorEl}
+              handleClose={handleEnergyCostPopoverClose}
             />
           </Box>
           {/* Card types and speed */}
@@ -591,7 +549,7 @@ export default function NexusCardForm() {
               <IconButton
                 aria-label="add cost"
                 size="large"
-                onClick={handlePopoverOpen}
+                onClick={handleGradePopoverOpen}
               >
                 <Image
                   src={`${cardPartPath.base}/card-parts${cardPartPath.icon}${cardPartPath.grade}/grade-${formCardData.cardGrade.toLowerCase()}.png`}
@@ -601,8 +559,8 @@ export default function NexusCardForm() {
                 />
               </IconButton>
               <GradePopover
-                anchorEl={anchorEl}
-                handleClose={handlePopoverClose}
+                anchorEl={gradeAnchorEl}
+                handleClose={handleGradePopoverClose}
               />
               <Box
                 className="

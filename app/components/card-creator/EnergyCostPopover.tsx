@@ -49,6 +49,8 @@ export default function EnergyCostPopover({
       setValue("cardEnergyCost." + color, newCost);
       setValue("cardEnergyValue", newTotalEnergyValue);
     }
+    console.log(`Color values: ${JSON.stringify(watchCardEnergyCost)}`)
+    console.log(`Total value: ${watchCardEnergyValue}`)
   }
 
   return (
@@ -121,8 +123,8 @@ export default function EnergyCostPopover({
               <Image
                 src={
                   color !== "void"
-                    ? `/images/card-parts/card-icons/${color}.png`
-                    : `/images/card-parts/card-icons/void-${watchCardEnergyCost.void}.png`
+                    ? `/images/card-parts/card-icons/card-cost/${color}.png`
+                    : `/images/card-parts/card-icons/card-cost/void-${watchCardEnergyCost.void}.png`
                 }
                 width={34}
                 height={34}

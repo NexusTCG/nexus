@@ -10,7 +10,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material/";
-import fetchCards from "@/app/lib/fetchCards";
+import fetchCards from "@/app/lib/actions/fetchCards";
 import clsx from "clsx";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import CardCreatorForm from "@/app/components/card-creator/CardCreatorForm";
