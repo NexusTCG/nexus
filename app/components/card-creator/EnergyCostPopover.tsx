@@ -71,10 +71,9 @@ export default function EnergyCostPopover({
       <Box
         className="
         flex
-        flex-row
+        flex-col
         justify-start
         items-center
-        w-[480]
         gap-4
         p-4
         rounded-lg
@@ -87,7 +86,7 @@ export default function EnergyCostPopover({
         <Box
           className="
             flex
-            flex-col
+            flex-row
             justify-between
             items-center
             w-full
@@ -98,15 +97,33 @@ export default function EnergyCostPopover({
           </Typography>
           {watchCardEnergyValue && (
             <Typography variant="overline" className="font-medium text-sm">
-              {`Total energy value: ${watchCardEnergyValue}`}
+              {`Energy value: ${watchCardEnergyValue}`}
             </Typography>
           )}
         </Box>
-
+        
+        <Box
+          className="
+            flex
+            flex-row
+            justify-between
+            items-center
+            gap-2
+          "
+        >
         {Object.keys(monoColorOptions).map((color) => (
           <Box
             key={color}
-            sx={{ display: "flex", alignItems: "center", margin: 1 }}
+            className={clsx("flex flex-col justify-center items-center w-full gap-2 p-2 rounded-md bg-opacity-20",
+              {
+                "bg-yellow-500": color === "yellow",
+                "bg-sky-500": color === "blue",
+                "bg-violet-500": color === "purple",
+                "bg-red-500": color === "red",
+                "bg-lime-500": color === "green",
+                "bg-gray-500": color === "void",
+              }
+            )}
           >
             <Box
               className="
@@ -114,10 +131,9 @@ export default function EnergyCostPopover({
                 flex-col
                 justify-center
                 items-center
-                gap-1
+                w-full
+                gap-2
                 p-2
-                bg-gray-700
-                rounded-md
             "
             >
               <Image
@@ -130,21 +146,20 @@ export default function EnergyCostPopover({
                 height={34}
                 alt={`${color} energy icon`}
               />
-              <Typography
-                variant="subtitle2"
-                className=" 
-                  font-semibold
-                  text-gray-300
-                  text-center
-              "
-              >
-                {watchCardEnergyCost[color]}
-              </Typography>
+              
             </Box>
 
             <ButtonGroup
-              variant="contained"
+              variant="outlined"
               aria-label="Increase and decrease energy cost"
+              className="
+                flex
+                flex-row
+                justify-between
+                items-center
+                w-full
+                gap-2
+              "
             >
               <IconButton
                 onClick={() => handleCostChange(color, +1)}
@@ -156,7 +171,17 @@ export default function EnergyCostPopover({
               >
                 <AddIcon />
               </IconButton>
-
+                <Typography
+                  variant="subtitle1"
+                  className=" 
+                    font-semibold
+                    text-gray-300
+                    text-xl
+                    text-center
+                "
+                >
+                  {watchCardEnergyCost[color]}
+                </Typography>
               <IconButton
                 disabled={watchCardEnergyCost[color] === 0}
                 onClick={() => handleCostChange(color, -1)}
@@ -171,6 +196,7 @@ export default function EnergyCostPopover({
             </ButtonGroup>
           </Box>
         ))}
+        </Box>
       </Box>
     </Popover>
   );

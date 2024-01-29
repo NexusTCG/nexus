@@ -56,13 +56,13 @@ export default function NexusCardForm() {
   const [cardColorClass, setCardColorClass] = useState<string | null>(null);
   const [cardBgImage, setCardBgImage] = useState<string | null>(null);
 
-
   // Determine color type based on cost
   useEffect(() => {
     const colorType = determineColorType(
       formCardData.cardEnergyCost
     );
     setCardColorType(colorType);
+    console.log(colorType);
   }, [formCardData.cardEnergyCost]);
 
   // Determine color based on cost and color type
@@ -72,6 +72,7 @@ export default function NexusCardForm() {
       cardColorType || ""
     );
     setCardColor(color);
+    console.log(color);
   }, [formCardData.cardEnergyCost, cardColorType]);
 
   // Determine color class based on color type and color
@@ -82,6 +83,7 @@ export default function NexusCardForm() {
       cardColor || "",
     );
     setCardColorClass(colorClass);
+    console.log(colorClass);
   }, [activeCardType, cardColorType, cardColor]); 
 
   // Determine bg image based on color type and color
@@ -92,6 +94,7 @@ export default function NexusCardForm() {
       cardColor || "",
     );
     setCardBgImage(bgImage);
+    console.log(bgImage);
   }, [activeCardType, cardColorType, cardColor]);
 
   // Handle energy cost popover
@@ -136,8 +139,7 @@ export default function NexusCardForm() {
       {/* Card frame */}
       <Box
         id="card-frame"
-        // function that dynamically sets bg image based on type and color
-        sx={{ backgroundImage: `${cardBgImage}.png` }}
+        sx={{ backgroundImage: `${cardBgImage}` }}
         className="
                     flex
                     flex-col
@@ -155,7 +157,7 @@ export default function NexusCardForm() {
           }}
           // set to cardColorClass object .number
           className={`
-                        ${cardColorClass}-500 
+                        bg-${cardColorClass}-500 
                         flex
                         flex-col
                         w-full
@@ -171,7 +173,7 @@ export default function NexusCardForm() {
           <Box
             id="card-header-name-cost"
             className={`
-                            ${cardColorClass}-500 
+                            bg-${cardColorClass}-500 
                             flex
                             flex-row
                             justify-between
@@ -219,7 +221,7 @@ export default function NexusCardForm() {
           <Box
             id="card-header-types-speed"
             className={`
-                            ${cardColorClass}-500 
+                            bg-${cardColorClass}-500 
                             flex
                             flex-row
                             justify-between
@@ -374,18 +376,18 @@ export default function NexusCardForm() {
           id="card-image"
           sx={{ aspectRatio: "4 / 3" }}
           className="
-                        flex
-                        flex-col
-                        justify-center
-                        items-center
-                        w-full
-                        overflow-hidden
-                        relative
-                        mx-auto
-                        px-2
-                        border-2
-                        border-black
-                "
+                flex
+                flex-col
+                justify-center
+                items-center
+                w-full
+                overflow-hidden
+                relative
+                mx-auto
+                px-2
+                border-2
+                border-black
+          "
         >
           <Image
             // Update to the art from DALL-E
@@ -402,15 +404,15 @@ export default function NexusCardForm() {
           id="card-text-flavor"
           sx={{ aspectRatio: "540 / 275" }}
           className="
-                        flex
-                        flex-col
-                        p-2
-                        bg-gray-600
-                        text-black
-                        border-2
-                        border-black
-                        mx-2
-                "
+                flex
+                flex-col
+                p-2
+                bg-gray-600
+                text-black
+                border-2
+                border-black
+                mx-2
+          "
         >
           {/* Card text */}
           <Controller
@@ -423,11 +425,10 @@ export default function NexusCardForm() {
                 size="small"
                 variant="standard"
                 placeholder='Type "/" to insert a keyword ability.'
-                className="w-full"
                 rows={4}
                 error={!!fieldState.error}
                 // helperText={fieldState.error ? fieldState.error.message : "Card text is required!"}
-                // InputProps={{ disableUnderline: true }} caused error
+                className="w-full"
               />
             )}
           />
