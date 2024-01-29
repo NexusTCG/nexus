@@ -1,11 +1,11 @@
-import { EntityTypeType } from "../types/types";
+import { EntityTypesType } from "../types/types";
 // import {
 //     Pets as PetsIcon,
 // } from '@mui/icons-material';
 
 // Swap out for database fetch / map
 
-const entityTypes: EntityTypeType[] = [
+const entityTypes: EntityTypesType[] = [
   {
     id: 1,
     name: "Alchemist",

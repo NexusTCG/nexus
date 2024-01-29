@@ -45,25 +45,12 @@ export default function NexusCardForm() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { register, setValue, control, watch } =
     useFormContext<CardFormDataType>();
-  const formCardData = watch();
 
+  const formCardData = watch();
   const activeCardType = formCardData.cardType;
 
-  // const [activeCardColorsType, setActiveCardColorsType] = useState<
-  //   string | null
-  // >(null);
-  // const [activeCardColors, setActiveCardColors] = useState<string | null>(null);
-  // const [cardColorClass, setCardColorClass] = useState<string | null>(null);
-  // const [cardBgImage, setCardBgImage] = useState<string | null>(null);
-  // state to track and clear the energy cost if the type changes to node and there is a cost
-  const [energyCostAnchorEl, setEnergyCostAnchorEl] = React.useState<HTMLButtonElement | null>(
-    null,
-  );
-
-  const [gradeAnchorEl, setGradeAnchorEl] = React.useState<HTMLButtonElement | null>(
-    null,
-  );
-
+  const [energyCostAnchorEl, setEnergyCostAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [gradeAnchorEl, setGradeAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [cardColorType, setCardColorType] = useState<string | null>(null);
   const [cardColor, setCardColor] = useState<string | null>(null);
   const [cardColorClass, setCardColorClass] = useState<string | null>(null);
