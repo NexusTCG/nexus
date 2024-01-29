@@ -8,8 +8,6 @@ import {
 } from "@/app/utils/data/cardColorOptions";
 import {
   CardFormDataType,
-  CardTypesType,
-  EnergyTypesType,
   DualColorOptionsType,
 } from "@/app/utils/types/types";
 import {
@@ -20,22 +18,19 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  IconButton,
-  Popover,
+  IconButton
 } from "@mui/material/";
 
 import {
   cardSuperTypeOptions,
   cardTypeOptions,
   cardSubTypeOptions,
-  cardSpeedOptions,
-  cardGradeOptions,
+  cardSpeedOptions
 } from "@/app/utils/data/cardCreatorOptions";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import EnergyCostPopover from "@/app/components/card-creator/EnergyCostPopover";
 import GradePopover from "@/app/components/card-creator/GradePopover";
 import Image from "next/image";
-import clsx from "clsx";
 
 const cardPartPath = {
   base: "/images",
@@ -47,6 +42,7 @@ const cardPartPath = {
 };
 
 export default function NexusCardForm() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { register, setValue, control, watch } =
     useFormContext<CardFormDataType>();
   const formCardData = watch();
@@ -87,7 +83,7 @@ export default function NexusCardForm() {
   useEffect(() => {
     if (formCardData.cardEnergyCost) {
       // Filter out colors with no cost
-      let colorsWithCost = Object.entries(formCardData.cardEnergyCost)
+      const colorsWithCost = Object.entries(formCardData.cardEnergyCost)
         .filter(
           ([color, value]) =>
             value > 0 &&

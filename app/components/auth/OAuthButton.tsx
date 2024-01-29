@@ -1,6 +1,8 @@
+// TODO: Fix logout flow
+
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { createClient } from "@/app/lib/supabase/client";
 import { Button } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -21,6 +23,7 @@ export default function OAuthButton({
   const [providerIcon, setProviderIcon] = useState<React.ReactNode | null>(
     null,
   );
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
   const supabase = createClient();
 
@@ -54,6 +57,7 @@ export default function OAuthButton({
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     setUserLoggedIn(false);

@@ -1,8 +1,12 @@
 import * as React from "react";
 import { Box, Typography, Divider } from "@mui/material";
+import useSession from "@/app/hooks/useSession";
 import SignOutButton from "@/app/components/auth/SignOutButton";
 
 export default function SidebarDesktop() {
+
+  const user = useSession()?.user;
+
   return (
     <Box
       className="
@@ -153,6 +157,9 @@ export default function SidebarDesktop() {
           </Typography>
         </Box>
         <Divider />
+        <Typography>
+          {user?.email}
+        </Typography>
         <SignOutButton />
       </Box>
     </Box>

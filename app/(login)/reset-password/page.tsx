@@ -2,6 +2,7 @@
 
 "use client";
 
+import React from "react";
 import { createClient } from "@/app/lib/supabase/client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -45,9 +46,9 @@ export default function ResetPassword() {
     if (error) console.log(error);
   }
 
-  function handlePasswordChange(e: any) {
+  function handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
-    setData((prev: any) => ({
+    setData((prev: { password: string; confirmPassword: string }) => ({
       ...prev,
       [name]: value,
     }));

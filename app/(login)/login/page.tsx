@@ -1,9 +1,10 @@
 "use client";
 
-import { createClient } from "@/app/lib/supabase/client";
+import React from "react";
 import { useState } from "react";
+import { createClient } from "@/app/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { Typography, Box, Divider } from "@mui/material";
+import { Typography, Divider } from "@mui/material";
 import clsx from "clsx";
 import NewAuthButton from "@/app/components/auth/OAuthButton";
 
@@ -23,10 +24,12 @@ export default function Login({
   const [success, setSuccess] = useState<boolean>(false);
 
   const supabase = createClient();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const router = useRouter();
 
   async function sendResetPassword() {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { data: resetData, error } =
         await supabase.auth.resetPasswordForEmail(data.email, {
           redirectTo: `${window.location.origin}/reset-password`,
@@ -37,9 +40,9 @@ export default function Login({
     }
   }
 
-  function handleChange(e: any) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
-    setData((prev: any) => ({
+    setData((prev: { email: string; password: string }) => ({
       ...prev,
       [name]: value,
     }));
@@ -141,7 +144,7 @@ export default function Login({
         variant="subtitle1"
         className="cursor-pointer hover:underline"
       >
-        Don't have an account? Sign up
+        Don&apos;t have an account? Sign up
       </Typography>
       <button
         formAction={"/auth/register-user"}

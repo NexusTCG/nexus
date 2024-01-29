@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Typography, TextField, Button } from "@mui/material/";
@@ -47,12 +48,14 @@ export default function CardCreatorForm() {
 
   const formNexusCardData = watch();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function sendPromptToOpenAI() {
     // Send prompt to OpenAI API
     // Store response in state
     // Add response to card data
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function onImageGeneration() {
     // Call OpenAI API to generate image
     // Store image url in state

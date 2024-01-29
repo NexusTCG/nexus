@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useFormContext } from "react-hook-form";
 import { Popover, Box, Typography } from "@mui/material";
 import Image from "next/image";
@@ -17,6 +18,7 @@ export default function GradePopover({
   const open = Boolean(anchorEl);
   const id = open ? "grade-popover" : undefined;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function handleGradeChange(grade: string) {
     setValue("cardGrade", grade);
   }

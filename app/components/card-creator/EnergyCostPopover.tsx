@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useFormContext } from "react-hook-form";
 import { monoColorOptions } from "@/app/utils/data/cardColorOptions";
 import {
@@ -68,7 +69,7 @@ export default function EnergyCostPopover({
       <Box
         className="
         flex
-        flex-col
+        flex-row
         justify-start
         items-center
         w-[480]
@@ -84,7 +85,7 @@ export default function EnergyCostPopover({
         <Box
           className="
             flex
-            flex-row
+            flex-col
             justify-between
             items-center
             w-full

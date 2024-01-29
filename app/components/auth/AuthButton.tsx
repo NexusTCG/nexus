@@ -1,3 +1,4 @@
+import React from "react";
 import { createClient } from "@/app/lib/supabase/server";
 import { cookies } from "next/headers";
 import Link from "next/link";
