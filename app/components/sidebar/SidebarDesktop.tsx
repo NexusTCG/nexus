@@ -1,11 +1,11 @@
-import * as React from 'react';
+import * as React from "react";
 import { Box, Typography, Divider } from "@mui/material";
-import SignOutButton from '@/app/components/auth/SignOutButton';
+import SignOutButton from "@/app/components/auth/SignOutButton";
 
 export default function SidebarDesktop() {
   return (
     <Box
-        className="
+      className="
             flex
             flex-col
             justify-between
@@ -24,8 +24,8 @@ export default function SidebarDesktop() {
             top-0
         "
     >
-        <Box
-            className="
+      <Box
+        className="
                 flex
                 flex-col
                 justify-between
@@ -33,67 +33,67 @@ export default function SidebarDesktop() {
                 gap-4
                 w-full
             "
-        >
-            <Typography
-                variant="body1"
-                className="
+      >
+        <Typography
+          variant="body1"
+          className="
                     text-center
                     w-full
                     bg-gray-800
                     py-4
                     rounded
                 "
-            >
-                Logo Placeholder
-            </Typography>
-            <Typography
-                variant="body1"
-                className="
+        >
+          Logo Placeholder
+        </Typography>
+        <Typography
+          variant="body1"
+          className="
                     text-center
                     w-full
                 "
-            >
-                GitHub Logo
-            </Typography>
-            <Typography
-                variant="body1"
-                className="
+        >
+          GitHub Logo
+        </Typography>
+        <Typography
+          variant="body1"
+          className="
                     text-center
                     w-full
                 "
-            >
-                Discord Logo
-            </Typography>
-            <Typography
-                variant="body1"
-                className="
+        >
+          Discord Logo
+        </Typography>
+        <Typography
+          variant="body1"
+          className="
                     text-center
                     w-full
                 "
-            >
-                Reddit Logo
-            </Typography>
-            <Typography
-                variant="body1"
-                className="
+        >
+          Reddit Logo
+        </Typography>
+        <Typography
+          variant="body1"
+          className="
                     text-center
                     w-full
                 "
-            >
-                Twitter Logo
-            </Typography>
-            <Typography
-                variant="body1"
-                className="
+        >
+          Twitter Logo
+        </Typography>
+        <Typography
+          variant="body1"
+          className="
                     text-center
                     w-full
                 "
-            >
-                LinkedIn Logo
-            </Typography>
-        </Box>
-        <Box
-            className="
+        >
+          LinkedIn Logo
+        </Typography>
+      </Box>
+      <Box
+        className="
                 flex
                 flex-col
                 justify-between
@@ -101,9 +101,9 @@ export default function SidebarDesktop() {
                 gap-6
                 w-full
             "
-        >
-             <Box
-                className="
+      >
+        <Box
+          className="
                     flex
                     flex-col
                     justify-between
@@ -111,10 +111,10 @@ export default function SidebarDesktop() {
                     gap-4
                     w-full
                 "
-            >
-                <Typography
-                    variant="body1"
-                    className="
+        >
+          <Typography
+            variant="body1"
+            className="
                         text-center
                         w-full
                         bg-gray-800
@@ -122,12 +122,12 @@ export default function SidebarDesktop() {
                         rounded
                         hover:bg-gray-700
                     "
-                >
-                    Gallery Placeholder
-                </Typography>
-                <Typography
-                    variant="body1"
-                    className="
+          >
+            Gallery Placeholder
+          </Typography>
+          <Typography
+            variant="body1"
+            className="
                         text-center
                         w-full
                         bg-gray-800
@@ -135,12 +135,12 @@ export default function SidebarDesktop() {
                         rounded
                         hover:bg-gray-700
                     "
-                >
-                    Rules Placeholder
-                </Typography>
-                <Typography
-                    variant="body1"
-                    className="
+          >
+            Rules Placeholder
+          </Typography>
+          <Typography
+            variant="body1"
+            className="
                         text-center
                         w-full
                         bg-gray-800
@@ -148,13 +148,13 @@ export default function SidebarDesktop() {
                         rounded
                         hover:bg-gray-700
                     "
-                >
-                    Settings Placeholder
-                </Typography>
-            </Box>
-            <Divider />
-            <SignOutButton />
+          >
+            Settings Placeholder
+          </Typography>
         </Box>
+        <Divider />
+        <SignOutButton />
+      </Box>
     </Box>
   );
 }

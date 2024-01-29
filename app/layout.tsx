@@ -1,20 +1,21 @@
-import { ThemeProvider } from '@mui/material/styles';
-import theme from './styles/theme';
-import { Inter } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/react';
-import './styles/globals.css'
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "./styles/theme";
+import { Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import "./styles/globals.css";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:3000'
+  : "http://localhost:3000";
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: 'Nexus TCG',
-  description: 'Nexus is an open source digital trading card game where players can make playable custom TCG cards with the help of generative AI.',
-}
+  title: "Nexus TCG",
+  description:
+    "Nexus is an open source digital trading card game where players can make playable custom TCG cards with the help of generative AI.",
+};
 
 type RootLayoutProps = {
   children: React.ReactNode;

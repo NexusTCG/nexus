@@ -1,139 +1,139 @@
 {
-    "Amplify": {
-        "type": "triggered",
-        "description": "When you play a nonconstant function, this temporarily gets boost 1."
-    },
-    "Boost": {
-        "type": "passive",
-        "description": "This entity gets N more attack and defense."
-    },
-    "Chain": {
-        "type": "triggered",
-        "description": "While you have played another function this turn, add this effect."
-    },
-    "Surge": {
-        "type": "triggered",
-        "description": "This triggers when you activate your power."
-    },
-    "Deploy": {
-        "type": "triggered",
-        "description": "This triggers when this appear on the planet."
-    },
-    "Despawn": {
-        "type": "triggered",
-        "description": "This triggers when this is put into a cache from the planet."
-    },
-    "Encrypt": {
-        "type": "passive",
-        "description": "This constant can't targeted by actions."
-    },
-    "Erase": {
-        "type": "activated",
-        "description": "Put the top N cards of a deck into its owner's cache."
-    },
-    "Exploit": {
-        "type": "triggered",
-        "description": "(This triggers when this entity deals battle damage to an opponent.)"
-    },
-    "Firewall {Cost}": {
-        "type": "triggered",
-        "description": "When this becomes targeted by an action, cancel that action unless its controller pays {Cost}."
-    },
-    "Flight": {
-        "type": "passive",
-        "description": "This entity can only be defended by entities with flight or intercept."
-    },
-    "Hack": {
-        "type": "triggered",
-        "description": "Unlock an entity, then temporarily take control of it. It temporarily gains rapid.",
-        "reminder syntax": "Unlock it, then temporarily take control of it. It temporarily gains rapid."
-    },
-    "Hologram": {
-        "type": "triggered",
-        "description": "Spawns a copy of an entity. Archive it at the end of your next turn."
-    },
-    "Indestructible": {
-        "type": "passive",
-        "description": "This can't be terminated."
-    },
-    "Stealth": {
-        "type": "passive",
-        "description": "This entity can't be defended."
-    },
-    "Initialize": {
-        "type": "triggered",
-        "description": "Terminate all alterations on a constant."
-    },
-    "Initiate": {
-        "type": "triggered",
-        "description": "This effect triggers whenever this entity attacks."
-    },
-    "Intercept": {
-        "type": "passive",
-        "description": "This entity can defend entities with flight."
-    },
-    "Leech": {
-        "type": "triggered",
-        "description": "When this deals damage, you gain that much health."
-    },
-    "Network": {
-        "type": "activated",
-        "description": "Lock any number of unlocked constants you control. For each, this costs {1} less to play."
-    },
-    "Nullify": {
-        "type": "triggered",
-        "description": "Put the top N cards of a deck into its owner's archive."
-    },
-    "Overclock": {
-        "type": "activated",
-        "description": "Increase the speed of a function by 1."
-    },
-    "Overpowered": {
-        "type": "triggered",
-        "description": "When this deals damage to an enemy entity, excess damage is dealt to the entity's controller."
-    },
-    "Rapid": {
-        "type": "passive",
-        "description": "This can lock the turn it appear on the planet."
-    },
-    "Scan": {
-        "type": "activated",
-        "description": "Look at the top N cards of your deck, then put any number of them on the bottom of your deck and the rest on top in any order."
-    },
-    "Secure": {
-        "type": "passive",
-        "description": "This entity does not lock when attacking."
-    },
-    "Shield": {
-        "type": "triggered",
-        "description": "If this entity would be terminated, or dealt damage, instead it loses shield."
-    },
-    "Quick strike": {
-        "type": "passive",
-        "description": "This entity deals battle damage before other entities."
-    },
-    "Swap": {
-        "type": "activated",
-        "description": "Discard this card, draw a card."
-    },
-    "Threat": {
-        "type": "passive",
-        "description": "This entity must be defended by at least two entities."
-    },
-    "Virus": {
-        "type": "triggered",
-        "description": "This only needs to deal one damage to entities to terminate them."
-    },
-    "Wormhole": {
-        "type": "triggered",
-        "description": "While you have played another event this turn, you may play this from your cache. If you do, archive it as it resolves."
-    },
-    "Gear": {
-        "type": "activated",
-        "description": "Attach to target friendly entity."
-    },
-    "Intimidate": {
-        "type": "passive",
-        "description": "This entity can't be defended by defenders with less attack."
-    }
+  "Amplify": {
+    "type": "triggered",
+    "description": "When you play a nonconstant function, this temporarily gets boost 1."
+  },
+  "Boost": {
+    "type": "passive",
+    "description": "This entity gets N more attack and defense."
+  },
+  "Chain": {
+    "type": "triggered",
+    "description": "While you have played another function this turn, add this effect."
+  },
+  "Surge": {
+    "type": "triggered",
+    "description": "This triggers when you activate your power."
+  },
+  "Deploy": {
+    "type": "triggered",
+    "description": "This triggers when this appear on the planet."
+  },
+  "Despawn": {
+    "type": "triggered",
+    "description": "This triggers when this is put into a cache from the planet."
+  },
+  "Encrypt": {
+    "type": "passive",
+    "description": "This constant can't targeted by actions."
+  },
+  "Erase": {
+    "type": "activated",
+    "description": "Put the top N cards of a deck into its owner's cache."
+  },
+  "Exploit": {
+    "type": "triggered",
+    "description": "(This triggers when this entity deals battle damage to an opponent.)"
+  },
+  "Firewall {Cost}": {
+    "type": "triggered",
+    "description": "When this becomes targeted by an action, cancel that action unless its controller pays {Cost}."
+  },
+  "Flight": {
+    "type": "passive",
+    "description": "This entity can only be defended by entities with flight or intercept."
+  },
+  "Hack": {
+    "type": "triggered",
+    "description": "Unlock an entity, then temporarily take control of it. It temporarily gains rapid.",
+    "reminder syntax": "Unlock it, then temporarily take control of it. It temporarily gains rapid."
+  },
+  "Hologram": {
+    "type": "triggered",
+    "description": "Spawns a copy of an entity. Archive it at the end of your next turn."
+  },
+  "Indestructible": {
+    "type": "passive",
+    "description": "This can't be terminated."
+  },
+  "Stealth": {
+    "type": "passive",
+    "description": "This entity can't be defended."
+  },
+  "Initialize": {
+    "type": "triggered",
+    "description": "Terminate all alterations on a constant."
+  },
+  "Initiate": {
+    "type": "triggered",
+    "description": "This effect triggers whenever this entity attacks."
+  },
+  "Intercept": {
+    "type": "passive",
+    "description": "This entity can defend entities with flight."
+  },
+  "Leech": {
+    "type": "triggered",
+    "description": "When this deals damage, you gain that much health."
+  },
+  "Network": {
+    "type": "activated",
+    "description": "Lock any number of unlocked constants you control. For each, this costs {1} less to play."
+  },
+  "Nullify": {
+    "type": "triggered",
+    "description": "Put the top N cards of a deck into its owner's archive."
+  },
+  "Overclock": {
+    "type": "activated",
+    "description": "Increase the speed of a function by 1."
+  },
+  "Overpowered": {
+    "type": "triggered",
+    "description": "When this deals damage to an enemy entity, excess damage is dealt to the entity's controller."
+  },
+  "Rapid": {
+    "type": "passive",
+    "description": "This can lock the turn it appear on the planet."
+  },
+  "Scan": {
+    "type": "activated",
+    "description": "Look at the top N cards of your deck, then put any number of them on the bottom of your deck and the rest on top in any order."
+  },
+  "Secure": {
+    "type": "passive",
+    "description": "This entity does not lock when attacking."
+  },
+  "Shield": {
+    "type": "triggered",
+    "description": "If this entity would be terminated, or dealt damage, instead it loses shield."
+  },
+  "Quick strike": {
+    "type": "passive",
+    "description": "This entity deals battle damage before other entities."
+  },
+  "Swap": {
+    "type": "activated",
+    "description": "Discard this card, draw a card."
+  },
+  "Threat": {
+    "type": "passive",
+    "description": "This entity must be defended by at least two entities."
+  },
+  "Virus": {
+    "type": "triggered",
+    "description": "This only needs to deal one damage to entities to terminate them."
+  },
+  "Wormhole": {
+    "type": "triggered",
+    "description": "While you have played another event this turn, you may play this from your cache. If you do, archive it as it resolves."
+  },
+  "Gear": {
+    "type": "activated",
+    "description": "Attach to target friendly entity."
+  },
+  "Intimidate": {
+    "type": "passive",
+    "description": "This entity can't be defended by defenders with less attack."
+  }
 }

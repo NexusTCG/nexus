@@ -1,11 +1,11 @@
-"use server"
+"use server";
 
-import { createClient } from '@/app/lib/supabase/server'
-import { cookies } from 'next/headers'
+import { createClient } from "@/app/lib/supabase/server";
+import { cookies } from "next/headers";
 
 export default async function fetchCards() {
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-    const { data: cards } = await supabase.from("cards").select();
-    return cards;
+  const cookieStore = cookies();
+  const supabase = createClient(cookieStore);
+  const { data: cards } = await supabase.from("cards").select();
+  return cards;
 }

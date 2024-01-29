@@ -1,16 +1,16 @@
 "use client";
 
-import { useFormContext } from 'react-hook-form';
-import { monoColorOptions } from '@/app/utils/data/cardColorOptions';
+import { useFormContext } from "react-hook-form";
+import { monoColorOptions } from "@/app/utils/data/cardColorOptions";
 import {
   Popover,
   Box,
   IconButton,
   Typography,
-  ButtonGroup
-} from '@mui/material';
-import RemoveIcon from '@mui/icons-material/Remove';
-import AddIcon from '@mui/icons-material/Add';
+  ButtonGroup,
+} from "@mui/material";
+import RemoveIcon from "@mui/icons-material/Remove";
+import AddIcon from "@mui/icons-material/Add";
 import Image from "next/image";
 import clsx from "clsx";
 
@@ -23,12 +23,7 @@ export default function EnergyCostPopover({
   anchorEl,
   handleClose,
 }: EnergyCostPopoverProps) {
-
-  const {
-    setValue,
-    getValues,
-    watch,
-  } = useFormContext();
+  const { setValue, getValues, watch } = useFormContext();
 
   const open = Boolean(anchorEl);
   const id = open ? "energy-cost-popover" : undefined;
@@ -44,15 +39,16 @@ export default function EnergyCostPopover({
 
     const updatedEnergyCosts = { ...energyCosts, [color]: newCost };
 
-    const newTotalEnergyValue = Object
-      .values(updatedEnergyCosts)
-      .reduce((acc: number, value) => acc + (value as number), 0);
+    const newTotalEnergyValue = Object.values(updatedEnergyCosts).reduce(
+      (acc: number, value) => acc + (value as number),
+      0,
+    );
 
-    if (typeof newTotalEnergyValue === 'number' && newTotalEnergyValue <= 15) {
-        setValue("cardEnergyCost." + color, newCost);
-        setValue("cardEnergyValue", newTotalEnergyValue);
+    if (typeof newTotalEnergyValue === "number" && newTotalEnergyValue <= 15) {
+      setValue("cardEnergyCost." + color, newCost);
+      setValue("cardEnergyValue", newTotalEnergyValue);
     }
-};
+  }
 
   return (
     <Popover
@@ -83,7 +79,8 @@ export default function EnergyCostPopover({
         border
         border-gray-700
         shadow-lg
-      ">
+      "
+      >
         <Box
           className="
             flex
@@ -91,23 +88,23 @@ export default function EnergyCostPopover({
             justify-between
             items-center
             w-full
-        ">
-          <Typography
-            variant="subtitle1"
-            className="font-semibold"
-          >
+        "
+        >
+          <Typography variant="subtitle1" className="font-semibold">
             Select energy cost
           </Typography>
-          {watchCardEnergyValue && (<Typography
-            variant="overline"
-            className="font-medium text-sm"
-          >
-            {`Total energy value: ${watchCardEnergyValue}`}
-          </Typography>)}
+          {watchCardEnergyValue && (
+            <Typography variant="overline" className="font-medium text-sm">
+              {`Total energy value: ${watchCardEnergyValue}`}
+            </Typography>
+          )}
         </Box>
-        
+
         {Object.keys(monoColorOptions).map((color) => (
-          <Box key={color} sx={{ display: 'flex', alignItems: 'center', margin: 1 }}>
+          <Box
+            key={color}
+            sx={{ display: "flex", alignItems: "center", margin: 1 }}
+          >
             <Box
               className="
                 flex
@@ -118,11 +115,13 @@ export default function EnergyCostPopover({
                 p-2
                 bg-gray-700
                 rounded-md
-            ">
+            "
+            >
               <Image
-                src={color !== "void"
-                  ? `/images/card-parts/card-icons/${color}.png`
-                  : `/images/card-parts/card-icons/void-${watchCardEnergyCost.void}.png`
+                src={
+                  color !== "void"
+                    ? `/images/card-parts/card-icons/${color}.png`
+                    : `/images/card-parts/card-icons/void-${watchCardEnergyCost.void}.png`
                 }
                 width={34}
                 height={34}
@@ -134,7 +133,8 @@ export default function EnergyCostPopover({
                   font-semibold
                   text-gray-300
                   text-center
-              ">
+              "
+              >
                 {watchCardEnergyCost[color]}
               </Typography>
             </Box>
@@ -146,19 +146,23 @@ export default function EnergyCostPopover({
               <IconButton
                 onClick={() => handleCostChange(color, +1)}
                 size="small"
-                className={clsx("hover:bg-green-700 hover:text-white",
-                  watchCardEnergyCost[color] === 0 && "opacity-50"
-                )}>
+                className={clsx(
+                  "hover:bg-green-700 hover:text-white",
+                  watchCardEnergyCost[color] === 0 && "opacity-50",
+                )}
+              >
                 <AddIcon />
               </IconButton>
-              
+
               <IconButton
                 disabled={watchCardEnergyCost[color] === 0}
                 onClick={() => handleCostChange(color, -1)}
                 size="small"
-                className={clsx("hover:bg-red-700 hover:text-white",
-                  watchCardEnergyCost[color] === 0 && "opacity-50"
-                )}>
+                className={clsx(
+                  "hover:bg-red-700 hover:text-white",
+                  watchCardEnergyCost[color] === 0 && "opacity-50",
+                )}
+              >
                 <RemoveIcon />
               </IconButton>
             </ButtonGroup>
@@ -167,4 +171,4 @@ export default function EnergyCostPopover({
       </Box>
     </Popover>
   );
-};
+}

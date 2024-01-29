@@ -1,56 +1,55 @@
+"use client";
 
-'use client';
-
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: "dark",
     primary: {
-      main: '#818cf8',
+      main: "#818cf8",
     },
     secondary: {
-      main: '#f472b6',
+      main: "#f472b6",
     },
     background: {
-      default: '#020617',
-      paper: '#020617',
+      default: "#020617",
+      paper: "#020617",
     },
     text: {
-      primary: '#f9fafb',
-      secondary: '#e5e7eb',
-      disabled: '#9ca3af',
+      primary: "#f9fafb",
+      secondary: "#e5e7eb",
+      disabled: "#9ca3af",
     },
     error: {
-      main: '#ef4444',
+      main: "#ef4444",
     },
     warning: {
-      main: '#eab308',
+      main: "#eab308",
     },
     info: {
-      main: '#3b82f6',
+      main: "#3b82f6",
     },
     success: {
-      main: '#22c55e',
+      main: "#22c55e",
     },
-    divider: '#4b5563',
+    divider: "#4b5563",
   },
   typography: {
     fontWeightLight: 300,
     h1: {
-      fontSize: '3rem',
+      fontSize: "3rem",
       fontWeight: 600,
     },
     h2: {
-      fontSize: '2.5rem',
+      fontSize: "2.5rem",
       fontWeight: 500,
     },
     h3: {
-      fontSize: '2rem',
+      fontSize: "2rem",
       fontWeight: 400,
     },
     h4: {
-      fontSize: '1.5rem',
+      fontSize: "1.5rem",
       fontWeight: 300,
     },
     subtitle1: {

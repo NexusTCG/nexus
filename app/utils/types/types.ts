@@ -26,15 +26,15 @@ export type CardTypesType = {
 };
 
 export type EntityTypesType = {
-    id: number;
-    name: string;
-    description: string;
-    artPrompt: string;
-    primaryColors: string[];
-    secondaryColors: string[];
-    planets: string[];
-    frequency: string;
-    role: boolean;
+  id: number;
+  name: string;
+  description: string;
+  artPrompt: string;
+  primaryColors: string[];
+  secondaryColors: string[];
+  planets: string[];
+  frequency: string;
+  role: boolean;
 };
 
 export type EnergyTypesType = {

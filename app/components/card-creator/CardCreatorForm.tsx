@@ -3,12 +3,7 @@
 import React from "react";
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Box,
-  Typography,
-  TextField,
-  Button,
-} from "@mui/material/";
+import { Box, Typography, TextField, Button } from "@mui/material/";
 import { CardFormDataType } from "@/app/utils/types/types";
 import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
@@ -47,9 +42,7 @@ export default function CardCreatorForm() {
     register,
     handleSubmit,
     watch,
-    formState: {
-      isValid
-    }
+    formState: { isValid },
   } = methods;
 
   const formNexusCardData = watch();
@@ -58,7 +51,7 @@ export default function CardCreatorForm() {
     // Send prompt to OpenAI API
     // Store response in state
     // Add response to card data
-  };
+  }
 
   function onImageGeneration() {
     // Call OpenAI API to generate image
