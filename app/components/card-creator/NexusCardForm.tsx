@@ -43,6 +43,7 @@ export default function NexusCardForm() {
   const { register, setValue, control, watch } =
     useFormContext<CardFormDataType>();
   const formCardData = watch();
+  const activeCardCost = formCardData.cardEnergyCost;
   const activeCardType = formCardData.cardType;
 
   const [energyCostAnchorEl, setEnergyCostAnchorEl] = React.useState<HTMLButtonElement | null>(null);
@@ -54,49 +55,47 @@ export default function NexusCardForm() {
 
   // Determine color type based on cost
   useEffect(() => {
-    console.log(`Determining new color type. Current color type: ${cardColorType}`)
+    console.log(`Current color type: ${cardColorType}`);
     const colorType = determineColorType(
-      formCardData.cardEnergyCost
+      activeCardCost
     );
     setCardColorType(colorType);
-    console.log(`Current color type: ${cardColorType}`);
-  }, [formCardData.cardEnergyCost]);
+  }, [activeCardCost]);
 
   // Determine color based on cost and color type
   useEffect(() => {
-    console.log(`Determining new color. Current color ${cardColor}`)
+    console.log(`Current color: ${cardColor}`);
     const color = determineColor(
-      formCardData.cardEnergyCost,
+      activeCardCost,
       cardColorType || ""
     );
     setCardColor(color);
-    console.log(`Current color: ${cardColor}`);
-  }, [formCardData.cardEnergyCost, cardColorType]);
+  }, [activeCardCost, cardColorType]);
 
   // Determine color class based on color type and color
   useEffect(() => {
-    console.log(`Determining new color class. Current color class: ${cardColorClass}`)
+    console.log(`Current color class: ${cardColorClass}`);
     const colorClass = determineColorClass(
       activeCardType,
       cardColorType || "",
       cardColor || "",
     );
     setCardColorClass(colorClass);
-    console.log(`Current color class: ${cardColorClass}`);
   }, [activeCardType, cardColorType, cardColor]); 
 
   // Determine bg image based on color type and color
   useEffect(() => {
-    console.log(`Determining new bg image. Current bg image: ${cardBgImage}`)
+    console.log(`Current bg image: ${cardBgImage}`);
     const bgImage = determineBgImage(
       activeCardType,
       cardColorType || "",
       cardColor || "",
     );
     setCardBgImage(bgImage);
-    console.log(`Current bg image: ${cardBgImage}`);
   }, [activeCardType, cardColorType, cardColor]);
 
+  // Reset color type, color, color class and bg image
+  // when card type changes to node
   useEffect(() => {
     if (formCardData.cardType === "node") {
       setCardColorType(null);

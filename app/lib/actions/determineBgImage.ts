@@ -1,5 +1,7 @@
+import { CardFormDataType } from "@/app/utils/types/types";
+
 export default function determineBgImage(
-    activeCardType: string,
+    activeCardType: CardFormDataType["cardType"],
     cardColorType: string,
     cardColor: string,
 ) {
