@@ -2,7 +2,8 @@ import { CardFormDataType } from "@/app/utils/types/types";
 import { monoColorOptions } from "@/app/utils/data/cardColorOptions";
 
 export default function determineColorType(
-    cardEnergyCost: CardFormDataType["cardEnergyCost"]
+    cardEnergyCost: CardFormDataType["cardEnergyCost"],
+    activeCardType: CardFormDataType["cardType"],
 ) {
     const energyCostEntries = Object
     .entries(
@@ -16,7 +17,7 @@ export default function determineColorType(
         && value > 0
     );
     
-    if (coloredCosts.length === 0) {
+    if (coloredCosts.length === 0 && activeCardType) {
         return "void";
     } else if (energyCostEntries.length === 1) {
         return "mono";

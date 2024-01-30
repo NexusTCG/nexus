@@ -34,6 +34,6 @@ export default function determineColor(
     } else if (cardColorType === "multi") {
         return "multi"
     } else {
-        return null;
+        return "default";
     };
 };

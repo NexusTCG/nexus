@@ -43,21 +43,24 @@ export default function NexusCardForm() {
   const { register, setValue, control, watch } =
     useFormContext<CardFormDataType>();
   const formCardData = watch();
-  const activeCardCost = formCardData.cardEnergyCost;
-  const activeCardType = formCardData.cardType;
+  const activeCardCost = watch("cardEnergyCost");
+  const activeCardType = watch("cardType");
 
   const [energyCostAnchorEl, setEnergyCostAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [gradeAnchorEl, setGradeAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [cardColorType, setCardColorType] = useState<string | null>(null);
   const [cardColor, setCardColor] = useState<string | null>(null);
-  const [cardColorClass, setCardColorClass] = useState<string | null>(null);
+  const [cardColorClass50, setCardColorClass50] = useState<string>("");
+  const [cardColorClass100, setCardColorClass100] = useState<string>("");
+  const [cardColorClass400, setCardColorClass400] = useState<string>("");
   const [cardBgImage, setCardBgImage] = useState<string | null>(null);
 
   // Determine color type based on cost
   useEffect(() => {
     console.log(`Current color type: ${cardColorType}`);
     const colorType = determineColorType(
-      activeCardCost
+      activeCardCost,
+      activeCardType
     );
     setCardColorType(colorType);
   }, [activeCardCost]);
@@ -74,13 +77,20 @@ export default function NexusCardForm() {
 
   // Determine color class based on color type and color
   useEffect(() => {
-    console.log(`Current color class: ${cardColorClass}`);
+    console.log(`
+      Current color classes:
+      ${cardColorClass50},
+      ${cardColorClass100},
+      ${cardColorClass400}
+    `);
     const colorClass = determineColorClass(
       activeCardType,
       cardColorType || "",
       cardColor || "",
     );
-    setCardColorClass(colorClass);
+    setCardColorClass50(`bg-${colorClass}-50`);
+    setCardColorClass100(`bg-${colorClass}-100`);
+    setCardColorClass400(`bg-${colorClass}-400`);
   }, [activeCardType, cardColorType, cardColor]); 
 
   // Determine bg image based on color type and color
@@ -108,10 +118,10 @@ export default function NexusCardForm() {
     event: React.MouseEvent<HTMLButtonElement>
   ) {
     setEnergyCostAnchorEl(event.currentTarget);
-  }
+  };
   function handleEnergyCostPopoverClose() {
     setEnergyCostAnchorEl(null);
-  }
+  };
 
   // Handle grade popover
   function handleGradePopoverOpen(
@@ -119,11 +129,11 @@ export default function NexusCardForm() {
   ) {
     setGradeAnchorEl(event.currentTarget);
     console.log(formCardData.cardGrade)
-  }
+  };
   function handleGradePopoverClose() {
     setGradeAnchorEl(null);
     console.log(formCardData.cardGrade)
-  }
+  };
 
   return (
     <Box
@@ -164,7 +174,7 @@ export default function NexusCardForm() {
           //   aspectRatio: "55 / 5",
           // }}
           className={`
-              bg-${cardColorClass}-50
+                ${cardColorClass50}
               flex
               flex-col
               w-full
@@ -232,7 +242,7 @@ export default function NexusCardForm() {
             id="card-header-types-speed"
             // 
             className={`
-              bg-${cardColorClass}-100 
+              ${cardColorClass100}
               flex
               flex-row
               w-full
@@ -437,7 +447,7 @@ export default function NexusCardForm() {
               gap-2
               p-1
               rounded-lg
-              bg-${cardColorClass}-400
+              ${cardColorClass400}
               border-4
               border-black
               shadow-lg
@@ -474,7 +484,7 @@ export default function NexusCardForm() {
               id="card-text-flavor"
               sx={{ aspectRatio: "540 / 275" }}
               className={`
-                bg-${cardColorClass}-50
+                ${cardColorClass50}
                 flex
                 flex-col
                 w-full

@@ -24,14 +24,19 @@ export default function EnergyCostPopover({
   anchorEl,
   handleClose,
 }: EnergyCostPopoverProps) {
-  const { setValue, getValues, watch } = useFormContext();
+  const {
+    setValue,
+    getValues,
+    watch,
+    trigger
+  } = useFormContext();
 
   const open = Boolean(anchorEl);
   const id = open ? "energy-cost-popover" : undefined;
   const watchCardEnergyCost = watch("cardEnergyCost");
   const watchCardEnergyValue = watch("cardEnergyValue");
 
-  function handleCostChange(color: string, delta: number) {
+  async function handleCostChange(color: string, delta: number) {
     const energyCosts = getValues("cardEnergyCost");
 
     let newCost = Math.max(0, energyCosts[color] + delta);
@@ -46,8 +51,9 @@ export default function EnergyCostPopover({
     );
 
     if (typeof newTotalEnergyValue === "number" && newTotalEnergyValue <= 15) {
-      setValue("cardEnergyCost." + color, newCost);
-      setValue("cardEnergyValue", newTotalEnergyValue);
+      setValue("cardEnergyCost." + color, newCost, { shouldValidate: true });
+      setValue("cardEnergyValue", newTotalEnergyValue, { shouldValidate: true });
+      await trigger("cardEnergyCost");
     }
     console.log(`Color values: ${JSON.stringify(watchCardEnergyCost)}`)
     console.log(`Total value: ${watchCardEnergyValue}`)
