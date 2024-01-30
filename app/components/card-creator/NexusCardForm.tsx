@@ -26,6 +26,7 @@ import {
 } from "@mui/material/";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Image from "next/image";
+import clsx from "clsx";
 
 // Custom actions
 import determineColorType from "@/app/lib/actions/determineColorType";
@@ -135,11 +136,13 @@ export default function NexusCardForm() {
       className="
         flex
         flex-col
-        justify-stary
+        justify-start
         items-center
-        p-5
         rounded-2xl
         bg-black
+        px-4
+        pt-3        
+        pb-8        
       "
     >
       {/* Card frame */}
@@ -150,47 +153,45 @@ export default function NexusCardForm() {
           flex-col
           w-full
           h-full
-          p-2
           rounded-lg
+          bg-lime-300
           ${cardBgImage}
         `}
       >
         {/* Card header */}
         <Box
           id="card-header"
-          sx={{
-            aspectRatio: "55 / 5",
-          }}
+          // sx={{
+          //   aspectRatio: "55 / 5",
+          // }}
           className={`
-              bg-${cardColorClass}-500 
+              bg-${cardColorClass}-50
               flex
               flex-col
               w-full
               gap-1
               py-1
               px-2
-              border-2
+              border-4
               border-black
-              rounded-md
+              rounded-lg
+              shadow-lg
+              shadow-black
+              shadow-opacity-25
+              z-10
           `}
         >
           {/* Card name and cost */}
           <Box
             id="card-header-name-cost"
             className={`
-                            bg-${cardColorClass}-500 
-                            flex
-                            flex-row
-                            justify-between
-                            items-center
-                            w-full
-                            gap-1
-                            py-1
-                            px-2
-                            border-2
-                            border-black
-                            rounded-md
-                        `}
+                flex
+                flex-row
+                justify-between
+                items-center
+                w-full
+                gap-2
+            `}
           >
             {/* Card name */}
             <Controller
@@ -200,12 +201,17 @@ export default function NexusCardForm() {
                 <TextField
                   {...field}
                   size="small"
-                  placeholder="Card name"
-                  className="w-3/4"
-                  error={!!fieldState.error}
-                  helperText={
-                    fieldState.error ? fieldState.error.message : null
+                  placeholder={
+                    !fieldState.error ? "Card name":
+                    "Card name is required!"
                   }
+                  error={!!fieldState.error}
+                  className={clsx("w-full text-white",
+                    {
+                      "!text-black": !fieldState.error,
+                      "!text-red-500": fieldState.error,
+                    }
+                  )}
                 />
               )}
             />
@@ -225,30 +231,24 @@ export default function NexusCardForm() {
           {/* Card types and speed */}
           <Box
             id="card-header-types-speed"
+            // 
             className={`
-                            bg-${cardColorClass}-500 
-                            flex
-                            flex-row
-                            justify-between
-                            items-center
-                            w-full
-                            gap-1
-                            py-1
-                            px-2
-                            border-2
-                            border-black
-                            rounded-md
-                        `}
+              bg-${cardColorClass}-100 
+              flex
+              flex-row
+              w-full
+              gap-1
+              p-1
+              rounded-md
+              text-black
+          `}
           >
-            {/* Super type */}
+            {/* Card types */}
             <Box
               id="card-header-types"
-              className="
-                                flex
-                                flex-row
-                                w-full
-                        "
+              className="flex flex-row w-full gap-1"
             >
+              {/* Super type */}
               {["object", "entity", "effect", "node"].includes(
                 formCardData.cardType,
               ) && (
@@ -256,8 +256,18 @@ export default function NexusCardForm() {
                   name="cardSuperType"
                   control={control}
                   render={({ field }) => (
-                    <FormControl fullWidth>
-                      <InputLabel>Super Type</InputLabel>
+                    <FormControl 
+                      className={clsx("",
+                        {
+                          "w-1/5": formCardData.cardType === "entity",
+                          "w-1/2":
+                            formCardData.cardType === "object"
+                            || formCardData.cardType === "effect"
+                            || formCardData.cardType === "node",
+                        }
+                      )}
+                    >
+                      <InputLabel>Super type</InputLabel>
                       <Select
                         {...field}
                         label="Super type"
@@ -281,7 +291,14 @@ export default function NexusCardForm() {
                 name="cardType"
                 control={control}
                 render={({ field }) => (
-                  <FormControl fullWidth>
+                  <FormControl
+                    className={clsx("w-full",
+                      {
+                        "w-1/2": formCardData.cardSuperType && !formCardData.cardSubType,
+                        "w-1/5": formCardData.cardSuperType && formCardData.cardSubType,
+                      }
+                    )}
+                  >
                     <InputLabel>Type</InputLabel>
                     <Select
                       {...field}
@@ -298,6 +315,7 @@ export default function NexusCardForm() {
                   </FormControl>
                 )}
               />
+              {/* Sub type */}
               {["object", "entity", "effect"].includes(
                 formCardData.cardType,
               ) && (
@@ -305,15 +323,25 @@ export default function NexusCardForm() {
                   name="cardSubType"
                   control={control}
                   render={({ field }) => (
-                    <FormControl fullWidth>
-                      <InputLabel>Sub Type</InputLabel>
+                    <FormControl
+                      className={clsx("",
+                        {
+                          "w-1/2": formCardData.cardType === "node",
+                          "w-3/5":
+                            formCardData.cardType === "object"
+                            || formCardData.cardType === "effect"
+                            || formCardData.cardType === "entity",
+                        }
+                      )}
+                    >
+                      <InputLabel>Sub type</InputLabel>
                       <Select
                         multiple
                         {...field}
                         value={Array.isArray(field.value) ? field.value : []}
                         label="Sub type"
                         size="small"
-                        // renderValue={(selected) => selected.join(' ')}
+                        renderValue={(selected) => selected.join(' ')}
                       >
                         {formCardData.cardType === "entity" &&
                           Object.entries(cardSubTypeOptions.entity).map(
@@ -351,144 +379,196 @@ export default function NexusCardForm() {
                 />
               )}
             </Box>
-            {/* Select: Speed */}
-            <Controller
-              name="cardSpeed"
-              control={control}
-              render={({ field }) => (
-                <FormControl fullWidth>
-                  <InputLabel>Speed</InputLabel>
-                  <Select
-                    multiple
-                    {...field}
-                    value={Array.isArray(field.value) ? field.value : []}
-                    label="Speed"
-                    size="small"
-                  >
-                    {Object.entries(cardSpeedOptions).map(([value, label]) => (
-                      <MenuItem key={value} value={value}>
-                        <Typography variant="body2">{label}</Typography>
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              )}
-            />
+            {formCardData.cardType && formCardData.cardType != "node" && (<Box
+              className="
+                w-1/5
+              "
+            >
+              {/* Select: Speed */}
+              <Controller
+                name="cardSpeed"
+                control={control}
+                render={({ field }) => (
+                  <FormControl fullWidth>
+                    <InputLabel>Speed</InputLabel>
+                    <Select
+                      {...field}
+                      value={Array.isArray(field.value) ? field.value : []}
+                      label="Speed"
+                      size="small"
+                    >
+                      {Object.entries(cardSpeedOptions)
+                        .map(([value, label]) => (
+                          <MenuItem key={value} value={value}>
+                            <Typography variant="body2">
+                              {label}
+                            </Typography>
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                )}
+              />
+            </Box>)}
           </Box>
         </Box>
-        {/* Card image */}
+        {/* Card image & content */}
         <Box
-          id="card-image"
-          sx={{ aspectRatio: "4 / 3" }}
-          className="
-                flex
-                flex-col
-                justify-center
-                items-center
+          id="card-image-content-outer"
+          className={`
+            flex
+            flex-col
+            w-full
+            h-full
+            px-4
+            -mt-4
+            shadow-lg
+            shadow-black
+            shadow-opacity-25
+            z-0
+          `}
+        >
+          <Box
+            id="card-image-content-inner"
+            className={`
+              flex
+              flex-col
+              w-full
+              h-full
+              gap-2
+              p-1
+              rounded-lg
+              bg-${cardColorClass}-400
+              border-4
+              border-black
+              shadow-lg
+              shadow-black
+              shadow-opacity-25
+            `}
+          >
+            {/* Card image */}
+            <Box
+              id="card-image"
+              sx={{
+                aspectRatio: "4 / 3"
+              }}
+              className="
                 w-full
                 overflow-hidden
                 relative
-                mx-auto
-                px-2
                 border-2
                 border-black
-          "
-        >
-          <Image
-            // Update to the art from DALL-E
-            src="/images/card-parts/card-art/default-art.jpg"
-            fill={true}
-            sizes="100%"
-            alt="Card name"
-            className="w-full h-full"
-            style={{ objectFit: "cover" }}
-          />
-        </Box>
-        {/* Card text and flavor text */}
-        <Box
-          id="card-text-flavor"
-          sx={{ aspectRatio: "540 / 275" }}
-          className="
+              "
+            >
+              <Image
+                // Get DALL-E image URL from props
+                // pass in dynamic image URL
+                src="/images/card-parts/card-art/default-art.jpg"
+                fill={true}
+                sizes="100%"
+                alt={`${formCardData.cardName} card art`}
+                style={{ objectFit: "cover" }}
+              />
+            </Box>
+            {/* Card text and flavor text */}
+            <Box
+              id="card-text-flavor"
+              sx={{ aspectRatio: "540 / 275" }}
+              className={`
+                bg-${cardColorClass}-50
                 flex
                 flex-col
-                p-2
-                bg-gray-600
+                w-full
                 text-black
                 border-2
                 border-black
-                mx-2
-          "
-        >
-          {/* Card text */}
-          <Controller
-            name="cardText"
-            control={control}
-            render={({ field, fieldState }) => (
-              <TextField
-                {...field}
-                multiline
-                size="small"
-                variant="standard"
-                placeholder='Type "/" to insert a keyword ability.'
-                rows={4}
-                error={!!fieldState.error}
-                // helperText={fieldState.error ? fieldState.error.message : "Card text is required!"}
-                className="w-full"
+                p-2
+                gap-1
+              `}
+            >
+              {/* Card text */}
+              <Controller
+                name="cardText"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <TextField
+                    {...field}
+                    multiline
+                    size="small"
+                    variant="standard"
+                    rows={4}
+                    error={!!fieldState.error}
+                    placeholder={
+                      !fieldState.error ? 'Type "/" to insert a keyword ability.':
+                      "Card text is required!"
+                    }
+                    className={clsx("w-full text-white",
+                      {
+                        "!text-black": !fieldState.error,
+                        "!text-red-500": fieldState.error,
+                      }
+                    )}
+                    inputProps={{ maxLength: 200 }}
+                  />
+                )}
               />
-            )}
-          />
-          <Box className="bg-black h-[1px] w-full my-4" />
-          {/* Card flavor text */}
-          {formCardData.cardText.length <= 200 && (
-            <Controller
-              name="cardFlavorText"
-              control={control}
-              render={({ field, fieldState }) => (
-                <TextField
-                  {...field}
-                  multiline
-                  size="small"
-                  variant="standard"
-                  placeholder="Write some flavor text here."
-                  className="w-full"
-                  rows={2}
-                  error={!!fieldState.error}
-                  inputProps={{ maxLength: 75 }}
-                  // helperText={fieldState.error ? fieldState.error.message : "Card text is required!"}
-                  // InputProps={{ disableUnderline: true }} caused error
+              {/* Divider */}
+              <Box
+                className="
+                  card-text-divider
+                  h-[2px]
+                  w-full
+                  my-4
+                "
+              />
+              {/* Card flavor text */}
+              {formCardData.cardText.length <= 200 && (
+                <Controller
+                  name="cardFlavorText"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      multiline
+                      size="small"
+                      variant="standard"
+                      placeholder="Write some flavor text."
+                      className="w-full"
+                      rows={2}
+                      inputProps={{ maxLength: 75 }}
+                    />
+                  )}
                 />
               )}
-            />
-          )}
+            </Box>
+          </Box>
         </Box>
+        
+        
         {/* Card stats, grade, creator and copyright */}
         <Box
           id="card-stats-grade-creator-info"
-          sx={{ zIndex: 1 }}
           className="
-                        flex
-                        flex-row
-                        justify-between
-                        items-center
-                        w-full
-                        ml-auto
-                        mr-0
-                        pr-2
-                        -mt-8
-                        px-1
-                        rounded-tl-lg
-                "
+            flex
+            flex-row
+            justify-between
+            items-center
+            w-full
+            -mt-10
+            z-1
+          "
         >
           {/* Card attack */}
           <Box
             id="stats-attack"
             className="
-                            flex
-                            flex-col
-                            justify-center
-                            items-center
-                            relative
-                    "
+              flex
+              flex-col
+              justify-center
+              items-center
+              w-1/5
+              relative
+            "
           >
             {formCardData.cardType === "entity" && (
               <Controller
@@ -511,10 +591,10 @@ export default function NexusCardForm() {
             )}
             <Image
               src={`${cardPartPath.base}/card-parts${cardPartPath.stats}/attack.png`}
-              width={96}
-              height={72}
+              width={72}
+              height={60}
               alt="Card attack icon"
-              className="w-full h-full"
+              className="w-full h-full bg-red-500 p-0"
               // style={{ objectFit: "cover" }}
             />
           </Box>
@@ -522,22 +602,23 @@ export default function NexusCardForm() {
           <Box
             id="stats-grade-info"
             className="
-                            flex
-                            flex-col
-                            justify-center
-                            items-center
-                    "
+              flex
+              flex-col
+              justify-center
+              items-center
+              w-3/5
+            "
           >
             {/* Card grade */}
             <Box
               id="stats-grade"
               className="
-                                flex
-                                flex-col
-                                justify-start
-                                items-center
-                                px-2
-                        "
+                flex
+                flex-col
+                justify-start
+                items-center
+                w-full
+              "
             >
               <IconButton
                 aria-label="add cost"
@@ -555,25 +636,33 @@ export default function NexusCardForm() {
                 anchorEl={gradeAnchorEl}
                 handleClose={handleGradePopoverClose}
               />
+              {/* Card creator & copyright */}
               <Box
                 className="
-                                flex
-                                flex-row
-                                justify-between
-                                items-center
-                                text-white
-                                text-xs
-                                font-medium
-                            "
+                  flex
+                  flex-row
+                  justify-between
+                  items-center
+                  w-full
+                  text-white
+                  text-xs
+                  -mt-4
+                "
               >
-                <Typography variant="caption">
-                  Creator:{" "}
+                <Typography
+                  variant="caption"
+                >
+                  {/* Creator: {" "} */}
                   {formCardData.cardCreator
                     ? formCardData.cardCreator
                     : "Card Creator"}
                 </Typography>
-                <Typography variant="caption">
-                  Copyright Nexus {new Date().getFullYear()} ©
+                <Typography
+                  variant="caption"
+                >
+                  © Nexus {
+                    new Date().getFullYear()
+                  } 
                 </Typography>
               </Box>
             </Box>
@@ -582,12 +671,13 @@ export default function NexusCardForm() {
           <Box
             id="stats-defense"
             className="
-                            flex
-                            flex-col
-                            justify-center
-                            items-center
-                            relative
-                    "
+              flex
+              flex-col
+              justify-center
+              items-center
+              w-1/5
+              relative
+            "
           >
             {formCardData.cardType === "entity" && (
               <Controller
@@ -601,7 +691,10 @@ export default function NexusCardForm() {
                     placeholder="0"
                     className="w-full"
                     error={!!fieldState.error}
-                    inputProps={{ maxLength: 2, disableUnderline: true }}
+                    inputProps={{
+                      maxLength: 2,
+                      disableUnderline: true
+                    }}
                     helperText={
                       fieldState.error
                         ? fieldState.error.message
@@ -614,8 +707,8 @@ export default function NexusCardForm() {
             )}
             <Image
               src={`${cardPartPath.base}/card-parts${cardPartPath.stats}/defense.png`}
-              width={96}
-              height={72}
+              width={72}
+              height={60}
               alt="Card defense icon"
               className="w-full h-full"
               // style={{ objectFit: "cover" }}

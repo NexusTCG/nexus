@@ -31,6 +31,6 @@ export default function determineColorClass(
         case "multi":
             return "multi";
         default:
-            return "default";
+            return "slate";
     };
 };
