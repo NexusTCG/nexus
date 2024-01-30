@@ -57,37 +57,37 @@ export default function NexusCardForm() {
 
   // Determine color type based on cost
   useEffect(() => {
-    console.log(`Current color type: ${cardColorType}`);
     const colorType = determineColorType(
       activeCardCost,
       activeCardType
     );
+    console.log(`Current color type: ${cardColorType}`);
     setCardColorType(colorType);
   }, [activeCardCost]);
 
   // Determine color based on cost and color type
   useEffect(() => {
-    console.log(`Current color: ${cardColor}`);
     const color = determineColor(
       activeCardCost,
       cardColorType || ""
     );
+    console.log(`Current color: ${cardColor}`);
     setCardColor(color);
   }, [activeCardCost, cardColorType]);
 
   // Determine color class based on color type and color
   useEffect(() => {
+    const colorClass = determineColorClass(
+      activeCardType,
+      cardColorType || "",
+      cardColor || "",
+    );
     console.log(`
       Current color classes:
       ${cardColorClass50},
       ${cardColorClass100},
       ${cardColorClass400}
     `);
-    const colorClass = determineColorClass(
-      activeCardType,
-      cardColorType || "",
-      cardColor || "",
-    );
     setCardColorClass50(`bg-${colorClass}-50`);
     setCardColorClass100(`bg-${colorClass}-100`);
     setCardColorClass400(`bg-${colorClass}-400`);
@@ -95,12 +95,12 @@ export default function NexusCardForm() {
 
   // Determine bg image based on color type and color
   useEffect(() => {
-    console.log(`Current bg image: ${cardBgImage}`);
     const bgImage = determineBgImage(
       activeCardType,
       cardColorType || "",
       cardColor || "",
     );
+    console.log(`Current bg image: ${cardBgImage}`);
     setCardBgImage(bgImage);
   }, [activeCardType, cardColorType, cardColor]);
 
