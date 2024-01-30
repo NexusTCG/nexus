@@ -96,6 +96,13 @@ export default function NexusCardForm() {
     console.log(`Current bg image: ${cardBgImage}`);
   }, [activeCardType, cardColorType, cardColor]);
 
+  useEffect(() => {
+    if (formCardData.cardType === "node") {
+      setCardColorType(null);
+      setCardColor(null);
+    };
+  }, [formCardData.cardType])
+
   // Handle energy cost popover
   function handleEnergyCostPopoverOpen(
     event: React.MouseEvent<HTMLButtonElement>
@@ -138,7 +145,6 @@ export default function NexusCardForm() {
       {/* Card frame */}
       <Box
         id="card-frame"
-        // sx={{ backgroundImage: `${cardBgImage}` }}
         className={`
           flex
           flex-col
@@ -146,7 +152,7 @@ export default function NexusCardForm() {
           h-full
           p-2
           rounded-lg
-          bg-[url(${cardBgImage})]
+          ${cardBgImage}
         `}
       >
         {/* Card header */}
@@ -155,19 +161,18 @@ export default function NexusCardForm() {
           sx={{
             aspectRatio: "55 / 5",
           }}
-          // set to cardColorClass object .number
           className={`
-                        bg-${cardColorClass}-500 
-                        flex
-                        flex-col
-                        w-full
-                        gap-1
-                        py-1
-                        px-2
-                        border-2
-                        border-black
-                        rounded-md
-                    `}
+              bg-${cardColorClass}-500 
+              flex
+              flex-col
+              w-full
+              gap-1
+              py-1
+              px-2
+              border-2
+              border-black
+              rounded-md
+          `}
         >
           {/* Card name and cost */}
           <Box
