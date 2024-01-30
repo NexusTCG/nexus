@@ -100,7 +100,7 @@ export default function EnergyCostPopover({
               {`Energy value: ${watchCardEnergyValue}`}
             </Typography>
           )}
-        </Box>
+        </Box>xw
         
         <Box
           className="

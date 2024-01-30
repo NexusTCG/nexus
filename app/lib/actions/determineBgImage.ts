@@ -3,7 +3,7 @@ export default function determineBgImage(
     cardColorType: string,
     cardColor: string,
 ) {
-    const path = "/images/card-parts/card-frames/";
+    const path = "public/images/card-parts/card-frames/";
 
     if (!cardColor && activeCardType === "node") {
         return `${path}other/node.png`;
@@ -38,5 +38,7 @@ export default function determineBgImage(
                 return `${path}other/effect/effect-default.png`;
             };
             return `${path}other/default.png`;
+            // public/images/card-parts/card-frames/other/default.png
+            
     };
 };

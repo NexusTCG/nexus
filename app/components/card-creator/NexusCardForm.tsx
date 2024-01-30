@@ -2,9 +2,18 @@
 
 import React, { useState, useEffect } from "react";
 import { useFormContext, Controller } from "react-hook-form";
+
+// Types & data
 import {
-  CardFormDataType
-} from "@/app/utils/types/types";
+  cardSuperTypeOptions,
+  cardTypeOptions,
+  cardSubTypeOptions,
+  cardSpeedOptions
+} from "@/app/utils/data/cardCreatorOptions";
+import { CardFormDataType } from "@/app/utils/types/types";
+import { cardPartPath } from "@/app/utils/consts/cardPartPaths";
+
+// Imported components
 import {
   Box,
   FormControl,
@@ -15,37 +24,23 @@ import {
   Select,
   IconButton
 } from "@mui/material/";
-import {
-  cardSuperTypeOptions,
-  cardTypeOptions,
-  cardSubTypeOptions,
-  cardSpeedOptions
-} from "@/app/utils/data/cardCreatorOptions";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import Image from "next/image";
+
+// Custom actions
 import determineColorType from "@/app/lib/actions/determineColorType";
 import determineColor from "@/app/lib/actions/determineColor";
 import determineColorClass from "@/app/lib/actions/determineColorClass";
 import determineBgImage from "@/app/lib/actions/determineBgImage";
 
-import AddCircleIcon from "@mui/icons-material/AddCircle";
+// Custom components
 import EnergyCostPopover from "@/app/components/card-creator/EnergyCostPopover";
-import GradePopover from "@/app/components/card-creator/GradePopover";
-import Image from "next/image";
-
-const cardPartPath = {
-  base: "/images",
-  parts: "/card-parts",
-  frame: "/card-frames",
-  icon: "/card-icons",
-  grade: "/card-grades",
-  stats: "/card-stats",
-  art: "/card-art",
-};
+import GradePopover from "@/app/components/card-creator/GradePopover"
 
 export default function NexusCardForm() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { register, setValue, control, watch } =
     useFormContext<CardFormDataType>();
-
   const formCardData = watch();
   const activeCardType = formCardData.cardType;
 
@@ -58,43 +53,47 @@ export default function NexusCardForm() {
 
   // Determine color type based on cost
   useEffect(() => {
+    console.log(`Determining new color type. Current color type: ${cardColorType}`)
     const colorType = determineColorType(
       formCardData.cardEnergyCost
     );
     setCardColorType(colorType);
-    console.log(colorType);
+    console.log(`Current color type: ${cardColorType}`);
   }, [formCardData.cardEnergyCost]);
 
   // Determine color based on cost and color type
   useEffect(() => {
+    console.log(`Determining new color. Current color ${cardColor}`)
     const color = determineColor(
       formCardData.cardEnergyCost,
       cardColorType || ""
     );
     setCardColor(color);
-    console.log(color);
+    console.log(`Current color: ${cardColor}`);
   }, [formCardData.cardEnergyCost, cardColorType]);
 
   // Determine color class based on color type and color
   useEffect(() => {
+    console.log(`Determining new color class. Current color class: ${cardColorClass}`)
     const colorClass = determineColorClass(
       activeCardType,
       cardColorType || "",
       cardColor || "",
     );
     setCardColorClass(colorClass);
-    console.log(colorClass);
+    console.log(`Current color class: ${cardColorClass}`);
   }, [activeCardType, cardColorType, cardColor]); 
 
   // Determine bg image based on color type and color
   useEffect(() => {
+    console.log(`Determining new bg image. Current bg image: ${cardBgImage}`)
     const bgImage = determineBgImage(
       activeCardType,
       cardColorType || "",
       cardColor || "",
     );
     setCardBgImage(bgImage);
-    console.log(bgImage);
+    console.log(`Current bg image: ${cardBgImage}`);
   }, [activeCardType, cardColorType, cardColor]);
 
   // Handle energy cost popover
@@ -124,30 +123,31 @@ export default function NexusCardForm() {
       id="card-border"
       sx={{
         aspectRatio: "2.5 / 3.5",
-        maxWidth: "400px",
+        maxWidth: "480px",
       }}
       className="
-                flex
-                flex-col
-                justify-stary
-                items-center
-                p-5
-                rounded-2xl
-                bg-black
-        "
+        flex
+        flex-col
+        justify-stary
+        items-center
+        p-5
+        rounded-2xl
+        bg-black
+      "
     >
       {/* Card frame */}
       <Box
         id="card-frame"
-        sx={{ backgroundImage: `${cardBgImage}` }}
-        className="
-                    flex
-                    flex-col
-                    w-full
-                    h-full
-                    p-2
-                    rounded-lg
-            "
+        // sx={{ backgroundImage: `${cardBgImage}` }}
+        className={`
+          flex
+          flex-col
+          w-full
+          h-full
+          p-2
+          rounded-lg
+          bg-[url(${cardBgImage})]
+        `}
       >
         {/* Card header */}
         <Box
