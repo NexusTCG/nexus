@@ -18,11 +18,15 @@ import clsx from "clsx";
 type EnergyCostPopoverProps = {
   anchorEl: HTMLElement | null;
   handleClose: () => void;
+  energyCostChangeCounter: number;
+  setEnergyCostChangeCounter: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export default function EnergyCostPopover({
   anchorEl,
   handleClose,
+  energyCostChangeCounter,
+  setEnergyCostChangeCounter
 }: EnergyCostPopoverProps) {
 
   const {
@@ -71,6 +75,10 @@ export default function EnergyCostPopover({
         });
       await trigger("cardEnergyCost");
       await trigger("cardEnergyValue");
+      
+      // Force card re-render by tracking each change
+      setEnergyCostChangeCounter(energyCostChangeCounter + 1);
+
       console.log(`Color values: ${JSON.stringify(watchCardEnergyCost)}`)
       console.log(`Total value: ${watchCardEnergyValue}`)
     };

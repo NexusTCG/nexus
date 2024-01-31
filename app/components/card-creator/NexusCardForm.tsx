@@ -55,6 +55,7 @@ export default function NexusCardForm() {
   const [cardColorClass100, setCardColorClass100] = useState<string>("");
   const [cardColorClass400, setCardColorClass400] = useState<string>("");
   const [cardBgImage, setCardBgImage] = useState<string | null>(null);
+  const [energyCostChangeCounter, setEnergyCostChangeCounter] = useState<number>(0);
 
   // Determine color type based on cost
   useEffect(() => {
@@ -64,7 +65,7 @@ export default function NexusCardForm() {
     );
     console.log(`Current color type: ${cardColorType}`);
     setCardColorType(colorType);
-  }, [activeCardCost, activeCardType]);
+  }, [activeCardCost, activeCardType, energyCostChangeCounter]);
 
   // Determine color based on cost and color type
   useEffect(() => {
@@ -227,6 +228,8 @@ export default function NexusCardForm() {
             <EnergyCostPopover
               anchorEl={energyCostAnchorEl}
               handleClose={handleEnergyCostPopoverClose}
+              energyCostChangeCounter={energyCostChangeCounter}
+              setEnergyCostChangeCounter={setEnergyCostChangeCounter}
             />
           </Box>
           {/* Card types and speed */}
