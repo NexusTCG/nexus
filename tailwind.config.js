@@ -1,33 +1,46 @@
 /* eslint-disable no-undef */
 /** @type {import('tailwindcss').Config} */
 
+function generateColorClasses(baseColor) {
+  return [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
+  .flatMap(shade => [
+    `bg-${baseColor}-${shade}`,
+  ]);
+}
+
+const baseColors = [
+  "yellow",
+  "sky",
+  "violet",
+  "red",
+  "green",
+  "slate",
+  "gray",
+  "amber",
+  "multi",
+  "yellow-blue",
+  "yellow-purple",
+  "yellow-red",
+  "yellow-green",
+  "blue-purple",
+  "blue-red",
+  "blue-green",
+  "purple-red",
+  "purple-green",
+  "red-green"
+];
+
+const safelist = baseColors.flatMap(
+  color => generateColorClasses(color)
+);
+
 module.exports = {
   mode: 'jit',
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  safelist: [
-    ...generateColorClasses("yellow"),
-    ...generateColorClasses("sky"),
-    ...generateColorClasses("violet"),
-    ...generateColorClasses("red"),
-    ...generateColorClasses("green"),
-    ...generateColorClasses("slate"),
-    ...generateColorClasses("gray"),
-    ...generateColorClasses("amber"),
-    ...generateColorClasses("multi"),
-    ...generateColorClasses("yellow-blue"),
-    ...generateColorClasses("yellow-purple"),
-    ...generateColorClasses("yellow-red"),
-    ...generateColorClasses("yellow-green"),
-    ...generateColorClasses("blue-purple"),
-    ...generateColorClasses("blue-red"),
-    ...generateColorClasses("blue-green"),
-    ...generateColorClasses("purple-red"),
-    ...generateColorClasses("purple-green"),
-    ...generateColorClasses("red-green"),
-  ],
+  safelist: safelist,
   theme: {
     extend: {
       backgroundImage: {
@@ -228,7 +241,3 @@ module.exports = {
   },
   plugins: [require("@tailwindcss/aspect-ratio")],
 };
-
-function generateColorClasses(baseColor) {
-  return [50, 100, 400, 500, 600, 700, 800, 900, 950].map(shade => `bg-${baseColor}-${shade}`);
-}

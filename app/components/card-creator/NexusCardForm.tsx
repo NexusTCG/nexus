@@ -33,6 +33,7 @@ import determineColorType from "@/app/lib/actions/determineColorType";
 import determineColor from "@/app/lib/actions/determineColor";
 import determineColorClass from "@/app/lib/actions/determineColorClass";
 import determineBgImage from "@/app/lib/actions/determineBgImage";
+import resetEnergyCost from "@/app/lib/actions/resetEnergyCost";
 
 // Custom components
 import EnergyCostPopover from "@/app/components/card-creator/EnergyCostPopover";
@@ -63,7 +64,7 @@ export default function NexusCardForm() {
     );
     console.log(`Current color type: ${cardColorType}`);
     setCardColorType(colorType);
-  }, [activeCardCost]);
+  }, [activeCardCost, activeCardType]);
 
   // Determine color based on cost and color type
   useEffect(() => {
@@ -103,15 +104,6 @@ export default function NexusCardForm() {
     console.log(`Current bg image: ${cardBgImage}`);
     setCardBgImage(bgImage);
   }, [activeCardType, cardColorType, cardColor]);
-
-  // Reset color type, color, color class and bg image
-  // when card type changes to node
-  useEffect(() => {
-    if (formCardData.cardType === "node") {
-      setCardColorType(null);
-      setCardColor(null);
-    };
-  }, [formCardData.cardType])
 
   // Handle energy cost popover
   function handleEnergyCostPopoverOpen(
@@ -314,6 +306,13 @@ export default function NexusCardForm() {
                       label="Type"
                       size="small"
                       className="w-full"
+                      onChange={(e) => {
+                        field.onChange(e);
+                        if (e.target.value === "node") {
+                          const newEnergyCost = resetEnergyCost(activeCardCost);
+                          setValue("cardEnergyCost", newEnergyCost);
+                        };
+                      }}
                     >
                       {Object.entries(cardTypeOptions).map(([value, label]) => (
                         <MenuItem key={value} value={value}>

@@ -24,6 +24,7 @@ export default function EnergyCostPopover({
   anchorEl,
   handleClose,
 }: EnergyCostPopoverProps) {
+
   const {
     setValue,
     getValues,
@@ -43,21 +44,37 @@ export default function EnergyCostPopover({
     if (color !== "void") newCost = Math.min(newCost, 6);
     else newCost = Math.min(newCost, 15);
 
-    const updatedEnergyCosts = { ...energyCosts, [color]: newCost };
+    const updatedEnergyCosts = {
+      ...energyCosts,
+      [color]: newCost
+    };
 
-    const newTotalEnergyValue = Object.values(updatedEnergyCosts).reduce(
-      (acc: number, value) => acc + (value as number),
-      0,
+    const newTotalEnergyValue = Object
+      .values(updatedEnergyCosts)
+      .reduce(
+        (acc: number, value) =>
+        acc + (value as number),
+        0,
     );
 
-    if (typeof newTotalEnergyValue === "number" && newTotalEnergyValue <= 15) {
-      setValue("cardEnergyCost." + color, newCost, { shouldValidate: true });
-      setValue("cardEnergyValue", newTotalEnergyValue, { shouldValidate: true });
+    if (
+      typeof newTotalEnergyValue === "number"
+      && newTotalEnergyValue <= 15
+    ) {
+      setValue("cardEnergyCost." +
+        color, newCost, {
+          shouldValidate: true
+        });
+      setValue("cardEnergyValue",
+        newTotalEnergyValue, {
+          shouldValidate: true
+        });
       await trigger("cardEnergyCost");
-    }
-    console.log(`Color values: ${JSON.stringify(watchCardEnergyCost)}`)
-    console.log(`Total value: ${watchCardEnergyValue}`)
-  }
+      await trigger("cardEnergyValue");
+      console.log(`Color values: ${JSON.stringify(watchCardEnergyCost)}`)
+      console.log(`Total value: ${watchCardEnergyValue}`)
+    };
+  };
 
   return (
     <Popover
