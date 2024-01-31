@@ -41,7 +41,7 @@ import GradePopover from "@/app/components/card-creator/GradePopover"
 
 export default function NexusCardForm() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { register, setValue, control, watch } =
+  const { setValue, control, watch } =
     useFormContext<CardFormDataType>();
   const formCardData = watch();
   const activeCardCost = watch("cardEnergyCost");
@@ -55,29 +55,48 @@ export default function NexusCardForm() {
   const [cardColorClass100, setCardColorClass100] = useState<string>("");
   const [cardColorClass400, setCardColorClass400] = useState<string>("");
   const [cardBgImage, setCardBgImage] = useState<string | null>(null);
-  const [energyCostChangeCounter, setEnergyCostChangeCounter] = useState<number>(0);
 
-  // Determine color type based on cost
+  const [energyCostChangeCounter, setEnergyCostChangeCounter] = useState<number>(0);
+  const [colorTypeChangeCounter, setColorTypeChangeCounter] = useState<number>(0);
+  const [colorChangeCounter, setColorChangeCounter] = useState<number>(0);
+
+  // useEffects to determine color type based on cost
   useEffect(() => {
     const colorType = determineColorType(
       activeCardCost,
       activeCardType
     );
     console.log(`Current color type: ${cardColorType}`);
+    console.log(`colorTypeChangeCounter: ${colorTypeChangeCounter}`);
     setCardColorType(colorType);
-  }, [activeCardCost, activeCardType, energyCostChangeCounter]);
+    setColorTypeChangeCounter(colorTypeChangeCounter + 1);
+    console.log(`Current color type: ${cardColorType}`);
+    console.log(`colorTypeChangeCounter: ${colorTypeChangeCounter}`);
+  }, [
+    activeCardCost,
+    activeCardType,
+    energyCostChangeCounter
+  ]);
 
-  // Determine color based on cost and color type
+  // useEffects to determine color based on cost and color type
   useEffect(() => {
     const color = determineColor(
       activeCardCost,
       cardColorType || ""
     );
-    console.log(`Current color: ${cardColor}`);
+    console.log(`colorClass: ${cardColor}`);
+    console.log(`colorTypeChangeCounter: ${colorChangeCounter}`);
     setCardColor(color);
-  }, [activeCardCost, cardColorType]);
+    setColorChangeCounter(colorChangeCounter + 1);
+    console.log(`colorClass: ${cardColor}`);
+    console.log(`colorTypeChangeCounter: ${colorChangeCounter}`);
+  }, [
+    activeCardCost,
+    cardColorType,
+    colorTypeChangeCounter
+  ]);
 
-  // Determine color class based on color type and color
+  // useEffects to determine color class based on color type and color
   useEffect(() => {
     const colorClass = determineColorClass(
       activeCardType,
@@ -90,21 +109,38 @@ export default function NexusCardForm() {
       ${cardColorClass100},
       ${cardColorClass400}
     `);
+    console.log(`cardColorClass: ${cardColorClass50}, ${cardColorClass100}, ${cardColorClass400}`)
+    console.log(`colorChangeCounter: ${colorChangeCounter}`);
     setCardColorClass50(`bg-${colorClass}-50`);
     setCardColorClass100(`bg-${colorClass}-100`);
     setCardColorClass400(`bg-${colorClass}-400`);
-  }, [activeCardType, cardColorType, cardColor]); 
+    console.log(`cardColorClass: ${cardColorClass50}, ${cardColorClass100}, ${cardColorClass400}`)
+    console.log(`colorChangeCounter (dep): ${colorChangeCounter}`);
+  }, [
+    activeCardType,
+    cardColorType,
+    cardColor,
+    colorChangeCounter
+  ]); 
 
-  // Determine bg image based on color type and color
+  // useEffects to determine bg image based on color type and color
   useEffect(() => {
     const bgImage = determineBgImage(
       activeCardType,
       cardColorType || "",
       cardColor || "",
     );
-    console.log(`Current bg image: ${cardBgImage}`);
+    console.log(`bgImage: ${cardBgImage}`);
+    console.log(`colorChangeCounter: ${colorChangeCounter}`);
     setCardBgImage(bgImage);
-  }, [activeCardType, cardColorType, cardColor]);
+    console.log(`bgImage: ${cardBgImage}`);
+    console.log(`colorChangeCounter (dep): ${colorChangeCounter}`);
+  }, [
+    activeCardType,
+    cardColorType,
+    cardColor,
+    colorChangeCounter
+  ]);
 
   // Handle energy cost popover
   function handleEnergyCostPopoverOpen(

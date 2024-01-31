@@ -13,7 +13,7 @@ const baseColors = [
   "sky",
   "violet",
   "red",
-  "green",
+  "lime",
   "slate",
   "gray",
   "amber",
@@ -46,27 +46,27 @@ module.exports = {
       backgroundImage: {
         // Multi: yellow-blue-purple-red-green
         "multi-50":
-          "radial-gradient(ellipse at center, #fefce8 0%, #e0f2fe 20%, #f3e8ff 40%, #fee2e2 60%, #f7fee7 80%)",
+          "linear-gradient(45deg, #fefce8 0%, #e0f2fe 20%, #f3e8ff 40%, #fee2e2 60%, #f7fee7 80%)",
         "multi-100":
-          "radial-gradient(ellipse at center, #fef9c3 0%, #bae6fd 20%, #ede9fe 40%, #fecaca 60%, #ecfccb 80%)",
+          "linear-gradient(45deg, #fef9c3 0%, #bae6fd 20%, #ede9fe 40%, #fecaca 60%, #ecfccb 80%)",
         "multi-200":
-          "radial-gradient(ellipse at center, #fef08a 0%, #93c5fd 20%, #ddd6fe 40%, #fca5a5 60%, #d9f99d 80%)",
+          "linear-gradient(45deg, #fef08a 0%, #93c5fd 20%, #ddd6fe 40%, #fca5a5 60%, #d9f99d 80%)",
         "multi-300":
-          "radial-gradient(ellipse at center, #fde047 0%, #60a5fa 20%, #c4b5fd 40%, #f87171 60%, #bef264 80%)",
+          "linear-gradient(45deg, #fde047 0%, #60a5fa 20%, #c4b5fd 40%, #f87171 60%, #bef264 80%)",
         "multi-400":
-          "radial-gradient(ellipse at center, #facc15 0%, #3b82f6 20%, #a78bfa 40%, #f87171 60%, #a3e635 80%)",
+          "linear-gradient(45deg, #facc15 0%, #3b82f6 20%, #a78bfa 40%, #f87171 60%, #a3e635 80%)",
         "multi-500":
-          "radial-gradient(ellipse at center, #eab308 0%, #2563eb 20%, #8b5cf6 40%, #ef4444 60%, #84cc16 80%)",
+          "linear-gradient(45deg, #eab308 0%, #2563eb 20%, #8b5cf6 40%, #ef4444 60%, #84cc16 80%)",
         "multi-600":
-          "radial-gradient(ellipse at center, #ca8a04 0%, #1d4ed8 20%, #7c3aed 40%, #dc2626 60%, #65a30d 80%)",
+          "linear-gradient(45deg, #ca8a04 0%, #1d4ed8 20%, #7c3aed 40%, #dc2626 60%, #65a30d 80%)",
         "multi-700":
-          "radial-gradient(ellipse at center, #a16207 0%, #1e40af 20%, #6d28d9 40%, #b91c1c 60%, #4d7c0f 80%)",
+          "linear-gradient(45deg, #a16207 0%, #1e40af 20%, #6d28d9 40%, #b91c1c 60%, #4d7c0f 80%)",
         "multi-800":
-          "radial-gradient(ellipse at center, #854d0e 0%, #1e3a8a 20%, #5b21b6 40%, #991b1b 60%, #3f6212 80%)",
+          "linear-gradient(45deg, #854d0e 0%, #1e3a8a 20%, #5b21b6 40%, #991b1b 60%, #3f6212 80%)",
         "multi-900":
-          "radial-gradient(ellipse at center, #713f12 0%, #1e3a8a 20%, #4c1d95 40%, #7f1d1d 60%, #365314 80%)",
+          "linear-gradient(45deg, #713f12 0%, #1e3a8a 20%, #4c1d95 40%, #7f1d1d 60%, #365314 80%)",
         "multi-950":
-          "radial-gradient(ellipse at center, #422006 0%, #082f49 20%, #2e1065 40%, #450a0a 60%, #1a2e05 80%)",
+          "linear-gradient(45deg, #422006 0%, #082f49 20%, #2e1065 40%, #450a0a 60%, #1a2e05 80%)",
         // Dual: yellow-blue
         "yellow-blue-50": "linear-gradient(90deg, #fefce8 100%, #e0f2fe 100%)",
         "yellow-blue-100": "linear-gradient(90deg, #fef9c3 100%, #bae6fd 100%)",
