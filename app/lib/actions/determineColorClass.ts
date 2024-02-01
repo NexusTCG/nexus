@@ -25,7 +25,37 @@ export default function determineColorClass(
             };
 
         case "dual":
-            return cardColor; // yellowBlue, yellowPurple, etc.
+            switch (cardColor) {
+                case "yellowBlue":
+                    return "yellowBlue";
+
+                case "yellowPurple":
+                    return "yellowPurple";
+
+                case "yellowRed":
+                    return "yellowRed";
+
+                case "yellowGreen":
+                    return "yellowGreen";
+
+                case "bluePurple":
+                    return "bluePurple";
+
+                case "blueRed":
+                    return "blueRed";
+
+                case "blueGreen":
+                    return "blueGreen";
+
+                case "purpleRed":
+                    return "purpleRed";
+
+                case "purpleGreen":
+                    return "purpleGreen";
+
+                default:
+                    return "redGreen"; // redGreen
+            };
 
         case "multi":
             return "multi"

@@ -161,6 +161,9 @@ export default function NexusCardForm() {
           h-full
           rounded-lg
           ${cardBgImage}
+          bg-cover
+          bg-center
+          bg-no-repeat
         `}
       >
         {/* Card header */}
@@ -214,29 +217,47 @@ export default function NexusCardForm() {
                       "!text-red-500": fieldState.error,
                     }
                   )}
+                  sx={{
+                    // Apply styles to the input element
+                    '& .MuiInputBase-input': {
+                      color: 'black', // change text color
+                    },
+                    // Apply styles to the notched outline
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'black', // change border color
+                    },
+                    // Change styles for the notched outline on hover
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'lightblue', // change border color on hover
+                    },
+                    // Change styles for the notched outline when focused
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'blue', // change border color when focused
+                    },
+                  }}
                 />
               )}
             />
             {/* Card cost */}
             <IconButton
-              aria-label="add cost"
-              size="large"
-              onClick={handleEnergyCostPopoverOpen}
-            >
-              <AddCircleIcon />
-            </IconButton>
-            <EnergyCostPopover
-              anchorEl={energyCostAnchorEl}
-              handleClose={handleEnergyCostPopoverClose}
-              energyCostChangeCounter={energyCostChangeCounter}
-              setEnergyCostChangeCounter={setEnergyCostChangeCounter}
-            />
+                aria-label="add cost"
+                size="large"
+                onClick={handleEnergyCostPopoverOpen}
+              >
+                <AddCircleIcon />
+              </IconButton>
+              <EnergyCostPopover
+                anchorEl={energyCostAnchorEl}
+                handleClose={handleEnergyCostPopoverClose}
+                energyCostChangeCounter={energyCostChangeCounter}
+                setEnergyCostChangeCounter={setEnergyCostChangeCounter}
+              />
           </Box>
           {/* Card types and speed */}
           <Box
             id="card-header-types-speed"
             className={`
-              ${colorMapping[cardColorClass as keyof typeof colorMapping]?.[200] ?? "bg-slate-200"}
+            ${colorMapping[cardColorClass as keyof typeof colorMapping]?.[200] ?? "bg-slate-200"}
               flex
               flex-row
               w-full
@@ -276,6 +297,24 @@ export default function NexusCardForm() {
                         label="Super type"
                         size="small"
                         className="w-full"
+                        sx={{
+                          // Apply styles to the input element
+                          '& .MuiInputBase-input': {
+                            color: 'black', // Text color
+                          },
+                          // Apply styles to the notched outline
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'black', // Border color
+                          },
+                          // Change styles for the notched outline on hover
+                          '&:hover .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'lightblue', // Border color on hover
+                          },
+                          // Change styles for the notched outline when focused
+                          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'blue', // Border color when focused
+                          },
+                        }}
                       >
                         {Object.entries(cardSuperTypeOptions).map(
                           ([value, label]) => (
@@ -308,6 +347,24 @@ export default function NexusCardForm() {
                       label="Type"
                       size="small"
                       className="w-full"
+                      sx={{
+                        // Apply styles to the input element
+                        '& .MuiInputBase-input': {
+                          color: 'black', // Text color
+                        },
+                        // Apply styles to the notched outline
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'black', // Border color
+                        },
+                        // Change styles for the notched outline on hover
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'lightblue', // Border color on hover
+                        },
+                        // Change styles for the notched outline when focused
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'blue', // Border color when focused
+                        },
+                      }}
                       onChange={(e) => {
                         field.onChange(e);
                         if (e.target.value === "node") {
@@ -351,6 +408,24 @@ export default function NexusCardForm() {
                         value={Array.isArray(field.value) ? field.value : []}
                         label="Sub type"
                         size="small"
+                        sx={{
+                          // Apply styles to the input element
+                          '& .MuiInputBase-input': {
+                            color: 'black', // Text color
+                          },
+                          // Apply styles to the notched outline
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'black', // Border color
+                          },
+                          // Change styles for the notched outline on hover
+                          '&:hover .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'lightblue', // Border color on hover
+                          },
+                          // Change styles for the notched outline when focused
+                          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'blue', // Border color when focused
+                          },
+                        }}
                         renderValue={(selected) => selected.join(' ')}
                       >
                         {formCardData.cardType === "entity" &&
@@ -404,6 +479,24 @@ export default function NexusCardForm() {
                       value={Array.isArray(field.value) ? field.value : []}
                       label="Speed"
                       size="small"
+                      sx={{
+                        // Apply styles to the input element
+                        '& .MuiInputBase-input': {
+                          color: 'black', // Text color
+                        },
+                        // Apply styles to the notched outline
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'black', // Border color
+                        },
+                        // Change styles for the notched outline on hover
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'lightblue', // Border color on hover
+                        },
+                        // Change styles for the notched outline when focused
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'blue', // Border color when focused
+                        },
+                      }}
                     >
                       {Object.entries(cardSpeedOptions)
                         .map(([value, label]) => (
@@ -424,7 +517,6 @@ export default function NexusCardForm() {
         <Box
           id="card-image-content-outer"
           className={`
-            ${colorMapping[cardColorClass as keyof typeof colorMapping]?.[400] ?? "bg-slate-400"}
             flex
             flex-col
             w-full
@@ -520,6 +612,24 @@ export default function NexusCardForm() {
                     inputProps={{
                       maxLength: 200
                     }}
+                    sx={{
+                      // Apply styles to the input element
+                      '& .MuiInputBase-input': {
+                        color: 'black', // change text color
+                      },
+                      // Apply styles to the notched outline
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'black', // change border color
+                      },
+                      // Change styles for the notched outline on hover
+                      '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'lightblue', // change border color on hover
+                      },
+                      // Change styles for the notched outline when focused
+                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'blue', // change border color when focused
+                      },
+                    }}
                   />
                 )}
               />
@@ -549,6 +659,24 @@ export default function NexusCardForm() {
                       inputProps={{
                         maxLength: 75
                       }}
+                      sx={{
+                        // Apply styles to the input element
+                        '& .MuiInputBase-input': {
+                          color: 'black', // change text color
+                        },
+                        // Apply styles to the notched outline
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'black', // change border color
+                        },
+                        // Change styles for the notched outline on hover
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'lightblue', // change border color on hover
+                        },
+                        // Change styles for the notched outline when focused
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'blue', // change border color when focused
+                        },
+                      }}
                     />
                   )}
                 />
@@ -570,7 +698,7 @@ export default function NexusCardForm() {
           "
         >
           {/* Card attack */}
-          <Box
+          {formCardData.cardType === "entity" && (<Box
             id="stats-attack"
             className="
               flex
@@ -581,46 +709,71 @@ export default function NexusCardForm() {
               relative
             "
           >
-            {formCardData.cardType === "entity" && (
-              <Controller
-                name="cardAttack"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <TextField
-                    {...field}
-                    size="small"
-                    variant="standard"
-                    placeholder="0"
-                    className="w-full"
-                    error={!!fieldState.error}
-                    inputProps={{
-                      maxLength: 2
-                    }}
-                    // add logic to only allow for numbers
-                    // helperText={fieldState.error ? fieldState.error.message : "Card text is required!"}
-                    // InputProps={{ disableUnderline: true }} caused error
-                  />
-                )}
-              />
-            )}
+            <Controller
+              name="cardAttack"
+              control={control}
+              render={({ field, fieldState }) => (
+                <TextField
+                  {...field}
+                  size="small"
+                  variant="standard"
+                  placeholder="0"
+                  className="
+                    flex
+                    justify-center
+                    items-center
+                    w-full
+                    absolute
+                    z-10
+                    top-0
+                    bottom-0
+                    right-0
+                    left-0
+                    text-center
+                    px-6
+                  "
+                  error={!!fieldState.error}
+                  inputProps={{
+                    maxLength: 2
+                  }}
+                  sx={{
+                    // Apply styles to the input element
+                    '& .MuiInputBase-input': {
+                      color: 'black', // change text color
+                    },
+                    // Apply styles to the notched outline
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'black', // change border color
+                    },
+                    // Change styles for the notched outline on hover
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'lightblue', // change border color on hover
+                    },
+                    // Change styles for the notched outline when focused
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'blue', // change border color when focused
+                    },
+                  }}
+                  // add logic to only allow for numbers
+                  // helperText={fieldState.error ? fieldState.error.message : "Card text is required!"}
+                  // InputProps={{ disableUnderline: true }} caused error
+                />
+              )}
+            />
             <Image
               src={`${cardPartPath.base}/card-parts${cardPartPath.stats}/attack.png`}
               width={72}
               height={60}
               alt="Card attack icon"
-              className="w-full h-full bg-red-500 p-0"
+              className="w-full h-full"
             />
-          </Box>
+          </Box>)}
           {/* Card grade + info */}
           <Box
             id="stats-grade-info"
-            className="
-              flex
-              flex-col
-              justify-center
-              items-center
-              w-3/5
-            "
+            className={clsx("flex flex-col justify-center items-center",
+                  formCardData.cardType !== "entity" ? "w-full" : "w-3/5"
+            )}
           >
             {/* Card grade */}
             <Box
@@ -681,7 +834,7 @@ export default function NexusCardForm() {
             </Box>
           </Box>
           {/* Card defense */}
-          <Box
+          {formCardData.cardType === "entity" && (<Box
             id="stats-defense"
             className="
               flex
@@ -692,32 +845,61 @@ export default function NexusCardForm() {
               relative
             "
           >
-            {formCardData.cardType === "entity" && (
-              <Controller
-                name="cardDefense"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <TextField
-                    {...field}
-                    size="small"
-                    variant="standard"
-                    placeholder="0"
-                    className="w-full"
-                    error={!!fieldState.error}
-                    inputProps={{
-                      maxLength: 2,
-                      disableUnderline: true
-                    }}
-                    helperText={
-                      fieldState.error
-                        ? fieldState.error.message
-                        : "Card text is required!"
-                    }
-                    // InputProps={{ disableUnderline: true }}
-                  />
-                )}
-              />
-            )}
+            <Controller
+              name="cardDefense"
+              control={control}
+              render={({ field, fieldState }) => (
+                <TextField
+                  {...field}
+                  size="small"
+                  variant="standard"
+                  placeholder="0"
+                  className="
+                    flex
+                    justify-center
+                    items-center
+                    w-full
+                    absolute
+                    z-10
+                    top-0
+                    bottom-0
+                    right-0
+                    left-0
+                    text-center
+                    px-6
+                  "
+                  sx={{
+                    // Apply styles to the input element
+                    '& .MuiInputBase-input': {
+                      color: 'black', // change text color
+                    },
+                    // Apply styles to the notched outline
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'black', // change border color
+                    },
+                    // Change styles for the notched outline on hover
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'lightblue', // change border color on hover
+                    },
+                    // Change styles for the notched outline when focused
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'blue', // change border color when focused
+                    },
+                  }}
+                  error={!!fieldState.error}
+                  inputProps={{
+                    maxLength: 2,
+                    disableUnderline: true
+                  }}
+                  // helperText={
+                  //   fieldState.error
+                  //     ? fieldState.error.message
+                  //     : "Card text is required!"
+                  // }
+                  // InputProps={{ disableUnderline: true }}
+                />
+              )}
+            />
             <Image
               src={`${cardPartPath.base}/card-parts${cardPartPath.stats}/defense.png`}
               width={72}
@@ -726,7 +908,7 @@ export default function NexusCardForm() {
               className="w-full h-full"
               // style={{ objectFit: "cover" }}
             />
-          </Box>
+          </Box>)}
         </Box>
       </Box>
     </Box>

@@ -8,14 +8,14 @@ export const monoColorOptions = {
 };
 
 export const dualColorOptions = {
-  yellowBlue: "yellow-blue",
-  yellowPurple: "yellow-purple",
-  yellowRed: "yellow-red",
-  yellowGreen: "yellow-green",
-  bluePurple: "blue-purple",
-  blueRed: "blue-red",
-  blueGreen: "blue-green",
-  purpleRed: "purple-red",
-  purpleGreen: "purple-green",
-  redGreen: "red-green",
+  yellowBlue: "yellowBlue",
+  yellowPurple: "yellowPurple",
+  yellowRed: "yellowRed",
+  yellowGreen: "yellowGreen",
+  bluePurple: "bluePurple",
+  blueRed: "blueRed",
+  blueGreen: "blueGreen",
+  purpleRed: "purpleRed",
+  purpleGreen: "purpleGreen",
+  redGreen: "redGreen",
 };

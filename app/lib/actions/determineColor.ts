@@ -32,7 +32,7 @@ export default function determineColor(
         && value > 0
     );
 
-    if (colorlessCost && cardColorType === "mono") {
+    if (!coloredCosts && colorlessCost && cardColorType === "mono") {
         // If there's only void costs, return void
         return "void";
 
@@ -69,12 +69,12 @@ export default function determineColor(
             };
 
             // Get the sorted dual color pair
-            const activeColors = coloredCosts
+            const activeDualColors = coloredCosts
                 .map(([color]) => color)
                 .sort((a, b) => sortByColorOrder(a, b));
 
             // Find the dual color pair
-            const colorKey = `${activeColors[0]}${activeColors[1]}`;
+            const colorKey = `${activeDualColors[0]}${activeDualColors[1]}`;
             const dualColorKey = Object.keys(dualColorOptions).find(
                 key => key.toLowerCase() === colorKey.toLowerCase()
             );
@@ -84,7 +84,7 @@ export default function determineColor(
                 ? dualColorOptions[dualColorKey as keyof typeof dualColorOptions]
                 : "default";
 
-    } else if (cardColorType === "multi") {
+    } else if (coloredCosts && cardColorType === "multi") {
         // If there's three or more non-void colors, return multi
         return "multi"
 
