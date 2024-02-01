@@ -4,6 +4,8 @@ import { monoColorOptions, dualColorOptions } from "@/app/utils/data/cardColorOp
 export default function determineColor(
     activeCardCost: CardFormDataType["cardEnergyCost"],
     cardColorType: string,
+    colorTypeChangeCounter: number,
+    setColorTypeChangeCounter: React.Dispatch<React.SetStateAction<number>>
 ) {
     const energyCostEntries = Object.entries(activeCardCost ?? {});
 
@@ -13,6 +15,10 @@ export default function determineColor(
             color !== monoColorOptions.void
             && value > 0
     );
+
+    if (coloredCosts || !coloredCosts) {
+        setColorTypeChangeCounter(colorTypeChangeCounter + 1);
+    }
 
     if (!coloredCosts && energyCostEntries.length === 1) {
         return "void";
