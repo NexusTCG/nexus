@@ -12,6 +12,7 @@ import {
 } from "@/app/utils/data/cardCreatorOptions";
 import { CardFormDataType } from "@/app/utils/types/types";
 import { cardPartPath } from "@/app/utils/consts/cardPartPaths";
+import colorMapping from "@/app/utils/data/colorMapping";
 
 // Imported components
 import {
@@ -47,17 +48,18 @@ export default function NexusCardForm() {
   const activeCardCost = watch("cardEnergyCost");
   const activeCardType = watch("cardType");
 
+  // Track energy cost popover state
   const [energyCostAnchorEl, setEnergyCostAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [gradeAnchorEl, setGradeAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const [cardColorType, setCardColorType] = useState<string | null>(null);
-  const [cardColor, setCardColor] = useState<string | null>(null);
-  const [cardColorClass50, setCardColorClass50] = useState<string>("");
-  const [cardColorClass100, setCardColorClass100] = useState<string>("");
-  const [cardColorClass400, setCardColorClass400] = useState<string>("");
-  const [cardBgImage, setCardBgImage] = useState<string | null>(null);
 
+  // Track energy cost change (to force re-render)
   const [energyCostChangeCounter, setEnergyCostChangeCounter] = useState<number>(0);
 
+  // Track card color type, color, color class and bg image state
+  const [cardColorType, setCardColorType] = useState<string | null>(null);
+  const [cardColor, setCardColor] = useState<string>("default");
+  const [cardColorClass, setCardColorClass] = useState<string>("default");
+  const [cardBgImage, setCardBgImage] = useState<string>("bg-[url('/images/card-parts/card-frames/other/default.png')]");
 
   // useEffects to determine color type based on cost
   useEffect(() => {
@@ -91,23 +93,13 @@ export default function NexusCardForm() {
   // useEffects to determine color class based on color type and color
   useEffect(() => {
     const colorClass = determineColorClass(
-      activeCardType,
       cardColorType || "",
       cardColor || ""
     );
-    console.log(`
-      Current color classes:
-      ${cardColorClass50},
-      ${cardColorClass100},
-      ${cardColorClass400}
-    `);
-    console.log(`cardColorClass: ${cardColorClass50}, ${cardColorClass100}, ${cardColorClass400}`)
+    console.log(`cardColorClass: ${cardColorClass}`)
     console.log(`energyCostChangeCounter: ${energyCostChangeCounter}`);
-    setCardColorClass50(`bg-${colorClass}-50`);
-    setCardColorClass100(`bg-${colorClass}-100`);
-    setCardColorClass400(`bg-${colorClass}-400`);
+    setCardColorClass(colorClass);
   }, [
-    activeCardType,
     cardColorType,
     cardColor
   ]); 
@@ -116,7 +108,6 @@ export default function NexusCardForm() {
   useEffect(() => {
     const bgImage = determineBgImage(
       activeCardType,
-      cardColorType || "",
       cardColor || ""
     );
     console.log(`bgImage: ${cardBgImage}`);
@@ -124,7 +115,6 @@ export default function NexusCardForm() {
     setCardBgImage(bgImage);
   }, [
     activeCardType,
-    cardColorType,
     cardColor
   ]);
 
@@ -178,18 +168,14 @@ export default function NexusCardForm() {
           w-full
           h-full
           rounded-lg
-          bg-lime-300
           ${cardBgImage}
         `}
       >
         {/* Card header */}
         <Box
           id="card-header"
-          // sx={{
-          //   aspectRatio: "55 / 5",
-          // }}
           className={`
-                ${cardColorClass50}
+                ${colorMapping[cardColorClass as keyof typeof colorMapping][100]}
               flex
               flex-col
               w-full
@@ -204,6 +190,7 @@ export default function NexusCardForm() {
               shadow-opacity-25
               z-10
           `}
+          
         >
           {/* Card name and cost */}
           <Box
@@ -258,8 +245,11 @@ export default function NexusCardForm() {
           <Box
             id="card-header-types-speed"
             // 
+
+            // ${cardColorClass100}
             className={`
-              ${cardColorClass100}
+              bg-rose-100
+
               flex
               flex-row
               w-full
@@ -448,36 +438,44 @@ export default function NexusCardForm() {
         {/* Card image & content */}
         <Box
           id="card-image-content-outer"
-          className={`
-            flex
-            flex-col
-            w-full
-            h-full
-            px-4
-            -mt-4
-            shadow-lg
-            shadow-black
-            shadow-opacity-25
-            z-0
-          `}
+          // className={`
+          //   flex
+          //   flex-col
+          //   w-full
+          //   h-full
+          //   px-4
+          //   -mt-4
+          //   shadow-md
+          //   shadow-black
+          //   shadow-opacity-25
+          //   z-0
+          // `}
+          className={clsx("flex flex-col w-full h-full px-4 -mt-4 shadow-md shadow-black shadow-opacity-25 z-0",
+            cardColorClass === "yellow" && "bg-yellow-400"
+          )}
         >
           <Box
             id="card-image-content-inner"
-            className={`
-              flex
-              flex-col
-              w-full
-              h-full
-              gap-2
-              p-1
-              rounded-lg
-              ${cardColorClass400}
-              border-4
-              border-black
-              shadow-lg
-              shadow-black
-              shadow-opacity-25
-            `}
+            // ${cardColorClass400}
+            // className={`
+            //   bg-rose-400
+
+            //   flex
+            //   flex-col
+            //   w-full
+            //   h-full
+            //   gap-2
+            //   p-1
+            //   rounded-lg
+            //   border-4
+            //   border-black
+            //   shadow-lg
+            //   shadow-black
+            //   shadow-opacity-25
+            // `}
+            className={clsx("flex flex-col w-full h-full gap-2 p-1 rounded-lg border-4 border-black shadow-lg shadow-black shadow-opacity-25",
+              cardColorClass === "default" && "bg-yellow-400"
+            )}
           >
             {/* Card image */}
             <Box
@@ -507,17 +505,23 @@ export default function NexusCardForm() {
             <Box
               id="card-text-flavor"
               sx={{ aspectRatio: "540 / 275" }}
-              className={`
-                ${cardColorClass50}
-                flex
-                flex-col
-                w-full
-                text-black
-                border-2
-                border-black
-                p-2
-                gap-1
-              `}
+              // ${cardColorClass50}
+              // className={`
+              //   bg-rose-50  
+              
+              //   flex
+              //   flex-col
+              //   w-full
+              //   text-black
+              //   border-2
+              //   border-black
+              //   p-2
+              //   gap-1
+              // `}
+              className={clsx("flex flex-col w-full text-black border-2 border-black p-2 gap-1",
+                cardColorClass === "default" && "bg-yellow-400",
+                cardColorClass === "slate" && "bg-rose-400"
+              )}
             >
               {/* Card text */}
               <Controller
