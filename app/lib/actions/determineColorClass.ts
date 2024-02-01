@@ -3,12 +3,8 @@ import { CardFormDataType } from "@/app/utils/types/types";
 export default function determineColorClass(
     activeCardType: CardFormDataType["cardType"],
     cardColorType: string,
-    cardColor: string,
-    determineColorClassChange: number,
-    setDetermineColorClassChange: React.Dispatch<React.SetStateAction<number>>
+    cardColor: string
 ) {
-
-    setDetermineColorClassChange(determineColorClassChange + 1);
 
     if (!cardColor && activeCardType === "node") {
         return "amber";

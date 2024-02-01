@@ -3,12 +3,8 @@ import { CardFormDataType } from "@/app/utils/types/types";
 export default function determineBgImage(
     activeCardType: CardFormDataType["cardType"],
     cardColorType: string,
-    cardColor: string,
-    determineBgImageChange: number,
-    setDetermineBgImageChange: React.Dispatch<React.SetStateAction<number>>
+    cardColor: string
 ) {
-
-    setDetermineBgImageChange(determineBgImageChange + 1);
 
     if (!cardColor && activeCardType === "node") {
         return "bg-[url('/images/card-parts/card-frames/other/node.png')]"
