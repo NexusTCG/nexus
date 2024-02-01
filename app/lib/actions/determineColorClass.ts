@@ -9,7 +9,7 @@ export default function determineColorClass(
                     return "yellow";
 
                 case "blue":
-                    return "blue";
+                    return "sky";
 
                 case "purple":
                     return "violet";
@@ -31,9 +31,9 @@ export default function determineColorClass(
             return "multi"
 
         case "node":
-            return "amber";
+            return "node";
 
         default:
-            return "slate"; // default
+            return "default"; // default
     };
 };

@@ -67,8 +67,6 @@ export default function NexusCardForm() {
       activeCardCost,
       activeCardType
     );
-    console.log(`Current color type: ${cardColorType}`);
-    console.log(`energyCostChangeCounter: ${energyCostChangeCounter}`);
     setCardColorType(colorType);
   }, [
     activeCardCost,
@@ -82,8 +80,6 @@ export default function NexusCardForm() {
       activeCardCost,
       cardColorType || ""
     );
-    console.log(`colorClass: ${cardColor}`);
-    console.log(`energyCostChangeCounter: ${energyCostChangeCounter}`);
     setCardColor(color);
   }, [
     activeCardCost,
@@ -96,8 +92,6 @@ export default function NexusCardForm() {
       cardColorType || "",
       cardColor || ""
     );
-    console.log(`cardColorClass: ${cardColorClass}`)
-    console.log(`energyCostChangeCounter: ${energyCostChangeCounter}`);
     setCardColorClass(colorClass);
   }, [
     cardColorType,
@@ -110,8 +104,6 @@ export default function NexusCardForm() {
       activeCardType,
       cardColor || ""
     );
-    console.log(`bgImage: ${cardBgImage}`);
-    console.log(`energyCostChangeCounter: ${energyCostChangeCounter}`);
     setCardBgImage(bgImage);
   }, [
     activeCardType,
@@ -175,7 +167,7 @@ export default function NexusCardForm() {
         <Box
           id="card-header"
           className={`
-                ${colorMapping[cardColorClass as keyof typeof colorMapping][100]}
+              ${colorMapping[cardColorClass as keyof typeof colorMapping]?.[50] ?? "bg-slate-50"}
               flex
               flex-col
               w-full
@@ -190,7 +182,6 @@ export default function NexusCardForm() {
               shadow-opacity-25
               z-10
           `}
-          
         >
           {/* Card name and cost */}
           <Box
@@ -244,12 +235,8 @@ export default function NexusCardForm() {
           {/* Card types and speed */}
           <Box
             id="card-header-types-speed"
-            // 
-
-            // ${cardColorClass100}
             className={`
-              bg-rose-100
-
+              ${colorMapping[cardColorClass as keyof typeof colorMapping]?.[200] ?? "bg-slate-200"}
               flex
               flex-row
               w-full
@@ -403,9 +390,7 @@ export default function NexusCardForm() {
               )}
             </Box>
             {formCardData.cardType && formCardData.cardType != "node" && (<Box
-              className="
-                w-1/5
-              "
+              className="w-1/5"
             >
               {/* Select: Speed */}
               <Controller
@@ -438,44 +423,37 @@ export default function NexusCardForm() {
         {/* Card image & content */}
         <Box
           id="card-image-content-outer"
-          // className={`
-          //   flex
-          //   flex-col
-          //   w-full
-          //   h-full
-          //   px-4
-          //   -mt-4
-          //   shadow-md
-          //   shadow-black
-          //   shadow-opacity-25
-          //   z-0
-          // `}
-          className={clsx("flex flex-col w-full h-full px-4 -mt-4 shadow-md shadow-black shadow-opacity-25 z-0",
-            cardColorClass === "yellow" && "bg-yellow-400"
-          )}
+          className={`
+            ${colorMapping[cardColorClass as keyof typeof colorMapping]?.[400] ?? "bg-slate-400"}
+            flex
+            flex-col
+            w-full
+            h-full
+            px-4
+            -mt-4
+            shadow-md
+            shadow-black
+            shadow-opacity-25
+            z-0
+          `}
         >
           <Box
             id="card-image-content-inner"
-            // ${cardColorClass400}
-            // className={`
-            //   bg-rose-400
-
-            //   flex
-            //   flex-col
-            //   w-full
-            //   h-full
-            //   gap-2
-            //   p-1
-            //   rounded-lg
-            //   border-4
-            //   border-black
-            //   shadow-lg
-            //   shadow-black
-            //   shadow-opacity-25
-            // `}
-            className={clsx("flex flex-col w-full h-full gap-2 p-1 rounded-lg border-4 border-black shadow-lg shadow-black shadow-opacity-25",
-              cardColorClass === "default" && "bg-yellow-400"
-            )}
+            className={`
+              ${colorMapping[cardColorClass as keyof typeof colorMapping]?.[400] ?? "bg-slate-400"}
+              flex
+              flex-col
+              w-full
+              h-full
+              gap-2
+              p-1
+              rounded-lg
+              border-4
+              border-black
+              shadow-lg
+              shadow-black
+              shadow-opacity-25
+            `}
           >
             {/* Card image */}
             <Box
@@ -505,23 +483,17 @@ export default function NexusCardForm() {
             <Box
               id="card-text-flavor"
               sx={{ aspectRatio: "540 / 275" }}
-              // ${cardColorClass50}
-              // className={`
-              //   bg-rose-50  
-              
-              //   flex
-              //   flex-col
-              //   w-full
-              //   text-black
-              //   border-2
-              //   border-black
-              //   p-2
-              //   gap-1
-              // `}
-              className={clsx("flex flex-col w-full text-black border-2 border-black p-2 gap-1",
-                cardColorClass === "default" && "bg-yellow-400",
-                cardColorClass === "slate" && "bg-rose-400"
-              )}
+              className={`
+                ${colorMapping[cardColorClass as keyof typeof colorMapping]?.[50] ?? "bg-slate-50"}
+                flex
+                flex-col
+                w-full
+                text-black
+                border-2
+                border-black
+                p-2
+                gap-1
+              `}
             >
               {/* Card text */}
               <Controller
@@ -545,7 +517,9 @@ export default function NexusCardForm() {
                         "!text-red-500": fieldState.error,
                       }
                     )}
-                    inputProps={{ maxLength: 200 }}
+                    inputProps={{
+                      maxLength: 200
+                    }}
                   />
                 )}
               />
@@ -572,7 +546,9 @@ export default function NexusCardForm() {
                       placeholder="Write some flavor text."
                       className="w-full"
                       rows={2}
-                      inputProps={{ maxLength: 75 }}
+                      inputProps={{
+                        maxLength: 75
+                      }}
                     />
                   )}
                 />
@@ -580,8 +556,6 @@ export default function NexusCardForm() {
             </Box>
           </Box>
         </Box>
-        
-        
         {/* Card stats, grade, creator and copyright */}
         <Box
           id="card-stats-grade-creator-info"
@@ -619,7 +593,10 @@ export default function NexusCardForm() {
                     placeholder="0"
                     className="w-full"
                     error={!!fieldState.error}
-                    inputProps={{ maxLength: 2 }}
+                    inputProps={{
+                      maxLength: 2
+                    }}
+                    // add logic to only allow for numbers
                     // helperText={fieldState.error ? fieldState.error.message : "Card text is required!"}
                     // InputProps={{ disableUnderline: true }} caused error
                   />
@@ -632,7 +609,6 @@ export default function NexusCardForm() {
               height={60}
               alt="Card attack icon"
               className="w-full h-full bg-red-500 p-0"
-              // style={{ objectFit: "cover" }}
             />
           </Box>
           {/* Card grade + info */}
