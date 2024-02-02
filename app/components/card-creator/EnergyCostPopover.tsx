@@ -9,6 +9,7 @@ import {
   IconButton,
   Typography,
   ButtonGroup,
+  Grid,
 } from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
@@ -35,6 +36,8 @@ export default function EnergyCostPopover({
     watch,
     trigger
   } = useFormContext();
+
+  const activeCardCost = watch("cardEnergyCost");
 
   const open = Boolean(anchorEl);
   const id = open ? "energy-cost-popover" : undefined;
@@ -91,28 +94,29 @@ export default function EnergyCostPopover({
       anchorEl={anchorEl}
       onClose={handleClose}
       anchorOrigin={{
-        vertical: "top",
-        horizontal: "center",
+        vertical: "bottom",
+        horizontal: "right",
       }}
       transformOrigin={{
         vertical: "bottom",
-        horizontal: "center",
+        horizontal: "right",
       }}
     >
       <Box
         className="
-        flex
-        flex-col
-        justify-start
-        items-center
-        gap-4
-        p-4
-        rounded-lg
-        bg-gray-800
-        border
-        border-gray-700
-        shadow-lg
-      "
+          flex
+          flex-col
+          justify-start
+          items-center
+          gap-4
+          p-4
+          rounded-lg
+          bg-gray-900
+          border
+          border-gray-800
+          shadow-lg
+          shadow-black
+        "
       >
         <Box
           className="
@@ -121,113 +125,149 @@ export default function EnergyCostPopover({
             justify-between
             items-center
             w-full
-        "
+          "
         >
-          <Typography variant="subtitle1" className="font-semibold">
+          <Typography
+            variant="subtitle1"
+            className="font-semibold text-gray-200"
+          >
             Select energy cost
           </Typography>
           {watchCardEnergyValue && (
-            <Typography variant="overline" className="font-medium text-sm">
+            <Typography
+              variant="overline"
+              className="
+                font-medium
+                text-sm
+                "
+            >
               {`Energy value: ${watchCardEnergyValue}`}
             </Typography>
           )}
         </Box>
         
-        <Box
-          className="
-            flex
-            flex-row
-            justify-between
-            items-center
-            gap-2
-          "
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            maxWidth: 360,
+          }}
         >
-        {Object.keys(monoColorOptions).map((color) => (
-          <Box
-            key={color}
-            className={clsx("flex flex-col justify-center items-center w-full gap-2 p-2 rounded-md bg-opacity-20",
-              {
-                "bg-yellow-500": color === "yellow",
-                "bg-sky-500": color === "blue",
-                "bg-violet-500": color === "purple",
-                "bg-red-500": color === "red",
-                "bg-lime-500": color === "green",
-                "bg-gray-500": color === "void",
-              }
-            )}
-          >
-            <Box
-              className="
-                flex
-                flex-col
-                justify-center
-                items-center
-                w-full
-                gap-2
-                p-2
-            "
+          {Object.keys(monoColorOptions).map((color) => (
+            <Grid
+              key={color}
+              item
+              xs={4}
             >
-              <Image
-                src={
-                  color !== "void"
-                    ? `/images/card-parts/card-icons/card-cost/${color}.png`
-                    : `/images/card-parts/card-icons/card-cost/void-${watchCardEnergyCost.void}.png`
-                }
-                width={34}
-                height={34}
-                alt={`${color} energy icon`}
-              />
-              
-            </Box>
-
-            <ButtonGroup
-              variant="outlined"
-              aria-label="Increase and decrease energy cost"
-              className="
-                flex
-                flex-row
-                justify-between
-                items-center
-                w-full
-                gap-2
-              "
-            >
-              <IconButton
-                onClick={() => handleCostChange(color, +1)}
-                size="small"
-                className={clsx(
-                  "hover:bg-green-700 hover:text-white",
-                  watchCardEnergyCost[color] === 0 && "opacity-50",
+              <Box
+                className={clsx("flex flex-col justify-center items-center w-full gap-1 py-1 px-2 rounded-lg",
+                  {
+                    "bg-yellow-500": color === "yellow",
+                    "bg-opacity-10 border border-yellow-500/0": color === "yellow" && activeCardCost[color] === 0,
+                    "bg-opacity-40 border border-yellow-500": color === "yellow" && activeCardCost[color] > 0,
+                  },
+                  {
+                    "bg-sky-500": color === "blue",
+                    "bg-opacity-10 border border-sky-500/0": color === "blue" && activeCardCost[color] === 0,
+                    "bg-opacity-40 border border-sky-500": color === "blue" && activeCardCost[color] > 0,
+                  },
+                  {
+                    "bg-violet-500": color === "purple",
+                    "bg-opacity-10 border border-violet-500/0": color === "purple" && activeCardCost[color] === 0,
+                    "bg-opacity-40 border border-violet-500": color === "purple" && activeCardCost[color] > 0,
+                  },
+                  {
+                    "bg-red-500": color === "red",
+                    "bg-opacity-10 border border-red-500/0": color === "red" && activeCardCost[color] === 0,
+                    "bg-opacity-40 border border-red-500": color === "red" && activeCardCost[color] > 0,
+                  },
+                  {
+                    "bg-lime-500": color === "green",
+                    "bg-opacity-10 border border-lime-500/0": color === "green" && activeCardCost[color] === 0,
+                    "bg-opacity-40 border border-lime-500": color === "green" && activeCardCost[color] > 0,
+                  },
+                  {
+                    "bg-gray-500": color === "void",
+                    "bg-opacity-10 border border-gray-500/0": color === "void" && activeCardCost[color] === 0,
+                    "bg-opacity-40 border border-gray-500": color === "void" && activeCardCost[color] > 0,
+                  }
                 )}
               >
-                <AddIcon />
-              </IconButton>
-                <Typography
-                  variant="subtitle1"
-                  className=" 
-                    font-semibold
-                    text-gray-300
-                    text-xl
-                    text-center
-                "
+                <Box
+                  className="
+                    flex
+                    flex-col
+                    justify-center
+                    items-center
+                    w-full
+                    gap-2
+                    p-2
+                  "
                 >
-                  {watchCardEnergyCost[color]}
-                </Typography>
-              <IconButton
-                disabled={watchCardEnergyCost[color] === 0}
-                onClick={() => handleCostChange(color, -1)}
-                size="small"
-                className={clsx(
-                  "hover:bg-red-700 hover:text-white",
-                  watchCardEnergyCost[color] === 0 && "opacity-50",
-                )}
-              >
-                <RemoveIcon />
-              </IconButton>
-            </ButtonGroup>
-          </Box>
-        ))}
-        </Box>
+                  <Image
+                    src={
+                      color !== "void"
+                        ? `/images/card-parts/card-icons/card-cost/${color}.png`
+                        : `/images/card-parts/card-icons/card-cost/void-${watchCardEnergyCost.void}.png`
+                    }
+                    width={30}
+                    height={30}
+                    alt={`${color} energy icon`}
+                  />
+                </Box>
+
+                <ButtonGroup
+                  variant="outlined"
+                  aria-label="Increase and decrease energy cost"
+                  className="
+                    flex
+                    flex-row
+                    justify-between
+                    items-center
+                    w-full
+                    gap-2
+                  "
+                >
+                <IconButton
+                  onClick={() => handleCostChange(color, +1)}
+                  size="small"
+                  className={clsx(
+                    "hover:opacity-100",
+                    watchCardEnergyCost[color] === 0 && "opacity-50",
+                  )}
+                >
+                  <AddIcon
+                    fontSize="small"
+                  />
+                </IconButton>
+                  <Typography
+                    variant="body1"
+                    className={clsx(
+                      "font-semibold text-gray-200 text-lg text-center",
+                      watchCardEnergyCost[color] === 0 && "opacity-50",
+                    )}
+                  >
+                    {watchCardEnergyCost[color]}
+                  </Typography>
+                <IconButton
+                  disabled={watchCardEnergyCost[color] === 0}
+                  onClick={() => handleCostChange(color, -1)}
+                  size="small"
+                  className={clsx(
+                    "hover:opacity-100",
+                    watchCardEnergyCost[color] === 0 && "opacity-25",
+                    watchCardEnergyCost[color] > 0 && "opacity-50",
+                  )}
+                >
+                  <RemoveIcon
+                    fontSize="small"
+                  />
+                </IconButton>
+              </ButtonGroup>
+            </Box>
+          </Grid>
+          ))}
+        </Grid>
       </Box>
     </Popover>
   );
