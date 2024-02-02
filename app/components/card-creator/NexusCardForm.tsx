@@ -8,7 +8,7 @@ import {
   cardSuperTypeOptions,
   cardTypeOptions,
   cardSubTypeOptions,
-  cardSpeedOptions
+  // cardSpeedOptions
 } from "@/app/utils/data/cardCreatorOptions";
 import { CardFormDataType } from "@/app/utils/types/types";
 import { cardPartPath } from "@/app/utils/consts/cardPartPaths";
@@ -39,6 +39,7 @@ import resetEnergyCost from "@/app/lib/actions/resetEnergyCost";
 // Custom components
 import EnergyCostPopover from "@/app/components/card-creator/EnergyCostPopover";
 import GradePopover from "@/app/components/card-creator/GradePopover"
+import SpeedSelect from "@/app/components/card-creator/SpeedSelect";
 
 export default function NexusCardForm() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -148,7 +149,10 @@ export default function NexusCardForm() {
         bg-black
         px-4
         pt-3        
-        pb-8        
+        pb-8
+        w-full
+        shadow-lg
+        shadow-gray-950/50
       "
     >
       {/* Card frame */}
@@ -160,10 +164,11 @@ export default function NexusCardForm() {
           w-full
           h-full
           rounded-lg
-          ${cardBgImage}
+          
           bg-cover
           bg-center
           bg-no-repeat
+          ${cardBgImage}
         `}
       >
         {/* Card header */}
@@ -174,15 +179,14 @@ export default function NexusCardForm() {
               flex
               flex-col
               w-full
-              gap-1
               py-1
-              px-2
+              px-1
+              gap-1
               border-4
               border-black
               rounded-lg
-              shadow-lg
-              shadow-black
-              shadow-opacity-25
+              shadow-md
+              shadow-gray-950/50
               z-10
           `}
         >
@@ -198,6 +202,8 @@ export default function NexusCardForm() {
                 gap-2
             `}
           >
+            {/* Mythic icon boolean */}
+
             {/* Card name */}
             <Controller
               name="cardName"
@@ -220,19 +226,19 @@ export default function NexusCardForm() {
                   sx={{
                     // Apply styles to the input element
                     '& .MuiInputBase-input': {
-                      color: 'black', // change text color
+                      color: "black",
                     },
                     // Apply styles to the notched outline
                     '& .MuiOutlinedInput-notchedOutline': {
-                      borderColor: 'black', // change border color
+                      borderColor: "black",
                     },
                     // Change styles for the notched outline on hover
                     '&:hover .MuiOutlinedInput-notchedOutline': {
-                      borderColor: 'lightblue', // change border color on hover
+                      borderColor: "gray",
                     },
                     // Change styles for the notched outline when focused
                     '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      borderColor: 'blue', // change border color when focused
+                      borderColor: 'blue',
                     },
                   }}
                 />
@@ -243,6 +249,8 @@ export default function NexusCardForm() {
                 aria-label="add cost"
                 size="large"
                 onClick={handleEnergyCostPopoverOpen}
+                color="primary"
+                className="p-2 bg-gray-200"
               >
                 <AddCircleIcon />
               </IconButton>
@@ -260,8 +268,10 @@ export default function NexusCardForm() {
             ${colorMapping[cardColorClass as keyof typeof colorMapping]?.[200] ?? "bg-slate-200"}
               flex
               flex-row
+              justify-between
+              items-center
               w-full
-              gap-1
+              gap-3
               p-1
               rounded-md
               text-black
@@ -464,53 +474,10 @@ export default function NexusCardForm() {
                 />
               )}
             </Box>
-            {formCardData.cardType && formCardData.cardType != "node" && (<Box
-              className="w-1/5"
-            >
-              {/* Select: Speed */}
-              <Controller
-                name="cardSpeed"
-                control={control}
-                render={({ field }) => (
-                  <FormControl fullWidth>
-                    <InputLabel>Speed</InputLabel>
-                    <Select
-                      {...field}
-                      value={Array.isArray(field.value) ? field.value : []}
-                      label="Speed"
-                      size="small"
-                      sx={{
-                        // Apply styles to the input element
-                        '& .MuiInputBase-input': {
-                          color: 'black', // Text color
-                        },
-                        // Apply styles to the notched outline
-                        '& .MuiOutlinedInput-notchedOutline': {
-                          borderColor: 'black', // Border color
-                        },
-                        // Change styles for the notched outline on hover
-                        '&:hover .MuiOutlinedInput-notchedOutline': {
-                          borderColor: 'lightblue', // Border color on hover
-                        },
-                        // Change styles for the notched outline when focused
-                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                          borderColor: 'blue', // Border color when focused
-                        },
-                      }}
-                    >
-                      {Object.entries(cardSpeedOptions)
-                        .map(([value, label]) => (
-                          <MenuItem key={value} value={value}>
-                            <Typography variant="body2">
-                              {label}
-                            </Typography>
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  </FormControl>
-                )}
-              />
-            </Box>)}
+            {/* Speed */}
+            {formCardData.cardType != "node" && (
+              <SpeedSelect />
+            )}
           </Box>
         </Box>
         {/* Card image & content */}

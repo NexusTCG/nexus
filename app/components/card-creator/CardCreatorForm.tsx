@@ -25,9 +25,10 @@ export default function CardCreatorForm() {
       },
       cardColor: "",
       cardArt: "",
-      cardType: "",
+      cardType: "entity",
       cardSuperType: "",
       cardSubType: [],
+      cardSpeed: "1",
       cardGrade: "common",
       cardText: "",
       cardFlavorText: "",
@@ -75,38 +76,80 @@ export default function CardCreatorForm() {
   return (
     <Box
       className="
-            flex
-            flex-col
-            w-full
-            p-0
-            md:p-6
-            space-y-4
-            md:bg-gray-800
-            md:rounded-xl
-            md:border
-            md:border-gray-700
-            md:shadow-xl    
-        "
+        flex
+        flex-col
+        w-full
+        p-0
+        md:p-6
+        md:bg-gray-800
+        md:rounded-xl
+        md:border
+        md:border-gray-700
+        md:shadow-xl    
+      "
     >
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Box className="flex flex-col w-full gap-4">
-            <Typography variant="h2">
-              {formNexusCardData.cardName
-                ? formNexusCardData.cardName
-                : "Card name"}
-            </Typography>
-            <Typography variant="subtitle1">
-              by{" "}
-              {formNexusCardData.cardCreator
-                ? formNexusCardData.cardCreator
-                : "Card creator"}
-            </Typography>
+          <Box
+            className="
+              flex
+              flex-col
+              w-full
+              gap-4
+              my-4
+            "
+          >
+            {/* Form header */}
+            <Box
+              className="
+                flex
+                flex-col
+                w-full
+                justify-start
+                items-start
+                gap-1
+              "
+            >
+              {/* Card title */}
+              <Typography
+                variant="h2"
+                className="
+                  text-4xl
+                  text-gray-200
+                  font-medium
+                "
+              >
+                {formNexusCardData.cardName
+                  ? formNexusCardData.cardName
+                  : "An awesome card"}
+              </Typography>
+
+              {/* Creator */}
+              <Typography
+                variant="overline"
+                className="text-emerald-400"
+              >
+                <Typography
+                  variant="overline"
+                  className="text-gray-400"
+                  component="span"
+                >
+                  by{" "}
+                </Typography>
+                {formNexusCardData.cardCreator
+                  ? formNexusCardData.cardCreator
+                  : "Card creator"}
+              </Typography>
+            </Box>
+            
+            {/* Replace with fetched username */}
             <TextField
               label="Card creator"
               variant="outlined"
               {...register("cardCreator")}
             />
+
+            {/* AI prompt */}
             <TextField
               multiline
               rows={4}
@@ -114,6 +157,8 @@ export default function CardCreatorForm() {
               variant="outlined"
               {...register("cardPrompt")}
             />
+
+            {/* Submit form */}
             <Box className="flex flex-row gap-4">
               {/* <PromptInput /> */}
               <Button
@@ -126,8 +171,17 @@ export default function CardCreatorForm() {
                 Submit
               </Button>
             </Box>
+
           </Box>
-          <Box className="flex flex-col">
+          <Box
+            className="
+              flex
+              flex-col
+              justify-center
+              items-center
+            "
+          >
+            {/* Nexus Card Form */}
             <NexusCardForm />
           </Box>
         </form>
