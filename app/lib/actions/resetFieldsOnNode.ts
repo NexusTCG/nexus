@@ -1,9 +1,8 @@
 import { CardFormDataType } from "@/app/utils/types/types";
 
-export default function resetEnergyCost(
+export default async function resetFieldsOnNode(
     activeCardCost: CardFormDataType["cardEnergyCost"]
 ) {
-    if (!activeCardCost) return;
 
     const resetCosts = Object.keys(
         activeCardCost || {}

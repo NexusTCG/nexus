@@ -2,6 +2,7 @@ import entityTypes from "@/app/utils/data/entityTypes";
 import { EntityTypesType } from "@/app/utils/types/types";
 
 export const cardSuperTypeOptions = {
+  default: "",
   mythic: "Mythic",
   core: "Core",
 };
@@ -14,16 +15,13 @@ export const cardTypeOptions = {
   node: "Node",
 };
 
-export const cardSpeedOptions = {
-  speedOne: "1",
-  speedTwo: "2",
-  speedThree: "3",
-};
-
 export const cardSubTypeOptions = {
+  default: "",
   entity: Object.fromEntries(
-    entityTypes.map((entityType: EntityTypesType) => [
-      entityType.name.toLowerCase(),
+    entityTypes.map((
+      entityType: EntityTypesType
+    ) => [
+      entityType.name,
       entityType.name,
     ]),
   ),

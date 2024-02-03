@@ -42,14 +42,15 @@ export default function EnergyCostIcons({
           <Box
             onClick={handleEnergyCostPopoverOpen}
             className="
-                flex
-                flex-row
-                justify-end
-                items-center
-                w-full
-                gap-0.25
-                cursor-pointer
-                hover:opacity-80
+              flex
+              flex-row
+              justify-end
+              items-center
+              w-auto
+              gap-0.25
+              cursor-pointer
+              hover:opacity-80
+              px-1
             "
           >
             {Object.entries(formCardData.cardEnergyCost ?? {})
@@ -59,8 +60,8 @@ export default function EnergyCostIcons({
                       <Image
                         key={`${color}-${i}`}
                         src={`/images/card-parts/card-icons/card-cost/${color}.png`}
-                        width={30}
-                        height={30}
+                        width={24}
+                        height={24}
                         alt={`${color} energy icon`}
                       />
                     ))
@@ -69,8 +70,8 @@ export default function EnergyCostIcons({
                       <Image
                         key={`void-0`}
                         src={`/images/card-parts/card-icons/card-cost/void-${value}.png`}
-                        width={30}
-                        height={30}
+                        width={24}
+                        height={24}
                         alt={`void energy icon`}
                       />
                     )
