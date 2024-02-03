@@ -38,7 +38,7 @@ import resetFieldsOnNode from "@/app/lib/actions/resetFieldsOnNode";
 
 // Custom components
 import EnergyCostPopover from "@/app/components/card-creator/EnergyCostPopover";
-import GradePopover from "@/app/components/card-creator/GradePopover"
+// import GradePopover from "@/app/components/card-creator/GradePopover"
 import SpeedSelect from "@/app/components/card-creator/SpeedSelect";
 import EnergyCostIcons from "@/app/components/card-creator/EnergyCostIcons";
 
@@ -52,7 +52,7 @@ export default function NexusCardForm() {
 
   // Track energy cost popover state
   const [energyCostAnchorEl, setEnergyCostAnchorEl] = React.useState<HTMLElement | null>(null);
-  const [gradeAnchorEl, setGradeAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  // const [gradeAnchorEl, setGradeAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
   // Track energy cost change (to force re-render)
   const [energyCostChangeCounter, setEnergyCostChangeCounter] = useState<number>(0);
@@ -123,16 +123,32 @@ export default function NexusCardForm() {
   };
 
   // Handle grade popover
-  function handleGradePopoverOpen(
-    event: React.MouseEvent<HTMLButtonElement>
-  ) {
-    setGradeAnchorEl(event.currentTarget);
-    console.log(formCardData.cardGrade)
-  };
-  function handleGradePopoverClose() {
-    setGradeAnchorEl(null);
-    console.log(formCardData.cardGrade)
-  };
+  // function handleGradePopoverOpen(
+  //   event: React.MouseEvent<HTMLButtonElement>
+  // ) {
+  //   setGradeAnchorEl(event.currentTarget);
+  //   console.log(formCardData.cardGrade)
+  // };
+  // function handleGradePopoverClose() {
+  //   setGradeAnchorEl(null);
+  //   console.log(formCardData.cardGrade)
+  // };
+
+  function handleGradeChange() {
+    switch (formCardData.cardGrade) {
+        case "rare":
+            setValue("cardGrade", "epic");
+            break;
+        case "epic":
+            setValue("cardGrade", "prime");
+            break;
+        case "prime":
+            setValue("cardGrade", "common");
+            break;
+        default:
+            setValue("cardGrade", "rare");
+      }
+  }
 
   return (
     <Box
@@ -804,19 +820,26 @@ export default function NexusCardForm() {
               <IconButton
                 aria-label="add grade"
                 size="large"
-                onClick={handleGradePopoverOpen}
+                onClick={handleGradeChange}
+                
               >
                 <Image
                   src={`${cardPartPath.base}/card-parts${cardPartPath.icon}${cardPartPath.grade}/grade-${formCardData.cardGrade.toLowerCase()}.png`}
-                  height={48}
-                  width={48}
-                  alt="Card grade icon"
+                  height={36}
+                  width={36}
+                  alt={`${formCardData.cardGrade} icon`}
+                  className="
+                    cursor-pointer
+                    rounded-full
+                    p-2
+                  "
                 />
               </IconButton>
-              <GradePopover
+              {/* <GradePopover
                 anchorEl={gradeAnchorEl}
                 handleClose={handleGradePopoverClose}
-              />
+              /> */}
+              
               {/* Card creator & copyright */}
               <Box
                 className="
