@@ -23,6 +23,10 @@ type EnergyCostPopoverProps = {
   setEnergyCostChangeCounter: React.Dispatch<React.SetStateAction<number>>;
 };
 
+type EnergyCosts = {
+  [color: string]: number;
+};
+
 export default function EnergyCostPopover({
   anchorEl,
   handleClose,
@@ -45,11 +49,46 @@ export default function EnergyCostPopover({
   const watchCardEnergyValue = watch("cardEnergyValue");
 
   async function handleCostChange(color: string, delta: number) {
-    const energyCosts = getValues("cardEnergyCost");
+    const energyCosts = getValues("cardEnergyCost") as EnergyCosts;
 
+    // Calculate new cost but don't apply it yet
     let newCost = Math.max(0, energyCosts[color] + delta);
-    if (color !== "void") newCost = Math.min(newCost, 6);
-    else newCost = Math.min(newCost, 15);
+
+    if (color !== "void") {
+      newCost = Math.min(newCost, 5);
+
+      const nonVoidTotal = Object
+        .entries(energyCosts)
+        .reduce(
+          (acc, [key, value]) => {
+            if (key !== "void") {
+              return acc + (
+                key === color ?
+                newCost : value
+              );
+            }
+        return acc;
+      }, 0);
+  
+      if (nonVoidTotal > 5) {
+        newCost = Math.max(
+          0, newCost - (nonVoidTotal - 5)
+        );
+      }
+    } else {
+      const nonVoidTotal = Object
+        .values(energyCosts)
+        .reduce(
+          (acc, value, index) => {
+            return index === Object
+              .keys(energyCosts)
+              .indexOf("void") ?
+              acc : acc + value;
+      }, 0);
+
+      const maxVoid = 15 - nonVoidTotal;
+      newCost = Math.min(newCost, maxVoid);
+    }
 
     const updatedEnergyCosts = {
       ...energyCosts,
@@ -101,6 +140,7 @@ export default function EnergyCostPopover({
         vertical: "bottom",
         horizontal: "right",
       }}
+      className="bg-black/25"
     >
       <Box
         className="
@@ -111,11 +151,6 @@ export default function EnergyCostPopover({
           gap-4
           p-4
           rounded-lg
-          bg-gray-900
-          border
-          border-gray-800
-          shadow-lg
-          shadow-black
         "
       >
         <Box
@@ -160,36 +195,54 @@ export default function EnergyCostPopover({
               xs={4}
             >
               <Box
-                className={clsx("flex flex-col justify-center items-center w-full gap-1 py-1 px-2 rounded-lg",
+                className={clsx("flex flex-col justify-center items-center w-full gap-1 py-1 px-2 rounded-lg hover:shadow-md hover:shadow-gray-900/50",
                   {
-                    "bg-yellow-500": color === "yellow",
-                    "bg-opacity-10 border border-yellow-500/0": color === "yellow" && activeCardCost[color] === 0,
-                    "bg-opacity-40 border border-yellow-500": color === "yellow" && activeCardCost[color] > 0,
+                    "bg-yellow-500":
+                      color === "yellow",
+                    "bg-opacity-10 hover:bg-opacity-20 border border-yellow-500/0 hover:border-yellow-500/40":
+                      color === "yellow" && activeCardCost[color] === 0,
+                    "bg-opacity-40 border border-yellow-500/80 shadow-sm shadow-gray-900/50":
+                      color === "yellow" && activeCardCost[color] > 0,
                   },
                   {
-                    "bg-sky-500": color === "blue",
-                    "bg-opacity-10 border border-sky-500/0": color === "blue" && activeCardCost[color] === 0,
-                    "bg-opacity-40 border border-sky-500": color === "blue" && activeCardCost[color] > 0,
+                    "bg-sky-500":
+                      color === "blue",
+                    "bg-opacity-10 hover:bg-opacity-20 border border-sky-500/0 hover:border-sky-500/40":
+                      color === "blue" && activeCardCost[color] === 0,
+                    "bg-opacity-40 border border-sky-500/80 shadow-sm shadow-gray-900/50":
+                      color === "blue" && activeCardCost[color] > 0,
                   },
                   {
-                    "bg-violet-500": color === "purple",
-                    "bg-opacity-10 border border-violet-500/0": color === "purple" && activeCardCost[color] === 0,
-                    "bg-opacity-40 border border-violet-500": color === "purple" && activeCardCost[color] > 0,
+                    "bg-violet-500":
+                      color === "purple",
+                    "bg-opacity-10 hover:bg-opacity-20 border border-violet-500/0 hover:border-violet-500/40":
+                      color === "purple" && activeCardCost[color] === 0,
+                    "bg-opacity-40 border border-violet-500/80 shadow-sm shadow-gray-900/50":
+                      color === "purple" && activeCardCost[color] > 0,
                   },
                   {
-                    "bg-red-500": color === "red",
-                    "bg-opacity-10 border border-red-500/0": color === "red" && activeCardCost[color] === 0,
-                    "bg-opacity-40 border border-red-500": color === "red" && activeCardCost[color] > 0,
+                    "bg-red-500":
+                      color === "red",
+                    "bg-opacity-10 hover:bg-opacity-20 border border-red-500/0 hover:border-red-500/40":
+                      color === "red" && activeCardCost[color] === 0,
+                    "bg-opacity-40 border border-red-500/80 shadow-sm shadow-gray-900/50":
+                      color === "red" && activeCardCost[color] > 0,
                   },
                   {
-                    "bg-lime-500": color === "green",
-                    "bg-opacity-10 border border-lime-500/0": color === "green" && activeCardCost[color] === 0,
-                    "bg-opacity-40 border border-lime-500": color === "green" && activeCardCost[color] > 0,
+                    "bg-lime-500":
+                      color === "green",
+                    "bg-opacity-10 hover:bg-opacity-20 border border-lime-500/0 hover:border-lime-500/40":
+                      color === "green" && activeCardCost[color] === 0,
+                    "bg-opacity-40 border border-lime-500/80 shadow-sm shadow-gray-900/50":
+                      color === "green" && activeCardCost[color] > 0,
                   },
                   {
-                    "bg-gray-500": color === "void",
-                    "bg-opacity-10 border border-gray-500/0": color === "void" && activeCardCost[color] === 0,
-                    "bg-opacity-40 border border-gray-500": color === "void" && activeCardCost[color] > 0,
+                    "bg-gray-500":
+                      color === "void",
+                    "bg-opacity-10 hover:bg-opacity-20 border border-gray-500/0 hover:border-gray-500/40":
+                      color === "void" && activeCardCost[color] === 0,
+                    "bg-opacity-40 border border-ligrayme-500/80 shadow-sm shadow-gray-900/50":
+                      color === "void" && activeCardCost[color] > 0,
                   }
                 )}
               >

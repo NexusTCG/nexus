@@ -30,8 +30,10 @@ export default function SpeedSelect() {
         const isHovered = hoveredIcon && hoveredIcon >= iconSpeed && hoveredIcon > currentCardSpeed;
         const isDimmedOnHover = hoveredIcon && hoveredIcon < currentCardSpeed && currentCardSpeed > iconSpeed;
 
-        if (isCurrent || isHovered) {
+        if (isCurrent) {
             return "opacity-100";
+        } else if (isHovered) {
+            return "opacity-75 scale-125";
         } else if (isDimmedOnHover) {
             return "opacity-25";
         } else {

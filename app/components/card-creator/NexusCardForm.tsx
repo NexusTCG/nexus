@@ -25,7 +25,7 @@ import {
   Select,
   IconButton
 } from "@mui/material/";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
+// import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Image from "next/image";
 import clsx from "clsx";
 
@@ -40,6 +40,7 @@ import resetEnergyCost from "@/app/lib/actions/resetEnergyCost";
 import EnergyCostPopover from "@/app/components/card-creator/EnergyCostPopover";
 import GradePopover from "@/app/components/card-creator/GradePopover"
 import SpeedSelect from "@/app/components/card-creator/SpeedSelect";
+import EnergyCostIcons from "@/app/components/card-creator/EnergyCostIcons";
 
 export default function NexusCardForm() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -50,7 +51,7 @@ export default function NexusCardForm() {
   const activeCardType = watch("cardType");
 
   // Track energy cost popover state
-  const [energyCostAnchorEl, setEnergyCostAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [energyCostAnchorEl, setEnergyCostAnchorEl] = React.useState<HTMLElement | null>(null);
   const [gradeAnchorEl, setGradeAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
   // Track energy cost change (to force re-render)
@@ -113,7 +114,7 @@ export default function NexusCardForm() {
 
   // Handle energy cost popover
   function handleEnergyCostPopoverOpen(
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLElement>
   ) {
     setEnergyCostAnchorEl(event.currentTarget);
   };
@@ -245,21 +246,16 @@ export default function NexusCardForm() {
               )}
             />
             {/* Card cost */}
-            <IconButton
-                aria-label="add cost"
-                size="large"
-                onClick={handleEnergyCostPopoverOpen}
-                color="primary"
-                className="p-2 bg-gray-200"
-              >
-                <AddCircleIcon />
-              </IconButton>
-              <EnergyCostPopover
-                anchorEl={energyCostAnchorEl}
-                handleClose={handleEnergyCostPopoverClose}
-                energyCostChangeCounter={energyCostChangeCounter}
-                setEnergyCostChangeCounter={setEnergyCostChangeCounter}
-              />
+            <EnergyCostIcons
+              handleEnergyCostPopoverOpen={handleEnergyCostPopoverOpen}
+            />
+
+            <EnergyCostPopover
+              anchorEl={energyCostAnchorEl}
+              handleClose={handleEnergyCostPopoverClose}
+              energyCostChangeCounter={energyCostChangeCounter}
+              setEnergyCostChangeCounter={setEnergyCostChangeCounter}
+            />
           </Box>
           {/* Card types and speed */}
           <Box
@@ -754,7 +750,7 @@ export default function NexusCardForm() {
               "
             >
               <IconButton
-                aria-label="add cost"
+                aria-label="add grade"
                 size="large"
                 onClick={handleGradePopoverOpen}
               >
