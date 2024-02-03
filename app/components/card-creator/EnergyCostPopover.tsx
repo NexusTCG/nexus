@@ -47,31 +47,58 @@ export default function EnergyCostPopover({
   const watchCardEnergyValue = watch("cardEnergyValue");
 
   // Cost change handler
-  async function handleCostChange(color: string, delta: number) {
+  async function handleCostChange(
+    color: string,
+    delta: number
+  ) {
     // Get the current energy cost values
     const energyCosts = getValues("cardEnergyCost") as EnergyCosts;
   
     // Calculate the total of non-void colors before any changes
-    const nonVoidTotalBefore = Object.entries(energyCosts).filter(([key]) => key !== "void").reduce((acc, [, value]) => acc + value, 0);
-    const totalEnergyBefore = Object.values(energyCosts).reduce((acc, value) => acc + value, 0);
+    const nonVoidTotalBefore = Object
+      .entries(energyCosts)
+      .filter(([key]) => key !== "void")
+        .reduce((acc, [, value]) =>
+        acc + value, 0);
+
+    const totalEnergyBefore = Object
+      .values(energyCosts)
+      .reduce((acc, value) =>
+        acc + value, 0);
   
     // Determine if adding this delta will exceed the non-void or total limits
-    const willExceedNonVoidLimit = color !== "void" && (nonVoidTotalBefore + delta > 5 || energyCosts[color] + delta > 5);
-    const willExceedTotalLimit = totalEnergyBefore + delta > 15;
+    const willExceedNonVoidLimit =
+      color !== "void" &&
+      (nonVoidTotalBefore + delta > 5 ||
+      energyCosts[color] + delta > 5);
+
+    const willExceedTotalLimit =
+      totalEnergyBefore + delta > 15;
   
     // Prevent changes that exceed limits
-    if (willExceedNonVoidLimit || (color === "void" && willExceedTotalLimit)) {
+    if (willExceedNonVoidLimit || (
+      color === "void" && willExceedTotalLimit
+    )) {
       console.log("Limit reached, cannot increase further.");
       return;
     }
   
     // Calculate new cost within the allowed limits
-    let newCost = Math.max(0, energyCosts[color] + delta);
+    let newCost = Math
+      .max(
+        0,
+        energyCosts[color] +
+        delta
+      );
+
     if (color !== "void") {
-      newCost = Math.min(newCost, 5);
+      newCost = Math
+        .min(newCost, 5);
     } else {
-      const maxVoid = 15 - nonVoidTotalBefore;
-      newCost = Math.min(newCost, maxVoid);
+      const maxVoid =
+        15 - nonVoidTotalBefore;
+      newCost = Math
+        .min(newCost, maxVoid);
     }
   
     // Update the energy costs with the new value
@@ -81,19 +108,41 @@ export default function EnergyCostPopover({
     };
   
     // Calculate the new total energy value
-    const newTotalEnergyValue = Object.values(updatedEnergyCosts).reduce((acc, value) => acc + value, 0);
+    const newTotalEnergyValue = Object
+      .values(updatedEnergyCosts)
+      .reduce((acc, value) =>
+        acc + value, 0
+      );
   
+    // Update the form values
     if (newTotalEnergyValue <= 15) {
-      setValue("cardEnergyCost." + color, newCost, { shouldValidate: true });
-      setValue("cardEnergyValue", newTotalEnergyValue, { shouldValidate: true });
+      // Set new values
+      setValue(
+        "cardEnergyCost." +
+        color, newCost, {
+          shouldValidate: true
+        });
+      setValue(
+        "cardEnergyValue",
+        newTotalEnergyValue, {
+          shouldValidate: true
+        });
+      
+      // Trigger validation
       await trigger("cardEnergyCost");
       await trigger("cardEnergyValue");
   
       // Force card re-render by tracking each change
-      setEnergyCostChangeCounter(energyCostChangeCounter + 1);
+      setEnergyCostChangeCounter(
+        energyCostChangeCounter + 1
+      );
   
-      console.log(`Color values: ${JSON.stringify(updatedEnergyCosts)}`);
-      console.log(`Total value: ${newTotalEnergyValue}`);
+      console.log(
+        `Color values: ${JSON.stringify(updatedEnergyCosts)}`
+      );
+      console.log(
+        `Total value: ${newTotalEnergyValue}`
+      );
     }
   };
 
