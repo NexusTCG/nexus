@@ -41,89 +41,60 @@ export default function EnergyCostPopover({
     trigger
   } = useFormContext();
 
-  const activeCardCost = watch("cardEnergyCost");
-
   const open = Boolean(anchorEl);
   const id = open ? "energy-cost-popover" : undefined;
-  const watchCardEnergyCost = watch("cardEnergyCost");
+  const watchCardEnergyCost = watch("cardEnergyCost") as EnergyCosts;
   const watchCardEnergyValue = watch("cardEnergyValue");
 
+  // Cost change handler
   async function handleCostChange(color: string, delta: number) {
+    // Get the current energy cost values
     const energyCosts = getValues("cardEnergyCost") as EnergyCosts;
-
-    // Calculate new cost but don't apply it yet
+  
+    // Calculate the total of non-void colors before any changes
+    const nonVoidTotalBefore = Object.entries(energyCosts).filter(([key]) => key !== "void").reduce((acc, [, value]) => acc + value, 0);
+    const totalEnergyBefore = Object.values(energyCosts).reduce((acc, value) => acc + value, 0);
+  
+    // Determine if adding this delta will exceed the non-void or total limits
+    const willExceedNonVoidLimit = color !== "void" && (nonVoidTotalBefore + delta > 5 || energyCosts[color] + delta > 5);
+    const willExceedTotalLimit = totalEnergyBefore + delta > 15;
+  
+    // Prevent changes that exceed limits
+    if (willExceedNonVoidLimit || (color === "void" && willExceedTotalLimit)) {
+      console.log("Limit reached, cannot increase further.");
+      return;
+    }
+  
+    // Calculate new cost within the allowed limits
     let newCost = Math.max(0, energyCosts[color] + delta);
-
     if (color !== "void") {
       newCost = Math.min(newCost, 5);
-
-      const nonVoidTotal = Object
-        .entries(energyCosts)
-        .reduce(
-          (acc, [key, value]) => {
-            if (key !== "void") {
-              return acc + (
-                key === color ?
-                newCost : value
-              );
-            }
-        return acc;
-      }, 0);
-  
-      if (nonVoidTotal > 5) {
-        newCost = Math.max(
-          0, newCost - (nonVoidTotal - 5)
-        );
-      }
     } else {
-      const nonVoidTotal = Object
-        .values(energyCosts)
-        .reduce(
-          (acc, value, index) => {
-            return index === Object
-              .keys(energyCosts)
-              .indexOf("void") ?
-              acc : acc + value;
-      }, 0);
-
-      const maxVoid = 15 - nonVoidTotal;
+      const maxVoid = 15 - nonVoidTotalBefore;
       newCost = Math.min(newCost, maxVoid);
     }
-
+  
+    // Update the energy costs with the new value
     const updatedEnergyCosts = {
       ...energyCosts,
       [color]: newCost
     };
-
-    const newTotalEnergyValue = Object
-      .values(updatedEnergyCosts)
-      .reduce(
-        (acc: number, value) =>
-        acc + (value as number),
-        0,
-    );
-
-    if (
-      typeof newTotalEnergyValue === "number"
-      && newTotalEnergyValue <= 15
-    ) {
-      setValue("cardEnergyCost." +
-        color, newCost, {
-          shouldValidate: true
-        });
-      setValue("cardEnergyValue",
-        newTotalEnergyValue, {
-          shouldValidate: true
-        });
+  
+    // Calculate the new total energy value
+    const newTotalEnergyValue = Object.values(updatedEnergyCosts).reduce((acc, value) => acc + value, 0);
+  
+    if (newTotalEnergyValue <= 15) {
+      setValue("cardEnergyCost." + color, newCost, { shouldValidate: true });
+      setValue("cardEnergyValue", newTotalEnergyValue, { shouldValidate: true });
       await trigger("cardEnergyCost");
       await trigger("cardEnergyValue");
-      
+  
       // Force card re-render by tracking each change
       setEnergyCostChangeCounter(energyCostChangeCounter + 1);
-
-      console.log(`Color values: ${JSON.stringify(watchCardEnergyCost)}`)
-      console.log(`Total value: ${watchCardEnergyValue}`)
-    };
+  
+      console.log(`Color values: ${JSON.stringify(updatedEnergyCosts)}`);
+      console.log(`Total value: ${newTotalEnergyValue}`);
+    }
   };
 
   return (
@@ -200,49 +171,49 @@ export default function EnergyCostPopover({
                     "bg-yellow-500":
                       color === "yellow",
                     "bg-opacity-10 hover:bg-opacity-20 border border-yellow-500/0 hover:border-yellow-500/40":
-                      color === "yellow" && activeCardCost[color] === 0,
+                      color === "yellow" && watchCardEnergyCost[color] === 0,
                     "bg-opacity-40 border border-yellow-500/80 shadow-sm shadow-gray-900/50":
-                      color === "yellow" && activeCardCost[color] > 0,
+                      color === "yellow" && watchCardEnergyCost[color] > 0,
                   },
                   {
                     "bg-sky-500":
                       color === "blue",
                     "bg-opacity-10 hover:bg-opacity-20 border border-sky-500/0 hover:border-sky-500/40":
-                      color === "blue" && activeCardCost[color] === 0,
+                      color === "blue" && watchCardEnergyCost[color] === 0,
                     "bg-opacity-40 border border-sky-500/80 shadow-sm shadow-gray-900/50":
-                      color === "blue" && activeCardCost[color] > 0,
+                      color === "blue" && watchCardEnergyCost[color] > 0,
                   },
                   {
                     "bg-violet-500":
                       color === "purple",
                     "bg-opacity-10 hover:bg-opacity-20 border border-violet-500/0 hover:border-violet-500/40":
-                      color === "purple" && activeCardCost[color] === 0,
+                      color === "purple" && watchCardEnergyCost[color] === 0,
                     "bg-opacity-40 border border-violet-500/80 shadow-sm shadow-gray-900/50":
-                      color === "purple" && activeCardCost[color] > 0,
+                      color === "purple" && watchCardEnergyCost[color] > 0,
                   },
                   {
                     "bg-red-500":
                       color === "red",
                     "bg-opacity-10 hover:bg-opacity-20 border border-red-500/0 hover:border-red-500/40":
-                      color === "red" && activeCardCost[color] === 0,
+                      color === "red" && watchCardEnergyCost[color] === 0,
                     "bg-opacity-40 border border-red-500/80 shadow-sm shadow-gray-900/50":
-                      color === "red" && activeCardCost[color] > 0,
+                      color === "red" && watchCardEnergyCost[color] > 0,
                   },
                   {
                     "bg-lime-500":
                       color === "green",
                     "bg-opacity-10 hover:bg-opacity-20 border border-lime-500/0 hover:border-lime-500/40":
-                      color === "green" && activeCardCost[color] === 0,
+                      color === "green" && watchCardEnergyCost[color] === 0,
                     "bg-opacity-40 border border-lime-500/80 shadow-sm shadow-gray-900/50":
-                      color === "green" && activeCardCost[color] > 0,
+                      color === "green" && watchCardEnergyCost[color] > 0,
                   },
                   {
                     "bg-gray-500":
                       color === "void",
                     "bg-opacity-10 hover:bg-opacity-20 border border-gray-500/0 hover:border-gray-500/40":
-                      color === "void" && activeCardCost[color] === 0,
+                      color === "void" && watchCardEnergyCost[color] === 0,
                     "bg-opacity-40 border border-ligrayme-500/80 shadow-sm shadow-gray-900/50":
-                      color === "void" && activeCardCost[color] > 0,
+                      color === "void" && watchCardEnergyCost[color] > 0,
                   }
                 )}
               >
@@ -282,6 +253,24 @@ export default function EnergyCostPopover({
                   "
                 >
                 <IconButton
+                  disabled={
+                    (color !== "void" &&
+                      watchCardEnergyCost[color] >= 5
+                    ) ||
+                    (color !== "void" && Object
+                      .entries(watchCardEnergyCost)
+                      .reduce((acc, [key, val]) => {
+                        return key !== "void" ?
+                        acc + val : acc;
+                      }, 0) >= 5
+                    ) ||
+                    (color === "void" && Object
+                      .values(watchCardEnergyCost)
+                      .reduce((acc, val) =>
+                        acc + val,
+                        0) >= 15
+                    )
+                  }
                   onClick={() => handleCostChange(color, +1)}
                   size="small"
                   className={clsx(
@@ -289,9 +278,7 @@ export default function EnergyCostPopover({
                     watchCardEnergyCost[color] === 0 && "opacity-50",
                   )}
                 >
-                  <AddIcon
-                    fontSize="small"
-                  />
+                  <AddIcon fontSize="small" />
                 </IconButton>
                   <Typography
                     variant="body1"
