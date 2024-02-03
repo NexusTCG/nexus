@@ -25,7 +25,6 @@ import {
   Select,
   IconButton
 } from "@mui/material/";
-// import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Image from "next/image";
 import clsx from "clsx";
 
@@ -38,7 +37,6 @@ import resetFieldsOnNode from "@/app/lib/actions/resetFieldsOnNode";
 
 // Custom components
 import EnergyCostPopover from "@/app/components/card-creator/EnergyCostPopover";
-// import GradePopover from "@/app/components/card-creator/GradePopover"
 import SpeedSelect from "@/app/components/card-creator/SpeedSelect";
 import EnergyCostIcons from "@/app/components/card-creator/EnergyCostIcons";
 
@@ -52,7 +50,6 @@ export default function NexusCardForm() {
 
   // Track energy cost popover state
   const [energyCostAnchorEl, setEnergyCostAnchorEl] = React.useState<HTMLElement | null>(null);
-  // const [gradeAnchorEl, setGradeAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
   // Track energy cost change (to force re-render)
   const [energyCostChangeCounter, setEnergyCostChangeCounter] = useState<number>(0);
@@ -121,18 +118,6 @@ export default function NexusCardForm() {
   function handleEnergyCostPopoverClose() {
     setEnergyCostAnchorEl(null);
   };
-
-  // Handle grade popover
-  // function handleGradePopoverOpen(
-  //   event: React.MouseEvent<HTMLButtonElement>
-  // ) {
-  //   setGradeAnchorEl(event.currentTarget);
-  //   console.log(formCardData.cardGrade)
-  // };
-  // function handleGradePopoverClose() {
-  //   setGradeAnchorEl(null);
-  //   console.log(formCardData.cardGrade)
-  // };
 
   function handleGradeChange() {
     switch (formCardData.cardGrade) {
@@ -821,24 +806,20 @@ export default function NexusCardForm() {
                 aria-label="add grade"
                 size="large"
                 onClick={handleGradeChange}
-                
               >
                 <Image
                   src={`${cardPartPath.base}/card-parts${cardPartPath.icon}${cardPartPath.grade}/grade-${formCardData.cardGrade.toLowerCase()}.png`}
-                  height={36}
-                  width={36}
+                  height={40}
+                  width={40}
                   alt={`${formCardData.cardGrade} icon`}
                   className="
+                    bg-black
                     cursor-pointer
                     rounded-full
                     p-2
                   "
                 />
               </IconButton>
-              {/* <GradePopover
-                anchorEl={gradeAnchorEl}
-                handleClose={handleGradePopoverClose}
-              /> */}
               
               {/* Card creator & copyright */}
               <Box
