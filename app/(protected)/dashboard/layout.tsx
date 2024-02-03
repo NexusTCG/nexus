@@ -23,6 +23,8 @@ export default function DashboardLayout({
     >
       <Box
         className="
+          sticky
+          top-0 
           hidden
           md:block 
           w-1/5
