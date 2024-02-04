@@ -20,7 +20,6 @@ import {
   FormControl,
   Typography,
   TextField,
-  InputLabel,
   MenuItem,
   Select,
   IconButton,
@@ -162,6 +161,7 @@ export default function NexusCardForm() {
       sx={{
         aspectRatio: "2.5 / 3.5",
         maxWidth: "480px",
+        minWidth: "420px",
       }}
       className="
         flex
@@ -284,7 +284,7 @@ export default function NexusCardForm() {
               p-1
               rounded-md
               text-black
-          `}
+            `}
           >
             {/* Card types */}
             <Box
@@ -309,41 +309,35 @@ export default function NexusCardForm() {
                     <FormControl 
                       className={clsx("flex-grow",
                         {
-                          "w-1/5": formCardData.cardType === "entity",
-                          "w-1/2":
-                            formCardData.cardType === "object"
-                            || formCardData.cardType === "effect"
-                            || formCardData.cardType === "node",
+                          "w-1/6": formCardData.cardType === "entity",
+                          "w-1/5": formCardData.cardType === "node",
                         }
                       )}
                     >
-                      <InputLabel>
-                        Super type
-                      </InputLabel>
                       <Select
                         {...field}
                         label="Super type"
-                        size="small"
-                        className="w-full"
                         sx={{
                           '& .MuiInputBase-input': {
-                            color: 'black',
+                            color: "black",
+                            padding: "0",
+                            height: "34px",
+                            display: "flex",
+                            justifyContent: "start",
+                            alignItems: "center",
+                            fontSize: "1rem",
+                            fontWeight: "semi-bold",
+                            overflow: "hidden",
                           },
                           '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'black',
-                          },
-                          '&:hover .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'lightblue',
-                          },
-                          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'blue',
+                            border: "none",
+                            borderColor: "black"
                           },
                         }}
                       >
                         {Object.entries(
                           cardSuperTypeOptions
-                          ).map(
-                          ([value, label]) => (
+                          ).map(([value, label]) => (
                             <MenuItem
                               key={value}
                               value={value}
@@ -361,42 +355,38 @@ export default function NexusCardForm() {
                   )}
                 />
               )}
+
               {/* Type */}
               <Controller
                 name="cardType"
                 control={control}
                 render={({ field }) => (
                   <FormControl
-                    className={clsx("w-full",
+                    className={clsx("flex-grow",
                       {
-                        "w-1/2": formCardData.cardSuperType &&
-                          !formCardData.cardSubType,
-                        "w-1/5": formCardData.cardSuperType &&
-                          formCardData.cardSubType,
+                        "w-1/6": formCardData.cardType === "entity",
+                        "w-4/5": formCardData.cardType === "node",
                       }
                     )}
                   >
-                    <InputLabel>
-                      Type
-                    </InputLabel>
                     <Select
                       // multiple // change to multiple but only for entity + object/effect
                       {...field}
                       label="Type"
-                      size="small"
-                      className="w-full"
                       sx={{
                         '& .MuiInputBase-input': {
-                          color: 'black',
+                          color: "black",
+                          padding: "0",
+                          height: "34px",
+                          display: "flex",
+                          justifyContent: "start",
+                          alignItems: "center",
+                          fontSize: "1rem",
+                          fontWeight: "semi-bold",
                         },
                         '& .MuiOutlinedInput-notchedOutline': {
-                          borderColor: 'black',
-                        },
-                        '&:hover .MuiOutlinedInput-notchedOutline': {
-                          borderColor: 'lightblue',
-                        },
-                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                          borderColor: 'blue',
+                          border: "none",
+                          borderColor: "black",
                         },
                       }}
                       onChange={async (e) => {
@@ -440,7 +430,7 @@ export default function NexusCardForm() {
                   control={control}
                   render={({ field }) => (
                     <FormControl
-                      className={clsx("",
+                      className={clsx("flex-grow",
                         {
                           "w-1/2": formCardData.cardType === "node",
                           "w-3/5":
@@ -450,27 +440,25 @@ export default function NexusCardForm() {
                         }
                       )}
                     >
-                      <InputLabel>
-                        Sub type
-                      </InputLabel>
                       <Select
                         multiple
                         {...field}
                         value={Array.isArray(field.value) ? field.value : []}
                         label="Sub type"
-                        size="small"
                         sx={{
                           '& .MuiInputBase-input': {
-                            color: 'black',
+                            color: "black",
+                            padding: "0",
+                            height: "34px",
+                            display: "flex",
+                            justifyContent: "start",
+                            alignItems: "center",
+                            fontSize: "1rem",
+                            fontWeight: "semi-bold",
                           },
                           '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'black',
-                          },
-                          '&:hover .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'lightblue',
-                          },
-                          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'blue',
+                            border: "none",
+                            borderColor: "black",
                           },
                         }}
                         renderValue={(selected) => selected.join(' ')}
@@ -673,7 +661,7 @@ export default function NexusCardForm() {
                       multiline
                       size="small"
                       variant="standard"
-                      placeholder="Write some flavor text."
+                      placeholder="The greatest flavor text you've ever read!"
                       className="w-full"
                       rows={2}
                       inputProps={{
@@ -852,6 +840,7 @@ export default function NexusCardForm() {
                   variant="caption"
                 >
                   {/* Creator: {" "} */}
+                  {/* Replace with username */}
                   {formCardData.cardCreator
                     ? formCardData.cardCreator
                     : "Card Creator"}

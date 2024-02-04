@@ -9,8 +9,7 @@ import { CardFormDataType } from "@/app/utils/types/types";
 import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
 
-export default function CardCreatorForm() {
-  const methods = useForm<CardFormDataType>({
+export default function CardCreatorForm() {const methods = useForm<CardFormDataType>({
     defaultValues: {
       cardCreator: "",
       cardName: "",
@@ -26,8 +25,8 @@ export default function CardCreatorForm() {
       cardColor: "",
       cardArt: "",
       cardType: "entity",
-      cardSuperType: "",
-      cardSubType: [],
+      cardSuperType: "Super",
+      cardSubType: [""],
       cardSpeed: "1",
       cardGrade: "common",
       cardText: "",
