@@ -23,7 +23,10 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  IconButton
+  IconButton,
+  Tooltip,
+  Fade,
+  Snackbar
 } from "@mui/material/";
 import Image from "next/image";
 import clsx from "clsx";
@@ -39,6 +42,7 @@ import resetFieldsOnNode from "@/app/lib/actions/resetFieldsOnNode";
 import EnergyCostPopover from "@/app/components/card-creator/EnergyCostPopover";
 import SpeedSelect from "@/app/components/card-creator/SpeedSelect";
 import EnergyCostIcons from "@/app/components/card-creator/EnergyCostIcons";
+import CustomInput from "@/app/components/card-creator/CustomInput";
 
 export default function NexusCardForm() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -59,6 +63,9 @@ export default function NexusCardForm() {
   const [cardColor, setCardColor] = useState<string>("default");
   const [cardColorClass, setCardColorClass] = useState<string>("default");
   const [cardBgImage, setCardBgImage] = useState<string>("bg-[url('/images/card-parts/card-frames/other/default.png')]");
+
+  // Snackbars
+  const [openGradeSnackbar, setOpenGradeSnackBar] = React.useState(false);
 
   // useEffects to determine color type based on cost
   useEffect(() => {
@@ -133,7 +140,19 @@ export default function NexusCardForm() {
         default:
             setValue("cardGrade", "rare");
       }
+    setOpenGradeSnackBar(true);
   }
+
+  function handleCloseGradeSnackbar(
+    event: React.SyntheticEvent |
+    Event, reason?: string
+  ) {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenGradeSnackBar(false);
+  };
 
   return (
     <Box
@@ -166,7 +185,6 @@ export default function NexusCardForm() {
           w-full
           h-full
           rounded-lg
-          
           bg-cover
           bg-center
           bg-no-repeat
@@ -177,7 +195,11 @@ export default function NexusCardForm() {
         <Box
           id="card-header"
           className={`
-              ${colorMapping[cardColorClass as keyof typeof colorMapping]?.[50] ?? "bg-slate-50"}
+              ${colorMapping[
+                cardColorClass as keyof typeof
+                colorMapping]?.[50] ??
+                "bg-slate-50"
+              }
               flex
               flex-col
               justify-between
@@ -228,42 +250,11 @@ export default function NexusCardForm() {
                 />
               )}
               {/* Card name */}
-              <Controller
+              <CustomInput
                 name="cardName"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <TextField
-                    {...field}
-                    size="small"
-                    placeholder={
-                      !fieldState.error ? "Card name":
-                      "Card name is required!"
-                    }
-                    error={!!fieldState.error}
-                    className={clsx("text-white flex-grow",
-                      {
-                        "!text-black": !fieldState.error,
-                        "!text-red-500": fieldState.error,
-                      }
-                    )}
-                    sx={{
-                      '& .MuiInputBase-input': {
-                        color: "black",
-                      },
-                      '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: "black",
-                      },
-                      '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: "gray",
-                      },
-                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'blue',
-                      },
-                    }}
-                  />
-                )}
+                placeholder="Card name"
               />
-            </Box>
+            </Box> 
             
             {/* Card cost */}
             {formCardData.cardType !== "node" &&  (<EnergyCostIcons
@@ -802,24 +793,45 @@ export default function NexusCardForm() {
                 w-full
               "
             >
-              <IconButton
-                aria-label="add grade"
-                size="large"
-                onClick={handleGradeChange}
+              <Snackbar
+                open={openGradeSnackbar}
+                autoHideDuration={3000}
+                onClose={handleCloseGradeSnackbar}
+                message={`Grade changed to ${formCardData.cardGrade}!`}
+              />
+              <Tooltip
+                TransitionComponent={Fade}
+                TransitionProps={{ timeout: 600 }}
+                title={`
+                  Change grade to
+                  ${
+                    formCardData.cardGrade === "rare" ?
+                    "epic" : formCardData.cardGrade === "epic" ?
+                    "prime" : formCardData.cardGrade === "prime" ?
+                    "common" : "rare"
+                  }`
+                }
+                placement="top"
               >
-                <Image
-                  src={`${cardPartPath.base}/card-parts${cardPartPath.icon}${cardPartPath.grade}/grade-${formCardData.cardGrade.toLowerCase()}.png`}
-                  height={40}
-                  width={40}
-                  alt={`${formCardData.cardGrade} icon`}
-                  className="
-                    bg-black
-                    cursor-pointer
-                    rounded-full
-                    p-2
-                  "
-                />
-              </IconButton>
+                <IconButton
+                  aria-label="add grade"
+                  size="large"
+                  onClick={handleGradeChange}
+                >
+                  <Image
+                    src={`${cardPartPath.base}/card-parts${cardPartPath.icon}${cardPartPath.grade}/grade-${formCardData.cardGrade.toLowerCase()}.png`}
+                    height={40}
+                    width={40}
+                    alt={`${formCardData.cardGrade} icon`}
+                    className="
+                      bg-black
+                      cursor-pointer
+                      rounded-full
+                      p-2
+                    "
+                  />
+                </IconButton>
+              </Tooltip>
               
               {/* Card creator & copyright */}
               <Box
@@ -906,12 +918,6 @@ export default function NexusCardForm() {
                     maxLength: 2,
                     disableUnderline: true
                   }}
-                  // helperText={
-                  //   fieldState.error
-                  //     ? fieldState.error.message
-                  //     : "Card text is required!"
-                  // }
-                  // InputProps={{ disableUnderline: true }}
                 />
               )}
             />

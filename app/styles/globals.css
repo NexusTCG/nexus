@@ -5,3 +5,57 @@
 .card-text-divider {
   background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, .25), rgba(0, 0, 0, 0));
 }
+
+/* CUSTOM STYLES */
+
+/* Custom Input Component */
+input.custom-input-base {
+  border: none;
+  appearance: none;
+}
+
+.custom-input-base {
+  flex: auto;
+  width: auto;
+  text-align: left;
+  align-items: center;
+  height: 34px;
+  padding: 6px 3px;
+  border-radius: 3px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: black;
+  background-color: transparent;
+}
+
+.custom-input-error {
+  color: red;
+}
+
+/* Custom Select Component */
+.custom-select-base {
+  flex: auto;
+  width: auto;
+  height: 34px;
+  padding: 6px 3px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: black;
+  background-color: transparent;
+  width: 100%;
+}
+
+.custom-select-base:focus {
+  border-color: transparent;
+}
+
+.custom-select-error {
+  border-color: red;
+}
+
+.custom-select-error-message {
+  color: red;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
