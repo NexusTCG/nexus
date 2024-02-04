@@ -197,10 +197,10 @@ export default function determineBgImage(
 
         default:
             if (activeCardType === "object") {
-                return "bg-[url('/images/card-parts/card-frames/other/object-default.png')]";
+                return "bg-[url('/images/card-parts/card-frames/other/object/object-default.png')]";
 
             } else if (activeCardType === "effect") {
-                return "bg-[url('/images/card-parts/card-frames/other/effect-default.png')]";
+                return "bg-[url('/images/card-parts/card-frames/other/effect/effect-default.png')]";
 
             };
             return "bg-[url('/images/card-parts/card-frames/other/default.png')]";

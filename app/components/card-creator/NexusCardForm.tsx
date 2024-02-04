@@ -404,7 +404,6 @@ export default function NexusCardForm() {
                         if (e.target.value === "node") {
                           const newEnergyCost = await resetFieldsOnNode(activeCardCost);
                           setValue("cardEnergyCost", newEnergyCost);
-
                           setValue("cardEnergyValue", 0);
                           setValue("cardSpeed", "");
                           setValue("cardSubType", [""]);
@@ -767,9 +766,6 @@ export default function NexusCardForm() {
                       borderColor: 'blue',
                     },
                   }}
-                  // add logic to only allow for numbers
-                  // helperText={fieldState.error ? fieldState.error.message : "Card text is required!"}
-                  // InputProps={{ disableUnderline: true }} caused error
                 />
               )}
             />
@@ -921,8 +917,7 @@ export default function NexusCardForm() {
                   }}
                   error={!!fieldState.error}
                   inputProps={{
-                    maxLength: 2,
-                    disableUnderline: true
+                    maxLength: 2
                   }}
                 />
               )}
