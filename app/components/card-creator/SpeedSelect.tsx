@@ -2,12 +2,14 @@
 
 import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Snackbar, Tooltip, Fade } from "@mui/material";
 import Image from "next/image";
 import clsx from "clsx";
 
 export default function SpeedSelect() {
     const { setValue, watch } = useFormContext();
+
+    const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const currentCardSpeed = watch("cardSpeed");
 
@@ -15,6 +17,7 @@ export default function SpeedSelect() {
 
     const handleSpeedChange = (newSpeed: string) => {
         setValue("cardSpeed", newSpeed);
+        setOpenSnackbar(true);
     };
 
     const handleMouseEnter = (iconSpeed: string) => {
@@ -24,6 +27,17 @@ export default function SpeedSelect() {
     const handleMouseLeave = () => {
         setHoveredIcon(null);
     };
+
+    function handleCloseSnackbar(
+        event: React.SyntheticEvent |
+        Event, reason?: string
+      ) {
+        if (reason === 'clickaway') {
+          return;
+        }
+    
+        setOpenSnackbar(false);
+      };
 
     function getOpacityClass(iconSpeed: string) {
         const isCurrent = currentCardSpeed >= iconSpeed;
@@ -42,35 +56,35 @@ export default function SpeedSelect() {
     };
 
     return (
-        <Box
-            className="
-                flex
-                flex-row-reverse
-                justify-start
-                items-center
-                gap-0.5
-                m-0
-            "
-        >
+        <Box className="flex flex-row-reverse justify-start items-center gap-0.5 m-0">
+            <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={handleCloseSnackbar} message={`Speed changed to ${currentCardSpeed}!`} />
             {["1", "2", "3"].map((iconSpeed) => (
-                <IconButton
+                <Tooltip
                     key={iconSpeed}
-                    id={`card-speed-${iconSpeed}-button`}
-                    aria-label={`speed ${iconSpeed}`}
-                    size="small"
-                    onClick={() => handleSpeedChange(iconSpeed)}
-                    onMouseEnter={() => handleMouseEnter(iconSpeed)}
-                    onMouseLeave={handleMouseLeave}
-                    className="p-0"
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 600 }}
+                    title={`Change speed to ${iconSpeed}`}
+                    placement="top"
                 >
-                    <Image
-                        src={`/images/card-parts/card-icons/speed.png`}
-                        width={14} // 17 base
-                        height={20} // 25 base
-                        alt={`Speed ${iconSpeed} icon`}
-                        className={clsx(getOpacityClass(iconSpeed))}
-                    />
-                </IconButton>
+                    <IconButton
+                        key={iconSpeed}
+                        id={`card-speed-${iconSpeed}-button`}
+                        aria-label={`speed ${iconSpeed}`}
+                        size="small"
+                        onClick={() => handleSpeedChange(iconSpeed)}
+                        onMouseEnter={() => handleMouseEnter(iconSpeed)}
+                        onMouseLeave={handleMouseLeave}
+                        className="p-0"
+                    >
+                        <Image
+                            src={`/images/card-parts/card-icons/speed.png`}
+                            width={14}
+                            height={20}
+                            alt={`Speed ${iconSpeed} icon`}
+                            className={clsx(getOpacityClass(iconSpeed))}
+                        />
+                    </IconButton>
+                </Tooltip>
             ))}
         </Box>
     );
