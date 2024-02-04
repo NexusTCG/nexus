@@ -26,7 +26,8 @@ import {
   IconButton,
   Tooltip,
   Fade,
-  Snackbar
+  Snackbar,
+  Divider
 } from "@mui/material/";
 import Image from "next/image";
 import clsx from "clsx";
@@ -51,6 +52,7 @@ export default function NexusCardForm() {
   const formCardData = watch();
   const activeCardCost = watch("cardEnergyCost");
   const activeCardType = watch("cardType");
+  const activeCardText = watch("cardText");
 
   // Track energy cost popover state
   const [energyCostAnchorEl, setEnergyCostAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -597,6 +599,7 @@ export default function NexusCardForm() {
                 flex
                 flex-col
                 w-full
+                h-[200px]
                 text-black
                 border-2
                 border-black
@@ -614,7 +617,7 @@ export default function NexusCardForm() {
                     multiline
                     size="small"
                     variant="standard"
-                    rows={4}
+                    rows={activeCardText.length > 200 ? 7 : 4}
                     error={!!fieldState.error}
                     placeholder={
                       !fieldState.error ? 'Type "/" to insert a keyword ability.':
@@ -627,7 +630,7 @@ export default function NexusCardForm() {
                       }
                     )}
                     inputProps={{
-                      maxLength: 200
+                      maxLength: 280
                     }}
                     sx={{
                       '& .MuiInputBase-input': {
@@ -648,17 +651,20 @@ export default function NexusCardForm() {
                   />
                 )}
               />
+
               {/* Divider */}
-              <Box
-                className="
-                  card-text-divider
-                  h-[2px]
-                  w-full
-                  my-4
-                "
-              />
+              {activeCardText.length <= 200 && (
+                <Divider
+                  className="
+                    mx-4
+                    my-2
+                    opacity-25
+                  "
+                />
+              )}
+              
               {/* Card flavor text */}
-              {formCardData.cardText.length <= 200 && (
+              {activeCardText.length <= 200 && (
                 <Controller
                   name="cardFlavorText"
                   control={control}
@@ -672,7 +678,7 @@ export default function NexusCardForm() {
                       className="w-full"
                       rows={2}
                       inputProps={{
-                        maxLength: 75
+                        maxLength: 80
                       }}
                       sx={{
                         '& .MuiInputBase-input': {
