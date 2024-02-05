@@ -12,7 +12,8 @@ import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
 
 // Remove the user id
-export default function CardCreatorForm() {const methods = useForm<CardFormDataType>({
+export default function CardCreatorForm() {
+  const methods = useForm<CardFormDataType>({
     defaultValues: {
       user_id: "", 
       cardCreator: "",
@@ -49,6 +50,7 @@ export default function CardCreatorForm() {const methods = useForm<CardFormDataT
     watch,
     formState: { isValid, errors, isSubmitting },
     setError,
+    setValue
   } = methods;
 
   const formNexusCardData = watch();
@@ -77,9 +79,15 @@ export default function CardCreatorForm() {const methods = useForm<CardFormDataT
   }
 
   const session = useSession();
+  const userId = watch("user_id")
+
+  useEffect(() => {
+    if (session?.user?.id) {
+      setValue('user_id', session.user.id);
+    }
+  }, [session, setValue]);
   
   async function onSubmit(data: CardFormDataType) {
-    const userId = session?.user?.id;
 
     if (!userId) {
       setError("user_id", { type: "manual", message: "User must be logged in to submit a card." });
@@ -87,18 +95,13 @@ export default function CardCreatorForm() {const methods = useForm<CardFormDataT
       return;
     }
 
-    const submissionData = {
-      ...data,
-      user_id: userId,
-    };
-
     try {
       const response = await fetch("/data/submit-card", { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(submissionData),
+        body: JSON.stringify(data),
       });
 
       const responseData = await response.json();
