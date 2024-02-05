@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Typography, TextField, Button } from "@mui/material/";
+import { Box, Typography, TextField, Button, Snackbar, Alert, CircularProgress } from "@mui/material/";
 import { CardFormDataType } from "@/app/utils/types/types";
 import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
@@ -43,10 +43,14 @@ export default function CardCreatorForm() {const methods = useForm<CardFormDataT
     register,
     handleSubmit,
     watch,
-    formState: { isValid },
+    formState: { isValid, errors, isSubmitting },
   } = methods;
 
   const formNexusCardData = watch();
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState('info');
 
   useEffect(() => {
     console.log(formNexusCardData);
@@ -67,8 +71,33 @@ export default function CardCreatorForm() {const methods = useForm<CardFormDataT
     // Display image in card preview
   }
 
-  function onSubmit(data: CardFormDataType) {
-    console.log(data);
+  async function onSubmit(data: CardFormDataType) {
+    try {
+      const response = await fetch("/data/submit-card", { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const responseData = await response.json();
+
+      if (response.ok) {
+        setSnackbarMessage('Submission successful');
+        setSnackbarSeverity('success');
+        // setOpenSnackbar(true);
+      } else {
+        setSnackbarMessage('Submission failed: ' + responseData.error);
+        setSnackbarSeverity('error');
+      }
+      setSnackbarOpen(true);
+    } catch (error) {
+      setSnackbarMessage('Submission failed: ' + error);
+      setSnackbarSeverity('error');
+      // Handle the error (e.g., showing an error message)
+    }
+    setSnackbarOpen(true);
     // Generate png image from code / card data
     // Write card data to database (with image url)
     // Write finished card image to database
@@ -184,8 +213,9 @@ export default function CardCreatorForm() {const methods = useForm<CardFormDataT
                   label="Card creator"
                   variant="outlined"
                   {...register("cardCreator")}
-                  className="flex
-                  w-full"
+                  className="flex w-full"
+                  error={Boolean(errors.cardCreator)}
+                  helperText={errors.cardCreator?.message}
                 />
 
                 {/* Input: AI prompt */}
@@ -195,13 +225,14 @@ export default function CardCreatorForm() {const methods = useForm<CardFormDataT
                   label="Card prompt"
                   variant="outlined"
                   {...register("cardPrompt")}
-                  className="flex
-                  w-full"
+                  className="flex w-full"
+                  error={Boolean(errors.cardPrompt)}
+                  helperText={errors.cardPrompt?.message}
                 />
 
                 {/* Submit Form */}
                 <Button
-                  disabled={!isValid}
+                  disabled={!isValid || isSubmitting}
                   type="submit"
                   variant="outlined"
                   size="large"
@@ -211,7 +242,7 @@ export default function CardCreatorForm() {const methods = useForm<CardFormDataT
                     rounded-full
                   "
                 >
-                  Submit
+                  {isSubmitting ? <CircularProgress size={24} /> : 'Submit'}
                 </Button>
               </Box>
             </Box>
@@ -232,6 +263,24 @@ export default function CardCreatorForm() {const methods = useForm<CardFormDataT
           
         </form>
       </FormProvider>
+      
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarOpen(false)}
+      >
+        <Alert
+          onClose={() => setSnackbarOpen(false)}
+          severity={
+            snackbarSeverity === "success" ?
+            "success" : "error"
+          }
+          sx={{ width: '100%' }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+      
     </Box>
   );
 }
