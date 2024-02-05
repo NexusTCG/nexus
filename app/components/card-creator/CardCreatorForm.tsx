@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,9 +23,9 @@ export default function CardCreatorForm() {const methods = useForm<CardFormDataT
         void: 0,
       },
       cardColor: "",
-      cardArt: "",
+      cardArt: "/images/card-parts/card-art/default-art.jpg",
       cardType: "entity",
-      cardSuperType: "Super",
+      cardSuperType: "default",
       cardSubType: [""],
       cardSpeed: "1",
       cardGrade: "common",
@@ -47,6 +47,10 @@ export default function CardCreatorForm() {const methods = useForm<CardFormDataT
   } = methods;
 
   const formNexusCardData = watch();
+
+  useEffect(() => {
+    console.log(formNexusCardData);
+  }, [formNexusCardData]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function sendPromptToOpenAI() {
@@ -73,116 +77,159 @@ export default function CardCreatorForm() {const methods = useForm<CardFormDataT
   }
 
   return (
+    // Outerontainer
     <Box
       className="
         flex
         flex-col
         w-full
-        p-0
-        md:p-6
         md:bg-gray-800
-        md:rounded-xl
         md:border
         md:border-gray-700
-        md:shadow-xl    
+        md:shadow-2xl
+        md:shadow-black
+        md:rounded-lg
+        p-6
+        md:py-8
+        pb:mb-0
+        pb-12
       "
     >
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
+          {/* Inner Container */}
           <Box
             className="
               flex
               flex-col
-              w-full
-              gap-4
-              my-4
+              md:flex-row
+              gap-8
             "
           >
-            {/* Form header */}
+            {/* Form Header */}
             <Box
               className="
                 flex
                 flex-col
-                w-full
                 justify-start
                 items-start
-                gap-1
+                w-full
+                gap-4
               "
             >
-              {/* Card title */}
-              <Typography
-                variant="h2"
+              {/* Card Name + Creator */}
+              <Box
                 className="
-                  text-4xl
-                  text-gray-200
-                  font-medium
+                  flex
+                  flex-col
+                  w-full
+                  justify-start
+                  items-start
+                  gap-2
                 "
               >
-                {formNexusCardData.cardName
-                  ? formNexusCardData.cardName
-                  : "An awesome card"}
-              </Typography>
-
-              {/* Creator */}
-              <Typography
-                variant="overline"
-                className="text-emerald-400"
-              >
+                {/* Card Name */}
                 <Typography
-                  variant="overline"
-                  className="text-gray-400"
-                  component="span"
+                  variant="h2"
+                  className="
+                    text-4xl
+                    text-gray-200
+                    font-medium
+                  "
                 >
-                  by{" "}
+                  {formNexusCardData.cardName
+                    ? formNexusCardData.cardName
+                    : "An awesome card"}
                 </Typography>
-                {formNexusCardData.cardCreator
-                  ? formNexusCardData.cardCreator
-                  : "Card creator"}
-              </Typography>
-            </Box>
-            
-            {/* Replace with fetched username */}
-            <TextField
-              label="Card creator"
-              variant="outlined"
-              {...register("cardCreator")}
-            />
 
-            {/* AI prompt */}
-            <TextField
-              multiline
-              rows={4}
-              label="Card prompt"
-              variant="outlined"
-              {...register("cardPrompt")}
-            />
+                {/* Card Creator */}
+                <Box
+                  className="
+                    flex
+                    flex-row
+                    w-full
+                    justify-start
+                    items-center
+                  "
+                >
+                  <Typography
+                    variant="overline"
+                    className="text-emerald-400"
+                  >
+                    <Typography
+                      variant="overline"
+                      className="text-gray-400"
+                      component="span"
+                    >
+                      by{" "}
+                    </Typography>
+                    {formNexusCardData.cardCreator
+                      ? formNexusCardData.cardCreator
+                      : "Card creator"}
+                  </Typography>
+                </Box>
+              </Box>
 
-            {/* Submit form */}
-            <Box className="flex flex-row gap-4">
-              {/* <PromptInput /> */}
-              <Button
-                disabled={!isValid}
-                type="submit"
-                variant="outlined"
-                size="large"
-                className="w-full rounded-full"
+              {/* Input Fields */}
+              <Box
+                className="
+                  flex
+                  flex-col
+                  w-full
+                  gap-4
+                "
               >
-                Submit
-              </Button>
-            </Box>
+                {/* Input: Card creator */}
+                <TextField
+                  label="Card creator"
+                  variant="outlined"
+                  {...register("cardCreator")}
+                  className="flex
+                  w-full"
+                />
 
+                {/* Input: AI prompt */}
+                <TextField
+                  multiline
+                  rows={4}
+                  label="Card prompt"
+                  variant="outlined"
+                  {...register("cardPrompt")}
+                  className="flex
+                  w-full"
+                />
+
+                {/* Submit Form */}
+                <Button
+                  disabled={!isValid}
+                  type="submit"
+                  variant="outlined"
+                  size="large"
+                  className="
+                    flex
+                    w-full
+                    rounded-full
+                  "
+                >
+                  Submit
+                </Button>
+              </Box>
+            </Box>
+            {/* Nexus Card Render */}
+            <Box
+              className="
+                flex
+                flex-col
+                justify-center
+                items-center
+                w-full
+              "
+            >
+              <NexusCardForm />
+            </Box>
           </Box>
-          <Box
-            className="
-              flex
-              flex-col
-              justify-center
-              items-center
-            "
-          >
-            {/* Nexus Card Form */}
-            <NexusCardForm />
-          </Box>
+
+          
         </form>
       </FormProvider>
     </Box>

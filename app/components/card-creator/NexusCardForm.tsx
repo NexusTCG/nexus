@@ -159,21 +159,23 @@ export default function NexusCardForm() {
     <Box
       id="card-border"
       sx={{
-        aspectRatio: "2.5 / 3.5",
-        maxWidth: "480px",
-        minWidth: "420px",
+        aspectRatio: "5 / 7"
       }}
       className="
+        relative
         flex
         flex-col
         justify-start
         items-center
+        w-full
+        h-full
+        max-w-[500px]
+        max-h-[700px]
         rounded-2xl
         bg-black
         px-4
         pt-3        
         pb-8
-        w-full
         shadow-lg
         shadow-gray-950/50
       "
@@ -186,6 +188,8 @@ export default function NexusCardForm() {
           flex-col
           w-full
           h-full
+          max-w-[468px]
+          max-h-[668px]
           rounded-lg
           bg-cover
           bg-center
@@ -196,49 +200,52 @@ export default function NexusCardForm() {
         {/* Card header */}
         <Box
           id="card-header"
+          sx={{
+            padding: "4px"
+          }}
           className={`
-              ${colorMapping[
-                cardColorClass as keyof typeof
-                colorMapping]?.[50] ??
-                "bg-slate-50"
-              }
-              flex
-              flex-col
-              justify-between
-              items-center
-              w-full
-              py-1
-              px-1
-              gap-2
-              border-4
-              border-black
-              rounded-lg
-              shadow-md
-              shadow-gray-950/50
-              z-10
+            ${colorMapping[
+              cardColorClass as keyof typeof
+              colorMapping]?.[50] ??
+              "bg-slate-50"
+            }
+            flex
+            flex-col
+            justify-between
+            items-center
+            w-full
+            h-full
+            max-w-[468px]
+            max-h-[72px]
+            border-4
+            border-black
+            rounded-lg
+            shadow-md
+            shadow-gray-950/50
+            z-10
           `}
         >
           {/* Card name and cost */}
           <Box
             id="card-header-mythic-name-cost"
             className={`
-                flex
-                flex-row
-                justify-between
-                items-center
-                w-full
-                gap-2
+              flex
+              flex-row
+              justify-between
+              items-center
+              w-full
+              max-h-[26px]
             `}
           >
             <Box
               id="card-header-mythic-name"
               className={`
-                  flex
-                  flex-row
-                  justify-start
-                  items-center
-                  gap-1
-                  flex-grow
+                flex
+                flex-row
+                flex-grow
+                justify-start
+                items-center
+                gap-1
               `}
             >
               {/* Mythic icon boolean */}
@@ -270,6 +277,7 @@ export default function NexusCardForm() {
               setEnergyCostChangeCounter={setEnergyCostChangeCounter}
             />)}
           </Box>
+
           {/* Card types and speed */}
           <Box
             id="card-header-types-speed"
@@ -280,7 +288,8 @@ export default function NexusCardForm() {
               justify-between
               items-center
               w-full
-              gap-3
+              max-h-[36px]
+              gap-2
               p-1
               rounded-md
               text-black
@@ -295,6 +304,7 @@ export default function NexusCardForm() {
                 justify-between
                 items-center
                 w-full
+                max-h-[28px]
                 gap-1
               "
             >
@@ -314,6 +324,7 @@ export default function NexusCardForm() {
                         }
                       )}
                     >
+                      {/* Replace with custom select component */}
                       <Select
                         {...field}
                         label="Super type"
@@ -321,11 +332,11 @@ export default function NexusCardForm() {
                           '& .MuiInputBase-input': {
                             color: "black",
                             padding: "0",
-                            height: "34px",
                             display: "flex",
                             justifyContent: "start",
                             alignItems: "center",
-                            fontSize: "1rem",
+                            fontSize: "20px",
+                            lineHeight: "28px",
                             fontWeight: "semi-bold",
                             overflow: "hidden",
                           },
@@ -356,6 +367,7 @@ export default function NexusCardForm() {
                 />
               )}
 
+              {/* Replace with custom select component */}              
               {/* Type */}
               <Controller
                 name="cardType"
@@ -371,17 +383,18 @@ export default function NexusCardForm() {
                   >
                     <Select
                       // multiple // change to multiple but only for entity + object/effect
+                      // change to custom component
                       {...field}
                       label="Type"
                       sx={{
                         '& .MuiInputBase-input': {
                           color: "black",
                           padding: "0",
-                          height: "34px",
                           display: "flex",
                           justifyContent: "start",
                           alignItems: "center",
-                          fontSize: "1rem",
+                          fontSize: "20px",
+                          lineHeight: "28px",
                           fontWeight: "semi-bold",
                         },
                         '& .MuiOutlinedInput-notchedOutline': {
@@ -449,11 +462,12 @@ export default function NexusCardForm() {
                           '& .MuiInputBase-input': {
                             color: "black",
                             padding: "0",
-                            height: "34px",
+                            height: "28px",
                             display: "flex",
                             justifyContent: "start",
                             alignItems: "center",
-                            fontSize: "1rem",
+                            fontSize: "20px",
+                            lineHeight: "28px",
                             fontWeight: "semi-bold",
                           },
                           '& .MuiOutlinedInput-notchedOutline': {
@@ -521,6 +535,7 @@ export default function NexusCardForm() {
             )}
           </Box>
         </Box>
+
         {/* Card image & content */}
         <Box
           id="card-image-content-outer"
@@ -529,6 +544,8 @@ export default function NexusCardForm() {
             flex-col
             w-full
             h-full
+            max-w-[468px]
+            max-h-[646px]
             px-4
             -mt-4
             z-0
@@ -544,6 +561,8 @@ export default function NexusCardForm() {
               flex-col
               w-full
               h-full
+              max-w-[434px]
+              max-h-[563px]
               gap-2
               p-1
               rounded-lg
@@ -560,7 +579,11 @@ export default function NexusCardForm() {
                 aspectRatio: "4 / 3"
               }}
               className="
+                flex
                 w-full
+                h-full
+                max-w-[424px]
+                max-h-[306px]
                 overflow-hidden
                 relative
                 border-2
@@ -580,13 +603,14 @@ export default function NexusCardForm() {
             {/* Card text and flavor text */}
             <Box
               id="card-text-flavor"
-              sx={{ aspectRatio: "540 / 275" }}
               className={`
                 ${colorMapping[cardColorClass as keyof typeof colorMapping]?.[50] ?? "bg-slate-50"}
                 flex
                 flex-col
                 w-full
-                h-[200px]
+                h-full
+                max-w-[424px]
+                max-h-[236px]
                 text-black
                 border-2
                 border-black
@@ -610,7 +634,7 @@ export default function NexusCardForm() {
                       !fieldState.error ? 'Type "/" to insert a keyword ability.':
                       "Card text is required!"
                     }
-                    className={clsx("w-full text-white",
+                    className={clsx("w-full h-full text-white",
                       {
                         "!text-black": !fieldState.error,
                         "!text-red-500": fieldState.error,
@@ -688,6 +712,7 @@ export default function NexusCardForm() {
             </Box>
           </Box>
         </Box>
+        
         {/* Card stats, grade, creator and copyright */}
         <Box
           id="card-stats-grade-creator-info"
@@ -697,8 +722,10 @@ export default function NexusCardForm() {
             justify-between
             items-center
             w-full
-            -mt-10
-            z-1
+            h-full
+            max-h-[57px]
+            -mt-12
+            z-10
           "
         >
           {/* Card attack */}
@@ -781,6 +808,7 @@ export default function NexusCardForm() {
                 justify-start
                 items-center
                 w-full
+                h-full
               "
             >
               <Snackbar

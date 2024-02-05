@@ -321,7 +321,6 @@ export default function EnergyCostPopover({
                     )
                   }
                   onClick={() => handleCostChange(color, +1)}
-                  size="small"
                   className={clsx(
                     "hover:opacity-100",
                     watchCardEnergyCost[color] === 0 && "opacity-50",

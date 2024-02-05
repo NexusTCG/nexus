@@ -56,8 +56,25 @@ export default function SpeedSelect() {
     };
 
     return (
-        <Box className="flex flex-row-reverse justify-start items-center gap-0.5 m-0">
-            <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={handleCloseSnackbar} message={`Speed changed to ${currentCardSpeed}!`} />
+        <Box
+            className="
+                flex
+                flex-row-reverse
+                justify-start
+                items-center
+                h-full
+                gap-0.5
+                m-0
+            "
+        >
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={3000}
+                onClose={handleCloseSnackbar}
+                message={`
+                    Speed changed to ${currentCardSpeed}!
+                `}
+            />
             {["1", "2", "3"].map((iconSpeed) => (
                 <Tooltip
                     key={iconSpeed}
@@ -78,8 +95,8 @@ export default function SpeedSelect() {
                     >
                         <Image
                             src={`/images/card-parts/card-icons/speed.png`}
-                            width={14}
-                            height={20}
+                            width={11}
+                            height={16}
                             alt={`Speed ${iconSpeed} icon`}
                             className={clsx(getOpacityClass(iconSpeed))}
                         />

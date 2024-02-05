@@ -27,10 +27,14 @@ export default function EnergyCostIcons({
         ).every(value => value === 0)) ? (
           <IconButton
             aria-label="add cost"
-            size="large"
+            size="small"
             onClick={handleEnergyCostPopoverOpen}
             color="primary"
-            className="p-2 bg-gray-200"
+            sx={{
+              height: "28px",
+              width: "28px",
+              padding: "0",
+            }}
           >
             <AddCircleIcon />
           </IconButton>
@@ -50,7 +54,6 @@ export default function EnergyCostIcons({
               gap-0.25
               cursor-pointer
               hover:opacity-80
-              px-1
             "
           >
             {Object.entries(formCardData.cardEnergyCost ?? {})
@@ -60,8 +63,8 @@ export default function EnergyCostIcons({
                       <Image
                         key={`${color}-${i}`}
                         src={`/images/card-parts/card-icons/card-cost/${color}.png`}
-                        width={24}
-                        height={24}
+                        width={26}
+                        height={26}
                         alt={`${color} energy icon`}
                       />
                     ))
@@ -70,8 +73,8 @@ export default function EnergyCostIcons({
                       <Image
                         key={`void-0`}
                         src={`/images/card-parts/card-icons/card-cost/void-${value}.png`}
-                        width={24}
-                        height={24}
+                        width={26}
+                        height={26}
                         alt={`void energy icon`}
                       />
                     )
