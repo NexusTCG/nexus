@@ -13,6 +13,7 @@ const EnergyCostSchema = z
 
 const CardFormSchema = z
   .object({
+    user_id: z.string().min(1, "User ID is required."), 
     cardCreator: z.string().min(1, "Card creator is required."),
     cardName: z.string().min(1, "Card name is required."),
     cardEnergyValue: z.number().optional(),

@@ -1,4 +1,5 @@
 export type CardFormDataType = {
+  user_id: string;
   cardCreator: string;
   cardName: string;
   cardEnergyValue: number;

@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import useSession from "@/app/hooks/useSession";
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,8 +11,10 @@ import { CardFormDataType } from "@/app/utils/types/types";
 import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
 
+// Remove the user id
 export default function CardCreatorForm() {const methods = useForm<CardFormDataType>({
     defaultValues: {
+      user_id: "", 
       cardCreator: "",
       cardName: "",
       cardEnergyValue: 0,
@@ -44,6 +48,7 @@ export default function CardCreatorForm() {const methods = useForm<CardFormDataT
     handleSubmit,
     watch,
     formState: { isValid, errors, isSubmitting },
+    setError,
   } = methods;
 
   const formNexusCardData = watch();
@@ -71,14 +76,29 @@ export default function CardCreatorForm() {const methods = useForm<CardFormDataT
     // Display image in card preview
   }
 
+  const session = useSession();
+  
   async function onSubmit(data: CardFormDataType) {
+    const userId = session?.user?.id;
+
+    if (!userId) {
+      setError("user_id", { type: "manual", message: "User must be logged in to submit a card." });
+      console.error("User ID is not available. User must be logged in to submit a card.");
+      return;
+    }
+
+    const submissionData = {
+      ...data,
+      user_id: userId,
+    };
+
     try {
       const response = await fetch("/data/submit-card", { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(submissionData),
       });
 
       const responseData = await response.json();
