@@ -39,6 +39,7 @@ export default function CardCreatorForm() {
       cardAttack: "",
       cardDefense: "",
       cardPrompt: "",
+      cardArtPrompt: "",
     },
     resolver: zodResolver(cardFormSchema),
     mode: "onChange",
@@ -54,41 +55,65 @@ export default function CardCreatorForm() {
   } = methods;
 
   const formNexusCardData = watch();
+  const session = useSession();
+  const userId = watch("user_id")
+  const cardArtPrompt = watch("cardArtPrompt");
 
+  // States
+  const [isGeneratingArt, setIsGeneratingArt] = useState(false);
+  const [generateArtLimit, setGenerateArtLimit] = useState(0);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState('info');
 
+
+  // Log form data
   useEffect(() => {
     console.log(formNexusCardData);
   }, [formNexusCardData]);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function sendPromptToOpenAI() {
-    // Send prompt to OpenAI API
-    // Store response in state
-    // Add response to card data
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function onImageGeneration() {
-    // Call OpenAI API to generate image
-    // Store image url in state
-    // Add image url to card data
-    // Display image in card preview
-  }
-
-  const session = useSession();
-  const userId = watch("user_id")
 
   useEffect(() => {
     if (session?.user?.id) {
       setValue('user_id', session.user.id);
     }
   }, [session, setValue]);
-  
-  async function onSubmit(data: CardFormDataType) {
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  function onPrompt() {
+    // Send prompt to OpenAI API
+    // Store response in state
+    // Add response to card data
+  }
+
+  // Generate card art
+  async function onImageGeneration() {
+    setIsGeneratingArt(true);
+    
+    if (generateArtLimit < 3) {
+      try {
+        const generatedImage = await fetch("/data/generate-card-art", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: cardArtPrompt,
+        });
+        const { image_url } = await generatedImage.json();
+
+        setValue("cardArt", image_url);
+        setValue("cardArtPrompt", "");
+        setGenerateArtLimit(generateArtLimit + 1);
+        
+      } catch (error) {
+        console.error('Failed to generate art:', error);
+      }
+    }
+    // If limit is hit, show error alert message
+    setIsGeneratingArt(false);
+  }
+  
+  // Submit form data
+  async function onSubmit(data: CardFormDataType) {
     if (!userId) {
       setError("user_id", { type: "manual", message: "User must be logged in to submit a card." });
       console.error("User ID is not available. User must be logged in to submit a card.");
@@ -96,6 +121,9 @@ export default function CardCreatorForm() {
     }
 
     try {
+      // Save card as PNG
+
+      // Submit the card data to the server
       const response = await fetch("/data/submit-card", { 
         method: 'POST',
         headers: {
@@ -128,8 +156,9 @@ export default function CardCreatorForm() {
     // Open modal to see & share card
   }
 
+
   return (
-    // Outerontainer
+    // Outer container
     <Box
       className="
         flex
@@ -252,10 +281,45 @@ export default function CardCreatorForm() {
                   error={Boolean(errors.cardPrompt)}
                   helperText={errors.cardPrompt?.message}
                 />
+                {/* Input: AI art prompt */}
+                <TextField
+                  multiline
+                  rows={2}
+                  label="Card art prompt"
+                  variant="outlined"
+                  {...register("cardArtPrompt")}
+                  className="flex w-full"
+                  error={Boolean(errors.cardArtPrompt)}
+                  helperText={errors.cardArtPrompt?.message}
+                />
+                <Button
+                  onClick={onImageGeneration}
+                  disabled={
+                    isGeneratingArt ||
+                    generateArtLimit >= 3 ||
+                    isSubmitting ||
+                    !userId
+                  }
+                  variant="outlined"
+                  size="large"
+                  className="
+                    flex
+                    w-full
+                    rounded-full
+                  "
+                >
+                  Generate card art
+                </Button>
+                {/* Alert component goes here */}
 
                 {/* Submit Form */}
                 <Button
-                  disabled={!isValid || isSubmitting}
+                  disabled={
+                    !isValid ||
+                    isGeneratingArt ||
+                    isSubmitting ||
+                    !userId
+                  }
                   type="submit"
                   variant="outlined"
                   size="large"
@@ -282,8 +346,6 @@ export default function CardCreatorForm() {
               <NexusCardForm />
             </Box>
           </Box>
-
-          
         </form>
       </FormProvider>
       
