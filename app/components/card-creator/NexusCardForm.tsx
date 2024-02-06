@@ -52,7 +52,7 @@ export default function NexusCardForm() {
   const activeCardCost = watch("cardEnergyCost");
   const activeCardType = watch("cardType");
   const activeCardText = watch("cardText");
-  // const activeCardArt = watch("cardArt");
+  const activeCardArt = watch("cardArt");
 
   // Track energy cost popover state
   const [energyCostAnchorEl, setEnergyCostAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -594,8 +594,8 @@ export default function NexusCardForm() {
               <Image
                 // Get DALL-E image URL from props
                 // pass in dynamic image URL
-                src="/images/card-parts/card-art/default-art.jpg"
-                // src={activeCardArt}
+                // src="/images/card-parts/card-art/default-art.jpg"
+                src={activeCardArt || "/images/card-parts/card-art/default-art.jpg"}
                 fill={true}
                 sizes="100%"
                 alt={`${formCardData.cardName} card art`}

@@ -23,6 +23,7 @@
     "google-fonts": "^1.0.0",
     "html-to-image": "^1.11.11",
     "next": "latest",
+    "node-fetch": "^3.3.2",
     "openai": "^4.26.1",
     "postcss": "^8.4.32",
     "react-dom": "18.2.0",

@@ -99,9 +99,9 @@ export default function CardCreatorForm() {
           },
           body: JSON.stringify({ prompt: cardArtPrompt }),
         });
-        const { image_url } = await generatedImage.json();
+        const { imageUrl } = await generatedImage.json();
 
-        setValue("cardArt", image_url);
+        setValue("cardArt", imageUrl);
         trigger("cardArt");
         setValue("cardArtPrompt", "");
         setGenerateArtLimit(generateArtLimit + 1);
@@ -157,7 +157,6 @@ export default function CardCreatorForm() {
     // Fetch finished card image from database
     // Open modal to see & share card
   }
-
 
   return (
     // Outer container
