@@ -49,6 +49,7 @@ export default function CardCreatorForm() {
     register,
     handleSubmit,
     watch,
+    trigger,
     formState: { isValid, errors, isSubmitting },
     setError,
     setValue
@@ -96,11 +97,12 @@ export default function CardCreatorForm() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: cardArtPrompt,
+          body: JSON.stringify({ prompt: cardArtPrompt }),
         });
         const { image_url } = await generatedImage.json();
 
         setValue("cardArt", image_url);
+        trigger("cardArt");
         setValue("cardArtPrompt", "");
         setGenerateArtLimit(generateArtLimit + 1);
         
@@ -295,6 +297,7 @@ export default function CardCreatorForm() {
                 <Button
                   onClick={onImageGeneration}
                   disabled={
+                    cardArtPrompt === "" ||
                     isGeneratingArt ||
                     generateArtLimit >= 3 ||
                     isSubmitting ||

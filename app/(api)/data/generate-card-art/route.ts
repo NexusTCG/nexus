@@ -2,34 +2,32 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-const apiKey = process.env.OPENAI_API_KEY;
-
 export async function POST(req: NextRequest) {
     if (req.method === 'POST') {
         const { prompt } = await req.json();
         
         try {
-            const imageResponse = await fetch("https://api.openai.com/v1/images/generations", {
+            const response = await fetch("https://api.openai.com/v1/images/generations", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${apiKey}`
+                    "Authorization": `Bearer ${process.env["OPENAI_API_KEY"]}`
                 },
                 body: JSON.stringify({
                     model: "dall-e-3",
                     prompt: prompt,
                     n: 1,
-                    size: "1024x1024"
+                    size: "1024x1024",
+                    response_format: "b64_json"
                 })
             });
 
-            if (!imageResponse.ok) {
-                throw new Error(`API call failed: ${imageResponse.statusText}`);
+            if (!response.ok) {
+                throw new Error(`API call failed: ${response.statusText}`);
             }
 
-            const imageData = await imageResponse.json();
-            console.log(imageData);
-            const image_url = imageData.data[0].url;
+            const responseData = await response.json();
+            const image_url = responseData.data[0].url;
 
             return new Response(JSON.stringify({ image_url }), {
                 status: 200,
