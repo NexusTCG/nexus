@@ -34,6 +34,7 @@ const CardFormSchema = z
     cardDefense: z.string().optional(),
     cardPrompt: z.string().optional(),
     cardArtPrompt: z.string().optional(),
+    cardRender: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.cardType !== "node") {

@@ -1,7 +1,7 @@
 "use server";
 
 import { NextRequest, NextResponse } from "next/server";
-import { uploadImage } from "@/app/lib/actions/uploadImage";
+import { uploadCardArtImage } from "@/app/lib/actions/uploadCardArtImage";
 import fetch from "node-fetch";
 
 export async function POST(req: NextRequest) {
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
             const responseData = await response.json() as { data: { url: string }[] };
             const openAiImageUrl = responseData.data[0].url;
 
-            const imageUrl = await uploadImage(openAiImageUrl);
+            const imageUrl = await uploadCardArtImage(openAiImageUrl);
 
             return new Response(JSON.stringify({ imageUrl }), {
                 status: 200,

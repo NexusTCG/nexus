@@ -4,7 +4,7 @@ import { createClient } from "@/app/lib/supabase/server";
 import { cookies } from "next/headers";
 
 // Make this a separate action function so we can call it from other routes
-export async function uploadImage(imageUrl: string) {
+export async function uploadCardArtImage(imageUrl: string) {
     const response = await fetch(imageUrl);
     
     if (!response.ok) {
@@ -27,7 +27,7 @@ export async function uploadImage(imageUrl: string) {
         });
 
     if (uploadError) {
-        throw new Error(`Failed to upload image: ${uploadError.message}`);
+        throw new Error(`Failed to upload card art image: ${uploadError.message}`);
     }
 
     const { data } = supabase

@@ -6,10 +6,13 @@ import useSession from "@/app/hooks/useSession";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Typography, TextField, Button, Snackbar, Alert, CircularProgress } from "@mui/material/";
+import { Box, Typography, TextField, Button, Snackbar, Alert, CircularProgress, Modal } from "@mui/material/";
 import { CardFormDataType } from "@/app/utils/types/types";
 import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
+import convertCardCodeToImage from "@/app/lib/actions/convertCardCodeToImage"
+import uploadCardImage from "@/app/lib/actions/uploadCardImage";
+import Image from "next/image";
 
 // Remove the user id
 export default function CardCreatorForm() {
@@ -40,6 +43,7 @@ export default function CardCreatorForm() {
       cardDefense: "",
       cardPrompt: "",
       cardArtPrompt: "",
+      cardRender: "",
     },
     resolver: zodResolver(cardFormSchema),
     mode: "onChange",
@@ -59,6 +63,7 @@ export default function CardCreatorForm() {
   const session = useSession();
   const userId = watch("user_id")
   const cardArtPrompt = watch("cardArtPrompt");
+  const cardRender = watch("cardRender");
 
   // States
   const [isGeneratingArt, setIsGeneratingArt] = useState(false);
@@ -69,6 +74,7 @@ export default function CardCreatorForm() {
   const [timerStart, setTimerStart] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [intervalId, setIntervalId] = useState<number | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
   // Log form data
   useEffect(() => {
@@ -86,6 +92,15 @@ export default function CardCreatorForm() {
     // Send prompt to OpenAI API
     // Store response in state
     // Add response to card data
+  }
+
+  function downloadCard(url: string) {
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${formNexusCardData.cardName}.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 
   // Generate card art
@@ -162,6 +177,14 @@ export default function CardCreatorForm() {
 
     try {
       // Save card as PNG
+      // what is the element id?
+      const imageDataUrl = await convertCardCodeToImage("card-border"); 
+      const imagePublicUrl = await uploadCardImage(imageDataUrl);
+
+      if (imagePublicUrl) {
+        setValue("cardRender", imagePublicUrl);
+        setModalOpen(true);
+      }
 
       // Submit the card data to the server
       const response = await fetch("/data/submit-card", { 
@@ -376,7 +399,8 @@ export default function CardCreatorForm() {
                     !isValid ||
                     isGeneratingArt ||
                     isSubmitting ||
-                    !userId
+                    !userId ||
+                    formNexusCardData.cardArt === "/images/card-parts/card-art/default-art.jpg"
                   }
                   type="submit"
                   variant="outlined"
@@ -423,6 +447,50 @@ export default function CardCreatorForm() {
           {snackbarMessage}
         </Alert>
       </Snackbar>
+
+
+      <Modal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        className="
+          flex
+          flex-col
+          justify-center
+          items-center
+          w-full
+          h-full
+          m-12
+          p-6
+          bg-gray-800
+          border
+          border-gray-700
+          rounded-lg
+          shadow-2xl
+          shadow-black
+        "
+      >
+        <Box>
+          <Image
+            src={cardRender}
+            width={400}
+            height={560}
+            alt={`Nexus TCG card: ${formNexusCardData.cardName} by ${formNexusCardData.cardCreator}`} />
+          {/* <button onClick={() => shareCard(publicURL)}>Share</button> */}
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            {`Nexus TCG card: ${formNexusCardData.cardName} by ${formNexusCardData.cardCreator}`}
+          </Typography>
+          <Button
+            onClick={() => downloadCard(cardRender)}
+            variant="outlined"
+            size="large"
+          >
+            Download card
+          </Button>
+        </Box>
+        
+      </Modal>
       
     </Box>
   );

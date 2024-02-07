@@ -7,29 +7,29 @@ export default function TestPage() {
   return (
     <Box
       className="
-            flex
-            flex-col
-            gap-4
-            justify-start
-            items-center
-        "
+        flex
+        flex-col
+        gap-4
+        justify-start
+        items-center
+      "
     >
       {Object.keys(keywordsData).map((key) => (
         <Card
           key={key}
           className="
-                        w-full
-                        rounded-md
-                        px-2
-                        py-1
-                "
+            w-full
+            rounded-md
+            px-2
+            py-1
+          "
         >
           <CardContent
             className="
-                            flex
-                            flex-col
-                            gap-2
-                    "
+              flex
+              flex-col
+              gap-2
+            "
           >
             <Typography component="span" variant="body1">
               <KeywordTooltip keyword={key} />

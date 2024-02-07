@@ -17,6 +17,7 @@ export type CardFormDataType = {
   cardDefense: string;
   cardPrompt: string;
   cardArtPrompt: string;
+  cardRender: string;
 };
 
 export type CardTypesType = {
