@@ -66,7 +66,9 @@ export default function CardCreatorForm() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState('info');
-
+  const [timerStart, setTimerStart] = useState(0);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [intervalId, setIntervalId] = useState<number | null>(null);
 
   // Log form data
   useEffect(() => {
@@ -89,8 +91,25 @@ export default function CardCreatorForm() {
   // Generate card art
   async function onImageGeneration() {
     setIsGeneratingArt(true);
+    setTimerStart(Date.now());
+    setElapsedTime(0);
+
+    const newIntervalId = setInterval(() => {
+      setElapsedTime((prevElapsedTime) => prevElapsedTime + 1000);
+    }, 1000) as unknown as number;
+    setIntervalId(newIntervalId);
+
+    if (generateArtLimit >= 3) {
+      setSnackbarMessage('Art generation limit reached');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+      setIsGeneratingArt(false);
+      clearInterval(newIntervalId);
+      return;
+    } 
     
     if (generateArtLimit < 3) {
+      setSnackbarMessage("Generating art...");
       try {
         const generatedImage = await fetch("/data/generate-card-art", {
           method: 'POST',
@@ -103,16 +122,35 @@ export default function CardCreatorForm() {
 
         setValue("cardArt", imageUrl);
         trigger("cardArt");
-        setValue("cardArtPrompt", "");
-        setGenerateArtLimit(generateArtLimit + 1);
         
       } catch (error) {
         console.error('Failed to generate art:', error);
       }
     }
-    // If limit is hit, show error alert message
-    setIsGeneratingArt(false);
+    
+    // Cleanup with delay to match card art updating
+    setTimeout(() => {
+      setValue("cardArtPrompt", "");
+      setGenerateArtLimit(generateArtLimit + 1);
+      clearInterval(newIntervalId);
+      setIsGeneratingArt(false);
+      setElapsedTime(Date.now() - timerStart);
+    }, 5000);
   }
+
+  // Reset timer on new art generation
+  useEffect(() => {
+    if (isGeneratingArt) {
+      setElapsedTime(0);
+    }
+  }, [isGeneratingArt]);
+
+  // Clear interval on unmount
+  useEffect(() => {
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [intervalId]);
   
   // Submit form data
   async function onSubmit(data: CardFormDataType) {
@@ -274,6 +312,10 @@ export default function CardCreatorForm() {
                 {/* Input: AI prompt */}
                 <TextField
                   multiline
+                  disabled={
+                    isSubmitting ||
+                    !userId
+                  }
                   rows={4}
                   label="Card prompt"
                   variant="outlined"
@@ -285,6 +327,12 @@ export default function CardCreatorForm() {
                 {/* Input: AI art prompt */}
                 <TextField
                   multiline
+                  disabled={
+                    isGeneratingArt ||
+                    generateArtLimit >= 3 ||
+                    isSubmitting ||
+                    !userId
+                  }
                   rows={2}
                   label="Card art prompt"
                   variant="outlined"
@@ -304,14 +352,22 @@ export default function CardCreatorForm() {
                   }
                   variant="outlined"
                   size="large"
-                  className="
-                    flex
-                    w-full
-                    rounded-full
-                  "
+                  className="flex w-full rounded-full"
                 >
-                  Generate card art
+                  {isGeneratingArt ? (
+                    <Box display="flex" alignItems="center" gap={2}>
+                      <CircularProgress size={24} />
+                      <Typography>
+                        Generating art in {Math.floor(elapsedTime / 1000)} seconds...
+                      </Typography>
+                    </Box>
+                  ) : generateArtLimit >= 3 ? (
+                    "Art generation limit reached"
+                  ) : (
+                    elapsedTime > 0 ? "Generate new art" : "Generate art"
+                  )}
                 </Button>
+
                 {/* Alert component goes here */}
 
                 {/* Submit Form */}

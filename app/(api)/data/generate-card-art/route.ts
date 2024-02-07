@@ -6,7 +6,9 @@ import fetch from "node-fetch";
 
 export async function POST(req: NextRequest) {
     if (req.method === 'POST') {
-        const { prompt } = await req.json();
+        let { prompt } = await req.json();
+
+        prompt = `Concept art, digital art, illustration, sci-fi, fantasy. ${prompt}. Dramatic mood, rule of thirds, dynamic poses.`;
         
         try {
             // Generate image
