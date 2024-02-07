@@ -6,13 +6,23 @@ import useSession from "@/app/hooks/useSession";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Typography, TextField, Button, Snackbar, Alert, CircularProgress, Modal } from "@mui/material/";
 import { CardFormDataType } from "@/app/utils/types/types";
 import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
 import convertCardCodeToImage from "@/app/lib/actions/convertCardCodeToImage"
 import uploadCardImage from "@/app/lib/actions/uploadCardImage";
 import Image from "next/image";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Snackbar,
+  Alert,
+  CircularProgress,
+  Modal,
+  Skeleton
+} from "@mui/material/";
 
 // Remove the user id
 export default function CardCreatorForm() {
@@ -54,7 +64,11 @@ export default function CardCreatorForm() {
     handleSubmit,
     watch,
     trigger,
-    formState: { isValid, errors, isSubmitting },
+    formState: {
+      isValid,
+      errors,
+      isSubmitting
+    },
     setError,
     setValue
   } = methods;
@@ -75,6 +89,12 @@ export default function CardCreatorForm() {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [intervalId, setIntervalId] = useState<number | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [isImageLoading, setIsImageLoading] = useState(true);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Alert states
+  const [alertMessage, setAlertMessage] = useState("Submitting card...");
+  const [alertSeverity, setAlertSeverity] = useState<string>("info");
 
   // Log form data
   useEffect(() => {
@@ -86,13 +106,6 @@ export default function CardCreatorForm() {
       setValue('user_id', session.user.id);
     }
   }, [session, setValue]);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function onPrompt() {
-    // Send prompt to OpenAI API
-    // Store response in state
-    // Add response to card data
-  }
 
   function downloadCard(url: string) {
     const a = document.createElement("a");
@@ -118,8 +131,10 @@ export default function CardCreatorForm() {
       setSnackbarMessage('Art generation limit reached');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
+      
       setIsGeneratingArt(false);
       clearInterval(newIntervalId);
+
       return;
     } 
     
@@ -176,17 +191,24 @@ export default function CardCreatorForm() {
     }
 
     try {
-      // Save card as PNG
-      // what is the element id?
+      setIsImageLoading(true);
+      setAlertMessage('Uploading card to database...');
+      setAlertSeverity('info');
+      setModalOpen(true);
+
+      // Convert card code to PNG
       const imageDataUrl = await convertCardCodeToImage("card-border"); 
+
+      // Upload the PNG to Supabase bucket
       const imagePublicUrl = await uploadCardImage(imageDataUrl);
 
+      // Add the image URL to the form data
       if (imagePublicUrl) {
+        
         setValue("cardRender", imagePublicUrl);
-        setModalOpen(true);
       }
 
-      // Submit the card data to the server
+      // Submit the card form data Supabase table
       const response = await fetch("/data/submit-card", { 
         method: 'POST',
         headers: {
@@ -198,25 +220,39 @@ export default function CardCreatorForm() {
       const responseData = await response.json();
 
       if (response.ok) {
+        setIsSubmitted(true);
+        setAlertMessage('Card submitted successfully!')
+        setAlertSeverity('success')
+
         setSnackbarMessage('Submission successful');
         setSnackbarSeverity('success');
-        // setOpenSnackbar(true);
+
+        trigger("cardRender");
+
+
       } else {
+        setIsSubmitted(false);
+        setAlertMessage('Submission failed: ' + responseData.error)
+        setAlertSeverity('error')
+
         setSnackbarMessage('Submission failed: ' + responseData.error);
         setSnackbarSeverity('error');
       }
-      setSnackbarOpen(true);
+      setSnackbarOpen(true);      
+
     } catch (error) {
+      setIsSubmitted(false);
+      setAlertMessage('Submission failed: ' + error)
+      setAlertSeverity('error')
+
       setSnackbarMessage('Submission failed: ' + error);
       setSnackbarSeverity('error');
-      // Handle the error (e.g., showing an error message)
     }
     setSnackbarOpen(true);
-    // Generate png image from code / card data
-    // Write card data to database (with image url)
-    // Write finished card image to database
-    // Fetch finished card image from database
-    // Open modal to see & share card
+    
+    setTimeout(() => {
+      setIsImageLoading(false);
+    }, 3000);
   }
 
   return (
@@ -431,22 +467,7 @@ export default function CardCreatorForm() {
         </form>
       </FormProvider>
       
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={() => setSnackbarOpen(false)}
-      >
-        <Alert
-          onClose={() => setSnackbarOpen(false)}
-          severity={
-            snackbarSeverity === "success" ?
-            "success" : "error"
-          }
-          sx={{ width: '100%' }}
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+      
 
 
       <Modal
@@ -460,38 +481,168 @@ export default function CardCreatorForm() {
           justify-center
           items-center
           w-full
-          h-full
-          m-12
-          p-6
-          bg-gray-800
-          border
-          border-gray-700
-          rounded-lg
-          shadow-2xl
-          shadow-black
+          max-w-4xl
+          m-auto
+          md:p-auto
+          p-12 
         "
       >
-        <Box>
-          <Image
-            src={cardRender}
-            width={400}
-            height={560}
-            alt={`Nexus TCG card: ${formNexusCardData.cardName} by ${formNexusCardData.cardCreator}`} />
-          {/* <button onClick={() => shareCard(publicURL)}>Share</button> */}
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            {`Nexus TCG card: ${formNexusCardData.cardName} by ${formNexusCardData.cardCreator}`}
-          </Typography>
-          <Button
-            onClick={() => downloadCard(cardRender)}
-            variant="outlined"
-            size="large"
+        <Box
+          className="
+            flex
+            flex-col
+            justify-center
+            items-center
+            w-full
+            p-6
+            gap-4
+            bg-gray-800
+            border
+            border-gray-700
+            rounded-2xl
+            shadow-2xl
+            shadow-black
+          "
+        >
+          {
+            isImageLoading ? (
+              <Skeleton
+                variant="rectangular"
+                width={400}
+                height={560}
+                animation="wave"
+                className="
+                  my-4
+                  rounded-2xl
+                  shadow-xl
+                   shadow-gray-950/25
+                "
+              />
+            ) : (
+              <Image
+                src={cardRender}
+                width={400}
+                height={560}
+                alt={`Nexus TCG card: ${formNexusCardData.cardName} by ${formNexusCardData.cardCreator}`}
+                className="
+                  my-4
+                  rounded-2xl
+                  shadow-lg
+                  hover:shadow-xl
+                   shadow-gray-950/30
+                   hover:shadow-gray-950/20
+                   
+                "
+                onLoadingComplete={() => setIsImageLoading(false)}
+              />
+            )
+          }
+          
+          <Box
+            className="
+              flex
+              flex-col
+              justify-center
+              items-center
+              w-full
+              gap-2
+            "
           >
-            Download card
-          </Button>
+            <Typography
+              id="modal-card-title"
+              variant="h3"
+              className="text-white font-medium"
+            >
+              {formNexusCardData.cardName}
+            </Typography>
+            <Typography
+              id="modal-card-subtitle"
+              variant="overline"
+              className="text-gray-400"
+            >
+              {`Created by ${formNexusCardData.cardCreator} on ${new Date().toLocaleDateString()}`}
+            </Typography>
+          </Box>
+          
+
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={6000}
+            onClose={() => setSnackbarOpen(false)}
+          >
+            <Alert
+              onClose={() => setSnackbarOpen(false)}
+              severity={
+                snackbarSeverity === "success" ?
+                "success" : "error"
+              }
+              sx={{ width: '100%' }}
+            >
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
+
+          {isImageLoading && (<Alert
+            severity={alertSeverity as "error" | "info" | "success" }
+            // variant=""
+            className="
+              w-full
+              rounded-full
+            "
+          >
+            {alertMessage}
+          </Alert>)}
+
+          <Box
+            className="
+              flex
+              flex-row
+              w-full
+              gap-4
+            "
+          >
+            {isSubmitted ? (
+              <Button
+                // onClick={() => shareCard(cardRender)}
+                variant="outlined"
+                color="primary"
+                size="large"
+                className="w-full rounded-full"
+              >
+                Share card
+              </Button>
+            ) : (
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height={48}
+                animation="wave"
+                className="rounded-full"
+              />
+            )}
+            
+            {isSubmitted ? (
+              <Button
+                onClick={() => downloadCard(cardRender)}
+                variant="outlined"
+                color="secondary"
+                size="large"
+                className="w-full rounded-full"
+              >
+                Download card
+              </Button>
+            ) : (
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height={48}
+                animation="wave"
+                className="rounded-full"
+              />
+            )}
+          </Box>
         </Box>
-        
       </Modal>
-      
     </Box>
   );
 }
