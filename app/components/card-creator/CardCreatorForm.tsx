@@ -12,6 +12,7 @@ import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
 import convertCardCodeToImage from "@/app/lib/actions/convertCardCodeToImage"
 import uploadCardImage from "@/app/lib/actions/uploadCardImage";
 import Image from "next/image";
+import PostHogClient from "@/app/lib/posthog/posthog";
 import {
   Box,
   Typography,
@@ -78,6 +79,8 @@ export default function CardCreatorForm() {
   const userId = watch("user_id")
   const cardArtPrompt = watch("cardArtPrompt");
   const cardRender = watch("cardRender");
+
+  const posthog = PostHogClient();
 
   // States
   const [isGeneratingArt, setIsGeneratingArt] = useState(false);
@@ -150,8 +153,19 @@ export default function CardCreatorForm() {
         });
         const { imageUrl } = await generatedImage.json();
 
-        setValue("cardArt", imageUrl);
-        trigger("cardArt");
+        if (imageUrl) {
+          if (session
+              && session.user
+              && session.user.id
+            ) {
+            posthog.capture({
+              distinctId: session.user.id,
+              event: '🎨 New Card Image Generated'
+            })
+          }
+          setValue("cardArt", imageUrl);
+          trigger("cardArt");
+        }
         
       } catch (error) {
         console.error('Failed to generate art:', error);
@@ -220,6 +234,14 @@ export default function CardCreatorForm() {
       const responseData = await response.json();
 
       if (response.ok) {
+        // Track card submission event on PostHog
+        if (session && session.user && session.user.id) {
+          posthog.capture({
+            distinctId: session.user.id,
+            event: '🎉 New Card Submitted'
+          })
+        }
+
         setIsSubmitted(true);
         setAlertMessage('Card submitted successfully!')
         setAlertSeverity('success')
@@ -228,7 +250,6 @@ export default function CardCreatorForm() {
         setSnackbarSeverity('success');
 
         trigger("cardRender");
-
 
       } else {
         setIsSubmitted(false);

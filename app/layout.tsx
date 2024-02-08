@@ -4,6 +4,13 @@ import { Analytics } from "@vercel/analytics/react";
 import { Inter } from "next/font/google";
 import theme from "@/app/styles/theme";
 import "@/app/styles/globals.css";
+import { PHProvider } from "@/app/providers";
+import dynamic from 'next/dynamic'
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const PostHogPageView = dynamic(() => import('@/app/lib/posthog/PostHogPageView'), {
+  ssr: false,
+})
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,14 +34,30 @@ export default function RootLayout(props: RootLayoutProps) {
 
   return (
     <html lang="en" className={inter.className}>
-      <body className="bg-background text-foreground">
-        <main className="min-h-screen flex flex-col items-center bg-gray-950 text-white">
-          <ThemeProvider theme={theme}>
-            {children}
-            <Analytics />
-          </ThemeProvider>
-        </main>
-      </body>
+      <PHProvider>
+        <ThemeProvider theme={theme}>
+          <body
+            className="
+              bg-background
+              text-foreground
+            "
+          >
+            <main
+              className="
+                min-h-screen
+                flex
+                flex-col
+                items-center
+                bg-gray-950
+                text-white
+              "
+            >
+                {children}
+                <Analytics />
+            </main>
+          </body>
+        </ThemeProvider>
+      </PHProvider>
     </html>
   );
 }

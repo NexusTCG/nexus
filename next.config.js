@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
     images: {
       remotePatterns: [

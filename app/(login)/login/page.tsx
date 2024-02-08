@@ -1,9 +1,7 @@
 "use client";
 
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { createClient } from "@/app/lib/supabase/client";
-import { useRouter } from "next/navigation";
 import { Typography, Divider } from "@mui/material";
 import clsx from "clsx";
 import NewAuthButton from "@/app/components/auth/OAuthButton";
@@ -24,8 +22,7 @@ export default function Login({
   const [success, setSuccess] = useState<boolean>(false);
 
   const supabase = createClient();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const router = useRouter();
+  
 
   async function sendResetPassword() {
     try {
