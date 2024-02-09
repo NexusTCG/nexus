@@ -151,6 +151,7 @@ export default function CardCreatorForm() {
           },
           body: JSON.stringify({ prompt: cardArtPrompt }),
         });
+        
         const { imageUrl } = await generatedImage.json();
 
         if (imageUrl) {
@@ -163,9 +164,11 @@ export default function CardCreatorForm() {
               event: '🎨 New Card Image Generated'
             })
           }
-          setValue("cardArt", imageUrl);
-          trigger("cardArt");
         }
+
+        setGenerateArtLimit(generateArtLimit + 1);
+        setValue("cardArt", imageUrl);
+        trigger("cardArt");
         
       } catch (error) {
         console.error('Failed to generate art:', error);
@@ -175,7 +178,6 @@ export default function CardCreatorForm() {
     // Cleanup with delay to match card art updating
     setTimeout(() => {
       setValue("cardArtPrompt", "");
-      setGenerateArtLimit(generateArtLimit + 1);
       clearInterval(newIntervalId);
       setIsGeneratingArt(false);
       setElapsedTime(Date.now() - timerStart);
@@ -195,12 +197,25 @@ export default function CardCreatorForm() {
       if (intervalId) clearInterval(intervalId);
     };
   }, [intervalId]);
+
   
   // Submit form data
   async function onSubmit(data: CardFormDataType) {
     if (!userId) {
-      setError("user_id", { type: "manual", message: "User must be logged in to submit a card." });
+      setError("user_id", {
+        type: "manual",
+        message: "User must be logged in to submit a card."
+      });
       console.error("User ID is not available. User must be logged in to submit a card.");
+      return;
+    }
+
+    if (generateArtLimit === 0) {
+      setError("cardArtPrompt", {
+        type: "manual",
+        message: "Please generate art for the card."
+      });
+      console.error("Please generate art for the card.");
       return;
     }
 
@@ -216,19 +231,23 @@ export default function CardCreatorForm() {
       // Upload the PNG to Supabase bucket
       const imagePublicUrl = await uploadCardImage(imageDataUrl);
 
-      // Add the image URL to the form data
-      if (imagePublicUrl) {
-        
-        setValue("cardRender", imagePublicUrl);
+      if (!imagePublicUrl) {
+        throw new Error("Failed to upload card image.");
       }
 
+      setValue("cardRender",
+        imagePublicUrl, {
+        shouldValidate: true
+      });
+      await trigger("cardRender");
+      
       // Submit the card form data Supabase table
       const response = await fetch("/data/submit-card", { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({...data, cardRender: imagePublicUrl}),
       });
 
       const responseData = await response.json();
@@ -248,8 +267,6 @@ export default function CardCreatorForm() {
 
         setSnackbarMessage('Submission successful');
         setSnackbarSeverity('success');
-
-        trigger("cardRender");
 
       } else {
         setIsSubmitted(false);
@@ -554,7 +571,7 @@ export default function CardCreatorForm() {
                    hover:shadow-gray-950/20
                    
                 "
-                onLoadingComplete={() => setIsImageLoading(false)}
+                onLoad={() => setIsImageLoading(false)}
               />
             )
           }

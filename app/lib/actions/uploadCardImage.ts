@@ -21,16 +21,16 @@ export default async function uploadCardmage(
         upsert: false
       });
   
-      if (uploadError) {
-        throw new Error(`Failed to upload card image: ${uploadError.message}`);
+    if (uploadError) {
+      throw new Error(`Failed to upload card image: ${uploadError.message}`);
     }
 
     const {
       data: downloadData
-    } = await supabase
-      .storage
-      .from("cards")
-      .getPublicUrl(fileName);
+    } = supabase
+        .storage
+        .from("cards")
+        .getPublicUrl(fileName);
   
     return downloadData.publicUrl;
   };
