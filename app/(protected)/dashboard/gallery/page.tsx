@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { CardFormDataType } from "@/app/utils/types/types"
-import fetchCards from "@/app/lib/actions/fetchCards";
+import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
+import fetchData from "@/app/lib/actions/fetchCardData";
 // import Image from "next/image";
 import {
     Box,
@@ -12,31 +12,39 @@ import {
     CardMedia,
     Typography,
     Tooltip,
-    Button
+    Button,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select
     // MenuItem,
     // Select
 } from "@mui/material/";
+import { SelectChangeEvent } from '@mui/material/Select';
 import AddIcon from '@mui/icons-material/Add';
 
 export default function Gallery() {
-    const [cards, setCards] = useState<CardFormDataType[]>([]);
-    // const [sort, setSort] = useState("created_at");
+    const [cards, setCards] = useState<CardsTableType[] | null>([]);
+    const [sort, setSort] = useState("created_at");
 
     useEffect(() => {
-        const fetchData = async () => {
-          const data = await fetchCards();
+        const fetchCards = async () => {
+          const data = await fetchData({
+            from: "cards",
+            select: "*",
+            sortBy: { column: sort, ascending: true }
+          });
           if (data) {
             setCards(data);
           }
         };
-        fetchData();
-    }, []);
+        fetchCards();
+    }, [sort]);
 
-    // const handleSortChange = (event: ChangeEvent<{ value: unknown }>) => {
-    //     const value = event.target.value as string;
-    //     setSort(value);
-    //     fetchCards(value);
-    // };
+    function handleSortChange(event: SelectChangeEvent<string>) {
+        const value = event.target.value as string;
+        setSort(value);
+    };
 
     return (
         <Box
@@ -93,13 +101,25 @@ export default function Gallery() {
                         text-gray-300
                     "
                 >
-                    {cards.length} cards
+                    {cards?.length} cards
                 </Typography>
-            
-            {/* <Select onChange={handleSortChange} value={sort} className="tailwind-classes">
-            <MenuItem value="created_at">Most Recent</MenuItem>
-            <MenuItem value="name">Name</MenuItem>
-            </Select> */}
+
+            <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                    Most Recent
+                </InputLabel>
+                <Select
+                    labelId="demo-simple-select-label"
+                    id="sort-select"
+                    value={sort}
+                    label="Age"
+                    onChange={handleSortChange}
+                >
+                    <MenuItem value="created_at">Most recent</MenuItem>
+                    {/* Card Named doesn't order alphabetically */}
+                    <MenuItem value="cardName">Card Name</MenuItem>
+                </Select>
+            </FormControl>
 
             <Grid
                 container
@@ -108,7 +128,7 @@ export default function Gallery() {
                     pl-8
                 "
             >
-            {cards.map((card) => (
+            {cards?.map((card) => (
                 <Grid
                     item
                     xs={6}

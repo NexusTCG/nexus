@@ -1,0 +1,23 @@
+export type CardsTableType = {
+    id: bigint;
+    created_at: string;
+    user_id: string | null;
+    cardName: string;
+    cardColor: string;
+    cardEnergyValue: number;
+    cardEnergyCost: { key: string, value: { color: string; value: number}};
+    cardArt: string;
+    cardType: string;
+    cardSuperType: string;
+    cardSubType: string;
+    cardSpeed: string;
+    cardGrade: string;
+    cardText: string;
+    cardFlavorText: string;
+    cardAttack: string;
+    cardDefense: string;
+    cardRender: string;
+    cardCreator: string;
+    cardPrompt: string;
+    cardArtPrompt: string;
+};
