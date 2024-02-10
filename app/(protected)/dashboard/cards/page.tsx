@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
-import fetchCards from "@/app/lib/actions/supabase/fetchCardData";
+import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
 import Image from "next/image";
 import {
     Box,
@@ -68,22 +68,25 @@ export default function Cards() {
     };
 
     // Handle data refresh
-    async function handleRefresh() {
-      const data = await fetchCards({
-        from: "cards",
-        select: "*",
-        sortBy: { column: sort, ascending: sortOrder }
-      });
-      if (data) {
-        const filteredData = data
-          .filter(card =>
-            card.cardRender !== null &&
-            card.cardRender !== "" &&
-            card.cardCreator !== null &&
-            card.cardCreator !== ""
-          );
-        setCards(filteredData);
-      }
+    function handleRefresh() {
+      async function fetchData() {
+        const data = await fetchCards({
+          from: "cards",
+          select: "*",
+          sortBy: { column: sort, ascending: sortOrder }
+        });
+        if (data) {
+          const filteredData = data
+            .filter(card =>
+              card.cardRender !== null &&
+              card.cardRender !== "" &&
+              card.cardCreator !== null &&
+              card.cardCreator !== ""
+            );
+          setCards(filteredData);
+        }
+      };
+      fetchData();
     };
 
     return (
@@ -169,14 +172,16 @@ export default function Cards() {
                   gap-1
                 "
               >
-                <IconButton
-                    aria-label="refresh cards"
-                    color="primary"
-                    size="small"
-                    onClick={handleRefresh}
-                  >
-                  <RefreshIcon />
-                </IconButton>
+                <Tooltip title="Refresh" arrow>
+                  <IconButton
+                      aria-label="refresh cards"
+                      color="primary"
+                      size="small"
+                      onClick={handleRefresh}
+                    >
+                    <RefreshIcon />
+                  </IconButton>
+                </Tooltip>
                 <Typography
                   variant="overline"
                   className="
@@ -314,12 +319,14 @@ export default function Cards() {
                   position: "relative",
                   height: "308px",
                 }}
+                // Addc clsx for breakpoints
                 className="
                   aspect-[5/7]
                   rounded-lg
                   hover:shadow-lg
                   hover:shadow-zinc-950/25
                   hover:scale-105
+                  mb-2
                 "
               >
                 <Image

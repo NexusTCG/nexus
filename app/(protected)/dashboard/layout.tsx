@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import SidebarDesktop from '@/app/components/sidebar/SidebarDesktop';
+import Sidebar from '@/app/components/sidebar/Sidebar';
 import { Box } from '@mui/material';
 
 export default function DashboardLayout({
@@ -29,7 +29,7 @@ export default function DashboardLayout({
           h-screen
         "
       >
-        <SidebarDesktop />
+        <Sidebar />
       </Box>
       <Box
         className="

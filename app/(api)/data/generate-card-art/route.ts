@@ -1,7 +1,7 @@
 "use server";
 
 import { NextRequest, NextResponse } from "next/server";
-import { uploadCardArtImage } from "@/app/lib/actions/supabase/uploadCardArtImage";
+import { uploadCardArtImage } from "@/app/lib/actions/supabase-data/uploadCardArtImage";
 import fetch from "node-fetch";
 
 export async function POST(req: NextRequest) {
