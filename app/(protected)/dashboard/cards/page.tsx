@@ -172,16 +172,6 @@ export default function Cards() {
                   gap-1
                 "
               >
-                <Tooltip title="Refresh" arrow>
-                  <IconButton
-                      aria-label="refresh cards"
-                      color="primary"
-                      size="small"
-                      onClick={handleRefresh}
-                    >
-                    <RefreshIcon />
-                  </IconButton>
-                </Tooltip>
                 <Typography
                   variant="overline"
                   className="
@@ -258,6 +248,17 @@ export default function Cards() {
                     <MenuItem value="descending">Desc</MenuItem>
                   </Select>
                 </FormControl>
+                <Tooltip title="Refresh" arrow>
+                  <IconButton
+                      aria-label="refresh cards"
+                      size="small"
+                      sx={{ width: "20px", height: "20px"}}
+                      className="opacity-50 hover:opacity-100 transition-opacity duration-300 ease-in-out"
+                      onClick={handleRefresh}
+                    >
+                    <RefreshIcon />
+                  </IconButton>
+                </Tooltip>
               </Box>
             </Box>
             <Box

@@ -4,8 +4,20 @@ import React, { useEffect, useState } from "react";
 import useSession from "@/app/hooks/useSession";
 import SignOutButton from "@/app/components/auth/SignOutButton";
 import SoMeButton from "@/app/components/sidebar/SoMeButton";
-import { Box, Button, Typography } from "@mui/material";
 import fetchUserProfiles from "@/app/lib/actions/supabase-data/fetchUserProfilesData";
+import {
+  Box,
+  Button,
+  Typography
+} from "@mui/material";
+import {
+  AccountCircle,
+  Collections,
+  DesignServices,
+  Rule,
+  Casino,
+  Flag
+} from '@mui/icons-material';
 
 export default function Sidebar() {
   const [userProfile, setUserProfile] = useState<string>("profile");
@@ -19,11 +31,9 @@ export default function Sidebar() {
           select: "*",
           filter: user.id
         });
-        console.log(data);
 
         const profile = data?.find(profile => profile.id === user.id);
         if (profile) {
-          console.log(profile);
           setUserProfile(profile.username);
         }
       }
@@ -114,39 +124,113 @@ export default function Sidebar() {
           "
         >
           <Button
-              variant="outlined"
-              href="/dashboard/cards"
-              className="
-                w-full
-                hover:cursor-pointer
-              "
-            >
-              Cards
+            id="navigation-button-home"
+            variant="outlined"
+            href="/dashboard/create"
+            startIcon={<DesignServices />}
+            size="large"
+            className="
+              flex
+              justify-start
+              items-center
+              w-full
+              hover:cursor-pointer
+            "
+          >
+            Create
           </Button>
           <Button
-              variant="outlined"
-              href="/dashboard/cards"
-              className="
-                w-full
-                hover:cursor-pointer
-              "
-            >
-              Cards
+            id="navigation-button-cards"
+            variant="outlined"
+            href="/dashboard/cards"
+            startIcon={<Collections />}
+            size="large"
+            className="
+              flex
+              justify-start
+              items-center
+              w-full
+              hover:cursor-pointer
+            "
+          >
+            Cards
           </Button>
           <Button
-              variant="outlined"
-              href="/dashboard/cards"
-              className="
-                w-full
-                hover:cursor-pointer
-              "
-            >
-              {/* {user?.email} */}
-              {userProfile}
+            id="navigation-button-cards"
+            variant="outlined"
+            href="/dashboard/rules"
+            startIcon={<Rule />}
+            size="large"
+            className="
+              flex
+              justify-start
+              items-center
+              w-full
+              hover:cursor-pointer
+            "
+          >
+            Rules
           </Button>
-        </Box>
+          <Button
+            id="navigation-button-cards"
+            variant="outlined"
+            href="/dashboard/game"
+            startIcon={<Casino />}
+            size="large"
+            className="
+              flex
+              justify-start
+              items-center
+              w-full
+              hover:cursor-pointer
+            "
+          >
+            Game
+          </Button>
+          <Button
+            id="navigation-button-cards"
+            variant="outlined"
+            href="/dashboard/roadmap"
+            startIcon={<Flag />}
+            size="large"
+            className="
+              flex
+              justify-start
+              items-center
+              w-full
+              hover:cursor-pointer
+            "
+          >
+            Roadmap
+          </Button>
+        
+          {/* Separate the below into its own container */}
 
-        <SignOutButton />
+          <Button
+            id="navigation-button-profile"
+            variant="outlined"
+            startIcon={<AccountCircle />}
+            href="/dashboard/profile"
+            size="large"
+            className="
+              flex
+              justify-start
+              items-center
+              w-full
+              hover:cursor-pointer
+            "
+          >
+            {userProfile}
+          </Button>
+
+          {/* Subscription */}
+          {/* Settings button */}
+          {/* Support */}
+
+        </Box>
+        
+        {/* Add icon, replace?? */}
+        <SignOutButton /> 
 
       </Box>
     </Box>
