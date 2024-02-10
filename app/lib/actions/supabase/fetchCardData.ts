@@ -7,7 +7,7 @@ import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 type FetchCardsOptions = {
   from: string;
   select?: string;
-  sortBy?: { column: string, ascending?: boolean };
+  sortBy?: { column: string, ascending: boolean };
 };
 
 export default async function fetchCards(

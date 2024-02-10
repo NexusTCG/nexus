@@ -7,27 +7,23 @@ import Image from "next/image";
 import {
     Box,
     Grid,
-    // Card,
-    // CardContent,
-    // CardMedia,
     Typography,
     Tooltip,
     Button,
     FormControl,
     MenuItem,
     Select,
-    Divider
-    // MenuItem,
-    // Select
+    IconButton
 } from "@mui/material/";
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { SelectChangeEvent } from '@mui/material/Select';
 import AddIcon from '@mui/icons-material/Add';
 
 export default function Cards() {
     const [cards, setCards] = useState<CardsTableType[] | null>([]);
     const [sort, setSort] = useState("created_at");
-    const [order, setOrder] = useState("ascending");
-    const [sortOrder, setSortOrder] = useState(true);
+    const [order, setOrder] = useState("descending");
+    const [sortOrder, setSortOrder] = useState(false);
 
     useEffect(() => {
       const fetchData = async () => {
@@ -50,6 +46,7 @@ export default function Cards() {
       fetchData();
     }, [sort, sortOrder]);
 
+    // Handle sort by change
     function handleSortChange(
       event: SelectChangeEvent<string>
     ) {
@@ -57,6 +54,7 @@ export default function Cards() {
       setSort(value);
     };
 
+    // Handle sort order change
     function handleSortOrderChange(
       event: SelectChangeEvent<string>
     ) {
@@ -67,6 +65,25 @@ export default function Cards() {
         setSortOrder(false)
       };
       setOrder(value);
+    };
+
+    // Handle data refresh
+    async function handleRefresh() {
+      const data = await fetchCards({
+        from: "cards",
+        select: "*",
+        sortBy: { column: sort, ascending: sortOrder }
+      });
+      if (data) {
+        const filteredData = data
+          .filter(card =>
+            card.cardRender !== null &&
+            card.cardRender !== "" &&
+            card.cardCreator !== null &&
+            card.cardCreator !== ""
+          );
+        setCards(filteredData);
+      }
     };
 
     return (
@@ -129,6 +146,7 @@ export default function Cards() {
               flex-col
               lg:flex-row
               justify-between
+              items-center
               w-full
             "
           >
@@ -151,6 +169,14 @@ export default function Cards() {
                   gap-1
                 "
               >
+                <IconButton
+                    aria-label="refresh cards"
+                    color="primary"
+                    size="small"
+                    onClick={handleRefresh}
+                  >
+                  <RefreshIcon />
+                </IconButton>
                 <Typography
                   variant="overline"
                   className="
@@ -264,9 +290,7 @@ export default function Cards() {
           </Box>
         </Box>
 
-        {/* Need to style divider */}
-        <Divider />
-
+        {/* Card grid */}
         <Grid
           container
           spacing={2}
@@ -277,7 +301,7 @@ export default function Cards() {
             xs={6}
             md={4}
             lg={3}
-            key={card.id} // Change to card.id
+            key={card.id}
           >
             <Tooltip
               title={`${card.cardName} by ${card.cardCreator}`}
