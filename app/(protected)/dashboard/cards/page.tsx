@@ -23,7 +23,7 @@ import {
 import { SelectChangeEvent } from '@mui/material/Select';
 import AddIcon from '@mui/icons-material/Add';
 
-export default function Gallery() {
+export default function Cards() {
     const [cards, setCards] = useState<CardsTableType[] | null>([]);
     const [sort, setSort] = useState("created_at");
 
