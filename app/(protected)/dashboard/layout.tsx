@@ -18,8 +18,6 @@ export default function DashboardLayout({
         justify-start
         items-start
         w-full
-        md:bg-gray-950
-        bg-gray-800
       "
     >
       <Box
@@ -28,7 +26,6 @@ export default function DashboardLayout({
           top-0
           hidden
           lg:block
-          w-1/5
           h-screen
         "
       >
@@ -41,11 +38,9 @@ export default function DashboardLayout({
           justify-center
           items-center
           w-full
-          lg:w-4/5
-          lg:mx-24
-          md:mx-12
-          lg:my-12
-          md:my-6
+          lg:px-12
+          md:px-8
+          sm:px-4
         "
       >
         {children}

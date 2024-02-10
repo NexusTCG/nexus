@@ -10,7 +10,7 @@ import { CardFormDataType } from "@/app/utils/types/types";
 import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
 import convertCardCodeToImage from "@/app/lib/actions/convertCardCodeToImage"
-import uploadCardImage from "@/app/lib/actions/uploadCardImage";
+import uploadCardImage from "@/app/lib/actions/supabase/uploadCardImage";
 import Image from "next/image";
 import PostHogClient from "@/app/lib/posthog/posthog";
 import {

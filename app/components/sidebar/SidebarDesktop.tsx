@@ -21,9 +21,9 @@ export default function SidebarDesktop() {
         w-[15%]
         min-w-[240px]
         h-[100vh]
-        bg-gray-900
+        bg-zinc-700
         border-r
-        border-gray-800
+        border-zinc-600
         top-0
       "
     >
@@ -42,7 +42,7 @@ export default function SidebarDesktop() {
           className="
             text-center
             w-full
-            bg-gray-800
+            bg-zinc-800
             py-4
             rounded
           "
@@ -120,10 +120,10 @@ export default function SidebarDesktop() {
             className="
               text-center
               w-full
-              bg-gray-800
+              bg-zinc-800
               py-3
               rounded
-              hover:bg-gray-700
+              hover:bg-zinc-700
             "
           >
             Gallery Placeholder
@@ -133,10 +133,10 @@ export default function SidebarDesktop() {
             className="
               text-center
               w-full
-              bg-gray-800
+              bg-zinc-800
               py-3
               rounded
-              hover:bg-gray-700
+              hover:bg-zinc-700
             "
           >
             Rules Placeholder
@@ -146,10 +146,10 @@ export default function SidebarDesktop() {
             className="
               text-center
               w-full
-              bg-gray-800
+              bg-zinc-800
               py-3
               rounded
-              hover:bg-gray-700
+              hover:bg-zinc-700
             "
           >
             Settings Placeholder

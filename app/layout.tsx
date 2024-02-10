@@ -48,7 +48,7 @@ export default function RootLayout(props: RootLayoutProps) {
                 flex
                 flex-col
                 items-center
-                bg-gray-950
+                bg-zinc-800
                 text-white
               "
             >
