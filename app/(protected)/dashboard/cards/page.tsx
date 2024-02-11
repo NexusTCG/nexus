@@ -191,12 +191,24 @@ export default function Cards() {
                     items-center
                   "
                 >
-                  <Tooltip title="Refresh results" arrow>
+                  <Tooltip
+                    title="Refresh results"
+                    arrow
+                  >
                     <IconButton
                         aria-label="refresh cards"
                         size="small"
-                        sx={{ width: "20px", height: "20px"}}
-                        className="opacity-50 hover:opacity-100 transition-opacity duration-300 ease-in-out"
+                        sx={{
+                          width: "20px",
+                          height: "20px"
+                        }}
+                        className="
+                          opacity-50
+                          hover:opacity-100
+                          transition-opacity
+                          duration-300
+                          ease-in-out
+                        "
                         onClick={handleRefresh}
                       >
                       <RefreshIcon />
@@ -344,62 +356,61 @@ export default function Cards() {
         >
         {/* Card grid */}
         <Grid
-            container
-            spacing={2}
-            className="
-              bg-neutral-800
-              border
-              border-neutral-700
-              pr-4
-              ml-2
-              mt-4
-              rounded-lg
-              shadow-xl
-              shadow-red
-            "
+          container
+          spacing={2}
+          className="
+            bg-neutral-800
+            border
+            border-neutral-700
+            pr-4
+            ml-2
+            mt-4
+            rounded-lg
+            shadow-xl
+            shadow-red
+          "
+        >
+          {cards?.map((card) => (
+          <Grid
+            item
+            xs={6}
+            md={4}
+            lg={3}
+            key={card.id}
           >
-            {cards?.map((card) => (
-            <Grid
-              item
-              xs={6}
-              md={4}
-              lg={3}
-              key={card.id}
+            <Tooltip
+              title={`${card.cardName} by ${card.cardCreator}`}
+              arrow
             >
-              <Tooltip
-                title={`${card.cardName} by ${card.cardCreator}`}
-                arrow
+              <Box
+                id="card-render-container"
+                sx={{
+                  overflow: "hidden",
+                  position: "relative",
+                  height: "308px",
+                }}
+                // Addc clsx for breakpoints
+                className="
+                  aspect-[5/7]
+                  rounded-lg
+                  hover:shadow-lg
+                  hover:shadow-zinc-950/25
+                  hover:scale-105
+                  mb-2
+                "
               >
-                <Box
-                  id="card-render-container"
-                  sx={{
-                    overflow: "hidden",
-                    position: "relative",
-                    height: "308px",
-                  }}
-                  // Addc clsx for breakpoints
-                  className="
-                    aspect-[5/7]
-                    rounded-lg
-                    hover:shadow-lg
-                    hover:shadow-zinc-950/25
-                    hover:scale-105
-                    mb-2
-                  "
-                >
-                  <Image
-                    src={card.cardRender}
-                    alt={card.cardName}
-                    fill
-                    style={{ objectFit: "cover" }}
-                  />
-                </Box>
-              </Tooltip>
-            </Grid>
-            ))}
+                <Image
+                  src={card.cardRender}
+                  alt={card.cardName}
+                  fill
+                  style={{ objectFit: "cover" }}
+                />
+              </Box>
+            </Tooltip>
           </Grid>
+          ))}
+        </Grid>
         </Box>
-        
       </Box>
     );
 };

@@ -29,7 +29,6 @@
     "postcss": "^8.4.32",
     "posthog-js": "^1.105.6",
     "posthog-node": "^3.6.2",
-    "puppeteer": "^22.0.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.49.3",
     "react-icons": "^4.12.0",

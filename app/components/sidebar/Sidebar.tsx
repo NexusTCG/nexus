@@ -1,22 +1,22 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import useSession from "@/app/hooks/useSession";
+import React from "react";
+// import { useState, useEffect } from "react";
+// import useSession from "@/app/hooks/useSession";
 import SoMeButton from "@/app/components/sidebar/SoMeButton";
-import fetchUserProfiles from "@/app/lib/actions/supabase-data/fetchUserProfilesData";
+// import fetchUserProfiles from "@/app/lib/actions/supabase-data/fetchUserProfilesData";
 import NavigationButton from "@/app/components/sidebar/NavigationButton";
 import SignOutButton from "@/app/components/auth/SignOutButton"
-import { AccountCircle } from '@mui/icons-material';
+// import { AccountCircle } from '@mui/icons-material';
 import {
   Box,
-  Button,
-  Typography,
-  Divider
+  // Button,
+  Typography
 } from "@mui/material";
 
 export default function Sidebar() {
-  const [userProfile, setUserProfile] = useState<string>("profile");
-  const user = useSession()?.user;
+  // const [userProfile, setUserProfile] = useState<string>("profile");
+  // const user = useSession()?.user;
 
   const soMeChannels = [
     "github",
@@ -34,29 +34,32 @@ export default function Sidebar() {
   ]
 
   const secondaryNavigation = [
+    "profile",
     "subscription",
     "settings",
     "support"
   ]
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (user?.id) {
-        const data = await fetchUserProfiles({
-          from: "profiles",
-          select: "*",
-          filter: user.id
-        });
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (user?.id) {
+  //       const data = await fetchUserProfiles({
+  //         from: "profiles",
+  //         select: "*",
+  //         filter: user.id
+  //       });
 
-        const profile = data?.find(profile => profile.id === user.id);
-        if (profile) {
-          setUserProfile(profile.username);
-        }
-      }
-    };
+  //       const profile = data?.find(
+  //         profile => profile.id === user.id
+  //       );
+  //       if (profile) {
+  //         setUserProfile(profile.username);
+  //       }
+  //     }
+  //   };
 
-    fetchData();
-  }, [user?.id])
+  //   fetchData();
+  // }, [user?.id])
 
   return (
     <Box
@@ -157,7 +160,7 @@ export default function Sidebar() {
             gap-2
           "
         >
-          <Button
+          {/* <Button
             id="navigation-button-profile"
             variant="outlined"
             startIcon={<AccountCircle />}
@@ -172,14 +175,12 @@ export default function Sidebar() {
             "
           >
             {userProfile}
-          </Button>
+          </Button> */}
           {secondaryNavigation.map((route, index) => {
             return (
               <NavigationButton key={index} route={route} />
             )
           })}
-          {/* Divider is not showing */}
-          <Divider />
           <SignOutButton /> 
         </Box>
       </Box>
