@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import useSession from "@/app/hooks/useSession";
 import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
 import fetchUserProfiles from "@/app/lib/actions/supabase-data/fetchUserProfilesData";
@@ -10,7 +10,8 @@ import {
   Typography,
   IconButton,
   Grid,
-  Tooltip
+  Tooltip,
+  CircularProgress
 } from "@mui/material";
 import UploadIcon from '@mui/icons-material/Upload';
 import Image from "next/image";
@@ -22,7 +23,10 @@ export default function Profile() {
     const [userFirstName, setUserFirstName] = useState<string>("");
     const [userLastName, setUserLastName] = useState<string>("");
     const [userBio, setUserBio] = useState<string>("");
+    const [userAvatarUploading, setUserAvatarUploading] = useState<boolean>(false);
+
     const user = useSession()?.user;
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
       const fetchUserData = async () => {
@@ -71,8 +75,36 @@ export default function Profile() {
       fetchCardData();
     }, [userProfile]);
 
-    function handleUploadAvatar() {
-      // TODO: Implement avatar upload
+    function handleUploadClick() {
+      fileInputRef.current?.click();
+    }
+
+    async function handleAvatarChange(event: React.ChangeEvent<HTMLInputElement>) {
+      const file = event.target.files?.[0];
+      console.log(file);
+      if (!file) return;
+      setUserAvatarUploading(true);
+
+      try {
+        const formData = new FormData();
+        const filename = `${userProfile}-avatar.png`;
+        formData.append(filename, file);
+  
+        const response = await fetch('/data/upload-avatar', {
+          method: 'POST',
+          body: formData,
+        });
+  
+        if (response.ok) {
+          const {data} = await response.json();
+          setUserAvatarUrl(data.url);
+        } else {
+          console.error("Failed to upload avatar");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+      setUserAvatarUploading(false);
     }
 
     return (
@@ -112,11 +144,11 @@ export default function Profile() {
             z-10
           "
         >
-          {userAvatarUrl && (<Box
+          {!userAvatarUrl && (<Box
             id="profile-avatar-container"
             sx={{
-              width: "144px",
-              height: "144px",
+              width: "96px",
+              height: "96px",
               position: "relative",
               overflow: "hidden"
             }}
@@ -129,20 +161,20 @@ export default function Profile() {
               border-neutral-700
             "
           >
-            <Image
+            {userAvatarUrl !== "" && (<Image
               fill
               src={userAvatarUrl}
               alt={`${userProfile}'s avatar`}
               style={{
                 objectFit: "cover",
               }}
-            />
+            />)}
           </Box>)}
-          {!userAvatarUrl && (<Box
+          {userAvatarUrl && (<Box
             id="profile-avatar-upload-container"
             sx={{
-              width: "144px",
-              height: "144px",
+              width: "96px",
+              height: "96px",
               position: "relative",
               overflow: "hidden"
             }}
@@ -158,12 +190,21 @@ export default function Profile() {
             "
           >
             <IconButton
+              disabled={userAvatarUploading}
               aria-label="upload avatar"
               size="large"
-              onAbort={handleUploadAvatar}
+              onClick={handleUploadClick}
             >
-              <UploadIcon fontSize="inherit"/>
+              {!userAvatarUploading && (<UploadIcon fontSize="inherit"/>)}
+              {userAvatarUploading && (<CircularProgress />)}
             </IconButton>
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              accept="image/*"
+              onChange={handleAvatarChange}
+            />
           </Box>)}
           <Box
             id="profile-user-info"
@@ -172,26 +213,37 @@ export default function Profile() {
               flex-col
               justify-start
               items-start
-              gap-1
             "
           >
-            <Typography
-              variant="h3"
+            <Box
+              id="profile-user-info-names"
               className="
-                font-semibold
-                text-white
+                flex
+                flex-row
+                justify-start
+                items-end
+                gap-1
               "
             >
-              {userFirstName} {userLastName}
-            </Typography>
-            <Typography
-              variant="h4"
-              className="
-                font-medium
-              "
-            >
-              @{userProfile}
-            </Typography>
+              <Typography
+                variant="h4"
+                className="
+                  font-semibold
+                  text-white
+                "
+              >
+                {userFirstName} {userLastName}
+              </Typography>
+              <Typography
+                variant="subtitle1"
+                className="
+                  font-medium
+                  text-xl
+                "
+              >
+                @{userProfile}
+              </Typography>
+            </Box>
             <Typography
               variant="body1"
               className="

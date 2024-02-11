@@ -33,6 +33,7 @@ export async function POST(req: NextRequest) {
         'Content-Type': 'application/json',
       },
     });
+
   } catch (error) {
     if (error instanceof z.ZodError) {
       return new NextResponse(JSON.stringify({ error: error.flatten }), {
@@ -45,7 +46,7 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ error: 'An unexpected error occurred' }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' },
-      });
+    });
   }
   
 }
