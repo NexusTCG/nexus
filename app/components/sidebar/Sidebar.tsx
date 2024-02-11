@@ -2,26 +2,42 @@
 
 import React, { useEffect, useState } from "react";
 import useSession from "@/app/hooks/useSession";
-import SignOutButton from "@/app/components/auth/SignOutButton";
 import SoMeButton from "@/app/components/sidebar/SoMeButton";
 import fetchUserProfiles from "@/app/lib/actions/supabase-data/fetchUserProfilesData";
+import NavigationButton from "@/app/components/sidebar/NavigationButton";
+import SignOutButton from "@/app/components/auth/SignOutButton"
+import { AccountCircle } from '@mui/icons-material';
 import {
   Box,
   Button,
-  Typography
+  Typography,
+  Divider
 } from "@mui/material";
-import {
-  AccountCircle,
-  Collections,
-  DesignServices,
-  Rule,
-  Casino,
-  Flag
-} from '@mui/icons-material';
 
 export default function Sidebar() {
   const [userProfile, setUserProfile] = useState<string>("profile");
   const user = useSession()?.user;
+
+  const soMeChannels = [
+    "github",
+    "discord",
+    "x",
+    "linkedin"
+  ]
+
+  const primaryNavigation = [
+    "create",
+    "cards",
+    "rules",
+    "game",
+    "roadmap",
+  ]
+
+  const secondaryNavigation = [
+    "subscription",
+    "settings",
+    "support"
+  ]
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,14 +66,13 @@ export default function Sidebar() {
         flex-col
         justify-between
         items-center
-        p-2
-        gap-4
         w-[240px]
         h-[100vh]
-        bg-zinc-700
+        bg-neutral-800
         border-r
-        border-zinc-600
+        border-neutral-700
         top-0
+        py-2
       "
     >
       <Box
@@ -67,8 +82,9 @@ export default function Sidebar() {
           flex-col
           justify-between
           items-center
-          gap-4
+          gap-8
           w-full
+          px-2
         "
       >
         <Typography
@@ -76,7 +92,7 @@ export default function Sidebar() {
           className="
             text-center
             w-full
-            bg-zinc-800
+            bg-neutral-700
             py-4
             rounded
           "
@@ -94,10 +110,27 @@ export default function Sidebar() {
             gap-4
           "
         >
-          <SoMeButton channel="github" />
-          <SoMeButton channel="discord" />
-          <SoMeButton channel="x" />
-          <SoMeButton channel="linkedin" />
+          {soMeChannels.map((channel, index) => {
+            return <SoMeButton key={index} channel={channel} />
+          })}
+        </Box>
+
+        <Box
+          id="sidebar-navigation-primary"
+          className="
+            flex
+            flex-col
+            justify-between
+            items-center
+            w-full
+            gap-2
+          "
+        >
+          {primaryNavigation.map((route, index) => {
+            return (
+              <NavigationButton key={index} route={route} />
+            )
+          })}
         </Box>
       </Box>
 
@@ -113,99 +146,17 @@ export default function Sidebar() {
         "
       >
         <Box
-          id="sidebar-navigation"
+          id="sidebar-navigation-secondary"
           className="
             flex
             flex-col
             justify-between
             items-center
             w-full
+            px-2
             gap-2
           "
         >
-          <Button
-            id="navigation-button-home"
-            variant="outlined"
-            href="/dashboard/create"
-            startIcon={<DesignServices />}
-            size="large"
-            className="
-              flex
-              justify-start
-              items-center
-              w-full
-              hover:cursor-pointer
-            "
-          >
-            Create
-          </Button>
-          <Button
-            id="navigation-button-cards"
-            variant="outlined"
-            href="/dashboard/cards"
-            startIcon={<Collections />}
-            size="large"
-            className="
-              flex
-              justify-start
-              items-center
-              w-full
-              hover:cursor-pointer
-            "
-          >
-            Cards
-          </Button>
-          <Button
-            id="navigation-button-cards"
-            variant="outlined"
-            href="/dashboard/rules"
-            startIcon={<Rule />}
-            size="large"
-            className="
-              flex
-              justify-start
-              items-center
-              w-full
-              hover:cursor-pointer
-            "
-          >
-            Rules
-          </Button>
-          <Button
-            id="navigation-button-cards"
-            variant="outlined"
-            href="/dashboard/game"
-            startIcon={<Casino />}
-            size="large"
-            className="
-              flex
-              justify-start
-              items-center
-              w-full
-              hover:cursor-pointer
-            "
-          >
-            Game
-          </Button>
-          <Button
-            id="navigation-button-cards"
-            variant="outlined"
-            href="/dashboard/roadmap"
-            startIcon={<Flag />}
-            size="large"
-            className="
-              flex
-              justify-start
-              items-center
-              w-full
-              hover:cursor-pointer
-            "
-          >
-            Roadmap
-          </Button>
-        
-          {/* Separate the below into its own container */}
-
           <Button
             id="navigation-button-profile"
             variant="outlined"
@@ -222,16 +173,15 @@ export default function Sidebar() {
           >
             {userProfile}
           </Button>
-
-          {/* Subscription */}
-          {/* Settings button */}
-          {/* Support */}
-
+          {secondaryNavigation.map((route, index) => {
+            return (
+              <NavigationButton key={index} route={route} />
+            )
+          })}
+          {/* Divider is not showing */}
+          <Divider />
+          <SignOutButton /> 
         </Box>
-        
-        {/* Add icon, replace?? */}
-        <SignOutButton /> 
-
       </Box>
     </Box>
   );

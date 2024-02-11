@@ -38,9 +38,6 @@ export default function DashboardLayout({
           justify-center
           items-center
           w-full
-          lg:px-12
-          md:px-8
-          sm:px-4
         "
       >
         {children}

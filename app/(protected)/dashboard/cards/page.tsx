@@ -98,9 +98,7 @@ export default function Cards() {
           justify-start
           items-center
           w-full
-          py-8
-          px-4
-          gap-2
+          gap-4
         "
       >
         <Box
@@ -113,6 +111,20 @@ export default function Cards() {
             justify-between
             items-center
             gap-4
+            lg:pl-12
+            md:pl-8
+            sm:pl-4
+            lg:pr-8
+            md:pr-4
+            sm:pr-2
+            pt-4
+            pb-2
+            bg-neutral-800
+            border-b
+          border-neutral-700
+            top-0
+            sticky
+            z-10
           "
         >
           <Box
@@ -123,7 +135,6 @@ export default function Cards() {
               flex-row
               justify-between
               gap-4
-              
             "
           >
             <Typography
@@ -164,32 +175,63 @@ export default function Cards() {
               "
             >
               <Box
-                id="cards-sort-text"
+                id="cards-sort-refresh-text"
                 className="
                   flex
                   flex-row
                   items-center
-                  gap-1
+                  gap-4
                 "
               >
-                <Typography
-                  variant="overline"
+                <Box
+                  id="cards-sort-refresh"
                   className="
-                    text-lime-500
-                    font-semibold
-                    text-xs
+                    flex
+                    justify-center
+                    items-center
                   "
                 >
-                  {cards?.length}
-                </Typography>
-                <Typography
-                  variant="body2"
+                  <Tooltip title="Refresh results" arrow>
+                    <IconButton
+                        aria-label="refresh cards"
+                        size="small"
+                        sx={{ width: "20px", height: "20px"}}
+                        className="opacity-50 hover:opacity-100 transition-opacity duration-300 ease-in-out"
+                        onClick={handleRefresh}
+                      >
+                      <RefreshIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+
+                <Box
+                  id="cards-sort-text"
                   className="
-                    text-gray-300
+                    flex
+                    justify-center
+                    items-center
+                    gap-1
                   "
                 >
-                  cards sorted by
-                </Typography>
+                  <Typography
+                    variant="overline"
+                    className="
+                      text-lime-500
+                      font-semibold
+                      text-xs
+                    "
+                  >
+                    {cards?.length}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    className="
+                      text-gray-300
+                    "
+                  >
+                    cards sorted by
+                  </Typography>
+                </Box>
               </Box>
               
               <Box
@@ -248,17 +290,6 @@ export default function Cards() {
                     <MenuItem value="descending">Desc</MenuItem>
                   </Select>
                 </FormControl>
-                <Tooltip title="Refresh" arrow>
-                  <IconButton
-                      aria-label="refresh cards"
-                      size="small"
-                      sx={{ width: "20px", height: "20px"}}
-                      className="opacity-50 hover:opacity-100 transition-opacity duration-300 ease-in-out"
-                      onClick={handleRefresh}
-                    >
-                    <RefreshIcon />
-                  </IconButton>
-                </Tooltip>
               </Box>
             </Box>
             <Box
@@ -296,51 +327,79 @@ export default function Cards() {
           </Box>
         </Box>
 
+        <Box
+          id="cards-grid-container"
+          className="
+            flex
+            flex-col
+            justify-start
+            items-center
+            w-full
+            lg:px-12
+            md:px-8
+            sm:px-6
+            lg:mb-12
+            mb-8
+          "
+        >
         {/* Card grid */}
         <Grid
-          container
-          spacing={2}
-        >
-          {cards?.map((card) => (
-          <Grid
-            item
-            xs={6}
-            md={4}
-            lg={3}
-            key={card.id}
+            container
+            spacing={2}
+            className="
+              bg-neutral-800
+              border
+              border-neutral-700
+              pr-4
+              ml-2
+              mt-4
+              rounded-lg
+              shadow-xl
+              shadow-red
+            "
           >
-            <Tooltip
-              title={`${card.cardName} by ${card.cardCreator}`}
-              arrow
+            {cards?.map((card) => (
+            <Grid
+              item
+              xs={6}
+              md={4}
+              lg={3}
+              key={card.id}
             >
-              <Box
-                id="card-render-container"
-                sx={{
-                  overflow: "hidden",
-                  position: "relative",
-                  height: "308px",
-                }}
-                // Addc clsx for breakpoints
-                className="
-                  aspect-[5/7]
-                  rounded-lg
-                  hover:shadow-lg
-                  hover:shadow-zinc-950/25
-                  hover:scale-105
-                  mb-2
-                "
+              <Tooltip
+                title={`${card.cardName} by ${card.cardCreator}`}
+                arrow
               >
-                <Image
-                  src={card.cardRender}
-                  alt={card.cardName}
-                  fill
-                  style={{ objectFit: "cover" }}
-                />
-              </Box>
-            </Tooltip>
+                <Box
+                  id="card-render-container"
+                  sx={{
+                    overflow: "hidden",
+                    position: "relative",
+                    height: "308px",
+                  }}
+                  // Addc clsx for breakpoints
+                  className="
+                    aspect-[5/7]
+                    rounded-lg
+                    hover:shadow-lg
+                    hover:shadow-zinc-950/25
+                    hover:scale-105
+                    mb-2
+                  "
+                >
+                  <Image
+                    src={card.cardRender}
+                    alt={card.cardName}
+                    fill
+                    style={{ objectFit: "cover" }}
+                  />
+                </Box>
+              </Tooltip>
+            </Grid>
+            ))}
           </Grid>
-          ))}
-        </Grid>
+        </Box>
+        
       </Box>
     );
 };

@@ -12,6 +12,7 @@ import {
   Reddit
 } from '@mui/icons-material';
 import { FaDiscord } from "react-icons/fa";
+import clsx from "clsx";
 
 type SoMeButtonProps = {
   channel: string;
@@ -54,11 +55,11 @@ export default function SoMeButton({ channel }: SoMeButtonProps) {
       <IconButton
         id={`social-media-button-${channel.toLowerCase()}`}
         size="small"
-        sx={{
-          width:"24px",
-          height:"24px"
-        }}
-        className="hover:cursor-pointer"
+        className={clsx("hover:cursor-pointer",
+          {
+            "w-[32px] h-[32px]": channel.toLowerCase() === "discord",
+          }
+        )}
       >
         {soMeIcon}
       </IconButton>

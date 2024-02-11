@@ -1,6 +1,7 @@
 "use client";
 
 import html2canvas from "html2canvas";
+// import puppeteer from "puppeteer";
 
 export default async function convertCardCodeToImage(elementId: string) {
   const cardElement = document.getElementById(elementId);
