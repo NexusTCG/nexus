@@ -1,63 +1,65 @@
 "use server";
 
 import { createClient } from "@/app/lib/supabase/server";
-import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-export async function POST(req: NextRequest) {
-  if (req.method === 'POST') {
-    const { file } = await req.json();
+export async function POST(request: Request) {
+  const formData = await request.formData();
 
-    try {
-      const cookieStore = cookies();
-      const supabase = createClient(cookieStore);
+  if (!formData.has('file')) {
+    return new Response(JSON.stringify({ error: 'No file found in request' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 
-      console.log('Uploading file:', file.filename); // Debug log
+  const file = formData.get('file') as File;
+  const dynamicFilename = formData.get('filename') as string;
 
-      const { error: uploadError } = await supabase
-          .storage
-          .from("avatars")
-          .upload(file.filename, file, {
-              contentType: 'image/png',
-              cacheControl: '3600',
-              upsert: false
-          });
+  try {
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore);
 
-      if (uploadError) {
-        throw new Error(`Failed to upload card art image: ${uploadError.message}`);
-      }
-
-      console.log('File uploaded successfully'); // Debug log
-
-      const { data } = await supabase
-          .storage
-          .from("avatars")
-          .getPublicUrl(file.filename);
-
-      console.log('Public URL:', data.publicUrl); // Debug log
-
-      return new Response(JSON.stringify({ data: data.publicUrl }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
+    const { error: uploadError } = await supabase
+      .storage
+      .from("avatars")
+      .upload(dynamicFilename, file, {
+        contentType: 'image/png',
+        cacheControl: '3600',
+        upsert: true
       });
+    
+    if (uploadError) {
+      console.log(uploadError)
+      throw new Error(`Failed to upload avatar image: ${uploadError.message}`);
+    }
 
-    } catch (error) {
-      console.error('An error occurred:', error); // Debug log
+    const { data } = await supabase
+      .storage
+      .from("avatars")
+      .getPublicUrl(dynamicFilename);
 
-      if (error instanceof Error) {
-        return new NextResponse(JSON.stringify({ error: error.message }), {
-          status: 400,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-      }
-      return new Response(JSON.stringify({ error: 'An unexpected error occurred' }), {
-          status: 500,
-          headers: { 'Content-Type': 'application/json' },
+    console.log(`Data returned by Supabase: ${data.publicUrl}`);
+
+    const publicUrl = data.publicUrl;
+    
+    return new Response(JSON.stringify({ data: publicUrl }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+    
+  } catch (error) {
+    if (error instanceof Error) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 400,
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
     }
-  } else {
-    return new NextResponse(null, { status: 405 });
+    return new Response(JSON.stringify({ error: 'An unexpected error occurred' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+    });
   }
 }

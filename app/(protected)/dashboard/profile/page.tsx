@@ -17,7 +17,7 @@ import UploadIcon from '@mui/icons-material/Upload';
 import Image from "next/image";
 
 export default function Profile() {
-  const [cards, setCards] = useState<CardsTableType[] | null>([]);
+    const [cards, setCards] = useState<CardsTableType[] | null>([]);
     const [userProfile, setUserProfile] = useState<string>("profile");
     const [userAvatarUrl, setUserAvatarUrl] = useState<string>("");
     const [userFirstName, setUserFirstName] = useState<string>("");
@@ -79,6 +79,10 @@ export default function Profile() {
       fileInputRef.current?.click();
     }
 
+    useEffect(() => {
+      console.log(`Updated userAvatarUrl: ${userAvatarUrl}`);
+    }, [userAvatarUrl]);
+
     async function handleAvatarChange(event: React.ChangeEvent<HTMLInputElement>) {
       const file = event.target.files?.[0];
       console.log(file);
@@ -88,7 +92,8 @@ export default function Profile() {
       try {
         const formData = new FormData();
         const filename = `${userProfile}-avatar.png`;
-        formData.append(filename, file);
+        formData.append("file", file);
+        formData.append("filename", filename.toLowerCase());
   
         const response = await fetch('/data/upload-avatar', {
           method: 'POST',
@@ -96,8 +101,14 @@ export default function Profile() {
         });
   
         if (response.ok) {
-          const {data} = await response.json();
-          setUserAvatarUrl(data.url);
+          const jsonResponse = await response.json();
+          console.log("Full API Response:", jsonResponse);
+          console.log(`Data returned by API: ${jsonResponse.data}`); 
+          setUserAvatarUrl(jsonResponse.data); 
+          // TODO: Update user profile with new avatar URL
+          // Remove setter for userAvatarUrl as its updated by useEffect
+          // Make this a function instead of API call
+          // Upload new image, and set user's avatar_url in profiles table
         } else {
           console.error("Failed to upload avatar");
         }
@@ -144,7 +155,7 @@ export default function Profile() {
             z-10
           "
         >
-          {!userAvatarUrl && (<Box
+          {userAvatarUrl && (<Box
             id="profile-avatar-container"
             sx={{
               width: "96px",
@@ -161,16 +172,16 @@ export default function Profile() {
               border-neutral-700
             "
           >
-            {userAvatarUrl !== "" && (<Image
-              fill
-              src={userAvatarUrl}
-              alt={`${userProfile}'s avatar`}
-              style={{
-                objectFit: "cover",
-              }}
-            />)}
+            {userAvatarUrl && (
+                <Image
+                    src={userAvatarUrl}
+                    alt={`${userProfile}'s avatar`}
+                    layout="fill"
+                    objectFit="cover"
+                />
+            )}
           </Box>)}
-          {userAvatarUrl && (<Box
+          {!userAvatarUrl && (<Box
             id="profile-avatar-upload-container"
             sx={{
               width: "96px",
@@ -185,7 +196,6 @@ export default function Profile() {
               rounded-full
               border-2
               border-neutral-700
-              hover:border-neutral-500
               hover:bg-neutral-700/20
             "
           >
@@ -194,6 +204,10 @@ export default function Profile() {
               aria-label="upload avatar"
               size="large"
               onClick={handleUploadClick}
+              className="
+                opacity-50
+                hover:opacity-100
+              "
             >
               {!userAvatarUploading && (<UploadIcon fontSize="inherit"/>)}
               {userAvatarUploading && (<CircularProgress />)}

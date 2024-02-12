@@ -1,6 +1,13 @@
 "use client";
 
-import React from "react";
+import React, {
+  useState,
+  useEffect
+} from "react";
+import { DashboardContext } from "@/app/context/DashboardContext";
+import useSession from "@/app/hooks/useSession";
+import fetchUserProfiles from "@/app/lib/actions/supabase-data/fetchUserProfilesData";
+import { UserProfilesTableType } from "@/app/utils/types/supabase/userProfilesTableType";
 import Sidebar from '@/app/components/sidebar/Sidebar';
 import { Box } from '@mui/material';
 
@@ -9,6 +16,32 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
+
+  const [userProfileData, setUserProfileData] = useState<Omit<UserProfilesTableType, 'id'> | undefined>();
+  const user = useSession()?.user;
+  
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user?.id) {
+        const data = await fetchUserProfiles({
+          from: "profiles",
+          select: "*",
+          filter: user.id
+        });
+  
+        if (data && data.length > 0) {
+          const profile = data[0];
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { id, ...rest } = profile;
+          setUserProfileData(rest);
+        } else {
+          console.error("No user profile data found.");
+        }
+      }
+    };
+  
+    fetchUserData();
+  }, [user?.id]);
   
   return (
     <Box
@@ -40,7 +73,9 @@ export default function DashboardLayout({
           w-full
         "
       >
-        {children}
+         <DashboardContext.Provider value={{ userProfileData }}>
+          {children}
+         </DashboardContext.Provider>
       </Box>
     </Box>
   )

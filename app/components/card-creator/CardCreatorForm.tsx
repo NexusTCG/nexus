@@ -300,16 +300,14 @@ export default function CardCreatorForm() {
         flex
         flex-col
         w-full
-        md:bg-gray-800
+        md:bg-neutral-800
         md:border
-        md:border-gray-700
-        md:shadow-2xl
-        md:shadow-black
+        md:border-neutral-700
         md:rounded-lg
-        p-6
         md:py-8
         pb:mb-0
         pb-12
+        p-6
       "
     >
       <FormProvider {...methods}>
@@ -350,7 +348,7 @@ export default function CardCreatorForm() {
                   variant="h2"
                   className="
                     text-4xl
-                    text-gray-200
+                    text-neutral-200
                     font-medium
                   "
                 >
@@ -375,7 +373,7 @@ export default function CardCreatorForm() {
                   >
                     <Typography
                       variant="overline"
-                      className="text-gray-400"
+                      className="text-neutral-400"
                       component="span"
                     >
                       by{" "}
@@ -534,9 +532,9 @@ export default function CardCreatorForm() {
             w-full
             p-6
             gap-4
-            bg-gray-800
+            bg-neutral-800
             border
-            border-gray-700
+            border-neutral-700
             rounded-2xl
             shadow-2xl
             shadow-black
@@ -553,7 +551,7 @@ export default function CardCreatorForm() {
                   my-4
                   rounded-2xl
                   shadow-xl
-                   shadow-gray-950/25
+                   shadow-neutral-950/25
                 "
               />
             ) : (
@@ -567,8 +565,8 @@ export default function CardCreatorForm() {
                   rounded-2xl
                   shadow-lg
                   hover:shadow-xl
-                   shadow-gray-950/30
-                   hover:shadow-gray-950/20
+                   shadow-neutral-950/30
+                   hover:shadow-neutral-950/20
                    
                 "
                 onLoad={() => setIsImageLoading(false)}
@@ -596,7 +594,7 @@ export default function CardCreatorForm() {
             <Typography
               id="modal-card-subtitle"
               variant="overline"
-              className="text-gray-400"
+              className="text-neutral-400"
             >
               {`Created by ${formNexusCardData.cardCreator} on ${new Date().toLocaleDateString()}`}
             </Typography>
