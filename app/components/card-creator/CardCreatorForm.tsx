@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { DashboardContext } from "@/app/context/DashboardContext";
 import useSession from "@/app/hooks/useSession";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,8 +23,23 @@ import {
   Alert,
   CircularProgress,
   Modal,
-  Skeleton
+  Skeleton,
+  InputAdornment,
+  IconButton,
+  Tooltip,
+  Chip,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Tab,
+  Tabs
 } from "@mui/material/";
+import SendIcon from "@mui/icons-material/Send";
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
+import PaletteIcon from '@mui/icons-material/Palette';
+import clsx from "clsx";
 
 // Remove the user id
 export default function CardCreatorForm() {
@@ -95,9 +111,13 @@ export default function CardCreatorForm() {
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const [promptTab, setPromptTab] = React.useState(0);
+
   // Alert states
   const [alertMessage, setAlertMessage] = useState("Submitting card...");
   const [alertSeverity, setAlertSeverity] = useState<string>("info");
+
+  const { userProfileData } = useContext(DashboardContext);
 
   // Log form data
   useEffect(() => {
@@ -108,7 +128,10 @@ export default function CardCreatorForm() {
     if (session?.user?.id) {
       setValue('user_id', session.user.id);
     }
-  }, [session, setValue]);
+    if (userProfileData?.username && userProfileData?.username !== undefined) {
+      setValue('cardCreator', userProfileData?.username as string);
+    }
+  }, [session, setValue, userProfileData]);
 
   function downloadCard(url: string) {
     const a = document.createElement("a");
@@ -293,6 +316,19 @@ export default function CardCreatorForm() {
     }, 3000);
   }
 
+  
+
+  const handleChange = (event: React.SyntheticEvent, newPromptTab: number) => {
+    setPromptTab(newPromptTab);
+  };
+
+  // PLACEHOLDER
+  const artStyleChip = true;
+
+  function handleChipClick() {
+    console.log("Chip clicked!");
+  }
+
   return (
     // Outer container
     <Box
@@ -304,8 +340,7 @@ export default function CardCreatorForm() {
         md:border
         md:border-neutral-700
         md:rounded-lg
-        md:py-8
-        pb:mb-0
+        md:py-6
         pb-12
         p-6
       "
@@ -333,7 +368,7 @@ export default function CardCreatorForm() {
               "
             >
               {/* Card Name + Creator */}
-              <Box
+              {/* <Box
                 className="
                   flex
                   flex-col
@@ -342,9 +377,9 @@ export default function CardCreatorForm() {
                   items-start
                   gap-2
                 "
-              >
+              > */}
                 {/* Card Name */}
-                <Typography
+                {/* <Typography
                   variant="h2"
                   className="
                     text-4xl
@@ -355,10 +390,10 @@ export default function CardCreatorForm() {
                   {formNexusCardData.cardName
                     ? formNexusCardData.cardName
                     : "An awesome card"}
-                </Typography>
+                </Typography> */}
 
                 {/* Card Creator */}
-                <Box
+                {/* <Box
                   className="
                     flex
                     flex-row
@@ -383,7 +418,7 @@ export default function CardCreatorForm() {
                       : "Card creator"}
                   </Typography>
                 </Box>
-              </Box>
+              </Box> */}
 
               {/* Input Fields */}
               <Box
@@ -395,14 +430,31 @@ export default function CardCreatorForm() {
                 "
               >
                 {/* Input: Card creator */}
-                <TextField
+                {/* <TextField
                   label="Card creator"
                   variant="outlined"
                   {...register("cardCreator")}
                   className="flex w-full"
                   error={Boolean(errors.cardCreator)}
                   helperText={errors.cardCreator?.message}
-                />
+                /> */}
+
+                <Tabs
+                  value={promptTab}
+                  onChange={handleChange}
+                  aria-label="icon position tabs example"
+                >
+                  <Tab
+                    icon={<PaletteIcon />}
+                    iconPosition="start"
+                    label="Generate Art"
+                  />
+                  <Tab
+                    icon={<SmartToyIcon />}
+                    iconPosition="start"
+                    label="Brainstorm"
+                  />
+                </Tabs>
 
                 {/* Input: AI prompt */}
                 <TextField
@@ -411,7 +463,7 @@ export default function CardCreatorForm() {
                     isSubmitting ||
                     !userId
                   }
-                  rows={4}
+                  rows={3}
                   label="Card prompt"
                   variant="outlined"
                   {...register("cardPrompt")}
@@ -419,6 +471,7 @@ export default function CardCreatorForm() {
                   error={Boolean(errors.cardPrompt)}
                   helperText={errors.cardPrompt?.message}
                 />
+                
                 {/* Input: AI art prompt */}
                 <TextField
                   multiline
@@ -428,15 +481,308 @@ export default function CardCreatorForm() {
                     isSubmitting ||
                     !userId
                   }
-                  rows={2}
-                  label="Card art prompt"
+                  rows={4}
+                  placeholder="Generate art for the card..."
+                  label={isGeneratingArt ? `Generating art in ${Math.floor(elapsedTime / 1000)} seconds...` : "Art prompt"}
                   variant="outlined"
                   {...register("cardArtPrompt")}
                   className="flex w-full"
                   error={Boolean(errors.cardArtPrompt)}
                   helperText={errors.cardArtPrompt?.message}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Tooltip
+                          title="Send prompt"
+                          arrow
+                        >
+                          <IconButton
+                            onClick={onImageGeneration}
+                            disabled={
+                              cardArtPrompt === "" ||
+                              isGeneratingArt ||
+                              generateArtLimit >= 3 ||
+                              isSubmitting ||
+                              !userId
+                            }
+                            size="medium"
+                            className="
+                              ml-2
+                              mt-auto
+                            "
+                          >
+                            {isGeneratingArt ? (
+                              <CircularProgress size={24} />
+                            ) : generateArtLimit >= 3 ? (
+                              <Typography>Limit reached</Typography>
+                            ) : (
+                              <SendIcon />
+                            )}
+                          </IconButton>
+                        </Tooltip>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
-                <Button
+                <Box
+                  className="
+                    flex
+                    flex-col
+                    justify-start
+                    items-start
+                    gap-2
+                  "
+                >
+                  <Typography
+                    variant="subtitle2"
+                    className="
+                      font-medium
+                    "
+                  >
+                    Select art style
+                  </Typography>
+                  <Box
+                    className="
+                      flex
+                      flex-row
+                      justify-center
+                      items-start
+                      flex-wrap
+                      w-full
+                      rounded-md
+                    "
+                  >
+                    {/* TODO: Add state management to add values to art prompt */}
+                    {/* Turn into component */}
+                    <Accordion
+                      className="w-full"
+                    >
+                      <AccordionSummary
+                        expandIcon={<ArrowDownwardIcon />}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                      >
+                        <Typography>Art Style</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails
+                        className="
+                          flex
+                          flex-row
+                          flex-wrap
+                          w-full
+                          gap-1
+                        "
+                      >
+                        <Chip
+                          id="art-style-1"
+                          label="Anime"
+                          variant="outlined"
+                          size="small"
+                          color="success"
+                          onClick={handleChipClick}
+                          className={clsx(["hover:opacity-100",
+                            {
+                              "opacity-100": artStyleChip === true,
+                              "opacity-50": artStyleChip !== true,
+                            }
+                          ])}
+                        />
+                        <Chip
+                          id="art-style-2"
+                          label="Ink"
+                          variant="outlined"
+                          size="small"
+                          color="default"
+                          onClick={handleChipClick}
+                        />
+                        <Chip
+                          id="art-style-3"
+                          label="Watercolor"
+                          variant="outlined"
+                          size="small"
+                          color="default"
+                          onClick={handleChipClick}
+                        />
+                        <Chip
+                          id="art-style-4"
+                          label="Airbrush"
+                          variant="outlined"
+                          size="small"
+                          color="default"
+                          onClick={handleChipClick}
+                        />
+                        <Chip
+                          id="art-style-5"
+                          label="Ligne Claire"
+                          variant="outlined"
+                          size="small"
+                          color="default"
+                          onClick={handleChipClick}
+                        />
+                      </AccordionDetails>
+                    </Accordion>
+                    <Accordion
+                      className="w-full"
+                    >
+                      <AccordionSummary
+                        expandIcon={<ArrowDropDownIcon />}
+                        aria-controls="panel2-content"
+                        id="panel2-header"
+                      >
+                        <Typography>Setting</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails
+                        className="
+                          flex
+                          flex-row
+                          flex-wrap
+                          w-full
+                          gap-1
+                        "
+                      >
+                        <Chip
+                          id="art-style-6"
+                          label="Gouache"
+                          variant="outlined"
+                          size="small"
+                          color="default"
+                          onClick={handleChipClick}
+                        />
+                        <Chip
+                          id="art-style-7"
+                          label="Dramatic"
+                          variant="outlined"
+                          size="small"
+                          color="default"
+                          onClick={handleChipClick}
+                        />
+                        <Chip
+                          id="art-style-8"
+                          label="Eerie"
+                          variant="outlined"
+                          size="small"
+                          color="default"
+                          onClick={handleChipClick}
+                        />
+                        <Chip
+                          id="art-style-9"
+                          label="Comedic"
+                          variant="outlined"
+                          size="small"
+                          color="default"
+                          onClick={handleChipClick}
+                        />
+                      </AccordionDetails>
+                    </Accordion>
+                    <Accordion
+                      className="w-full"
+                    >
+                      <AccordionSummary
+                        expandIcon={<ArrowDropDownIcon />}
+                        aria-controls="panel2-content"
+                        id="panel2-header"
+                      >
+                        <Typography>Composition</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails
+                        className="
+                          flex
+                          flex-row
+                          flex-wrap
+                          w-full
+                          gap-1
+                        "
+                      >
+                        <Chip
+                          id="art-style-10"
+                          label="Gouache"
+                          variant="outlined"
+                          size="small"
+                          color="default"
+                          onClick={handleChipClick}
+                        />
+                        <Chip
+                          id="art-style-11"
+                          label="Dramatic"
+                          variant="outlined"
+                          size="small"
+                          color="default"
+                          onClick={handleChipClick}
+                        />
+                        <Chip
+                          id="art-style-12"
+                          label="Eerie"
+                          variant="outlined"
+                          size="small"
+                          color="default"
+                          onClick={handleChipClick}
+                        />
+                        <Chip
+                          id="art-style-13"
+                          label="Comedic"
+                          variant="outlined"
+                          size="small"
+                          color="default"
+                          onClick={handleChipClick}
+                        />
+                      </AccordionDetails>
+                    </Accordion>
+                    <Accordion
+                      className="w-full"
+                    >
+                      <AccordionSummary
+                        expandIcon={<ArrowDropDownIcon />}
+                        aria-controls="panel2-content"
+                        id="panel2-header"
+                      >
+                        <Typography>Mood</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails
+                        className="
+                          flex
+                          flex-row
+                          flex-wrap
+                          w-full
+                          gap-1
+                        "
+                      >
+                        <Chip
+                          id="art-style-14"
+                          label="Gouache"
+                          variant="outlined"
+                          size="small"
+                          color="default"
+                          onClick={handleChipClick}
+                        />
+                        <Chip
+                          id="art-style-15"
+                          label="Dramatic"
+                          variant="outlined"
+                          size="small"
+                          color="default"
+                          onClick={handleChipClick}
+                        />
+                        <Chip
+                          id="art-style-16"
+                          label="Eerie"
+                          variant="outlined"
+                          size="small"
+                          color="default"
+                          onClick={handleChipClick}
+                        />
+                        <Chip
+                          id="art-style-17"
+                          label="Comedic"
+                          variant="outlined"
+                          size="small"
+                          color="default"
+                          onClick={handleChipClick}
+                        />
+                      </AccordionDetails>
+                    </Accordion>
+                  </Box>
+                </Box>
+                {/* <Button
                   onClick={onImageGeneration}
                   disabled={
                     cardArtPrompt === "" ||
@@ -447,7 +793,7 @@ export default function CardCreatorForm() {
                   }
                   variant="outlined"
                   size="large"
-                  className="flex w-full rounded-full"
+                  className="flex w-full" 
                 >
                   {isGeneratingArt ? (
                     <Box display="flex" alignItems="center" gap={2}>
@@ -461,7 +807,7 @@ export default function CardCreatorForm() {
                   ) : (
                     elapsedTime > 0 ? "Generate new art" : "Generate art"
                   )}
-                </Button>
+                </Button> */}
 
                 {/* Alert component goes here */}
 
@@ -480,7 +826,6 @@ export default function CardCreatorForm() {
                   className="
                     flex
                     w-full
-                    rounded-full
                   "
                 >
                   {isSubmitting ? <CircularProgress size={24} /> : 'Submit'}

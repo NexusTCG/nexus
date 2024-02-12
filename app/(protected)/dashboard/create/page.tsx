@@ -8,6 +8,7 @@ import {
   Typography,
   Button,
 } from "@mui/material";
+import SaveIcon from '@mui/icons-material/Save';
 
 export default function Create() {
   const [placeholderFormValidation, setPlaceholderFormValidation] = React.useState<boolean>(false);
@@ -17,7 +18,9 @@ export default function Create() {
     if (!placeholderFormValidation) {
       setPlaceholderFormValidation(true);
     }
-  }, []);
+  }, [placeholderFormValidation]);
+
+  // TODO: Move state 
 
   return (
     <Box
@@ -42,11 +45,11 @@ export default function Create() {
           lg:pl-12
           md:pl-8
           sm:pl-4
-          lg:pr-8
-          md:pr-4
-          sm:pr-2
-          pt-4
-          pb-2
+          lg:pr-12
+          md:pr-8
+          sm:pr-4
+          px-6
+          py-4
           bg-neutral-800
           border-b
         border-neutral-700
@@ -56,32 +59,65 @@ export default function Create() {
         "
       >
         <Box
-          id="cards-header-content"
+          id="create-header-content"
           className="
-            w-full
             flex
             flex-row
             justify-between
-            gap-4
+            items-center
+            w-full
+            gap-8
           "
         >
-          <Typography
-            variant="h4"
+          {/* Card Name + Creator */}
+          <Box
+            id="card-name-creator-container"
             className="
-              font-medium
+              flex
+              flex-row
+              justify-between
+              items-baseline
+              gap-2
             "
           >
-            Create card by ${userProfileData?.username}
-          </Typography>
+            {/* Card Name */}
+            <Typography
+              variant="h4"
+              className="
+                font-medium
+              "
+            >
+              Card name {/* Conditionally change name */}
+            </Typography>
+            {/* Card Creator*/}
+            <Typography
+              variant="overline"
+              className="text-emerald-400"
+            >
+              <Typography
+                variant="overline"
+                className="text-neutral-400"
+                component="span"
+              >
+                by{" "}
+              </Typography>
+              {userProfileData?.username
+                ? userProfileData?.username
+                : "Card creator"}
+            </Typography>
+          </Box>
+          {/* Save button */}
           <Button
             variant="outlined"
-            size="small"
+            startIcon={<SaveIcon />}
+            size="large"
           >
-            Submit Card
+            Save card
           </Button>
         </Box>
       </Box>
       <Box
+        id="create-form-container"
         className="
           flex
           flex-col
