@@ -20,7 +20,7 @@ import {
   Mood,
   LocalSee
 } from "@mui/icons-material"
-import { ArtPromptOptions } from "@/app/utils/data/artStyleOptions";
+import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
 
 type ArtPromptAccordionProps = {
   category: keyof typeof ArtPromptOptions;

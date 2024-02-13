@@ -10,11 +10,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CardFormDataType } from "@/app/utils/types/types";
 import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
+import ConstructArtPrompt from "@/app/lib/actions/constructArtPrompt";
 import convertCardCodeToImage from "@/app/lib/actions/convertCardCodeToImage"
 import uploadCardImage from "@/app/lib/actions/supabase-data/uploadCardImage";
 import ArtPromptAccordion from "@/app/components/card-creator/ArtPromptAccordion";
 import Image from "next/image";
-import { ArtPromptOptions } from "@/app/utils/data/artStyleOptions";
+import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
 import PostHogClient from "@/app/lib/posthog/posthog";
 import {
   Box,
@@ -163,15 +164,23 @@ export default function CardCreatorForm() {
     if (generateArtLimit < 3) {
       setSnackbarMessage("Generating art...");
       try {
-        const generatedImage = await fetch("/data/generate-card-art", {
+        const constructedArtPrompt = await ConstructArtPrompt(artPromptSelections, cardArtPrompt);
+
+        console.log("Constructed art prompt:", constructedArtPrompt);
+
+        const response = await fetch("/data/generate-card-art", {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ prompt: cardArtPrompt }),
+          body: JSON.stringify({ prompt: constructedArtPrompt }),
         });
+
+        if (!response.ok) {
+          throw new Error('Artwork generation failed.');
+        }
         
-        const { imageUrl } = await generatedImage.json();
+        const { imageUrl } = await response.json();
 
         if (imageUrl) {
           if (session
@@ -516,79 +525,69 @@ export default function CardCreatorForm() {
                     <ArtPromptAccordion
                       category="style"
                       title="Style"
-                      selectedOptions={artPromptSelections["style"] || ""}
+                      selectedOptions={
+                        artPromptSelections["style"] || ""
+                      }
                       onSelectionChange={handleSelectionChange}
                     />
                     <ArtPromptAccordion
                       category="technique"
                       title="Technique"
-                      selectedOptions={artPromptSelections["technique"] || ""}
+                      selectedOptions={
+                        artPromptSelections["technique"] || ""
+                      }
                       onSelectionChange={handleSelectionChange}
                     />
                     <ArtPromptAccordion
                       category="subject"
                       title="Subject"
-                      selectedOptions={artPromptSelections["subject"] || ""}
+                      selectedOptions={
+                        artPromptSelections["subject"] || ""
+                      }
                       onSelectionChange={handleSelectionChange}
                     />
                     <ArtPromptAccordion
                       category="setting"
                       title="Setting"
-                      selectedOptions={artPromptSelections["setting"] || ""}
+                      selectedOptions={
+                        artPromptSelections["setting"] || ""
+                      }
                       onSelectionChange={handleSelectionChange}
                     />
                     <ArtPromptAccordion
                       category="time"
                       title="Time"
-                      selectedOptions={artPromptSelections["time"] || ""}
+                      selectedOptions={
+                        artPromptSelections["time"] || ""
+                      }
                       onSelectionChange={handleSelectionChange}
                     />
                     <ArtPromptAccordion
                       category="weather"
                       title="Weather"
-                      selectedOptions={artPromptSelections["weather"] || ""}
+                      selectedOptions={
+                        artPromptSelections["weather"] || ""
+                      }
                       onSelectionChange={handleSelectionChange}
                     />
                     <ArtPromptAccordion
                       category="mood"
                       title="Mood"
-                      selectedOptions={artPromptSelections["mood"] || ""}
+                      selectedOptions={
+                        artPromptSelections["mood"] || ""
+                      }
                       onSelectionChange={handleSelectionChange}
                     />
                     <ArtPromptAccordion
                       category="composition"
                       title="Composition"
-                      selectedOptions={artPromptSelections["composition"] || ""}
+                      selectedOptions={
+                        artPromptSelections["composition"] || ""
+                      }
                       onSelectionChange={handleSelectionChange}
                     />
                   </Box>
                 </Box>
-                {/* <Button
-                  onClick={onImageGeneration}
-                  disabled={
-                    cardArtPrompt === "" ||
-                    isGeneratingArt ||
-                    generateArtLimit >= 3 ||
-                    isSubmitting ||
-                    !userId
-                  }
-                  variant="outlined"
-                  size="large"
-                  className="flex w-full" 
-                >
-                  {isGeneratingArt ? (
-                    <Box display="flex" alignItems="center" gap={2}>
-                      <CircularProgress size={24} />
-                      <Typography>
-                        Generating art in {Math.floor(elapsedTime / 1000)} seconds...
-                      </Typography>
-                    </Box>
-                  ) : generateArtLimit >= 3 ? (
-                    "Art generation limit reached"
-                  ) : (
-                    elapsedTime > 0 ? "Generate new art" : "Generate art"
-                  )}
-                </Button> */}
 
                 {/* Alert component goes here */}
 

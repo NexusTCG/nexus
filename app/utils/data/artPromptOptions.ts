@@ -14,7 +14,8 @@ export const ArtPromptOptions = {
     "Ink",
     "Pastel",
     "Sketching",
-    "Oil painting"
+    "Oil painting",
+    "Ligne Claire",
   ],
   subject: [
     "1 character",
@@ -51,6 +52,8 @@ export const ArtPromptOptions = {
     "Comedic",
     "Calm",
     "Heroic",
+    "Chaotic",
+    "Serious",
   ],
   composition: [
     "Portrait",
