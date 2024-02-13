@@ -33,14 +33,14 @@ type ArtPromptAccordionProps = {
 };
 
 const categoryIcons = {
-  style: <Palette className="text-neutral-500" />,
-  technique: <Brush className="text-neutral-500" />,
-  subject: <People className="text-neutral-500" />,
-  setting: <Landscape className="text-neutral-500" />,
-  time: <AccessTime className="text-neutral-500" />,
-  weather: <WbSunny className="text-neutral-500" />,
-  mood: <Mood className="text-neutral-500" />,
-  composition: <LocalSee className="text-neutral-500" />,
+  style: <Palette className="text-neutral-400" />,
+  technique: <Brush className="text-neutral-400" />,
+  subject: <People className="text-neutral-400" />,
+  setting: <Landscape className="text-neutral-400" />,
+  time: <AccessTime className="text-neutral-400" />,
+  weather: <WbSunny className="text-neutral-400" />,
+  mood: <Mood className="text-neutral-400" />,
+  composition: <LocalSee className="text-neutral-400" />,
 };
 
 export default function ArtPromptAccordion({
@@ -57,13 +57,17 @@ export default function ArtPromptAccordion({
   
   return (
     <Accordion
-      className="w-full"
+      className="
+        w-full
+        bg-transparent
+        shadow-none
+      "
     >
       <AccordionSummary
         expandIcon={
           <ArrowDownward
             className="
-              text-neutral-500
+              text-neutral-400
               hover:text-neutral-300
             "
           />

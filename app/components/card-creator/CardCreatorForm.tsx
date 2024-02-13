@@ -17,6 +17,7 @@ import ArtPromptAccordion from "@/app/components/card-creator/ArtPromptAccordion
 import Image from "next/image";
 import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
 import PostHogClient from "@/app/lib/posthog/posthog";
+import clsx from "clsx";
 import {
   Box,
   Typography,
@@ -106,6 +107,7 @@ export default function CardCreatorForm() {
   const [modalOpen, setModalOpen] = useState(false);
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [apiError, setApiError] = useState({ open: false, message: "" });
 
   const [promptTab, setPromptTab] = React.useState(0);
   const [artPromptSelections, setArtPromptSelections] = useState<{ [category: string]: string }>({});
@@ -195,17 +197,17 @@ export default function CardCreatorForm() {
         }
 
         setGenerateArtLimit(generateArtLimit + 1);
+        setValue("cardArtPrompt", "");
         setValue("cardArt", imageUrl);
         trigger("cardArt");
         
       } catch (error) {
-        console.error('Failed to generate art:', error);
+        setApiError({ open: true, message: "Failed to generate artwork. Please try again later or check OpenAI's status here: https://status.openai.com/" });
       }
     }
     
     // Cleanup with delay to match card art updating
     setTimeout(() => {
-      setValue("cardArtPrompt", "");
       clearInterval(newIntervalId);
       setIsGeneratingArt(false);
       setElapsedTime(Date.now() - timerStart);
@@ -341,49 +343,64 @@ export default function CardCreatorForm() {
   return (
     // Outer container
     <Box
+      id="card-form-container-outer"
       className="
         flex
         flex-col
+        justify-start
+        items-center
         w-full
-        md:bg-neutral-800
-        md:border
-        md:border-neutral-700
-        md:rounded-lg
-        md:py-6
-        pb-12
-        p-6
       "
     >
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Inner Container */}
           <Box
+            id="card-form-container-inner"
             className="
               flex
-              flex-col
+              flex-col-reverse
               md:flex-row
-              gap-8
+              justify-start
+              items-start
+              w-full
+              gap-2
+              md:gap-8
+              md:px-0
+              px-6
             "
           >
-            {/* Form Header */}
+            {/* Prompt Container */}
             <Box
+              id="card-form-prompt-container"
               className="
                 flex
                 flex-col
                 justify-start
                 items-start
                 w-full
-                gap-4
+                md:w-1/2
+                border
+                border-neutral-700
+                bg-neutral-800
+                rounded-md
+                md:shadow-xl
+                shadow-lg
+                md:shadow-neutral-950/25
+                shadow-neutral-950/50
               "
             >
-
-              {/* Input Fields */}
+              {/* Prompt Tabs */}
               <Box
+                id="card-form-prompt-tabs-container"
                 className="
                   flex
                   flex-col
+                  justify-start
+                  items-start
                   w-full
-                  gap-4
+                  border-b
+                  border-neutral-700
                 "
               >
                 <Tabs
@@ -402,37 +419,41 @@ export default function CardCreatorForm() {
                     label="Brainstorm"
                   />
                 </Tabs>
+              </Box>
 
+              {/* Prompt Input Fields */}
+              <Box
+                className="
+                  flex
+                  flex-col
+                  justify-start
+                  items-start
+                  w-full
+                  gap-4
+                  p-4
+                  pt-6
+                  border-b
+                  border-neutral-700
+                "
+              >
+                {/* Conditionally render based on currently active tab */}
                 {/* Input: AI prompt */}
                 <TextField
                   multiline
-                  disabled={
-                    isSubmitting ||
-                    !userId
-                  }
-                  rows={3}
+                  disabled={isSubmitting || !userId}
                   label="Card prompt"
-                  variant="outlined"
                   {...register("cardPrompt")}
-                  className="flex w-full"
                   error={Boolean(errors.cardPrompt)}
                   helperText={errors.cardPrompt?.message}
+                  rows={2}
+                  variant="outlined"
+                  className="
+                    w-full
+                    bg-neutral-900/50
+                    hidden
+                  "
                 />
                 
-                {/* Conditionally render based on currently active tab */}
-                { (<Box
-                  id="art-prompt-container"
-                  className="
-                    flex
-                    flex-col
-                    justify-start
-                    items-start
-                    w-full
-                    gap-4
-                  "
-                >
-
-                </Box>)}
                 {/* Input: AI art prompt */}
                 <TextField
                   multiline
@@ -442,17 +463,21 @@ export default function CardCreatorForm() {
                     isSubmitting ||
                     !userId
                   }
-                  rows={4}
                   placeholder="Generate art for the card..."
                   label={isGeneratingArt ?
                     `Generating art in ${Math.floor(elapsedTime / 1000)} seconds...` : 
                     "Art prompt"
                   }
-                  variant="outlined"
                   {...register("cardArtPrompt")}
-                  className="flex w-full"
                   error={Boolean(errors.cardArtPrompt)}
                   helperText={errors.cardArtPrompt?.message}
+                  rows={2}
+                  variant="outlined"
+                  className="
+                    flex
+                    w-full
+                    bg-neutral-900/50
+                  "
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -460,175 +485,276 @@ export default function CardCreatorForm() {
                           title="Send prompt"
                           arrow
                         >
-                          <IconButton
-                            onClick={onImageGeneration}
-                            disabled={
-                              cardArtPrompt === "" ||
-                              isGeneratingArt ||
-                              generateArtLimit >= 3 ||
-                              isSubmitting ||
-                              !userId
-                            }
-                            size="medium"
-                            className="
-                              ml-2
-                              mt-auto
-                            "
-                          >
-                            {isGeneratingArt ? (
-                              <CircularProgress size={24} />
-                            ) : generateArtLimit >= 3 ? (
-                              <Typography>
-                                Limit reached
-                              </Typography>
-                            ) : (
-                              <SendIcon />
-                            )}
-                          </IconButton>
+                          <span className="tooltip-wrapper">
+                            <IconButton
+                              onClick={onImageGeneration}
+                              disabled={
+                                cardArtPrompt === "" ||
+                                isGeneratingArt ||
+                                generateArtLimit >= 3 ||
+                                isSubmitting ||
+                                !userId
+                              }
+                              size="small"
+                              className="
+                                ml-2
+                                mt-auto
+                              "
+                            >
+                              {isGeneratingArt ? (
+                                <CircularProgress size={24} />
+                              ) : generateArtLimit >= 3 ? (
+                                <Typography>
+                                  Limit reached
+                                </Typography>
+                              ) : (
+                                <SendIcon
+                                  className={clsx("",
+                                    cardArtPrompt === "" ? "text-neutral-500" : "text-lime-500"
+                                  )}
+                                />
+                              )}
+                            </IconButton>
+                          </span>
                         </Tooltip>
                       </InputAdornment>
                     ),
                   }}
                 />
+                
+                
+                
+              </Box>
+              {/* Art Prompt Options Accordions */}
+              <Box
+                className="
+                  flex
+                  flex-col
+                  justify-start
+                  items-start
+                  bg-neutral-900
+                "
+              >
+                {/* Art Prompt Options Title */}
                 <Box
                   className="
                     flex
                     flex-col
-                    justify-start
-                    items-start
-                    gap-2
+                    justify-between
+                    items-center
+                    bg-neutral-900
+                    w-full
+                    gap-1
+                    border-b
+                    border-neutral-700
                   "
                 >
-                  <Typography
-                    variant="subtitle1"
-                    className="
-                      font-medium
-                    "
-                  >
-                    Select art style
-                  </Typography>
                   <Box
-                    id="art-prompt-options-container"
                     className="
                       flex
                       flex-row
-                      justify-center
-                      items-start
-                      flex-wrap
+                      justify-between
+                      items-center
+                      px-4
+                      pt-2
                       w-full
-                      rounded-2xl
-                      gap-0
-                      my-0
                     "
                   >
-                    {/* Art Prompt Options Accordions */}
-                    <ArtPromptAccordion
-                      category="style"
-                      title="Style"
-                      selectedOptions={
-                        artPromptSelections["style"] || ""
-                      }
-                      onSelectionChange={handleSelectionChange}
-                    />
-                    <ArtPromptAccordion
-                      category="technique"
-                      title="Technique"
-                      selectedOptions={
-                        artPromptSelections["technique"] || ""
-                      }
-                      onSelectionChange={handleSelectionChange}
-                    />
-                    <ArtPromptAccordion
-                      category="subject"
-                      title="Subject"
-                      selectedOptions={
-                        artPromptSelections["subject"] || ""
-                      }
-                      onSelectionChange={handleSelectionChange}
-                    />
-                    <ArtPromptAccordion
-                      category="setting"
-                      title="Setting"
-                      selectedOptions={
-                        artPromptSelections["setting"] || ""
-                      }
-                      onSelectionChange={handleSelectionChange}
-                    />
-                    <ArtPromptAccordion
-                      category="time"
-                      title="Time"
-                      selectedOptions={
-                        artPromptSelections["time"] || ""
-                      }
-                      onSelectionChange={handleSelectionChange}
-                    />
-                    <ArtPromptAccordion
-                      category="weather"
-                      title="Weather"
-                      selectedOptions={
-                        artPromptSelections["weather"] || ""
-                      }
-                      onSelectionChange={handleSelectionChange}
-                    />
-                    <ArtPromptAccordion
-                      category="mood"
-                      title="Mood"
-                      selectedOptions={
-                        artPromptSelections["mood"] || ""
-                      }
-                      onSelectionChange={handleSelectionChange}
-                    />
-                    <ArtPromptAccordion
-                      category="composition"
-                      title="Composition"
-                      selectedOptions={
-                        artPromptSelections["composition"] || ""
-                      }
-                      onSelectionChange={handleSelectionChange}
-                    />
+                    <Typography
+                      variant="subtitle2"
+                      className="
+                        font-semibold
+                        text-lime-500
+                      "
+                    >
+                      ART DIRECTION
+                    </Typography>
+                    <Typography
+                      variant="overline"
+                      component={"span"}
+                      className="
+                        text-lime-500
+                      "
+                    >
+                      {Object.keys(artPromptSelections).length} {" "}
+                      <Typography
+                        variant="overline"
+                        className="
+                          text-neutral-500
+                        "
+                      >
+                        / 8 selected
+                      </Typography>
+                    </Typography>
+                  </Box>
+                  <Box
+                    className="
+                      flex
+                      flex-col
+                      justify-start
+                      items-start
+                      px-4
+                      pb-3
+                      w-full
+                    "
+                  >
+                    <Typography
+                      variant="body2"
+                    >
+                      Select options to include them in the art generation prompt.
+                    </Typography>
                   </Box>
                 </Box>
-
-                {/* Alert component goes here */}
-
-                {/* Submit Form */}
-                <Button
-                  disabled={
-                    !isValid ||
-                    isGeneratingArt ||
-                    isSubmitting ||
-                    !userId ||
-                    formNexusCardData.cardArt === "/images/card-parts/card-art/default-art.jpg"
-                  }
-                  type="submit"
-                  variant="outlined"
-                  size="large"
+                
+                {/* Prompt Options Container */}
+                <Box
+                  id="art-prompt-options-container"
                   className="
                     flex
+                    flex-row
+                    justify-center
+                    items-start
+                    flex-wrap
                     w-full
+                    rounded-2xl
+                    gap-0
+                    my-0
                   "
                 >
-                  {isSubmitting ? <CircularProgress size={24} /> : 'Submit'}
-                </Button>
+                  {/* Art Prompt Options Accordions */}
+                  <ArtPromptAccordion
+                    category="style"
+                    title="Style"
+                    selectedOptions={
+                      artPromptSelections["style"] || ""
+                    }
+                    onSelectionChange={handleSelectionChange}
+                  />
+                  <ArtPromptAccordion
+                    category="technique"
+                    title="Technique"
+                    selectedOptions={
+                      artPromptSelections["technique"] || ""
+                    }
+                    onSelectionChange={handleSelectionChange}
+                  />
+                  <ArtPromptAccordion
+                    category="subject"
+                    title="Subject"
+                    selectedOptions={
+                      artPromptSelections["subject"] || ""
+                    }
+                    onSelectionChange={handleSelectionChange}
+                  />
+                  <ArtPromptAccordion
+                    category="setting"
+                    title="Setting"
+                    selectedOptions={
+                      artPromptSelections["setting"] || ""
+                    }
+                    onSelectionChange={handleSelectionChange}
+                  />
+                  <ArtPromptAccordion
+                    category="time"
+                    title="Time"
+                    selectedOptions={
+                      artPromptSelections["time"] || ""
+                    }
+                    onSelectionChange={handleSelectionChange}
+                  />
+                  <ArtPromptAccordion
+                    category="weather"
+                    title="Weather"
+                    selectedOptions={
+                      artPromptSelections["weather"] || ""
+                    }
+                    onSelectionChange={handleSelectionChange}
+                  />
+                  <ArtPromptAccordion
+                    category="mood"
+                    title="Mood"
+                    selectedOptions={
+                      artPromptSelections["mood"] || ""
+                    }
+                    onSelectionChange={handleSelectionChange}
+                  />
+                  <ArtPromptAccordion
+                    category="composition"
+                    title="Composition"
+                    selectedOptions={
+                      artPromptSelections["composition"] || ""
+                    }
+                    onSelectionChange={handleSelectionChange}
+                  />
+                </Box>
               </Box>
+              {/* Alert component goes here */}
+              
             </Box>
-            
-            {/* Nexus Card Render */}
+
+            {/* Card Render */}
             <Box
+              id="card-render-container"
               className="
                 flex
                 flex-col
-                justify-center
+                justify-start
                 items-center
                 w-full
+                h-full
+                md:w-1/2
+                px-0
+                pt-6
+                pb-8
+                md:px-6
+                md:pt-8
+                md:pb-12
+                md:border
+                md:border-neutral-700
+                md:bg-neutral-800
+                md:rounded-md
+                md:shadow-xl
+                md:shadow-neutral-950/25
               "
             >
               <NexusCardForm />
             </Box>
           </Box>
+
+          {/* TODO: Move state up to page level */}
+          <Box
+            className="
+              flex
+              flex-col
+              justify-center
+              items-center
+              mt-8
+            "
+          >
+            {/* Submit Form Button */}
+            <Button
+              disabled={
+                !isValid ||
+                isGeneratingArt ||
+                isSubmitting ||
+                !userId ||
+                formNexusCardData.cardArt === "/images/card-parts/card-art/default-art.jpg"
+              }
+              type="submit"
+              variant="outlined"
+              size="large"
+              className="
+                flex
+                w-full
+              "
+            >
+              {isSubmitting ? <CircularProgress size={24} /> : 'Submit'}
+            </Button>
+          </Box>
         </form>
       </FormProvider>
 
+      {/* TODO Make Separate page */}
       <Modal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -690,7 +816,6 @@ export default function CardCreatorForm() {
                   hover:shadow-xl
                    shadow-neutral-950/30
                    hover:shadow-neutral-950/20
-                   
                 "
                 onLoad={() => setIsImageLoading(false)}
               />
@@ -738,6 +863,20 @@ export default function CardCreatorForm() {
               sx={{ width: '100%' }}
             >
               {snackbarMessage}
+            </Alert>
+          </Snackbar>
+
+          <Snackbar
+            open={apiError.open}
+            autoHideDuration={6000}
+            onClose={() => setApiError({ ...apiError, open: false })}
+          >
+            <Alert
+              onClose={() => setApiError({ ...apiError, open: false })}
+              severity="error"
+              sx={{ width: '100%' }}
+            >
+              {apiError.message}
             </Alert>
           </Snackbar>
 

@@ -24,6 +24,7 @@ export default function Create() {
 
   return (
     <Box
+      id="create-container"
       className="
         flex
         flex-col
@@ -34,6 +35,7 @@ export default function Create() {
       "
     >
       <Box
+        id="create-header-container"
         className="
           w-full
           h-full
@@ -55,7 +57,9 @@ export default function Create() {
         border-neutral-700
           top-0
           sticky
-          z-10
+          z-20
+          md:shadow-md
+          md:shadow-neutral-900/50
         "
       >
         <Box
@@ -129,7 +133,7 @@ export default function Create() {
           sm:px-6
           lg:mb-12
           mb-8
-          mt-4
+          md:mt-4
         "
       >
         <CardCreatorForm />
