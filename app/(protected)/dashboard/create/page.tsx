@@ -84,7 +84,7 @@ export default function Create() {
             <Typography
               variant="h4"
               className="
-                font-medium
+                font-semibold
               "
             >
               Card name {/* Conditionally change name */}
