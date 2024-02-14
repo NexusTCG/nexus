@@ -6,10 +6,12 @@ const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#818cf8",
+      main: "#14b8a6", // Emerald 500
+      // main: "#818cf8",
     },
     secondary: {
-      main: "#f472b6",
+      main: "#737373", // Neutral 500
+      // main: "#f472b6",
     },
     background: {
       default: "#020617",
@@ -21,18 +23,22 @@ const theme = createTheme({
       disabled: "#9ca3af",
     },
     error: {
-      main: "#ef4444",
+      main: "#ef4444", // Red 600
+      // main: "#ef4444",
     },
     warning: {
-      main: "#eab308",
+      main: "#eab308", // Yellow 500
+      // main: "#eab308",
     },
     info: {
-      main: "#3b82f6",
+      main: "#3b82f6", // Blue 500
+      // main: "#3b82f6",
     },
     success: {
-      main: "#22c55e",
+      main: "#16a34a", // Green 600
+      // main: "#22c55e",
     },
-    divider: "#4b5563",
+    divider: "#737373", // Neutral 500
   },
   typography: {
     fontWeightLight: 300,

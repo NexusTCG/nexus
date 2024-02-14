@@ -533,6 +533,7 @@ export default function CardCreatorForm() {
                   justify-start
                   items-start
                   bg-neutral-900
+                  rounded-b-lg
                 "
               >
                 {/* Art Prompt Options Title */}
@@ -616,7 +617,7 @@ export default function CardCreatorForm() {
                     items-start
                     flex-wrap
                     w-full
-                    rounded-2xl
+                    rounded-xl
                     gap-0
                     my-0
                   "

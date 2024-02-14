@@ -55,7 +55,7 @@ export default function SoMeButton({ channel }: SoMeButtonProps) {
       <IconButton
         id={`social-media-button-${channel.toLowerCase()}`}
         size="small"
-        className={clsx("hover:cursor-pointer",
+        className={clsx("opacity-50 hover:opacity-100 hover:cursor-pointer",
           {
             "w-[32px] h-[32px]": channel.toLowerCase() === "discord",
           }

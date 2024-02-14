@@ -113,6 +113,7 @@ export default function Create() {
           {/* Save button */}
           <Button
             variant="outlined"
+            color="secondary"
             startIcon={<SaveIcon />}
             size="large"
           >

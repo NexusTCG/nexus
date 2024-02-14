@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import UploadIcon from '@mui/icons-material/Upload';
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Profile() {
     const [cards, setCards] = useState<CardsTableType[] | null>([]);
@@ -328,14 +329,18 @@ export default function Profile() {
                   mb-2
                 "
               >
-                <Image
-                  src={card.cardRender}
-                  alt={card.cardName}
-                  fill
-                  style={{
-                    objectFit: "cover"
-                  }}
-                />
+                <Link
+                  href={`/dashboard/cards/${card.id}`}
+                >
+                  <Image
+                    src={card.cardRender}
+                    alt={card.cardName}
+                    fill
+                    style={{
+                      objectFit: "cover"
+                    }}
+                  />
+                </Link>
               </Box>
             </Tooltip>
           </Grid>

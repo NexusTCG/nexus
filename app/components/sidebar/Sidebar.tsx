@@ -4,10 +4,9 @@ import React from "react";
 import SoMeButton from "@/app/components/sidebar/SoMeButton";
 import NavigationButton from "@/app/components/sidebar/NavigationButton";
 import SignOutButton from "@/app/components/auth/SignOutButton"
-import {
-  Box,
-  Typography
-} from "@mui/material";
+import Image from "next/image";
+import { Box } from "@mui/material";
+import Link from "next/link";
 
 const soMeChannels = [
   "github",
@@ -32,7 +31,6 @@ const secondaryNavigation = [
 ]
 
 export default function Sidebar() {
-
   return (
     <Box
       id="sidebar-container"
@@ -47,7 +45,6 @@ export default function Sidebar() {
         border-r
         border-neutral-700
         top-0
-        py-2
       "
     >
       <Box
@@ -57,38 +54,71 @@ export default function Sidebar() {
           flex-col
           justify-between
           items-center
-          gap-8
+          gap-4
           w-full
-          px-2
         "
       >
-        <Typography
-          variant="body1"
-          className="
-            text-center
-            w-full
-            bg-neutral-700
-            py-4
-            rounded
-          "
-        >
-          Nexus Logo Placeholder
-        </Typography>
-
         <Box
-          id="social-media-buttons"
+          id="sidebar-logo-social-container"
           className="
             flex
-            flex-row
-            justify-between
+            flex-col
+            justify-center
             items-center
-            gap-4
+            w-full
+            py-4
+            gap-6
+            border-b
+            border-neutral-700
           "
         >
-          {soMeChannels.map((channel, index) => {
-            return <SoMeButton key={index} channel={channel} />
-          })}
+          <Box
+            id="sidebar-logo-container"
+            className="
+              flex
+              flex-col
+              justify-center
+              items-center
+              w-full
+              px-4
+              py-1
+            "
+          >
+            <Link
+              href="/"
+              className="
+                flex
+                flex-col
+                justify-center
+                items-center
+                w-full
+                hover:opacity-80
+              "  
+            >
+              <Image
+                src="/images/nexus-logo.png" // Repace with SVG
+                alt="Nexus Logo Placeholder"
+                width={160}
+                height={34}
+              />
+            </Link>
+          </Box>
+          <Box
+            id="social-media-buttons"
+            className="
+              flex
+              flex-row
+              justify-between
+              items-center
+              gap-4
+            "
+          >
+            {soMeChannels.map((channel, index) => {
+              return <SoMeButton key={index} channel={channel} />
+            })}
+          </Box>
         </Box>
+        
 
         <Box
           id="sidebar-navigation-primary"
@@ -99,6 +129,7 @@ export default function Sidebar() {
             items-center
             w-full
             gap-2
+            px-2
           "
         >
           {primaryNavigation.map((route, index) => {
@@ -118,6 +149,7 @@ export default function Sidebar() {
           items-center
           gap-4
           w-full
+          pb-2
         "
       >
         <Box

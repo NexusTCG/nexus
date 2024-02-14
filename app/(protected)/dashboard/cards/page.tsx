@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
 import Image from "next/image";
+import Link from "next/link";
 import {
     Box,
     Grid,
@@ -399,12 +400,16 @@ export default function Cards() {
                   mb-2
                 "
               >
-                <Image
-                  src={card.cardRender}
-                  alt={card.cardName}
-                  fill
-                  style={{ objectFit: "cover" }}
-                />
+                <Link
+                  href={`/dashboard/cards/${card.id}`}
+                >
+                  <Image
+                    src={card.cardRender}
+                    alt={card.cardName}
+                    fill
+                    style={{ objectFit: "cover" }}
+                  />
+                </Link>
               </Box>
             </Tooltip>
           </Grid>
