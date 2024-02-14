@@ -8,6 +8,7 @@ type FetchCardsOptions = {
   from: string;
   select?: string;
   sortBy?: { column: string, ascending: boolean };
+  filter?: { column: string, value: string | number };
 };
 
 export default async function fetchCards(
@@ -20,6 +21,11 @@ export default async function fetchCards(
   const query = supabase
     .from(options.from)
     .select(options.select || "*");
+
+  // Apply the filter if provided
+  if (options.filter) {
+    query.eq(options.filter.column, options.filter.value);
+  }
 
   if (options.sortBy) {
     query
@@ -36,7 +42,7 @@ export default async function fetchCards(
   const { data: cards, error } = await query;
 
   if (error) {
-    console.error(`Error fetching ${options.from} data: ${error}`);
+    console.error(`Error fetching ${options.from} data:`, error);
     return null;
   }
   

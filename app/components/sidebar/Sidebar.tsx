@@ -1,65 +1,37 @@
 "use client";
 
 import React from "react";
-// import { useState, useEffect } from "react";
-// import useSession from "@/app/hooks/useSession";
 import SoMeButton from "@/app/components/sidebar/SoMeButton";
-// import fetchUserProfiles from "@/app/lib/actions/supabase-data/fetchUserProfilesData";
 import NavigationButton from "@/app/components/sidebar/NavigationButton";
 import SignOutButton from "@/app/components/auth/SignOutButton"
-// import { AccountCircle } from '@mui/icons-material';
 import {
   Box,
-  // Button,
   Typography
 } from "@mui/material";
 
+const soMeChannels = [
+  "github",
+  "discord",
+  "x",
+  "linkedin"
+]
+
+const primaryNavigation = [
+  "create",
+  "cards",
+  "rules",
+  "game",
+  "roadmap",
+]
+
+const secondaryNavigation = [
+  "profile",
+  "subscription",
+  "settings",
+  "support"
+]
+
 export default function Sidebar() {
-  // const [userProfile, setUserProfile] = useState<string>("profile");
-  // const user = useSession()?.user;
-
-  const soMeChannels = [
-    "github",
-    "discord",
-    "x",
-    "linkedin"
-  ]
-
-  const primaryNavigation = [
-    "create",
-    "cards",
-    "rules",
-    "game",
-    "roadmap",
-  ]
-
-  const secondaryNavigation = [
-    "profile",
-    "subscription",
-    "settings",
-    "support"
-  ]
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (user?.id) {
-  //       const data = await fetchUserProfiles({
-  //         from: "profiles",
-  //         select: "*",
-  //         filter: user.id
-  //       });
-
-  //       const profile = data?.find(
-  //         profile => profile.id === user.id
-  //       );
-  //       if (profile) {
-  //         setUserProfile(profile.username);
-  //       }
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [user?.id])
 
   return (
     <Box
@@ -160,22 +132,6 @@ export default function Sidebar() {
             gap-2
           "
         >
-          {/* <Button
-            id="navigation-button-profile"
-            variant="outlined"
-            startIcon={<AccountCircle />}
-            href="/dashboard/profile"
-            size="large"
-            className="
-              flex
-              justify-start
-              items-center
-              w-full
-              hover:cursor-pointer
-            "
-          >
-            {userProfile}
-          </Button> */}
           {secondaryNavigation.map((route, index) => {
             return (
               <NavigationButton key={index} route={route} />
