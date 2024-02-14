@@ -85,7 +85,7 @@ export default function Sidebar() {
             "
           >
             <Link
-              href="/"
+              href="/dashboard/create" // Replace with actual route
               className="
                 flex
                 flex-col
