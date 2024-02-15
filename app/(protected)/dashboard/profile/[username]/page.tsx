@@ -3,9 +3,12 @@
 import React, {
   useState,
   useEffect,
-  useRef
+  useRef,
+  // useRouter,
+  // useContext
 } from "react";
-import useSession from "@/app/hooks/useSession";
+// import { DashboardContext } from "@/app/context/DashboardContext";
+// import useSession from "@/app/hooks/useSession";
 import fetchUserProfiles from "@/app/lib/actions/supabase-data/fetchUserProfilesData";
 import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
@@ -18,7 +21,7 @@ import {
   CircularProgress
 } from "@mui/material";
 import UploadIcon from '@mui/icons-material/Upload';
-import EditIcon from '@mui/icons-material/Edit';
+// import EditIcon from '@mui/icons-material/Edit';
 import Image from "next/image";
 import Link from "next/link";
 
@@ -28,7 +31,7 @@ export default function ProfileId({
   params: { slug: string } 
 }) {
 
-  const [isProfileOwner, setIsProfileOwner] = useState<boolean>(false);
+  // const [isProfileOwner, setIsProfileOwner] = useState<boolean>(false);
   const [userUsername, setUserUsername] = useState<string>("");
   const [userAvatarUrl, setUserAvatarUrl] = useState<string>("");
   const [userFirstName, setUserFirstName] = useState<string>("");
@@ -38,17 +41,24 @@ export default function ProfileId({
   const [userAvatarUploading, setUserAvatarUploading] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const user = useSession()?.user;
+  // const user = useSession()?.user;
+
+  // const { userProfileData } = useContext(DashboardContext);
+  // const router = useRouter();
 
   // Fetch user profile matching the params.slug
   useEffect(() => {
-    if (user && params.slug) {
-      const paramsSlugLower = params.slug.toLowerCase();
+    if (params.slug) {
+      console.log(`Fetching user profile for ${params.slug}`);
       const fetchUserData = async () => {
         const data = await fetchUserProfiles({
           from: "profiles",
           select: "*",
-          filter: { column: "username", value: paramsSlugLower }
+          filter: {
+            column: "username",
+            value: params.slug,
+            method: 'ilike'
+          }
         });
   
         if (data !== null && data.length > 0) {
@@ -57,15 +67,11 @@ export default function ProfileId({
           setUserFirstName(data[0].first_name);
           setUserLastName(data[0].last_name);
           setUserBio(data[0].bio);
-          // Check if user session matches the profile owner
-          if (user?.id === data[0].id) {
-            setIsProfileOwner(true);
-          }
         }
       };
       fetchUserData();
     }
-  }, [user, params.slug])
+  }, [params.slug]);
 
   // Fetch user profile's cards
   useEffect(() => {
@@ -73,18 +79,18 @@ export default function ProfileId({
       const data = await fetchCards({
         from: "cards",
         select: "*",
-        sortBy: { column: "created_at", ascending: false }
+        sortBy: {
+          column: "created_at",
+          ascending: false
+        },
+        filter: {
+          column: "cardCreator",
+          value: params.slug,
+          method: 'ilike'
+        }
       });
       if (data) {
-        const filteredData = data
-          .filter(card =>
-            card.cardCreator === userUsername &&
-            card.cardRender !== null &&
-            card.cardRender !== "" &&
-            card.cardCreator !== null &&
-            card.cardCreator !== ""
-          );
-        setCards(filteredData);
+        setCards(data);
       }
     };
     fetchCardData();
@@ -359,7 +365,7 @@ export default function ProfileId({
                 />
               </Link>
               {/* Link to cards/[slug]/edit */}
-              {isProfileOwner && (<EditIcon />)} 
+              {/* {isProfileOwner && (<EditIcon />)}  */}
             </Box>
           </Tooltip>
         </Grid>

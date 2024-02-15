@@ -7,7 +7,11 @@ import { UserProfilesTableType } from "@/app/utils/types/supabase/userProfilesTa
 type FetchUserProfileOptions = {
   from: string;
   select?: string;
-  filter?: { column: string, value: string | number };
+  filter?: {
+    column: string,
+    value: string | number,
+    method?: 'eq' | 'ilike'
+  };
 };
 
 export default async function fetchUserProfiles(
@@ -21,9 +25,13 @@ export default async function fetchUserProfiles(
     .from(options.from)
     .select(options.select || "*")
     
-  if (options.filter) {
-    query.eq(options.filter.column, options.filter.value);
-  }
+    if (options.filter) {
+      if (options.filter.method === 'eq') {
+        query.eq(options.filter.column, options.filter.value);
+      } else {
+        query.ilike(options.filter.column, `%${options.filter.value}%`);
+      }
+    }
 
   const { data: userProfiles, error } = await query;
 

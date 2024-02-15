@@ -7,8 +7,15 @@ import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 type FetchCardsOptions = {
   from: string;
   select?: string;
-  sortBy?: { column: string, ascending: boolean };
-  filter?: { column: string, value: string | number };
+  sortBy?: {
+    column: string,
+    ascending: boolean
+  };
+  filter?: {
+    column: string,
+    value: string | number,
+    method?: 'eq' | 'ilike'
+  };
 };
 
 export default async function fetchCards(
@@ -24,7 +31,12 @@ export default async function fetchCards(
 
   // Apply the filter if provided
   if (options.filter) {
-    query.eq(options.filter.column, options.filter.value);
+    const filterMethod = options.filter.method || 'eq';
+    if (filterMethod === 'eq') {
+      query.eq(options.filter.column, options.filter.value);
+    } else if (filterMethod === 'ilike') {
+      query.ilike(options.filter.column, `%${options.filter.value}%`);
+    }
   }
 
   if (options.sortBy) {
