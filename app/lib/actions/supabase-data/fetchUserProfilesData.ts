@@ -21,24 +21,34 @@ export default async function fetchUserProfiles(
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  const query = supabase
+  let query = supabase
     .from(options.from)
     .select(options.select || "*")
     
     if (options.filter) {
-      if (options.filter.method === 'eq') {
-        query.eq(options.filter.column, options.filter.value);
-      } else {
-        query.ilike(options.filter.column, `%${options.filter.value}%`);
+      switch (options.filter.method) {
+        case 'ilike':
+          query = query.ilike(
+            options.filter.column,
+            `%${options.filter.value}%`
+          );
+          break;
+        case 'eq':
+        default:
+          query = query.eq(
+            options.filter.column,
+            options.filter.value
+          );
+          break;
       }
     }
 
-  const { data: userProfiles, error } = await query;
+    const { data, error } = await query;
 
   if (error) {
     console.error(`Error fetching ${options.from} data:`, error);
     return null;
   }
   
-  return userProfiles as unknown as UserProfilesTableType[];
+  return data as unknown as UserProfilesTableType[];
 }

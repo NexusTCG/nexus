@@ -69,7 +69,10 @@ export default function Profile() {
           const data = await fetchUserProfiles({
             from: "profiles",
             select: "*",
-            filter: { column: "id", value: user?.id as string }
+            filter: {
+              column: "id",
+              value: user?.id as string
+            }
           });
   
           const profile = data?.find(

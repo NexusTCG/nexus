@@ -388,6 +388,7 @@ export default function Cards() {
                 sx={{
                   overflow: "hidden",
                   position: "relative",
+                  width: "220px",
                   height: "308px",
                 }}
                 // Addc clsx for breakpoints
