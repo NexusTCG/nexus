@@ -35,13 +35,15 @@ export default function Card({
 }: {
    params: { slug: string } 
 }) {
-  const { userProfileData } = useContext(DashboardContext);
+  
   const [isCardOwner, setIsCardOwner] = useState<boolean>(false);
   const [createNewCardHref, setCreateNewCardHref] = useState<string>("/login");
   const [createNewCardHrefIcon, setCreateNewCardHrefIcon] = useState<React.ReactNode>(<Login />);
   const [card, setCard] = useState<CardsTableType | null>(null);
   const [formattedDate, setFormattedDate] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+
+  const { userProfileData } = useContext(DashboardContext);
 
   // Fetch card data from Supabase
   useEffect(() => {

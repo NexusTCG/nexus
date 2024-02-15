@@ -7,7 +7,7 @@ import { UserProfilesTableType } from "@/app/utils/types/supabase/userProfilesTa
 type FetchUserProfileOptions = {
   from: string;
   select?: string;
-  filter?: string;
+  filter?: { column: string, value: string | number };
 };
 
 export default async function fetchUserProfiles(
@@ -20,7 +20,10 @@ export default async function fetchUserProfiles(
   const query = supabase
     .from(options.from)
     .select(options.select || "*")
-    .eq("id", options.filter);
+    
+  if (options.filter) {
+    query.eq(options.filter.column, options.filter.value);
+  }
 
   const { data: userProfiles, error } = await query;
 

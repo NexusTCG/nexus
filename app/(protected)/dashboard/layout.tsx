@@ -17,7 +17,7 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
 
-  const [userProfileData, setUserProfileData] = useState<Omit<UserProfilesTableType, 'id'> | undefined>();
+  const [userProfileData, setUserProfileData] = useState<UserProfilesTableType | undefined>();
   const user = useSession()?.user;
   
   useEffect(() => {
@@ -26,14 +26,12 @@ export default function DashboardLayout({
         const data = await fetchUserProfiles({
           from: "profiles",
           select: "*",
-          filter: user.id
+          filter: { column: "id", value: user?.id as string }
         });
   
         if (data && data.length > 0) {
           const profile = data[0];
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { id, ...rest } = profile;
-          setUserProfileData(rest);
+          setUserProfileData(profile);
         } else {
           console.error("No user profile data found.");
         }
