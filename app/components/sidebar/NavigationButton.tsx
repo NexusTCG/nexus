@@ -14,6 +14,7 @@ import {
   Help,
   Settings
 } from '@mui/icons-material';
+import clsx from "clsx";
 
 type NavigationButtonProps = {
   route: string;
@@ -82,16 +83,11 @@ export default function NavigationButton({ route }: NavigationButtonProps) {
       startIcon={icon}
       size="large"
       color={currentColor}
-      className="
-        flex
-        justify-start
-        items-center
-        w-full
-        hover:cursor-pointer
-        hover:bg-teal-600/30
-        hover:text-white
-        hover:border-teal-600
-      "
+      className={clsx("flex justify-start items-center w-full hover:cursor-pointer hover:bg-teal-600/30 hover:text-white hover:border-teal-600",
+        {
+          "opacity-50": disabled,
+        }
+      )}
     >
       {routeName} {disabled ? "🚧" : ""}
     </Button>
