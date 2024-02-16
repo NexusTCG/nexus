@@ -10,20 +10,20 @@ import React, {
 // import { DashboardContext } from "@/app/context/DashboardContext";
 // import useSession from "@/app/hooks/useSession";
 import fetchUserProfiles from "@/app/lib/actions/supabase-data/fetchUserProfilesData";
-// import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
-// import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
+import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
+import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import {
   Box,
   Typography,
   IconButton,
-  // Grid,
-  // Tooltip,
+  Grid,
+  Tooltip,
   CircularProgress
 } from "@mui/material";
 import UploadIcon from '@mui/icons-material/Upload';
 // import EditIcon from '@mui/icons-material/Edit';
 import Image from "next/image";
-// import Link from "next/link";
+import Link from "next/link";
 
 export default function ProfileId({
   params 
@@ -37,7 +37,7 @@ export default function ProfileId({
   const [userFirstName, setUserFirstName] = useState<string>("");
   const [userLastName, setUserLastName] = useState<string>("");
   const [userBio, setUserBio] = useState<string>("");
-  // const [cards, setCards] = useState<CardsTableType[] | null>([]);
+  const [cards, setCards] = useState<CardsTableType[] | null>([]);
   const [userAvatarUploading, setUserAvatarUploading] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -60,7 +60,7 @@ export default function ProfileId({
             filter: {
               column: "username",
               value: username,
-              method: 'ilike'
+              method: "ilike"
             }
           });
           console.log(`Fetched profiles data: ${JSON.stringify(data, null, 2)}`)
@@ -79,40 +79,47 @@ export default function ProfileId({
         }
       };
       fetchUserData();
-    }
+    };
   }, [username]);
 
-  // Fetch user profile's cards
-  // useEffect(() => {
-  //   if (username) {
-  //     console.log(`Fetching cards for ${username}`);
-  //     const fetchCardData = async () => {
-  //       try {
-  //         const data = await fetchCards({
-  //           from: "cards",
-  //           select: "*",
-  //           sortBy: {
-  //             column: "created_at",
-  //             ascending: false
-  //           },
-  //           filter: {
-  //             column: "cardCreator",
-  //             value: username,
-  //             method: 'ilike'
-  //           }
-  //         });
-  //         if (data) {
-  //           setCards(data);
-  //         } else {
-  //           console.log("No data or empty array returned by fetchCardData")
-  //         }
-  //       } catch (error) {
-  //         console.error('Error fetching cards:', error);
-  //       }
-  //     };
-  //     fetchCardData();
-  //   }
-  // }, [username]);
+  useEffect(() => {
+    console.log(`Fetching cards for ${userUsername}`);
+    if (userUsername) {
+      console.log(`Fetching cards for ${userUsername}`);
+      const fetchCardData = async () => {
+        try {
+          const data = await fetchCards({
+            from: "cards",
+            select: "*",
+            sortBy: {
+              column: "created_at",
+              ascending: false
+            },
+            filter: {
+              column: "cardCreator",
+              value: userUsername,
+              method: "ilike"
+            }
+          });
+          if (data) {
+            const filteredData = data
+              .filter(card =>
+                card.cardRender !== null &&
+                card.cardRender !== "" &&
+                card.cardCreator !== null &&
+                card.cardCreator !== ""
+              );
+            setCards(filteredData);
+          } else {
+            console.log("No data or empty array returned by fetchCardData")
+          }
+        } catch (error) {
+          console.error('Error fetching cards:', error);
+        }
+      };
+      fetchCardData();
+    };
+  }, [userUsername]);
 
   // Handle avatar upload click
   function handleUploadClick() {
@@ -329,7 +336,68 @@ export default function ProfileId({
         "
       >
       {/* Card grid */}
-      
+      <Grid
+        container
+        spacing={2}
+        className="
+          bg-neutral-800
+          border
+          border-neutral-700
+          pr-4
+          ml-2
+          mt-4
+          rounded-lg
+          shadow-xl
+          shadow-red
+        "
+      >
+        {cards?.map((card) => (
+        <Grid
+          item
+          xs={6}
+          md={4}
+          lg={3}
+          key={card.id}
+        >
+          <Tooltip
+            title={`${card.cardName} by ${card.cardCreator}`}
+            arrow
+          >
+            <Link
+                href={`/dashboard/cards/${card.id}`}
+              >
+                <Box
+                  id="card-render-container"
+                  sx={{
+                    overflow: "hidden",
+                    position: "relative",
+                    aspectRatio: "5/7"
+                  }}
+                  className="
+                    md:rounded-xl
+                    hover:shadow-lg
+                    hover:shadow-zinc-950/25
+                    hover:scale-105
+                    w-full
+                    mb-2
+                  "
+                >
+                  <Image
+                    src={card.cardRender}
+                    alt={card.cardName}
+                    fill
+                    style={{
+                      objectFit: "cover"
+                    }}
+                  />
+                {/* Link to cards/[slug]/edit */}
+                {/* {isProfileOwner && (<EditIcon />)}  */}
+              </Box>
+            </Link>
+          </Tooltip>
+        </Grid>
+        ))}
+      </Grid>
       </Box>
     </Box>
   );

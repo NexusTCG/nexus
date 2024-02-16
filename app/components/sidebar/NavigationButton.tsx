@@ -21,6 +21,7 @@ type NavigationButtonProps = {
 
 export default function NavigationButton({ route }: NavigationButtonProps) {
   const [icon, setIcon] = useState<React.ReactNode | null>(null);
+  const [disabled, setDisabled] = useState<boolean>(true);
   const [currentColor, setCurrentColor] = useState<"secondary" | "primary">("secondary");
 
   const routeLowerCase = route.toLowerCase();
@@ -39,9 +40,11 @@ export default function NavigationButton({ route }: NavigationButtonProps) {
     switch (routeLowerCase) {
       case "create":
         setIcon(<DesignServices />);
+        setDisabled(false);
         break;
       case "cards":
         setIcon(<Collections />);
+        setDisabled(false);
         break;
       case "rules":
         setIcon(<Rule />);
@@ -54,6 +57,7 @@ export default function NavigationButton({ route }: NavigationButtonProps) {
         break;
       case "profile":
         setIcon(<AccountCircle />);
+        setDisabled(false);
         break;
       case "settings":
         setIcon(<Settings />);
@@ -72,14 +76,24 @@ export default function NavigationButton({ route }: NavigationButtonProps) {
   return (
     <Button
       id={`navigation-button-${routeLowerCase}`}
+      disabled={disabled}
       variant="outlined"
       href={`/dashboard/${routeLowerCase}`}
       startIcon={icon}
       size="large"
       color={currentColor}
-      className="flex justify-start items-center w-full hover:cursor-pointer"
+      className="
+        flex
+        justify-start
+        items-center
+        w-full
+        hover:cursor-pointer
+        hover:bg-teal-600/30
+        hover:text-white
+        hover:border-teal-600
+      "
     >
-      {routeName}
+      {routeName} {disabled ? "🚧" : ""}
     </Button>
   );
 }

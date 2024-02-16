@@ -388,13 +388,11 @@ export default function Cards() {
                 sx={{
                   overflow: "hidden",
                   position: "relative",
-                  width: "220px",
-                  height: "308px",
+                  aspectRatio: "5/7"
                 }}
                 // Addc clsx for breakpoints
                 className="
-                  aspect-[5/7]
-                  rounded-lg
+                  rounded-xl
                   hover:shadow-lg
                   hover:shadow-zinc-950/25
                   hover:scale-105
