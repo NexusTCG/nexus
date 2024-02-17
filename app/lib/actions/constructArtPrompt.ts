@@ -25,11 +25,10 @@ export default async function ConstructArtPrompt(
     const mood = selections.mood ? `Mood: ${selections.mood}` : "";
     const composition = selections.composition ? `Composition: ${selections.composition}` : "";
 
-    const promptInstructions = "Generate a piece of art based on the following prompt: ";
     const promptStart = "Digital painting, illustration, sci-fi, fantasy, rule of thirds, dynamic poses, centered focus. ";
-    const promptEnd = "DO NOT: Include sexual content, art tools (such as pencils, brushes, etc.), include hands of someone producing the art, user interfaces, generate characters with the likeness of proprietary characters, violate copyright protected material and intellectual property, generate anything but original artwork."
+    const promptEnd = "Do NOT Include sexual content, do NOT include art tools (such as pencils, brushes, etc.), do NOT include hands of someone producing the art, do NOT user interfaces, do NOT generate characters with the likeness of proprietary characters, do NOT violate copyright protected material and intellectual property."
 
-    const constructedArtPrompt = `${promptInstructions} ${promptStart} ${style}. ${technique}. ${userPrompt}. ${subject}. ${setting}. ${time}. ${weather}. ${mood}. ${composition}. ${promptEnd}`;
+    const constructedArtPrompt = `${promptStart} ${style}. ${technique}. ${userPrompt}. ${subject}. ${setting}. ${time}. ${weather}. ${mood}. ${composition}. ${promptEnd}`;
 
     // TODO: Dynamically add descriptions for entity types.
     

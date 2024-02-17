@@ -680,6 +680,14 @@ export default function CardCreatorForm() {
                     onSelectionChange={handleSelectionChange}
                   />
                   <ArtPromptAccordion
+                    category="color"
+                    title="Color"
+                    selectedOptions={
+                      artPromptSelections["color"] || ""
+                    }
+                    onSelectionChange={handleSelectionChange}
+                  />
+                  <ArtPromptAccordion
                     category="technique"
                     title="Technique"
                     selectedOptions={
