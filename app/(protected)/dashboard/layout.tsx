@@ -52,6 +52,7 @@ export default function DashboardLayout({
         justify-start
         items-start
         w-full
+        z-30
       "
     >
       <Box

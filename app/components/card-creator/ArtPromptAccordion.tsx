@@ -18,7 +18,8 @@ import {
   AccessTime,
   WbSunny,
   Mood,
-  LocalSee
+  LocalSee,
+  InvertColors
 } from "@mui/icons-material"
 import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
 
@@ -34,6 +35,7 @@ type ArtPromptAccordionProps = {
 
 const categoryIcons = {
   style: <Palette className="text-neutral-400" />,
+  color: <InvertColors className="text-neutral-400" />,
   technique: <Brush className="text-neutral-400" />,
   subject: <People className="text-neutral-400" />,
   setting: <Landscape className="text-neutral-400" />,
