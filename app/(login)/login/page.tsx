@@ -47,6 +47,7 @@ export default function AuthForm({
   
   const supabase = createClient();
   const formSchema = showSignUp ? SignUpSchema : LoginSchema;
+  const authBg = Math.floor(Math.random() * 13) + 1;
   const methods = useForm({
     defaultValues: {
       username: "",
@@ -131,6 +132,7 @@ export default function AuthForm({
     const endpoint = showSignUp ? "/auth/register-user" : "/auth/login-user";
 
     try {
+      console.log("Submitting form data:", email, password);
       const response = await fetch(endpoint, {
         method: "POST",
         headers: {
@@ -139,7 +141,7 @@ export default function AuthForm({
         body: new URLSearchParams({
           email,
           password,
-          ...(showSignUp && { username }),
+          ...(showSignUp && { username }), // Update API to accept username
         })
       });
 
@@ -175,18 +177,20 @@ export default function AuthForm({
       className="
         flex
         flex-col
+        lg:flex-row-reverse
         justify-center
+        lg:justify-between
         items-center
-        lg:items-start
         w-full
         h-[100vh]
         bg-neutral-950
         lg:px-48
         px-8
+        lg:gap-24
       "
     >
       <Image
-        src="/images/nexus-404.png"
+        src={`/images/auth-bg/nexus-auth-bg-${authBg}.jpg`}
         alt="Nexus background"
         fill
         style={{ objectFit: "cover"}}
@@ -195,6 +199,41 @@ export default function AuthForm({
           lg:opacity-20
         "
       />
+      <Box
+        id="login-logo-container"
+        className="
+          hidden
+          lg:flex
+          flex-col
+          justify-center
+          items-center
+          w-full
+          h-full
+          gap-16
+          pb-8
+        "
+      >
+        <Image
+          src="/images/nexus-logo.png"
+          alt="Nexus logo"
+          width={480}
+          height={480}
+          
+        />
+        <Typography
+          variant="subtitle1"
+          className="
+            text-4xl
+            font-medium
+            text-center
+            text-white
+          "
+        >
+          AI-POWERED <br />
+          OPEN SOURCE <br />
+          DIGITAL TCG
+        </Typography>
+      </Box>
       <Box
         id="login-inner-container"
         className="
