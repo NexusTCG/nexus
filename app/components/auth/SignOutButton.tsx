@@ -9,7 +9,7 @@ export default function SignOutButton() {
 
   const handleSignOut = async () => {
     setButtonDisabled(!buttonDisabled);
-    const response = await fetch(`${window.location.origin}/auth/logout`, {
+    const response = await fetch(`${window.location.origin}/auth/logout-user`, {
       method: "POST",
     });
 

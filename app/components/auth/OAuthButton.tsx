@@ -5,13 +5,14 @@
 import React, { useState, useEffect } from "react";
 import { createClient } from "@/app/lib/supabase/client";
 import { Button } from "@mui/material";
-import GoogleIcon from "@mui/icons-material/Google";
-import GitHubIcon from "@mui/icons-material/GitHub";
+import { Google, GitHub } from "@mui/icons-material";
+import { FaDiscord } from "react-icons/fa";
+
 // MUI doesn't have a Discord icon
 
 type NewAuthButtonProps = {
   cta: string | null;
-  provider: "google" | "github" | null;
+  provider: "google" | "github" | "discord" | null;
   disabled?: boolean;
 };
 
@@ -30,10 +31,13 @@ export default function OAuthButton({
   useEffect(() => {
     switch (provider) {
       case "google":
-        setProviderIcon(<GoogleIcon />);
+        setProviderIcon(<Google />);
         break;
       case "github":
-        setProviderIcon(<GitHubIcon />);
+        setProviderIcon(<GitHub />);
+        break;
+      case "discord":
+        setProviderIcon(<FaDiscord />);
         break;
       default:
         setProviderIcon(null);
@@ -70,6 +74,13 @@ export default function OAuthButton({
       disabled={disabled}
       startIcon={providerIcon}
       size="large"
+      // sx={{ height: "56px"}}
+      className="
+        flex
+        justify-center
+        items-center
+        w-full
+      "
     >
       {cta}
     </Button>
