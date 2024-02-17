@@ -334,7 +334,7 @@ export default function ResetPassword() {
               <Button
                 type="submit"
                 variant="outlined"
-                disabled={isSubmitting && isValid ? true : false}
+                disabled={!isValid || isSubmitting}
                 color={isValid ? "success" : "primary"}
                 size="large"
                 className="

@@ -39,6 +39,7 @@ export default function AuthForm({
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showResetPassword, setShowResetPassword] = useState<boolean>(false);
   const [showPasswordResetAlert, setShowPasswordResetAlert] = useState<boolean>(false);
+  const [showLoginAlert, setShowLoginAlert] = useState<boolean>(false);
   const [alertInfo, setAlertInfo] = useState<{
     type: "success" | "error" | "info" | "warning";
     message: string;
@@ -127,7 +128,7 @@ export default function AuthForm({
     password: string
   }) {
     const { username, email, password } = data;
-    const endpoint = showSignUp ? "/api/register-user" : "/api/login-user";
+    const endpoint = showSignUp ? "/auth/register-user" : "/auth/login-user";
 
     try {
       const response = await fetch(endpoint, {
@@ -151,6 +152,7 @@ export default function AuthForm({
           type: "error",
           message: "Failed to process request. Please try again."
         });
+        setShowLoginAlert(true);
       };
 
     } catch (error) {
@@ -159,6 +161,7 @@ export default function AuthForm({
         type: "error",
         message: "An unexpected error occurred. Please try again."
       });
+      setShowLoginAlert(true);
     };
   };
 
@@ -530,6 +533,21 @@ export default function AuthForm({
                     </Typography>
                   </Box>
                 </Box>
+
+                {/* Login Alert */}
+                {showLoginAlert && (
+                <Alert
+                  icon={
+                    alertInfo?.type === "success" ?
+                    <Check fontSize="inherit" /> : 
+                    <Error fontSize="inherit" />
+                  }
+                  severity={alertInfo?.type}
+                  className="w-full"
+                >
+                  {alertInfo?.message}
+                </Alert>
+              )}
 
                 {/* Callback Message */}
                 {searchParams?.message && (
