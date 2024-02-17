@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
+import { useForm, FormProvider, FieldValues } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginSchema, SignUpSchema } from "@/app/utils/schemas/AuthFormSchema";
+import PasswordResetSchema  from "@/app/utils/schemas/PasswordResetSchema";
 import { createClient } from "@/app/lib/supabase/client";
-import clsx from "clsx";
 import OAuthButton from "@/app/components/auth/OAuthButton";
 import Image from "next/image";
 import {
@@ -13,63 +16,150 @@ import {
   OutlinedInput,
   InputLabel,
   FormControl,
-  Button
+  Button,
+  Alert
 } from "@mui/material";
 import {
   Visibility,
-  VisibilityOff
+  VisibilityOff,
+  Check,
+  Error
 } from "@mui/icons-material";
 
-export default function Login({
+type PasswordResetFormData = {
+  resetEmail: string;
+}
+
+export default function AuthForm({
   searchParams,
 }: {
   searchParams: { message: string };
 }) {
-  const [data, setData] = useState<{
-    email: string;
-    password: string;
-  }>({
-    email: "",
-    password: "",
+  const [showSignUp, setShowSignUp] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showResetPassword, setShowResetPassword] = useState<boolean>(false);
+  const [showPasswordResetAlert, setShowPasswordResetAlert] = useState<boolean>(false);
+  const [alertInfo, setAlertInfo] = useState<{
+    type: "success" | "error" | "info" | "warning";
+    message: string;
+  } | null>(null);
+  
+  const supabase = createClient();
+  const formSchema = showSignUp ? SignUpSchema : LoginSchema;
+  const methods = useForm({
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+    },
+    resolver: zodResolver(formSchema),
+    mode: "onChange"
   });
 
-  const [resetPassword, setResetPassword] = useState<boolean>(false);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [success, setSuccess] = useState<boolean>(false);
-
-  const supabase = createClient();
-  
-  async function sendResetPassword() {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { data: resetData, error } =
-        await supabase.auth.resetPasswordForEmail(data.email, {
-          redirectTo: `${window.location.origin}/reset-password`,
-        });
-      setSuccess(true);
-    } catch (error) {
-      console.log(error);
+  // Methods for auth form
+  const {
+    register,
+    handleSubmit,
+    formState: {
+      isValid,
+      errors,
+      isSubmitting
     }
-  }
+  } = methods;
 
-  function handleChange(
-    e: React.ChangeEvent<HTMLInputElement>
-  ) {
-    const { name, value } = e.target;
-    setData((prev: { email: string; password: string }) => ({
-      ...prev,
-      [name]: value,
-    }));
-  }
+  // Methods for password reset form
+  const {
+    register: registerReset,
+    handleSubmit: handleResetSubmit,
+    formState: {
+      errors: resetErrors,
+      isValid: isResetValid
+    },
+    reset,
+  } = useForm({
+    resolver: zodResolver(PasswordResetSchema),
+    mode: "onChange",
+  });
 
+  // Password visibility toggle
   function handleClickShowPassword() {
     setShowPassword((show) => !show)
   };
 
+  // Prevent default on password visibility toggle
   function handleMouseDownPassword(
     event: React.MouseEvent<HTMLButtonElement>
   ) {
     event.preventDefault();
+  };
+
+  // Reset password function
+  async function onPasswordReset(data: PasswordResetFormData) {
+    try {
+      const { resetEmail } = data;
+      const {
+        error
+      } = await supabase
+        .auth
+        .resetPasswordForEmail(resetEmail, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+      if (error) throw error;
+      setAlertInfo({
+        type: "success",
+        message: "Success! Check your email for a link to reset your password."
+      });
+      reset();
+    } catch (error) {
+      console.error(error);
+      setAlertInfo({
+        type: "error",
+        message: "An unexpected error occurred. Please try again."
+      });
+    }
+    setShowPasswordResetAlert(true);
+  };
+
+  // Form submission function
+  async function onSubmit(data: {
+    username?: string;
+    email: string;
+    password: string
+  }) {
+    const { username, email, password } = data;
+    const endpoint = showSignUp ? "/api/register-user" : "/api/login-user";
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          email,
+          password,
+          ...(showSignUp && { username }),
+        })
+      });
+
+      const resultUrl = response.url;
+
+      if (response.ok) {
+        window.location.href = resultUrl;
+      } else {
+        setAlertInfo({
+          type: "error",
+          message: "Failed to process request. Please try again."
+        });
+      };
+
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      setAlertInfo({
+        type: "error",
+        message: "An unexpected error occurred. Please try again."
+      });
+    };
   };
 
   return (
@@ -124,6 +214,7 @@ export default function Login({
           z-10
         "
       >
+        {!showResetPassword ? (
         <Box
           id="login-header-container"
           className="
@@ -142,254 +233,415 @@ export default function Login({
               text-white
             "
           >
-            Log in
-            
+            {showSignUp ? "Sign up" : "Log in"}
           </Typography>
           <Typography
             variant="subtitle1"
             className="
               font-light
+              text-neutral-400
             "
           >
-            Enter your credentials to continue
+            {showSignUp ? "Enter your credentials to sign up" : "Enter your credentials to log in"}
           </Typography>
         </Box>
-        
-        {!resetPassword && (
-          <form
-            action={"/auth/login-user"}
-            method="post"
-            className="w-full"
+        ) : (
+        <Box
+          id="password-reset-header-container"
+          className="
+            flex
+            flex-col
+            justify-center
+            items-center
+            w-full
+            gap-2
+          "
+        >
+          <Typography
+            variant="h4"
+            className="
+              font-medium
+              text-white
+            "
           >
-            <Box
-              id="login-form-container"
+            Reset password
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            className="
+              font-light
+              text-neutral-400
+            "
+          >
+            Enter your email to reset your password
+          </Typography>
+        </Box>
+        )}
+        
+        {!showResetPassword && (
+          <FormProvider {...methods}>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="w-full"
+            >
+              <Box
+                id="login-form-container"
+                className="
+                  flex
+                  flex-col
+                  justify-center
+                  items-center
+                  w-full
+                  gap-2
+                  animate-in
+                "
+              >
+                <Box
+                  id="oath-buttons-container"
+                  className="
+                    flex
+                    flex-col
+                    justify-center
+                    items-center
+                    w-full
+                    gap-4
+                  "
+                >
+                  <OAuthButton
+                    cta={showSignUp ? "Sign up with Google" : "Log in with Google"}
+                    provider="google"
+                    disabled={false}
+                  />
+                  <OAuthButton
+                    cta={showSignUp ? "Sign up with Discord" : "Log in with Discord"}
+                    provider="discord"
+                    disabled={false}
+                  />
+                  <OAuthButton
+                    cta={showSignUp ? "Sign up with GitHub" : "Log in with GitHub"}
+                    provider="github"
+                    disabled={false}
+                  />
+                </Box>
+
+                <Box
+                  id="login-separator-container"
+                  className="
+                    flex
+                    flex-row
+                    justify-center
+                    items-center
+                    w-full
+                    gap-2
+                    mt-2
+                    px-4
+                  "
+                >
+                  <Box
+                    className="
+                      w-full
+                      h-[1px]
+                      bg-neutral-500
+                    "
+                  />
+                  <Typography
+                    variant="overline"
+                  >
+                    {""} or {""}
+                  </Typography>
+                  <Box
+                    className="
+                      w-full
+                      h-[1px]
+                      bg-neutral-500
+                    "
+                  />
+                </Box>
+
+                <Box
+                  id="login-inputs-container"
+                  className="
+                    flex
+                    flex-col
+                    justify-center
+                    items-center
+                    w-full
+                    gap-4
+                  "
+                >
+                  {/* Username input */}
+                  {showSignUp &&(<FormControl
+                    variant="outlined"
+                    className="w-full"
+                  >
+                    <InputLabel
+                      htmlFor="username-input"
+                    >
+                      Username
+                    </InputLabel>
+                    <OutlinedInput
+                      id="username-input"
+                      label="Username"
+                      placeholder="Your username"
+                      {...register("username")}
+                      error={Boolean(errors.username)}
+                      className="
+                        w-full
+                      "
+                    />
+                  </FormControl>)}
+
+                  {/* Email input */}
+                  <FormControl
+                    variant="outlined"
+                    className="w-full"
+                  >
+                    <InputLabel
+                      htmlFor="email-input"
+                    >
+                      Email
+                    </InputLabel>
+                    <OutlinedInput
+                      id="email-input"
+                      label="Email"
+                      placeholder="your@email.com"
+                      {...register("email")}
+                      error={Boolean(errors.email)}
+                      type="email"
+                      className="
+                        w-full
+                      "
+                    />
+                  </FormControl>
+                  {errors.email && (
+                    <Typography
+                      color="error"
+                      variant="caption"
+                      display="block"
+                    >
+                      {errors.email.message}
+                    </Typography>
+                  )}
+
+                  {/* Password Input */}
+                  <FormControl
+                    variant="outlined"
+                    className="w-full"
+                  >
+                    <InputLabel
+                      htmlFor="password-input"
+                    >
+                      Password
+                    </InputLabel>
+                    <OutlinedInput
+                      id="password-input"
+                      label="Password"
+                      placeholder="••••••••"
+                      {...register("password")}
+                      error={Boolean(errors.password)}
+                      type={showPassword ? 'text' : 'password'}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      className="
+                        w-full
+                      "
+                    />
+                  </FormControl>
+                  {errors.password && (
+                    <Typography
+                      color="error"
+                      variant="caption"
+                      display="block"
+                    >
+                      {errors.password.message}
+                    </Typography>
+                  )}
+
+                  {/* Password reset toggle */}
+                  <Typography
+                    variant="subtitle2"
+                    onClick={() => setShowResetPassword(!showResetPassword)}
+                    className="
+                    text-neutral-400
+                    hover:text-neutral-300
+                      cursor-pointer
+                      hover:underline
+                    "
+                  >
+                    Forgot your password?
+                  </Typography>
+
+                  {/* Form submit button */}
+                  <Button
+                    type="submit"
+                    variant="outlined"
+                    disabled={isSubmitting && isValid ? true : false}
+                    color={isValid ? "success" : "primary"}
+                    size="large"
+                    className="
+                      w-full
+                    "
+                  >
+                    {!showSignUp ? "Log in" : "Sign up"}
+                  </Button>
+
+                  {/* Register toggle */}
+                  <Box
+                    id="register-container"
+                    className="
+                      flex
+                      flex-row
+                      justify-center
+                      items-center
+                      w-full
+                      gap-1
+                    "
+                  >
+                    <Typography
+                      variant="subtitle2"
+                      component="span"
+                      className="
+                      text-neutral-400
+                      "
+                    >
+                      {showSignUp ? "Already have an account?" : "Don't have an account?"}
+                    </Typography>
+                    <Typography
+                      onClick={() => setShowSignUp(!showSignUp)}
+                      variant="subtitle2"
+                      className="
+                      text-teal-500
+                      hover:text-teal-300
+                        cursor-pointer
+                        hover:underline
+                      "
+                    >
+                      {showSignUp ?  "Log in" : "Create account"}
+                    </Typography>
+                  </Box>
+                </Box>
+
+                {/* Callback Message */}
+                {searchParams?.message && (
+                  <Alert
+                    severity="info"
+                    className="w-full"
+                  >
+                    {searchParams.message}
+                  </Alert>
+                )}
+              </Box>
+            </form>
+          </FormProvider>
+        )}
+
+        {/* Password Reset */}
+        {showResetPassword && (
+          <Box
+            id="password-reset-container"
+            className="
+              flex
+              flex-col
+              justify-center
+              items-center
+              w-full
+            "
+          >
+            {/* Email Password Reset Input */}
+            <form
+              onSubmit={handleResetSubmit(
+                (data: FieldValues) => onPasswordReset(
+                  data as PasswordResetFormData
+                ))}
               className="
                 flex
                 flex-col
                 justify-center
                 items-center
                 w-full
-                gap-2
-                animate-in
+                gap-4
               "
             >
-              <Box
-                id="oath-buttons-container"
-                className="
-                  flex
-                  flex-col
-                  justify-center
-                  items-center
-                  w-full
-                  gap-4
-                "
+              <FormControl
+                variant="outlined"
+                error={Boolean(resetErrors.resetEmail)}
+                className="w-full"
               >
-                <OAuthButton
-                  cta="Log in with Google"
-                  provider="google"
-                  disabled={false}
-                />
-                <OAuthButton
-                  cta="Log in with Discord"
-                  provider="discord"
-                  disabled={false}
-                />
-                <OAuthButton
-                  cta="Log in with GitHub"
-                  provider="github"
-                  disabled={false}
-                />
-              </Box>
-
-              <Box
-                id="login-separator-container"
-                className="
-                  flex
-                  flex-row
-                  justify-center
-                  items-center
-                  w-full
-                  gap-2
-                  mt-2
-                  px-4
-                "
-              >
-                <Box
-                  className="
-                    w-full
-                    h-[1px]
-                    bg-neutral-500
-                  "
-                />
-                <Typography
-                  variant="overline"
+                <InputLabel
+                  htmlFor="password-reset-input"
                 >
-                  {""} or {""}
-                </Typography>
-                <Box
-                  className="
-                    w-full
-                    h-[1px]
-                    bg-neutral-500
-                  "
+                  Email
+                </InputLabel>
+                <OutlinedInput
+                  id="password-reset-input"
+                  type="email"
+                  {...registerReset("resetEmail")}
+                  label="Email"
+                  placeholder="Your email"
+                  className="w-full"
                 />
-              </Box>
-
-              <Box
-                id="login-inputs-container"
-                className="
-                  flex
-                  flex-col
-                  justify-center
-                  items-center
-                  w-full
-                "
-              >
-                {/* Email input */}
-                <FormControl
-                  sx={{ m: 1, width: '25ch' }} 
-                  variant="outlined"
+                {resetErrors.resetEmail &&
+                  typeof resetErrors.resetEmail.message ===
+                  "string" && (
+                  <Typography
+                    color="error"
+                    variant="caption"
+                    display="block"
+                  >
+                    {resetErrors.resetEmail.message}
+                  </Typography>
+                )}
+              </FormControl>
+              {showPasswordResetAlert && (
+                <Alert
+                  icon={
+                    alertInfo?.type === "success" ?
+                    <Check fontSize="inherit" /> : 
+                    <Error fontSize="inherit" />
+                  }
+                  severity={alertInfo?.type}
                   className="w-full"
                 >
-                  <InputLabel
-                    htmlFor="email-input"
-                  >
-                    Email
-                  </InputLabel>
-                  <OutlinedInput
-                    id="email-input"
-                    label="Email"
-                    placeholder="your@email.com"
-                    type="email"
-                    className="
-                      w-full
-                    "
-                  />
-                </FormControl>
-
-                {/* Password Input */}
-                <FormControl
-                  sx={{ m: 1, width: '25ch' }} 
-                  variant="outlined"
-                  className="w-full"
-                >
-                  <InputLabel
-                    htmlFor="password-input"
-                  >
-                    Password
-                  </InputLabel>
-                  <OutlinedInput
-                    id="password-input"
-                    label="Password"
-                    placeholder="••••••••"
-                    type={showPassword ? 'text' : 'password'}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    className="
-                      w-full
-                    "
-                  />
-                </FormControl>
-                <Typography
-                  variant="subtitle2"
-                  className="
-                  text-neutral-400
-                  hover:text-neutral-300
-                    cursor-pointer
-                    hover:underline
-                    py-1
-                  "
-                >
-                  Forgot your password?
-                </Typography>
-                <Button
-                  type="submit"
-                  variant="outlined"
-                  disabled={false}
-                  // color={true ? "success" : "primary"}
-                  color="primary"
-                  size="large"
-                  className="
-                    w-full
-                    mt-2
-                  "
-                >
-                  Log in
-                </Button>
-                
-              </Box>
-
-              {/* <button className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2">
-                Sign In
-              </button> */}
-
-              {searchParams?.message && (
-                <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-                  {searchParams.message}
-                </p>
+                  {alertInfo?.message}
+                </Alert>
               )}
-            </Box>
-          </form>
-        )}
-
-        {resetPassword && (
-          <Box className="grid gap-4">
-            <Box className="grid">
-              <label>Email</label>
-              <input
-                type="text"
-                name="email"
-                value={data?.email}
-                onChange={handleChange}
-              />
-            </Box>
-            {success && (
-              <Box className="bg-green-100 text-green-500 p-4 rounded">
-                Success! Check your email for a link to reset your password.
-              </Box>
-            )}
-            <Box>
-              <button
-                className="px-4 py-2 bg-blue-500 rounded cursor-pointer"
-                onClick={sendResetPassword}
+              <Button
+                type="submit"
+                variant="outlined"
+                disabled={!isResetValid || isSubmitting}
+                color="primary"
+                size="large"
+                className="
+                  w-full
+                "
               >
-                Reset my password
-              </button>
-            </Box>
+                Reset password
+              </Button>
+              <Typography
+                variant="subtitle2"
+                onClick={() => setShowResetPassword(!showResetPassword)}
+                className="
+                text-neutral-400
+                hover:text-neutral-300
+                  cursor-pointer
+                  hover:underline
+                "
+              >
+                Remember your password? Sign in
+              </Typography>
+            </form>
           </Box>
         )}
-        <p
-          onClick={() => setResetPassword(!resetPassword)}
-          className={clsx(
-            "cursor-pointer hover:underline",
-            resetPassword ? "text-green-500" : "text-foreground",
-          )}
-        >
-          {resetPassword ? "Login" : "Reset password"}
-        </p>
-        {/* Conditionally render & Move inside form */}
-        <Typography
-          variant="subtitle1"
-          className="cursor-pointer hover:underline"
-        >
-          Don&apos;t have an account? Sign up
-        </Typography>
-        <button
-          formAction={"/auth/register-user"}
-          className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
-        >
-          Sign Up
-        </button>
       </Box>
     </Box>
   );

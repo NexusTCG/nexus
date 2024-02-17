@@ -683,7 +683,7 @@ export default function CardCreatorForm() {
                     category="color"
                     title="Color"
                     selectedOptions={
-                      artPromptSelections["color"] || ""
+                      artPromptSelections["style"] || ""
                     }
                     onSelectionChange={handleSelectionChange}
                   />
