@@ -18,7 +18,7 @@ import {
 } from "@mui/material/";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { SelectChangeEvent } from '@mui/material/Select';
-import AddIcon from '@mui/icons-material/Add';
+// import AddIcon from '@mui/icons-material/Add';
 
 export default function Cards() {
     const [cards, setCards] = useState<CardsTableType[] | null>([]);
@@ -118,17 +118,19 @@ export default function Cards() {
             lg:pr-8
             md:pr-4
             sm:pr-2
-            pt-4
-            pb-2
-            bg-neutral-800
+            p-2
+            bg-neutral-800/90
             border-b
           border-neutral-700
             top-0
             sticky
             z-10
+            backdrop-blur-sm
+            shadow-md
+            shadow-neutral-950/25
           "
         >
-          <Box
+          {/* <Box
             id="cards-header-content"
             className="
               w-full
@@ -153,7 +155,7 @@ export default function Cards() {
             >
               Create card
             </Button>
-          </Box>
+          </Box> */}
           <Box
             id="cards-sort-pagination"
             className="
@@ -333,7 +335,7 @@ export default function Cards() {
                   variant="outlined"
                   size="medium"
                 >
-                  Next 60
+                  Next 50
                 </Button>
               </Box>
             </Box>
@@ -397,6 +399,7 @@ export default function Cards() {
                   hover:shadow-zinc-950/25
                   hover:scale-105
                   mb-2
+                  w-full
                 "
               >
                 <Link

@@ -26,7 +26,10 @@ export default function DashboardLayout({
         const data = await fetchUserProfiles({
           from: "profiles",
           select: "*",
-          filter: { column: "id", value: user?.id as string }
+          filter: {
+            column: "id",
+            value: user?.id as string
+          }
         });
   
         if (data && data.length > 0) {

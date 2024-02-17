@@ -32,7 +32,8 @@ import {
   IconButton,
   Tooltip,
   Tab,
-  Tabs
+  Tabs,
+  Badge
 } from "@mui/material/";
 import SendIcon from "@mui/icons-material/Send";
 import SmartToyIcon from '@mui/icons-material/SmartToy';
@@ -111,6 +112,9 @@ export default function CardCreatorForm() {
 
   const [promptTab, setPromptTab] = React.useState(0);
   const [artPromptSelections, setArtPromptSelections] = useState<{ [category: string]: string }>({});
+  const [showCardArtOptions, setShowCardArtOptions] = useState<boolean>(false);
+  const [cardArtOptions, setCardArtOptions] = useState<string[]>([]);
+  const [activeCardArtOption, setActiveCardArtOption] = useState<number>(0);
 
   // Alert states
   const [alertMessage, setAlertMessage] = useState("Submitting card...");
@@ -199,6 +203,11 @@ export default function CardCreatorForm() {
         setGenerateArtLimit(generateArtLimit + 1);
         setValue("cardArtPrompt", "");
         setValue("cardArt", imageUrl);
+        setCardArtOptions(prev => [...prev, imageUrl]);
+        setActiveCardArtOption(cardArtOptions.length);
+        if (cardArtOptions.length > 0) {
+          setShowCardArtOptions(true);
+        };
         trigger("cardArt");
         
       } catch (error) {
@@ -227,7 +236,6 @@ export default function CardCreatorForm() {
       if (intervalId) clearInterval(intervalId);
     };
   }, [intervalId]);
-
   
   // Submit form data
   async function onSubmit(data: CardFormDataType) {
@@ -298,6 +306,8 @@ export default function CardCreatorForm() {
         setSnackbarMessage('Submission successful');
         setSnackbarSeverity('success');
 
+        // Redirect to the cards/id page
+
       } else {
         setIsSubmitted(false);
         setAlertMessage('Submission failed: ' + responseData.error)
@@ -339,6 +349,13 @@ export default function CardCreatorForm() {
       [category]: selectedOption,
     }));
   };
+
+  // Handle changing image option
+  function handleCardArtOptionChange(index: number) {
+    setValue("cardArt", cardArtOptions[index]);
+    setActiveCardArtOption(index);
+  };
+
 
   return (
     // Outer container
@@ -482,7 +499,7 @@ export default function CardCreatorForm() {
                     endAdornment: (
                       <InputAdornment position="end">
                         <Tooltip
-                          title="Send prompt"
+                          title={`${3 - generateArtLimit} prompts left`}
                           arrow
                         >
                           <span className="tooltip-wrapper">
@@ -508,11 +525,16 @@ export default function CardCreatorForm() {
                                   Limit reached
                                 </Typography>
                               ) : (
-                                <SendIcon
-                                  className={clsx("",
-                                    cardArtPrompt === "" ? "text-neutral-500" : "text-lime-500"
-                                  )}
-                                />
+                                <Badge
+                                  badgeContent={generateArtLimit ? 3 - generateArtLimit : 3}
+                                  color={generateArtLimit < 3 ? "error" : "primary"}
+                                >
+                                  <SendIcon
+                                    className={clsx("",
+                                      cardArtPrompt === "" ? "text-neutral-500" : "text-lime-500"
+                                    )}
+                                  />
+                                </Badge>
                               )}
                             </IconButton>
                           </span>
@@ -521,8 +543,34 @@ export default function CardCreatorForm() {
                     ),
                   }}
                 />
-                
-                
+
+                {/* Art Prompt Selections */}
+                {artPromptSelections && (<Box
+                  className="
+                    flex
+                    flex-row
+                    justify-start
+                    items-start
+                    flex-wrap
+                    w-full
+                    gap-3
+                  "
+                >
+                  {Object.entries(artPromptSelections).map(
+                    ([category, selection]) => (
+                    <Typography
+                      key={category}
+                      variant="overline"
+                      className="
+                        text-neutral-500
+                        rounded-full
+                        text-xs
+                      "
+                    >
+                      {selection}
+                    </Typography>
+                  ))}
+                </Box>)}
                 
               </Box>
               {/* Art Prompt Options Accordions */}
@@ -705,20 +753,87 @@ export default function CardCreatorForm() {
                 h-full
                 md:w-1/2
                 px-0
-                pt-6
-                pb-8
+                py-4
                 md:px-6
-                md:pt-8
-                md:pb-12
+                md:py-6
                 md:border
                 md:border-neutral-700
                 md:bg-neutral-800
                 md:rounded-md
                 md:shadow-xl
                 md:shadow-neutral-950/25
+                gap-6
               "
             >
               <NexusCardForm />
+
+              {showCardArtOptions && (<Box
+                className="
+                  flex
+                  flex-col
+                  justify-start
+                  items-start
+                  w-full
+                  gap-2
+                  p-4
+                  rounded-lg
+                  bg-neutral-900
+                "
+              >
+                <Typography
+                    variant="subtitle2"
+                    className="
+                      text-neutral-500
+                      font-medium
+                    "
+                  >
+                    {formNexusCardData.cardName ? `${formNexusCardData.cardName} art options` : "Card art options"}
+                  </Typography>
+                <Box
+                  className="
+                    flex
+                    flex-row
+                    justify-center
+                    items-center
+                    w-full
+                    gap-2
+                  "
+                >
+                  {cardArtOptions.map((imageUrl, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        position: "relative",
+                        overflow: "hidden",
+                        aspectRatio: "1/1"
+                      }}
+                      className="
+                        flex
+                        flex-col
+                        justify-center
+                        items-center
+                        w-full
+                        gap-2
+                      "
+                    >
+                      <Image
+                        key={index}
+                        src={imageUrl}
+                        fill
+                        alt={`Card art option ${index + 1}`}
+                        onClick={handleCardArtOptionChange.bind(null, index)}
+                        style={{ objectFit: "cover"}}
+                        className={clsx("rounded-md border border-neutral-500 shadow-md shadow-neutral-950/50",
+                          {
+                            "opacity-100 border-teal-500": index === activeCardArtOption,
+                            "opacity-25 hover:opacity-100 hover:cursor-pointer hover:shadow-neutral-950": index !== activeCardArtOption
+                          }
+                        )}
+                      />
+                    </Box>
+                  ))}
+                </Box>
+              </Box>)}
             </Box>
           </Box>
 

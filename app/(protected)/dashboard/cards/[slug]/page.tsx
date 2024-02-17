@@ -148,13 +148,21 @@ export default function Card({
             Cards
           </Typography>
         </Link>
-        <Typography
+        {card ? (<Typography
           className="
             text-white
           "
         >
           {card?.cardName || "Card"}
         </Typography>
+        ) : (
+          <Skeleton
+            variant="text"
+            width={100}
+            height={34}
+            animation="wave"
+          />
+        )}
       </Breadcrumbs>
       <Box
         id="card-countainer-inner"
@@ -181,7 +189,14 @@ export default function Card({
             w-full
           "
         >
-          <Box
+          {card ? (<Box
+            id="card-image-container"
+            sx={{
+              overflow: "hidden",
+              position: "relative",
+              aspectRatio: "5/7",
+              maxWidth: "400px",
+            }}
             className="
               flex
               flex-col
@@ -190,38 +205,42 @@ export default function Card({
               w-full
               pt-4
               pb-6
-              border-b
-            border-neutral-700
+              m-4
+              rounded-2xl
+              shadow-lg
+            shadow-neutral-950/25
             "
           >
-            {card ? (
-              <Image
-                src={card?.cardRender || "/images/nexus-cardback.png"}
-                width={400}
-                height={560}
-                alt={card?.cardName || "Card image"}
-                priority
-                className="
-                  rounded-2xl
-                  shadow-lg
-                  shadow-neutral-950/25
-                "
-              />
-            ) : (
-              <Skeleton
-                variant="rectangular"
-                width={400}
-                height={560}
-                animation="wave"
-                className="
-                  rounded-2xl
-                  shadow-lg
-                  shadow-neutral-950/25
-                "
-              />
-            )}
-          </Box>
+            <Image
+              src={card?.cardRender || "/images/nexus-cardback.png"}
+              fill
+              style={{ objectFit: "cover" }}
+              alt={card?.cardName || "Card image"}
+              priority
+            />
+          </Box>) : (
+            <Skeleton
+              variant="rectangular"
+              width={400}
+              height={560}
+              animation="wave"
+              className="
+                flex
+                flex-col
+                justify-center
+                items-center
+                w-full
+                pt-4
+                pb-6
+                m-4
+                rounded-2xl
+                shadow-lg
+              shadow-neutral-950/25
+              "
+            />
+          )}
           <Box
+            id="card-details-container"
             className="
               flex
               flex-col
@@ -231,6 +250,7 @@ export default function Card({
               h-full
               bg-neutral-900
               rounded-b-lg
+              mt-2
             "
           >
             <Box
@@ -246,6 +266,7 @@ export default function Card({
               "
             >
               <Box
+                id="card-details-text"
                 className="
                   flex
                   flex-col
@@ -254,6 +275,7 @@ export default function Card({
                 "
               >
                 <Box
+                  id="card-details-name-creator"
                   className="
                     flex
                     flex-row
@@ -365,6 +387,7 @@ export default function Card({
               </Box>)}
             </Box>
             <Box
+              id="card-details-buttons-container"
               className="
                 flex
                 md:flex-row
@@ -456,24 +479,38 @@ export default function Card({
             shadow-neutral-950/50
           "
         >
-          <IconButton
-            aria-label="close"
-            size="small"
+          <Box
+            id="share-card-modal-header"
             className="
-              opacity-50
-              hover:opacity-100
+              flex
+              flex-row
+              justify-between
+              items-center
+              w-full
             "
           >
-            <Close />
-          </IconButton>
-          <Typography
-            variant="h4"
-          >
-            Share this card
-            {/* Share on Discord */}
-            {/* Share on Reddit */}
-            {/* Share on X */}
-          </Typography>
+            <Typography
+              variant="h4"
+              className="
+                text-white
+              "
+            >
+              Share {card?.cardName || "card"}
+              {/* Share on Discord */}
+              {/* Share on Reddit */}
+              {/* Share on X */}
+            </Typography>
+            <IconButton
+              aria-label="close"
+              size="small"
+              className="
+                opacity-50
+                hover:opacity-100
+              "
+            >
+              <Close />
+            </IconButton>
+          </Box>
         </Box>
       </Modal>
     </Box>

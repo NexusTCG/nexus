@@ -166,7 +166,10 @@ export default function Sidebar() {
         >
           {secondaryNavigation.map((route, index) => {
             return (
-              <NavigationButton key={index} route={route} />
+              <NavigationButton
+                key={index}
+                route={route}
+              />
             )
           })}
           <SignOutButton /> 
