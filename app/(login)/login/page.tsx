@@ -395,7 +395,6 @@ export default function AuthForm({
                     items-center
                     w-full
                     gap-2
-                    mt-2
                     px-4
                   "
                 >
@@ -702,20 +701,20 @@ export default function AuthForm({
                 "
               >
                 <Typography
-                    variant="subtitle2"
-                    onClick={() => {
-                      setShowResetPassword(!showResetPassword )
-                      setShowSignUp(false)
-                    }}
-                    className="
-                    text-neutral-400
-                    hover:text-neutral-300
-                      cursor-pointer
-                      hover:underline
-                    "
-                  >
-                    Remember your password? Log in
-                  </Typography>
+                  variant="subtitle2"
+                  onClick={() => {
+                    setShowResetPassword(!showResetPassword )
+                    setShowSignUp(false)
+                  }}
+                  className="
+                  text-neutral-400
+                  hover:text-neutral-300
+                    cursor-pointer
+                    hover:underline
+                  "
+                >
+                  Remember your password? Log in
+                </Typography>
                 <Box
                   className="
                     flex

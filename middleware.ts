@@ -4,7 +4,7 @@ import { createClient } from "@/app/lib/supabase/middleware";
 export async function middleware(request: NextRequest) {
   const { supabase, response } = createClient(request);
 
-  const publicUrls = ["/reset-password"];
+  const publicUrls = ["/reset-password", "/login/complete-signup"];
   if (publicUrls.includes(request.nextUrl.pathname)) {
     return response;
   }

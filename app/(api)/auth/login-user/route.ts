@@ -15,7 +15,7 @@ export async function POST(request: Request) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .auth
     .signInWithPassword({
       email,
@@ -26,6 +26,25 @@ export async function POST(request: Request) {
     console.log(`Error when attempting sign in: ${error.message}`);
     const errorMessage = encodeURIComponent(error.message);
     return NextResponse.redirect(`${requestUrl}/login?error=${errorMessage}`);
+  }
+
+  // Check if it's the user's first login
+  if (data.user && data.user.id) {
+    const {
+      data: profile,
+      error: profileError
+    } = await supabase
+      .from("profiles")
+      .select("username")
+      .eq("id", data.user.id)
+      .maybeSingle();
+
+      if (profileError) {
+        console.error(`Error fetching user profile: ${profileError.message}`);
+        return NextResponse.redirect(`${requestUrl}/login?error=Error%20fetching%20user%20profile`);
+      } else if (!profile) {
+        return NextResponse.redirect(`${requestUrl}/login/complete-signup`);
+      }
   }
 
   return NextResponse.redirect(`${requestUrl}/dashboard`);

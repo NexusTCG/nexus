@@ -28,7 +28,7 @@ import {
 export default function CompleteSignup() {
   const supabase = createClient();
   const router = useRouter();
-  const user = useSession();
+  const session = useSession();
   const methods = useForm({
     defaultValues: {
       username: "",
@@ -60,11 +60,13 @@ export default function CompleteSignup() {
     message: string;
   } | null>(null);
 
-  useEffect(() => {
-    if (!user) {
-      router.push("/login");
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (session !== null && session?.user?.id) {
+  //     setLoading(false);
+  //   } else if (session === null) {
+  //     router.push("/login");
+  //   }
+  // }, [session, router]);
 
   // Randomize the background image
   useEffect(() => {
@@ -80,6 +82,7 @@ export default function CompleteSignup() {
     last_name: string,
     bio: string
   }) {
+    console.log("Form submitted", data);
     const {
       username,
       first_name,
@@ -88,10 +91,12 @@ export default function CompleteSignup() {
     } = data;
 
     try {
+      console.log("User ID:", session?.user.id);
+
       const { error } = await supabase
         .from("profiles")
         .insert({
-          id: user?.user.id,
+          id: session?.user.id,
           username: username,
           first_name: first_name,
           last_name: last_name,
@@ -106,7 +111,7 @@ export default function CompleteSignup() {
       } else if (!error) {
         setAlertInfo({
           type: "success",
-          message: "Profile created successfully! Loggin you in..."
+          message: "Profile created successfully! Logging you in..."
         });
         setTimeout(() => {
           setTimeout(() => {
@@ -129,8 +134,7 @@ export default function CompleteSignup() {
   };
 
   return (
-    <>
-    {user ? (<Box
+    <Box
       id="complete-signup-outer-container"
       style={{
         position: "relative",
@@ -238,10 +242,7 @@ export default function CompleteSignup() {
         "
       >
         <FormProvider {...methods}>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="w-full"
-          >
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
             <Box
               id="complete-signup-form-container"
               className="
@@ -250,7 +251,7 @@ export default function CompleteSignup() {
                 justify-center
                 items-center
                 w-full
-                gap-2
+                gap-4
                 animate-in
               "
             >
@@ -389,51 +390,6 @@ export default function CompleteSignup() {
           </form>
         </FormProvider>
       </Box>
-    </Box>) : (
-      <Box
-        id="complete-signup-outer-container"
-        style={{
-          position: "relative",
-          overflow: "hidden",
-        }}
-        className="
-          flex
-          flex-col
-          lg:flex-row-reverse
-          justify-center
-          lg:justify-between
-          items-center
-          w-full
-          h-[100vh]
-          bg-neutral-950
-          lg:px-48
-          px-8
-          lg:gap-24
-          gap-12
-          pb-8
-          lg:pb-0
-        "
-      >
-        {authBg && (<Image
-          src={`/images/auth-bg/nexus-auth-bg-${authBg}.jpg`}
-          alt="Nexus background"
-          fill
-          style={{ objectFit: "cover"}}
-          className="
-            opacity-25
-          "
-        />)}
-        <Typography
-          variant="h4"
-          className="
-            text-center
-            text-white
-          "
-        >
-          Redirecting...
-        </Typography>
-      </Box>
-    )}
-    </>
+    </Box>
   );
 }
