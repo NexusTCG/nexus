@@ -1,7 +1,7 @@
-"use server";
+// Remove this path
 
-import { redirect } from "next/navigation";
+import React from "react"
 
-export default async function Dashboard() {
-  redirect("/dashboard/create");
-};
+export default function Dashboard() {
+  return <div>Dashboard</div>
+}

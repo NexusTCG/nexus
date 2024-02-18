@@ -11,21 +11,19 @@ export async function POST(req: NextRequest) {
   const formData = await req.formData();
   const email = String(formData.get("email"));
   const password = String(formData.get("password"));
-  // const username = String(formData.get("username"));
 
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  const { error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      // data: { 
-      //   username: username,
-      // },
-      emailRedirectTo: `${url}/auth/callback`,
-    },
-  });
+  const { error } = await supabase
+    .auth
+    .signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${url}/auth/callback`,
+      },
+    });
 
   if (error) {
     console.log(`Error when attempting sign up: ${error.message}`);

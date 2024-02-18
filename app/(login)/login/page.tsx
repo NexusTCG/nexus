@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, FormProvider, FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchema, SignUpSchema } from "@/app/utils/schemas/AuthFormSchema";
+import AuthFormSchema from "@/app/utils/schemas/AuthFormSchema";
 import PasswordResetSchema  from "@/app/utils/schemas/PasswordResetSchema";
 import { createClient } from "@/app/lib/supabase/client";
 import OAuthButton from "@/app/components/auth/OAuthButton";
@@ -40,21 +40,20 @@ export default function AuthForm({
   const [showResetPassword, setShowResetPassword] = useState<boolean>(false);
   const [showPasswordResetAlert, setShowPasswordResetAlert] = useState<boolean>(false);
   const [showLoginAlert, setShowLoginAlert] = useState<boolean>(false);
+  const [authBg, setAuthBg] = useState<number | null>(null);
   const [alertInfo, setAlertInfo] = useState<{
     type: "success" | "error" | "info" | "warning";
     message: string;
   } | null>(null);
   
   const supabase = createClient();
-  const formSchema = showSignUp ? SignUpSchema : LoginSchema;
-  const authBg = Math.floor(Math.random() * 13) + 1;
+  // const authBg = Math.floor(Math.random() * 13) + 1;
   const methods = useForm({
     defaultValues: {
-      username: "",
       email: "",
       password: "",
     },
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(AuthFormSchema),
     mode: "onChange"
   });
 
@@ -82,6 +81,12 @@ export default function AuthForm({
     resolver: zodResolver(PasswordResetSchema),
     mode: "onChange",
   });
+
+  useEffect(() => {
+    if (authBg !== null) return;
+    const randomBg = Math.floor(Math.random() * 13) + 1;
+    setAuthBg(randomBg);
+  }, []);
 
   // Password visibility toggle
   function handleClickShowPassword() {
@@ -124,15 +129,13 @@ export default function AuthForm({
 
   // Form submission function
   async function onSubmit(data: {
-    username?: string;
     email: string;
     password: string
   }) {
-    const { username, email, password } = data;
+    const { email, password } = data;
     const endpoint = showSignUp ? "/auth/register-user" : "/auth/login-user";
 
     try {
-      console.log("Submitting form data:", email, password);
       const response = await fetch(endpoint, {
         method: "POST",
         headers: {
@@ -141,7 +144,6 @@ export default function AuthForm({
         body: new URLSearchParams({
           email,
           password,
-          ...(showSignUp && { username }), // Update API to accept username
         })
       });
 
@@ -154,7 +156,6 @@ export default function AuthForm({
           type: "error",
           message: "Failed to process request. Please try again."
         });
-        setShowLoginAlert(true);
       };
 
     } catch (error) {
@@ -163,8 +164,8 @@ export default function AuthForm({
         type: "error",
         message: "An unexpected error occurred. Please try again."
       });
-      setShowLoginAlert(true);
     };
+    setShowLoginAlert(true);
   };
 
   return (
@@ -187,46 +188,65 @@ export default function AuthForm({
         lg:px-48
         px-8
         lg:gap-24
+        gap-12
+        pb-8
+        lg:pb-0
       "
     >
-      <Image
+      {authBg && (<Image
         src={`/images/auth-bg/nexus-auth-bg-${authBg}.jpg`}
         alt="Nexus background"
         fill
         style={{ objectFit: "cover"}}
         className="
-          opacity-10
-          lg:opacity-20
+          opacity-25
         "
-      />
+      />)}
       <Box
         id="login-logo-container"
         className="
-          hidden
-          lg:flex
+          flex
           flex-col
           justify-center
           items-center
           w-full
-          h-full
-          gap-16
-          pb-8
+          lg:h-full
+          lg:gap-16
+          lg:pb-8
+          z-10
         "
       >
         <Image
           src="/images/nexus-logo.png"
           alt="Nexus logo"
+          width={240}
+          height={58}
+          priority
+          className="
+            block
+            lg:hidden
+          "
+        />
+        <Image
+          src="/images/nexus-logo.png"
+          alt="Nexus logo"
           width={480}
-          height={480}
-          
+          height={116}
+          priority
+          className="
+            hidden
+            lg:block
+          "
         />
         <Typography
           variant="subtitle1"
           className="
-            text-4xl
+            lg:text-4xl
             font-medium
             text-center
             text-white
+            hidden
+            lg:block
           "
         >
           AI-POWERED <br />
@@ -411,28 +431,6 @@ export default function AuthForm({
                     gap-4
                   "
                 >
-                  {/* Username input */}
-                  {showSignUp &&(<FormControl
-                    variant="outlined"
-                    className="w-full"
-                  >
-                    <InputLabel
-                      htmlFor="username-input"
-                    >
-                      Username
-                    </InputLabel>
-                    <OutlinedInput
-                      id="username-input"
-                      label="Username"
-                      placeholder="Your username"
-                      {...register("username")}
-                      error={Boolean(errors.username)}
-                      className="
-                        w-full
-                      "
-                    />
-                  </FormControl>)}
-
                   {/* Email input */}
                   <FormControl
                     variant="outlined"
@@ -483,7 +481,12 @@ export default function AuthForm({
                       error={Boolean(errors.password)}
                       type={showPassword ? 'text' : 'password'}
                       endAdornment={
-                        <InputAdornment position="end">
+                        <InputAdornment
+                          position="end"
+                          className="
+                            mr-2
+                          "
+                        >
                           <IconButton
                             aria-label="toggle password visibility"
                             onClick={handleClickShowPassword}
@@ -575,18 +578,18 @@ export default function AuthForm({
 
                 {/* Login Alert */}
                 {showLoginAlert && (
-                <Alert
-                  icon={
-                    alertInfo?.type === "success" ?
-                    <Check fontSize="inherit" /> : 
-                    <Error fontSize="inherit" />
-                  }
-                  severity={alertInfo?.type}
-                  className="w-full"
-                >
-                  {alertInfo?.message}
-                </Alert>
-              )}
+                  <Alert
+                    icon={
+                      alertInfo?.type === "success" ?
+                      <Check fontSize="inherit" /> : 
+                      <Error fontSize="inherit" />
+                    }
+                    severity={alertInfo?.type}
+                    className="w-full"
+                  >
+                    {alertInfo?.message}
+                  </Alert>
+                )}
 
                 {/* Callback Message */}
                 {searchParams?.message && (
@@ -684,18 +687,71 @@ export default function AuthForm({
               >
                 Reset password
               </Button>
-              <Typography
-                variant="subtitle2"
-                onClick={() => setShowResetPassword(!showResetPassword)}
+              
+              {/* Password Reset Toggle Options */}
+              <Box
+                id="reset-password-container"
                 className="
-                text-neutral-400
-                hover:text-neutral-300
-                  cursor-pointer
-                  hover:underline
+                  flex
+                  flex-col
+                  justify-center
+                  items-center
+                  w-full
+                  gap-2
+                  mt-2
                 "
               >
-                Remember your password? Sign in
-              </Typography>
+                <Typography
+                    variant="subtitle2"
+                    onClick={() => {
+                      setShowResetPassword(!showResetPassword )
+                      setShowSignUp(false)
+                    }}
+                    className="
+                    text-neutral-400
+                    hover:text-neutral-300
+                      cursor-pointer
+                      hover:underline
+                    "
+                  >
+                    Remember your password? Log in
+                  </Typography>
+                <Box
+                  className="
+                    flex
+                    flex-row
+                    justify-center
+                    items-center
+                    w-full
+                    gap-1
+                  "
+                >
+                  <Typography
+                    variant="subtitle2"
+                    component="span"
+                    className="
+                    text-neutral-400
+                    "
+                  >
+                    Don&apos;t have an account?
+                  </Typography>
+                  <Typography
+                    onClick={() => {
+                      setShowResetPassword(!showResetPassword )
+                      setShowSignUp(true)
+                    }}
+                    variant="subtitle2"
+                    className="
+                    text-teal-500
+                    hover:text-teal-300
+                      cursor-pointer
+                      hover:underline
+                    "
+                  >
+                    Create account
+                  </Typography>
+                </Box>
+              </Box>
             </form>
           </Box>
         )}

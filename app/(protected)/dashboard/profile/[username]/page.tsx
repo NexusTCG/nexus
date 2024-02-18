@@ -82,6 +82,7 @@ export default function ProfileId({
     };
   }, [username]);
 
+  // Fetch user's cards
   useEffect(() => {
     console.log(`Fetching cards for ${userUsername}`);
     if (userUsername) {
@@ -126,13 +127,10 @@ export default function ProfileId({
     fileInputRef.current?.click();
   }
 
-  // Log userAvatarUrl updates
-  useEffect(() => {
-    console.log(`Updated userAvatarUrl: ${userAvatarUrl}`);
-  }, [userAvatarUrl]);
-
   // Handle avatar upload
-  async function handleAvatarChange(event: React.ChangeEvent<HTMLInputElement>) {
+  async function handleAvatarChange(
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
     const file = event.target.files?.[0];
     console.log(file);
     if (!file) return;

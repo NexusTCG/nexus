@@ -9,6 +9,15 @@ const nextConfig = {
         },
       ]
     },
+    async redirects() {
+      return [
+        {
+          source: '/dashboard',
+          destination: '/dashboard/create',
+          permanent: true,
+        },
+      ]
+    }
   };
 
 module.exports = nextConfig;

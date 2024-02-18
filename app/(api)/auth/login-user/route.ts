@@ -1,33 +1,32 @@
 "use server";
 
+// If its the first time logging in, redirect to /login/complete-signup
+
 import { createClient } from "@/app/lib/supabase/server";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-import type { NextRequest } from "next/server";
-
-export async function POST(req: NextRequest) {
-  const url = new URL(req.url).origin;
-  const formData = await req.formData();
+export async function POST(request: Request) {
+  const requestUrl = new URL(request.url).origin;
+  const formData = await request.formData();
   const email = String(formData.get("email"));
   const password = String(formData.get("password"));
 
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  console.log("Logging in with:", email, password);
-  const {
-    error
-  } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
+  const { error } = await supabase
+    .auth
+    .signInWithPassword({
+      email,
+      password,
+    });
 
   if (error) {
     console.log(`Error when attempting sign in: ${error.message}`);
     const errorMessage = encodeURIComponent(error.message);
-    return NextResponse.redirect(`${url}/login?error=${errorMessage}`);
+    return NextResponse.redirect(`${requestUrl}/login?error=${errorMessage}`);
   }
 
-  return NextResponse.redirect(`${url}/dashboard`);
+  return NextResponse.redirect(`${requestUrl}/dashboard`);
 }

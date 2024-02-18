@@ -75,7 +75,9 @@ export default function DashboardLayout({
           w-full
         "
       >
-         <DashboardContext.Provider value={{ userProfileData }}>
+         <DashboardContext.Provider
+          value={{ userProfileData }}
+        >
           {children}
          </DashboardContext.Provider>
       </Box>

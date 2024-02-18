@@ -12,7 +12,10 @@ export async function GET(req: NextRequest) {
   if (code) {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { error } = await supabase
+      .auth
+      .exchangeCodeForSession(code);
+
     if (error) {
       console.log(
         `Error when attempting to exchange code for session: ${error.message}`,
@@ -24,5 +27,5 @@ export async function GET(req: NextRequest) {
   }
 
   // URL to redirect to after sign in process completes
-  return NextResponse.redirect(`${url.origin}/dashboard`);
+  return NextResponse.redirect(`${url.origin}/login`);
 }
