@@ -43,7 +43,7 @@ export async function POST(request: Request) {
         console.error(`Error fetching user profile: ${profileError.message}`);
         return NextResponse.redirect(`${requestUrl}/login?error=Error%20fetching%20user%20profile`);
       } else if (!profile) {
-        return NextResponse.redirect(`${requestUrl}/login/complete-signup`);
+        return NextResponse.redirect(`${requestUrl}/login/complete-profile`);
       }
   }
 

@@ -1,5 +1,3 @@
-// Redirect users if no session is found
-
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -25,16 +23,17 @@ import {
   Error
 } from "@mui/icons-material";
 
-export default function CompleteSignup() {
+export default function CompleteProfile() {
   const supabase = createClient();
   const router = useRouter();
   const session = useSession();
   const methods = useForm({
     defaultValues: {
+      id: "",
       username: "",
       first_name: "",
       last_name: "",
-      avatar_url: "",
+      // avatar_url: "",
       bio: "",
     },
     resolver: zodResolver(ProfileFormSchema),
@@ -44,6 +43,9 @@ export default function CompleteSignup() {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
+    trigger,
     formState: {
       errors,
       isValid,
@@ -60,13 +62,7 @@ export default function CompleteSignup() {
     message: string;
   } | null>(null);
 
-  // useEffect(() => {
-  //   if (session !== null && session?.user?.id) {
-  //     setLoading(false);
-  //   } else if (session === null) {
-  //     router.push("/login");
-  //   }
-  // }, [session, router]);
+  const watchId = watch("id");
 
   // Randomize the background image
   useEffect(() => {
@@ -91,7 +87,11 @@ export default function CompleteSignup() {
     } = data;
 
     try {
-      console.log("User ID:", session?.user.id);
+      if (!session?.user.id) return;
+      if (watchId === "") {
+        setValue("id", session?.user.id);
+        await trigger("id");
+      }
 
       const { error } = await supabase
         .from("profiles")
@@ -100,6 +100,7 @@ export default function CompleteSignup() {
           username: username,
           first_name: first_name,
           last_name: last_name,
+          avatar_url: "",
           bio: bio
         })
 
@@ -111,17 +112,20 @@ export default function CompleteSignup() {
       } else if (!error) {
         setAlertInfo({
           type: "success",
-          message: "Profile created successfully! Logging you in..."
+          message: `Profile created successfully! Redirecting in ${countdown}...`
         });
-        setTimeout(() => {
-          setTimeout(() => {
-            if (countdown > 0) {
-              setCountdown(countdown - 1);
+
+        setShowCountdown(true);
+        const countdownInterval = setInterval(() => {
+          setCountdown((countdown) => {
+            if (countdown <= 1) {
+              clearInterval(countdownInterval);
+              router.push("/dashboard");
+              return 0;
             }
-          }, 1000);
-          setShowCountdown(true);
-          router.push("/dashboard");
-        }, 3000);
+            return countdown - 1;
+          });
+        }, 1000);
       }
 
     } catch (error) {
@@ -135,7 +139,7 @@ export default function CompleteSignup() {
 
   return (
     <Box
-      id="complete-signup-outer-container"
+      id="complete-profile-outer-container"
       style={{
         position: "relative",
         overflow: "hidden",
@@ -168,7 +172,7 @@ export default function CompleteSignup() {
         "
       />)}
       <Box
-        id="complete-signup-logo-container"
+        id="complete-profile-logo-container"
         className="
           flex
           flex-col
@@ -220,7 +224,7 @@ export default function CompleteSignup() {
         </Typography>
       </Box>
       <Box
-        id="complete-signup-inner-container"
+        id="complete-profile-inner-container"
         className="
           flex
           flex-col
@@ -244,113 +248,157 @@ export default function CompleteSignup() {
         <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className="w-full">
             <Box
-              id="complete-signup-form-container"
+              id="complete-profile-form-container"
               className="
                 flex
                 flex-col
                 justify-center
                 items-center
                 w-full
-                gap-4
+                gap-6
                 animate-in
               "
             >
-              {/* Username input */}
-              <FormControl
-                variant="outlined"
-                className="w-full"
+              {/* Welcome Message */}
+              <Box
+                id="complete-profile-form-header"
+                className="
+                  flex
+                  flex-col
+                  justify-center
+                  items-center
+                  w-full
+                "
               >
-                <InputLabel
-                  htmlFor="username-input"
-                >
-                  Username <span className="text-red-500">*</span>
-                </InputLabel>
-                <OutlinedInput
-                  id="username-input"
-                  label="Username"
-                  placeholder="Your username"
-                  {...register("username")}
-                  error={Boolean(errors.username)}
-                  type="text"
+                {session?.user.email && (<Typography
+                  variant="overline"
                   className="
-                    w-full
+                    font-medium
+                    text-teal-500
                   "
-                />
-              </FormControl>
-              {errors.username && (
+                >
+                  Hi, {session?.user.email}!
+                </Typography>)}
                 <Typography
-                  color="error"
-                  variant="caption"
-                  display="block"
+                  variant="h4"
+                  className="
+                    font-medium
+                    text-white
+                  "
                 >
-                  {errors.username.message}
+                  Complete your profile to continue
                 </Typography>
-              )}
-
-              {/* First name input */}
-              <FormControl
-                variant="outlined"
-                className="w-full"
+              </Box>
+              
+              <Box
+                id="complete-profile-form-inputs-container"
+                className="
+                  flex
+                  flex-col
+                  justify-center
+                  items-center
+                  w-full
+                  gap-4
+                "
               >
-                <InputLabel
-                  htmlFor="first-name-input"
+                {/* Username input */}
+                <FormControl
+                  variant="outlined"
+                  className="w-full"
                 >
-                  First name
-                </InputLabel>
-                <OutlinedInput
-                  id="first-name-input"
-                  label="First name"
-                  placeholder="Your first name"
-                  {...register("first_name")}
-                  type="text"
-                  className="
-                    w-full
-                  "
-                />
-              </FormControl>
+                  <InputLabel
+                    htmlFor="username-input"
+                  >
+                    Username <span className="text-red-500">*</span>
+                  </InputLabel>
+                  <OutlinedInput
+                    id="username-input"
+                    label="Username"
+                    placeholder="Your username"
+                    {...register("username")}
+                    error={Boolean(errors.username)}
+                    type="text"
+                    className="
+                      w-full
+                    "
+                  />
+                </FormControl>
+                {errors.username && (
+                  <Typography
+                    color="error"
+                    variant="caption"
+                    display="block"
+                  >
+                    {errors.username.message}
+                  </Typography>
+                )}
 
-              {/* First name input */}
-              <FormControl
-                variant="outlined"
-                className="w-full"
-              >
-                <InputLabel
-                  htmlFor="last-name-input"
+                {/* First name input */}
+                <FormControl
+                  variant="outlined"
+                  className="w-full"
                 >
-                  Last name
-                </InputLabel>
-                <OutlinedInput
-                  id="last-name-input"
-                  label="Last name"
-                  placeholder="Your last name"
-                  {...register("last_name")}
-                  type="text"
-                  className="
-                    w-full
-                  "
-                />
-              </FormControl>
+                  <InputLabel
+                    htmlFor="first-name-input"
+                  >
+                    First name
+                  </InputLabel>
+                  <OutlinedInput
+                    id="first-name-input"
+                    label="First name (optional)"
+                    placeholder="Your first name"
+                    {...register("first_name")}
+                    type="text"
+                    className="
+                      w-full
+                    "
+                  />
+                </FormControl>
 
-              {/* Bio input */}
-              <FormControl
-                variant="outlined"
-                className="w-full"
-              >
-                <TextField
-                  id="bio-input"
-                  label="Bio"
-                  placeholder="Your bio"
-                  {...register("bio")}
-                  type="text"
-                  rows={2}
-                  className="
-                    w-full
-                  "
-                />
-              </FormControl>
+                {/* First name input */}
+                <FormControl
+                  variant="outlined"
+                  className="w-full"
+                >
+                  <InputLabel
+                    htmlFor="last-name-input"
+                  >
+                    Last name
+                  </InputLabel>
+                  <OutlinedInput
+                    id="last-name-input"
+                    label="Last name (optional)"
+                    placeholder="Your last name"
+                    {...register("last_name")}
+                    type="text"
+                    className="
+                      w-full
+                    "
+                  />
+                </FormControl>
+
+                {/* Bio input */}
+                <FormControl
+                  variant="outlined"
+                  className="w-full"
+                >
+                  <TextField
+                    multiline
+                    id="bio-input"
+                    label="Bio (optional)"
+                    placeholder="Your bio"
+                    {...register("bio")}
+                    type="text"
+                    rows={2}
+                    className="
+                      w-full
+                    "
+                  />
+                </FormControl>
+              </Box>
 
               {/* Login Alert */}
-              {showSubmitAlert && (
+              {showSubmitAlert && showCountdown && (
                 <Alert
                   icon={
                     alertInfo?.type === "success" ?
@@ -364,27 +412,18 @@ export default function CompleteSignup() {
                 </Alert>
               )}
 
-              {showCountdown && (<Typography
-                variant="caption"
-                className="
-                  text-center
-                "
-              >
-                Redirecting in {countdown} seconds...
-              </Typography>)}
-
               {/* Form submit button */}
               <Button
                 type="submit"
                 variant="outlined"
-                disabled={isSubmitting && isValid ? true : false}
-                color={isValid ? "success" : "primary"}
+                disabled={isSubmitting || !isValid ? true : false}
+                color={"primary"}
                 size="large"
                 className="
                   w-full
                 "
               >
-                Complete signup
+                Complete profile
               </Button>
             </Box>
           </form>

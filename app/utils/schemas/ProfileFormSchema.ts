@@ -2,7 +2,8 @@ import { z } from "zod";
 
 const ProfileFormSchema = z.object({
   id: z
-    .string(),
+    .string()
+    .optional(),
   username: z
     .string()
     .min(4, "Usernames must be at least 4 characters")
@@ -15,9 +16,9 @@ const ProfileFormSchema = z.object({
     .string()
     .max(50)
     .optional(),
-  avatar_url: z
-    .string()
-    .optional(),
+  // avatar_url: z
+  //   .string()
+  //   .optional(),
   bio: z
     .string()
     .max(150)
