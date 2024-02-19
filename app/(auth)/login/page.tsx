@@ -8,6 +8,7 @@ import PasswordResetSchema  from "@/app/utils/schemas/PasswordResetSchema";
 import { createClient } from "@/app/lib/supabase/client";
 import OAuthButton from "@/app/components/auth/OAuthButton";
 import Image from "next/image";
+import Link from "next/link"
 import {
   Box,
   Typography,
@@ -17,7 +18,9 @@ import {
   InputLabel,
   FormControl,
   Button,
-  Alert
+  Alert,
+  Checkbox,
+  FormControlLabel
 } from "@mui/material";
 import {
   Visibility,
@@ -40,6 +43,7 @@ export default function AuthForm({
   const [showResetPassword, setShowResetPassword] = useState<boolean>(false);
   const [showPasswordResetAlert, setShowPasswordResetAlert] = useState<boolean>(false);
   const [showLoginAlert, setShowLoginAlert] = useState<boolean>(false);
+  const [checkedCheckbox, setCheckedCheckbox] = useState<boolean>(true);
   const [authBg, setAuthBg] = useState<number | null>(null);
   const [alertInfo, setAlertInfo] = useState<{
     type: "success" | "error" | "info" | "warning";
@@ -61,6 +65,7 @@ export default function AuthForm({
   const {
     register,
     handleSubmit,
+    watch,
     formState: {
       isValid,
       errors,
@@ -81,6 +86,8 @@ export default function AuthForm({
     resolver: zodResolver(PasswordResetSchema),
     mode: "onChange",
   });
+
+  const form = watch();
 
   useEffect(() => {
     if (authBg !== null) return;
@@ -125,6 +132,9 @@ export default function AuthForm({
       });
     }
     setShowPasswordResetAlert(true);
+    setTimeout(() => {
+      setShowPasswordResetAlert(false)
+    }, 5000);
   };
 
   // Form submission function
@@ -354,7 +364,7 @@ export default function AuthForm({
                   justify-center
                   items-center
                   w-full
-                  gap-2
+                  gap-4
                   animate-in
                 "
               >
@@ -435,125 +445,235 @@ export default function AuthForm({
                     gap-4
                   "
                 >
-                  {/* Email input */}
-                  <FormControl
-                    variant="outlined"
-                    className="w-full"
-                  >
-                    <InputLabel
-                      htmlFor="email-input"
-                    >
-                      Email
-                    </InputLabel>
-                    <OutlinedInput
-                      id="email-input"
-                      label="Email"
-                      placeholder="your@email.com"
-                      {...register("email")}
-                      error={Boolean(errors.email)}
-                      type="email"
-                      className="
-                        w-full
-                      "
-                    />
-                  </FormControl>
-                  {errors.email && (
-                    <Typography
-                      color="error"
-                      variant="caption"
-                      display="block"
-                    >
-                      {errors.email.message}
-                    </Typography>
-                  )}
-
-                  {/* Password Input */}
-                  <FormControl
-                    variant="outlined"
-                    className="w-full"
-                  >
-                    <InputLabel
-                      htmlFor="password-input"
-                    >
-                      Password
-                    </InputLabel>
-                    <OutlinedInput
-                      id="password-input"
-                      label="Password"
-                      placeholder="••••••••"
-                      {...register("password")}
-                      error={Boolean(errors.password)}
-                      type={showPassword ? 'text' : 'password'}
-                      endAdornment={
-                        <InputAdornment
-                          position="end"
-                          className="
-                            mr-2
-                          "
-                        >
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                          >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                      className="
-                        w-full
-                      "
-                    />
-                  </FormControl>
-                  {!errors.password && showSignUp && (
-                    <Typography
-                      variant="caption"
-                      display="block"
-                      className="
-                        text-neutral-400
-                      "
-                    >
-                      Passwords must be at least 8 characters long and contain numbers, letters, and special characters.
-                    </Typography>
-                  )}
-                  {errors.password && (
-                    <Typography
-                      color="error"
-                      variant="caption"
-                      display="block"
-                    >
-                      {errors.password.message}
-                    </Typography>
-                  )}
-
-                  {/* Password reset toggle */}
-                  <Typography
-                    variant="subtitle2"
-                    onClick={() => setShowResetPassword(!showResetPassword)}
+                  <Box
+                    id="email-password-container"
                     className="
-                    text-neutral-400
-                    hover:text-neutral-300
-                      cursor-pointer
-                      hover:underline
+                      flex
+                      flex-col
+                      justify-center
+                      items-center
+                      w-full
+                      gap-2
                     "
                   >
-                    Forgot your password?
-                  </Typography>
+                    {/* Email input */}
+                    <FormControl
+                      variant="outlined"
+                      className="w-full"
+                    >
+                      <InputLabel
+                        htmlFor="email-input"
+                      >
+                        Email
+                      </InputLabel>
+                      <OutlinedInput
+                        id="email-input"
+                        label="Email"
+                        placeholder="your@email.com"
+                        {...register("email")}
+                        error={Boolean(errors.email)}
+                        type="email"
+                        className="
+                          w-full
+                        "
+                      />
+                    </FormControl>
+                    {errors.email && (
+                      <Typography
+                        color="error"
+                        variant="caption"
+                        display="block"
+                      >
+                        {errors.email.message}
+                      </Typography>
+                    )}
 
-                  {/* Form submit button */}
-                  <Button
+                    {/* Password Input */}
+                    <FormControl
+                      variant="outlined"
+                      className="w-full"
+                    >
+                      <InputLabel
+                        htmlFor="password-input"
+                      >
+                        Password
+                      </InputLabel>
+                      <OutlinedInput
+                        id="password-input"
+                        label="Password"
+                        placeholder="••••••••"
+                        {...register("password")}
+                        error={Boolean(errors.password)}
+                        type={showPassword ? 'text' : 'password'}
+                        endAdornment={
+                          <InputAdornment
+                            position="end"
+                            className="
+                              mr-2
+                            "
+                          >
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleMouseDownPassword}
+                              edge="end"
+                            >
+                              {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                        className="
+                          w-full
+                        "
+                      />
+                    </FormControl>
+                    {!errors.password && showSignUp && form.password !== "" && (
+                      <Typography
+                        variant="caption"
+                        display="block"
+                        className="
+                          text-neutral-400
+                        "
+                      >
+                        Passwords must be at least 8 characters long and contain numbers, letters, and special characters.
+                      </Typography>
+                    )}
+                    {errors.password && (
+                      <Typography
+                        color="error"
+                        variant="caption"
+                        display="block"
+                      >
+                        {errors.password.message}
+                      </Typography>
+                    )}
+
+                    {/* Password reset toggle */}
+                    <Typography
+                      variant="subtitle2"
+                      onClick={() => setShowResetPassword(!showResetPassword)}
+                      className="
+                      text-neutral-400
+                      hover:text-neutral-300
+                        cursor-pointer
+                        hover:underline
+                      "
+                    >
+                      Forgot your password?
+                    </Typography>
+                  </Box>
+
+                  {/* Terms of Service Checkbox */}
+                  {showSignUp && (<Box
+                    id="terms-checkbox-container"
+                    className="
+                      flex
+                      flex-row
+                      justify-between
+                      items-center
+                      w-full
+                      gap-8
+                    "
+                  >
+                    <Typography
+                      variant="caption"
+                      component="span"
+                      className="
+                      flex-grow
+                      flex-row
+                      flex-wrap
+                      justify-start
+                      items-center
+                      gap-1
+                      text-neutral-400
+                      "
+                    >
+                      By signing up, you agree to our {""}
+                      <Link
+                        href="/terms"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <Typography
+                          variant="caption"
+                          className="
+                          text-teal-500
+                          hover:text-teal-400
+                          "
+                        >
+                          Terms of Service
+                        </Typography>
+                      </Link>
+                      {""} and {""}
+                      <Link
+                        href="/policies"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        <Typography
+                          variant="caption"
+                          className="
+                          text-teal-500
+                          hover:text-teal-400
+                          "
+                        >
+                          Policies
+                        </Typography>
+                      </Link>
+                    </Typography>
+                    <FormControlLabel
+                      required
+                      control={
+                        <Checkbox
+                          defaultChecked
+                          onClick={() => setCheckedCheckbox(!checkedCheckbox)}
+                        />
+                      }
+                      label="Required"
+                      className="
+                        justify-start
+                        items-center
+                        w-2/5
+                        -mr-2
+                      "
+                    />
+                  </Box>)}
+
+                  {/* Sign Up Button */}
+                  {showSignUp && checkedCheckbox && ( <Button
                     type="submit"
                     variant="outlined"
-                    disabled={isSubmitting && isValid ? true : false}
+                    disabled={
+                      isSubmitting && 
+                      isValid && 
+                      !checkedCheckbox 
+                      ? true : false
+                    }
                     color={isValid ? "success" : "primary"}
                     size="large"
                     className="
                       w-full
                     "
                   >
-                    {!showSignUp ? "Log in" : "Sign up"}
-                  </Button>
+                    Sign up
+                  </Button>)}
+                  {/* Sign In Button */}
+                  {!showSignUp && ( <Button
+                    type="submit"
+                    variant="outlined"
+                    disabled={
+                      isSubmitting && 
+                      isValid 
+                      ? true : false
+                    }
+                    color={isValid ? "success" : "primary"}
+                    size="large"
+                    className="
+                      w-full
+                    "
+                  >
+                    Sign in
+                  </Button>)}
 
                   {/* Register toggle */}
                   <Box

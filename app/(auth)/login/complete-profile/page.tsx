@@ -140,6 +140,9 @@ export default function CompleteProfile() {
       });
     }
     setShowSubmitAlert(true);
+    setTimeout(() => {
+      setShowSubmitAlert(false)
+    }, 5000);
   };
 
   return (
