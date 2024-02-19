@@ -187,8 +187,8 @@ export default function AuthForm({
         bg-neutral-950
         lg:px-48
         px-8
-        lg:gap-24
-        gap-12
+        lg:gap-12
+        gap-8
         pb-8
         lg:pb-0
       "
@@ -366,7 +366,7 @@ export default function AuthForm({
                     justify-center
                     items-center
                     w-full
-                    gap-4
+                    gap-2
                   "
                 >
                   <OAuthButton
@@ -375,13 +375,18 @@ export default function AuthForm({
                     disabled={false}
                   />
                   <OAuthButton
+                    cta={showSignUp ? "Sign up with GitHub" : "Log in with GitHub"}
+                    provider="github"
+                    disabled={false}
+                  />
+                  <OAuthButton
                     cta={showSignUp ? "Sign up with Discord" : "Log in with Discord"}
                     provider="discord"
                     disabled={false}
                   />
                   <OAuthButton
-                    cta={showSignUp ? "Sign up with GitHub" : "Log in with GitHub"}
-                    provider="github"
+                    cta={showSignUp ? "Sign up with Twitch" : "Log in with Twitch"}
+                    provider="twitch"
                     disabled={false}
                   />
                 </Box>
@@ -501,6 +506,17 @@ export default function AuthForm({
                       "
                     />
                   </FormControl>
+                  {!errors.password && showSignUp && (
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      className="
+                        text-neutral-400
+                      "
+                    >
+                      Passwords must be at least 8 characters long and contain numbers, letters, and special characters.
+                    </Typography>
+                  )}
                   {errors.password && (
                     <Typography
                       color="error"

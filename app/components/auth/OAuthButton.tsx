@@ -1,18 +1,15 @@
 // TODO: Fix logout flow
-
 "use client";
 
 import React, { useState, useEffect } from "react";
 import { createClient } from "@/app/lib/supabase/client";
 import { Button } from "@mui/material";
 import { Google, GitHub } from "@mui/icons-material";
-import { FaDiscord } from "react-icons/fa";
-
-// MUI doesn't have a Discord icon
+import { FaDiscord, FaTwitch } from "react-icons/fa";
 
 type NewAuthButtonProps = {
   cta: string | null;
-  provider: "google" | "github" | "discord" | null;
+  provider: "google" | "github" | "discord" | "twitch" | null;
   disabled?: boolean;
 };
 
@@ -39,6 +36,9 @@ export default function OAuthButton({
       case "discord":
         setProviderIcon(<FaDiscord />);
         break;
+      case "twitch":
+        setProviderIcon(<FaTwitch />);
+        break;
       default:
         setProviderIcon(null);
         break;
@@ -47,11 +47,15 @@ export default function OAuthButton({
 
   const handleSignIn = async () => {
     if (provider !== null) {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: provider,
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
+      const {
+        error
+      } = await supabase
+        .auth
+        .signInWithOAuth({
+          provider: provider,
+          options: {
+            redirectTo: `${window.location.origin}/auth/callback`,
+          },
       });
       if (error) {
         console.log(error);

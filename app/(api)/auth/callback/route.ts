@@ -12,20 +12,47 @@ export async function GET(req: NextRequest) {
   if (code) {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
-    const { error } = await supabase
+    
+    // Exchange code for session
+    const {
+      data,
+      error
+    } = await supabase
       .auth
       .exchangeCodeForSession(code);
 
     if (error) {
-      console.log(
-        `Error when attempting to exchange code for session: ${error.message}`,
-      );
       return NextResponse.redirect(
         `${url.origin}/login?error=${encodeURIComponent(error.message)}`,
       );
+    } 
+    
+    if (data?.session && data?.session.user) {
+      // Check if user has a profile
+      const {
+        data: profile,
+        error: profileError,
+      } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", data.session.user.id)
+        .maybeSingle();
+      
+      // If user has no profile, redirect to complete profile
+      if (profileError || !profile) {
+        return NextResponse.redirect(
+          `${url.origin}/login/complete-profile`
+          );
+      }
+
+      // If user has profile, redirect to dashboard
+      return NextResponse.redirect(
+        `${url.origin}/dashboard`
+      );
     }
   }
-
-  // URL to redirect to after sign in process completes
-  return NextResponse.redirect(`${url.origin}/login`);
+  // If no code, redirect to login
+  return NextResponse.redirect(
+    `${url.origin}/login`
+  );
 }

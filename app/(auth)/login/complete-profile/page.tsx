@@ -8,6 +8,7 @@ import ProfileFormSchema from "@/app/utils/schemas/ProfileFormSchema";
 import { createClient } from "@/app/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { debounce } from "lodash";
 import {
   Box,
   Typography,
@@ -22,6 +23,7 @@ import {
   Check,
   Error
 } from "@mui/icons-material";
+import checkUsernameUnique from "@/app/lib/actions/supabase-data/checkUsernameUnique";
 
 export default function CompleteProfile() {
   const supabase = createClient();
@@ -63,6 +65,7 @@ export default function CompleteProfile() {
   } | null>(null);
 
   const watchId = watch("id");
+  const debouncedCheckUsernameUnique = debounce(checkUsernameUnique, 300);
 
   // Randomize the background image
   useEffect(() => {
@@ -110,6 +113,8 @@ export default function CompleteProfile() {
           message: "Error creating profile. Please try again."
         });
       } else if (!error) {
+        // TODO: Log new user in PostHog
+
         setAlertInfo({
           type: "success",
           message: `Profile created successfully! Redirecting in ${countdown}...`
@@ -315,7 +320,12 @@ export default function CompleteProfile() {
                     id="username-input"
                     label="Username"
                     placeholder="Your username"
-                    {...register("username")}
+                    {...register("username", {
+                      required: "Username is required",
+                      validate: async (
+                        value: string
+                      ) => await debouncedCheckUsernameUnique(value) || "Username is already taken."
+                    })}
                     error={Boolean(errors.username)}
                     type="text"
                     className="
