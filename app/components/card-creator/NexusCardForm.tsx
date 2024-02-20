@@ -44,10 +44,16 @@ import SpeedSelect from "@/app/components/card-creator/SpeedSelect";
 import EnergyCostIcons from "@/app/components/card-creator/EnergyCostIcons";
 import CustomInput from "@/app/components/card-creator/CustomInput";
 
+// Add debouncer to reduce input lag
+
 export default function NexusCardForm() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { setValue, control, watch } =
-    useFormContext<CardFormDataType>();
+  const {
+    setValue,
+    control,
+    watch
+  } = useFormContext<CardFormDataType>();
+
   const formCardData = watch();
   const activeCardCost = watch("cardEnergyCost");
   const activeCardType = watch("cardType");
@@ -346,7 +352,12 @@ export default function NexusCardForm() {
               "
             >
               {/* Super type */}
-              {["object", "entity", "effect", "node"].includes(
+              {[
+                "object",
+                "entity",
+                "effect",
+                "node"
+              ].includes(
                 formCardData.cardType,
               ) && (
                 <Controller

@@ -23,7 +23,7 @@ import {
 } from "@mui/icons-material"
 import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
 
-type ArtPromptAccordionProps = {
+export type ArtPromptAccordionProps = {
   category: keyof typeof ArtPromptOptions;
   title: string;
   selectedOptions: string;
@@ -45,7 +45,19 @@ const categoryIcons = {
   composition: <LocalSee className="text-neutral-400" />,
 };
 
-export default function ArtPromptAccordion({
+export const ArtPromptAccordionData = [
+  { category: "style", title: "Style" },
+  { category: "color", title: "Color" },
+  { category: "technique", title: "Technique" },
+  { category: "subject", title: "Subject" },
+  { category: "setting", title: "Setting" },
+  { category: "time", title: "Time" },
+  { category: "weather", title: "Weather" },
+  { category: "mood", title: "Mood" },
+  { category: "composition", title: "Composition" },
+];
+
+export function ArtPromptAccordion({
   category,
   title,
   onSelectionChange,
