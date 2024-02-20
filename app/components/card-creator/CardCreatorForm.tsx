@@ -4,8 +4,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { DashboardContext } from "@/app/context/DashboardContext";
 import useSession from "@/app/hooks/useSession";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CardFormDataType } from "@/app/utils/types/types";
 import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
@@ -13,6 +12,7 @@ import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
 import ConstructArtPrompt from "@/app/lib/actions/constructArtPrompt";
 import convertCardCodeToImage from "@/app/lib/actions/convertCardCodeToImage"
 import uploadCardImage from "@/app/lib/actions/supabase-data/uploadCardImage";
+import { postCardToDiscord } from "@/app/lib/actions/postCardToDiscord";
 import ArtPromptAccordion from "@/app/components/card-creator/ArtPromptAccordion";
 import Image from "next/image";
 import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
@@ -195,13 +195,12 @@ export default function CardCreatorForm() {
             ) {
             posthog.capture({
               distinctId: session.user.id,
-              event: '🎨 New Card Image Generated'
+              event: "🎨 New Card Image Generated"
             })
           }
         }
 
         setGenerateArtLimit(generateArtLimit + 1);
-        setValue("cardArtPrompt", "");
         setValue("cardArt", imageUrl);
         setCardArtOptions(prev => [...prev, imageUrl]);
         setActiveCardArtOption(cardArtOptions.length);
@@ -238,7 +237,9 @@ export default function CardCreatorForm() {
   }, [intervalId]);
   
   // Submit form data
-  async function onSubmit(data: CardFormDataType) {
+  async function onSubmit(
+    data: CardFormDataType
+  ) {
     if (!userId) {
       setError("user_id", {
         type: "manual",
@@ -298,6 +299,13 @@ export default function CardCreatorForm() {
             event: '🎉 New Card Submitted'
           })
         }
+
+        // Post the card to Discord channel
+        postCardToDiscord({
+          cardName: data.cardName,
+          cardRender: imagePublicUrl,
+          cardCreator: data.cardCreator
+        });
 
         setIsSubmitted(true);
         setAlertMessage('Card submitted successfully!')
@@ -488,7 +496,7 @@ export default function CardCreatorForm() {
                   {...register("cardArtPrompt")}
                   error={Boolean(errors.cardArtPrompt)}
                   helperText={errors.cardArtPrompt?.message}
-                  rows={2}
+                  rows={4}
                   variant="outlined"
                   className="
                     flex
@@ -527,11 +535,11 @@ export default function CardCreatorForm() {
                               ) : (
                                 <Badge
                                   badgeContent={generateArtLimit ? 3 - generateArtLimit : 3}
-                                  color={generateArtLimit < 3 ? "error" : "primary"}
+                                  color={generateArtLimit >= 3 ? "error" : "success"}
                                 >
                                   <SendIcon
                                     className={clsx("",
-                                      cardArtPrompt === "" ? "text-neutral-500" : "text-lime-500"
+                                      cardArtPrompt === "" ? "text-neutral-700" : "text-neutral-300"
                                     )}
                                   />
                                 </Badge>
@@ -553,18 +561,22 @@ export default function CardCreatorForm() {
                     items-start
                     flex-wrap
                     w-full
-                    gap-3
+                    gap-2
                   "
                 >
                   {Object.entries(artPromptSelections).map(
                     ([category, selection]) => (
                     <Typography
                       key={category}
-                      variant="overline"
+                      variant="caption"
                       className="
-                        text-neutral-500
+                        text-teal-500
+                        font-light
                         rounded-full
                         text-xs
+                        bg-teal-900/50
+                        px-2
+                        py-1
                       "
                     >
                       {selection}
@@ -613,7 +625,7 @@ export default function CardCreatorForm() {
                       variant="subtitle2"
                       className="
                         font-semibold
-                        text-lime-500
+                        text-teal-500
                       "
                     >
                       ART DIRECTION
@@ -622,17 +634,17 @@ export default function CardCreatorForm() {
                       variant="overline"
                       component={"span"}
                       className="
-                        text-lime-500
+                        text-teal-500
                       "
                     >
-                      {Object.keys(artPromptSelections).length} {" "}
+                      {Object.keys(artPromptSelections).length}
                       <Typography
                         variant="overline"
                         className="
                           text-neutral-500
                         "
                       >
-                        / 8 selected
+                        /9 selected
                       </Typography>
                     </Typography>
                   </Box>
@@ -683,7 +695,7 @@ export default function CardCreatorForm() {
                     category="color"
                     title="Color"
                     selectedOptions={
-                      artPromptSelections["style"] || ""
+                      artPromptSelections["color"] || ""
                     }
                     onSelectionChange={handleSelectionChange}
                   />

@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
         },
       });
     }
-  
+
     return new NextResponse(JSON.stringify({ data }), {
       status: 200,
       headers: {

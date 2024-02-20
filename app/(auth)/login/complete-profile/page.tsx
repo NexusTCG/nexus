@@ -6,6 +6,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ProfileFormSchema from "@/app/utils/schemas/ProfileFormSchema";
 import { createClient } from "@/app/lib/supabase/client";
+import PostHogClient from "@/app/lib/posthog/posthog";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { debounce } from "lodash";
@@ -29,6 +30,7 @@ export default function CompleteProfile() {
   const supabase = createClient();
   const router = useRouter();
   const session = useSession();
+  const posthog = PostHogClient();
   const methods = useForm({
     defaultValues: {
       id: "",
@@ -113,8 +115,15 @@ export default function CompleteProfile() {
           message: "Error creating profile. Please try again."
         });
       } else if (!error) {
-        // TODO: Log new user in PostHog
 
+        // Log new user profile creation event in PostHog
+        if (session?.user.id) {
+          posthog.capture({
+            distinctId: session.user.id,
+            event: "🤩 New User Profile Created"
+          })
+        }
+        
         setAlertInfo({
           type: "success",
           message: `Profile created successfully! Redirecting in ${countdown}...`

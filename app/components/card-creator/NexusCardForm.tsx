@@ -26,7 +26,7 @@ import {
   Tooltip,
   Fade,
   Snackbar,
-  Divider
+  Divider,
 } from "@mui/material/";
 import Image from "next/image";
 import clsx from "clsx";
@@ -68,6 +68,37 @@ export default function NexusCardForm() {
 
   // Snackbars
   const [openGradeSnackbar, setOpenGradeSnackBar] = React.useState(false);
+
+  // Dynamically adjust text size, line height and rows based on text length
+  const textLength = activeCardText.length;
+  const maxChars = 440;
+  let fontSize: string, lineHeight: string, textRows: number, flavorTextVisible: boolean;
+
+  if (textLength <= 110) {
+    // Default size
+    fontSize = '1rem';
+    lineHeight = '1.5rem';
+    textRows = 4;
+    flavorTextVisible = true;
+  } else if (textLength <= 220) {
+    // Medium size
+    fontSize = '0.9375rem';
+    lineHeight = '1.375rem';
+    textRows = 5;
+    flavorTextVisible = textLength <= maxChars / 6;
+  } else if (textLength <= 330) {
+    // Small size
+    fontSize = '0.85rem';
+    lineHeight = '1.25rem';
+    textRows = 7;
+    flavorTextVisible = textLength <= 295;
+  } else {
+    // Extra small size
+    fontSize = '0.75rem';
+    lineHeight = '1.1rem';
+    textRows = 10;
+    flavorTextVisible = false;
+  } 
 
   // useEffects to determine color type based on cost
   useEffect(() => {
@@ -160,18 +191,21 @@ export default function NexusCardForm() {
     <Box
       id="card-border"
       sx={{
-        aspectRatio: "5 / 7"
+        aspectRatio: "5 / 7",
+        width: "400px",
+        height: "560px",
+        
       }}
+        // h-full
+        // w-full
+        // max-w-[500px]
+        // max-h-[700px]
       className="
         relative
         flex
         flex-col
         justify-start
         items-center
-        w-full
-        h-full
-        max-w-[500px]
-        max-h-[700px]
         rounded-2xl
         bg-black
         px-4
@@ -271,12 +305,14 @@ export default function NexusCardForm() {
               handleEnergyCostPopoverOpen={handleEnergyCostPopoverOpen}
             />)}
 
+            {/* Energy cost popover */}
             {formCardData.cardType !== "node" && (<EnergyCostPopover
               anchorEl={energyCostAnchorEl}
               handleClose={handleEnergyCostPopoverClose}
               energyCostChangeCounter={energyCostChangeCounter}
               setEnergyCostChangeCounter={setEnergyCostChangeCounter}
             />)}
+            
           </Box>
 
           {/* Card types and speed */}
@@ -477,6 +513,13 @@ export default function NexusCardForm() {
                           },
                         }}
                         renderValue={(selected) => selected.join(' ')}
+                        MenuProps={{
+                          PaperProps: {
+                            style: {
+                              maxHeight: 176,
+                            },
+                          },
+                        }}
                       >
                         {formCardData.cardType === "entity" &&
                           Object.entries(
@@ -630,7 +673,8 @@ export default function NexusCardForm() {
                     multiline
                     size="small"
                     variant="standard"
-                    rows={activeCardText.length > 200 ? 7 : 4}
+                    // rows={activeCardText.length > 200 ? 7 : 4}
+                    rows={textRows}
                     error={!!fieldState.error}
                     placeholder={
                       !fieldState.error ? 'Type "/" to insert a keyword ability.':
@@ -643,7 +687,11 @@ export default function NexusCardForm() {
                       }
                     )}
                     inputProps={{
-                      maxLength: 280
+                      maxLength: 440,
+                      style: {
+                        fontSize: fontSize,
+                        lineHeight: lineHeight,
+                      }
                     }}
                     sx={{
                       '& .MuiInputBase-input': {
@@ -677,7 +725,8 @@ export default function NexusCardForm() {
               )}
               
               {/* Card flavor text */}
-              {activeCardText.length <= 200 && (
+              {/* {activeCardText.length <= 200 && ( */}
+              {flavorTextVisible && (
                 <Controller
                   name="cardFlavorText"
                   control={control}
@@ -746,44 +795,50 @@ export default function NexusCardForm() {
               name="cardAttack"
               control={control}
               render={({ field, fieldState }) => (
-                <TextField
-                  {...field}
-                  size="small"
-                  variant="standard"
-                  placeholder="0"
-                  className="
-                    flex
-                    justify-center
-                    items-center
-                    w-full
-                    absolute
-                    z-10
-                    top-0
-                    bottom-0
-                    right-0
-                    left-0
-                    text-center
-                    px-6
-                  "
-                  error={!!fieldState.error}
-                  inputProps={{
-                    maxLength: 2
-                  }}
-                  sx={{
-                    '& .MuiInputBase-input': {
-                      color: 'black',
-                    },
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderColor: 'black',
-                    },
-                    '&:hover .MuiOutlinedInput-notchedOutline': {
-                      borderColor: 'lightblue',
-                    },
-                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      borderColor: 'blue',
-                    },
-                  }}
-                />
+                <Tooltip
+                  title="Entity attack"
+                  placement="top"
+                >
+                  <TextField
+                    {...field}
+                    size="small"
+                    variant="standard"
+                    placeholder="0"
+                    type="number"
+                    className="
+                      flex
+                      justify-center
+                      items-center
+                      w-full
+                      absolute
+                      z-10
+                      top-0
+                      bottom-0
+                      right-0
+                      left-0
+                      text-center
+                      px-6
+                    "
+                    error={!!fieldState.error}
+                    inputProps={{
+                      maxLength: 2
+                    }}
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        color: 'black',
+                      },
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'black',
+                      },
+                      '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'lightblue',
+                      },
+                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'blue',
+                      },
+                    }}
+                  />
+                </Tooltip>
               )}
             />
             <Image
@@ -897,50 +952,58 @@ export default function NexusCardForm() {
               relative
             "
           >
+            
             <Controller
               name="cardDefense"
               control={control}
               render={({ field, fieldState }) => (
-                <TextField
-                  {...field}
-                  size="small"
-                  variant="standard"
-                  placeholder="0"
-                  className="
-                    flex
-                    justify-center
-                    items-center
-                    w-full
-                    absolute
-                    z-10
-                    top-0
-                    bottom-0
-                    right-0
-                    left-0
-                    text-center
-                    px-6
-                  "
-                  sx={{
-                    '& .MuiInputBase-input': {
-                      color: 'black',
-                    },
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderColor: 'black',
-                    },
-                    '&:hover .MuiOutlinedInput-notchedOutline': {
-                      borderColor: 'lightblue',
-                    },
-                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                      borderColor: 'blue',
-                    },
-                  }}
-                  error={!!fieldState.error}
-                  inputProps={{
-                    maxLength: 2
-                  }}
-                />
+                <Tooltip
+                  title="Entity defense"
+                  placement="top"
+                >
+                  <TextField
+                    {...field}
+                    size="small"
+                    variant="standard"
+                    placeholder="0"
+                    type="number"
+                    className="
+                      flex
+                      justify-center
+                      items-center
+                      w-full
+                      absolute
+                      z-10
+                      top-0
+                      bottom-0
+                      right-0
+                      left-0
+                      text-center
+                      px-6
+                    "
+                    sx={{
+                      '& .MuiInputBase-input': {
+                        color: 'black',
+                      },
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'black',
+                      },
+                      '&:hover .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'lightblue',
+                      },
+                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'blue',
+                      },
+                    }}
+                    error={!!fieldState.error}
+                    inputProps={{
+                      maxLength: 2
+                    }}
+                  />
+                </Tooltip>
               )}
             />
+            
             <Image
               src={`${cardPartPath.base}/card-parts${cardPartPath.stats}/defense.png`}
               width={72}
