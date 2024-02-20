@@ -234,6 +234,25 @@ export default function Create() {
 
                 console.log("Uploaded card ID: ", cardId, cardIdError);
 
+                // Post card to Discord
+                if (postToDiscord) {
+                  if (cardId) {
+                    postCardToDiscord({
+                      cardName: data.cardName,
+                      cardRender: imagePublicUrl,
+                      cardCreator: data.cardCreator,
+                      cardIdUrl: `https://www.play.nexus/dashboard/cards/${cardId.id}`
+                    });
+                  } else {
+                    postCardToDiscord({
+                      cardName: data.cardName,
+                      cardRender: imagePublicUrl,
+                      cardCreator: data.cardCreator,
+                      cardIdUrl: ""
+                    });
+                  }
+                }
+
               if (cardIdError) {
                 setAlertInfo({
                   type: "error",
@@ -257,15 +276,7 @@ export default function Create() {
             }
           }
 
-          // Post card to Discord
-          if (postToDiscord) {
-            postCardToDiscord({
-              cardName: data.cardName,
-              cardRender: imagePublicUrl,
-              cardCreator: data.cardCreator,
-              cardIdUrl: `https://www.play.nexus/dashboard/cards/${data.user_id}`
-            });
-          }
+          
 
         } else {
           setAlertInfo({
