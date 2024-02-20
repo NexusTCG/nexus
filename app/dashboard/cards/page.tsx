@@ -130,32 +130,6 @@ export default function Cards() {
             shadow-neutral-950/25
           "
         >
-          {/* <Box
-            id="cards-header-content"
-            className="
-              w-full
-              flex
-              flex-row
-              justify-between
-              gap-4
-            "
-          >
-            <Typography
-              variant="h4"
-              className="
-                font-medium
-              "
-            >
-              Community gallery
-            </Typography>
-            <Button
-              variant="outlined"
-              size="small"
-              startIcon={<AddIcon />}
-            >
-              Create card
-            </Button>
-          </Box> */}
           <Box
             id="cards-sort-pagination"
             className="

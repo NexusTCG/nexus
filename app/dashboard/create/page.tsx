@@ -18,12 +18,15 @@ import convertCardCodeToImage from "@/app/lib/actions/convertCardCodeToImage"
 import uploadCardImage from "@/app/lib/actions/supabase-data/uploadCardImage";
 import { postCardToDiscord } from "@/app/lib/actions/postCardToDiscord";
 import { createClient } from "@/app/lib/supabase/client";
+import clsx from "clsx";
+import Link from "next/link";
 import {
   FormControlLabel,
   LinearProgress,
   Typography,
+  Checkbox,
+  Snackbar,
   Button,
-  Switch,
   Alert,
   Box,
 } from "@mui/material";
@@ -31,7 +34,7 @@ import {
   Check,
   Error,
   Info,
-  Save
+  Save,
 } from "@mui/icons-material";
 
 export default function Create() {
@@ -80,8 +83,10 @@ export default function Create() {
   } = methods;
 
   // States
-  const [postToDiscord, setPostToDiscord] = useState<boolean>(false);
+  const [postToDiscord, setPostToDiscord] = useState<boolean>(true);
   const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [alertInfo, setAlertInfo] = useState<{
     type: "success" | "error" | "info" | "warning";
     icon: React.ReactNode;
@@ -121,6 +126,27 @@ export default function Create() {
     userProfileData,
     setValue
   ]);
+
+  // Re-open snackbar when message changes
+  useEffect(() => {
+    if (snackbarMessage === "") {
+      return;
+    } else if (!openSnackbar) {
+      setOpenSnackbar(true);
+    }
+  }, [snackbarMessage]);
+
+  // Post to Discord change handler
+  function handlePostToDiscordChange() {
+    const newPostToDiscord = !postToDiscord;
+    setPostToDiscord(newPostToDiscord);
+    setOpenSnackbar(false);
+    setSnackbarMessage(
+      newPostToDiscord ? 
+      "Posting to Discord!" : 
+      "Not posting to Discord!"
+    );
+  };
 
   // Form submit handler
   async function onSubmit(
@@ -181,15 +207,6 @@ export default function Create() {
             message: "Card submitted successfully! Redirecting..."
           });
 
-          // Post card to Discord
-          if (postToDiscord) {
-            postCardToDiscord({
-              cardName: data.cardName,
-              cardRender: imagePublicUrl,
-              cardCreator: data.cardCreator
-            });
-          }
-
           // Track event in PostHog
           if (session && session.user && session.user.id) {
             posthog.capture({
@@ -239,6 +256,17 @@ export default function Create() {
               console.log("Error redirecting: ", error);
             }
           }
+
+          // Post card to Discord
+          if (postToDiscord) {
+            postCardToDiscord({
+              cardName: data.cardName,
+              cardRender: imagePublicUrl,
+              cardCreator: data.cardCreator,
+              cardIdUrl: `https://www.play.nexus/dashboard/cards/${data.user_id}`
+            });
+          }
+
         } else {
           setAlertInfo({
             type: "error",
@@ -261,181 +289,240 @@ export default function Create() {
   };
   
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Box
-          id="create-container"
-          className="
-            flex
-            flex-col
-            justify-start
-            items-center
-            w-full
-            gap-4
-          "
-        >
+    <>
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Box
-            id="create-header-container"
-            className="
-              w-full
-              h-full
-              flex
-              flex-col
-              justify-between
-              items-center
-              gap-4
-              lg:pl-12
-              md:pl-8
-              sm:pl-4
-              lg:pr-12
-              md:pr-8
-              sm:pr-4
-              px-6
-              py-4
-              bg-neutral-800
-              border-b
-            border-neutral-700
-              top-0
-              sticky
-              z-20
-              md:shadow-md
-              md:shadow-neutral-900/50
-            "
-          >
-            <Box
-              id="create-header-content"
-              className="
-                flex
-                flex-row
-                justify-between
-                items-center
-                w-full
-                gap-8
-              "
-            >
-              {/* Card Name + Creator */}
-              <Box
-                id="card-name-creator-container"
-                className="
-                  flex
-                  flex-row
-                  justify-between
-                  items-baseline
-                  gap-2
-                "
-              >
-                {/* Card Name */}
-                <Typography
-                  variant="h4"
-                  className="
-                    font-semibold
-                  "
-                >
-                  {
-                    form.cardName ? 
-                    form.cardName : 
-                    "Card Name"
-                  }
-                </Typography>
-                {/* Card Creator*/}
-                <Typography
-                  variant="overline"
-                  className="text-emerald-400"
-                >
-                  <Typography
-                    variant="overline"
-                    className="text-neutral-400"
-                    component="span"
-                  >
-                    by{" "}
-                  </Typography>
-                    {
-                      userProfileData?.username ? 
-                      userProfileData?.username : 
-                      "Card creator"
-                    }
-                </Typography>
-              </Box>
-
-              {/* Upload to Discord */}
-              <FormControlLabel
-                required
-                onClick={() => setPostToDiscord(!postToDiscord)}
-                control={<Switch />}
-                label="Post to Nexus Discord"
-              />
-
-              {/* Save button */}
-              {!isSubmitting && !showAlertInfo ? (
-                <Button
-                  type="submit"
-                  variant="outlined"
-                  disabled={
-                    !isValid || 
-                    isSubmitting ||
-                    form.cardArt === "/images/card-parts/card-art/default-art.jpg"
-                  }
-                  color={isValid ? "success" : "secondary"}
-                  startIcon={<Save />}
-                  size="large"
-                >
-                  Save card
-                </Button>
-              ) : (
-                <Alert
-                  severity={alertInfo?.type}
-                  icon={
-                    alertInfo ? 
-                    alertInfo.icon : 
-                    undefined
-                  }
-                >
-                  {
-                    alertInfo ? 
-                    alertInfo.message : 
-                    "Error"
-                  }
-                </Alert>
-              )}
-            </Box>
-            {isSubmitting && (<LinearProgress
-              color="secondary"
-              className="w-full"
-            />)}
-          </Box>
-          <Box
-            id="create-form-container"
+            id="create-container"
             className="
               flex
               flex-col
               justify-start
               items-center
               w-full
-              lg:px-12
-              md:px-8
-              sm:px-6
-              lg:mb-12
-              mb-8
-              md:mt-4
+              gap-4
             "
           >
-            {/* Card Creator Form */}
-            <CardCreatorForm />
+            <Box
+              id="create-header-container"
+              className="
+                w-full
+                h-full
+                flex
+                flex-col
+                justify-between
+                items-center
+                bg-neutral-800
+                border-b
+              border-neutral-700
+                top-0
+                sticky
+                z-20
+                md:shadow-md
+                md:shadow-neutral-900/50
+              "
+            >
+              <Box
+                id="create-header-content"
+                className="
+                  flex
+                  flex-row
+                  justify-between
+                  items-center
+                  w-full
+                  gap-8
+                  lg:pl-12
+                  md:pl-8
+                  sm:pl-4
+                  lg:pr-12
+                  md:pr-8
+                  sm:pr-4
+                  px-6
+                  py-4
+                "
+              >
+                {/* Card Name + Creator */}
+                <Box
+                  id="card-name-creator-container"
+                  className="
+                    flex
+                    flex-row
+                    justify-between
+                    items-baseline
+                    gap-2
+                  "
+                >
+                  {/* Card Name */}
+                  <Typography
+                    variant="h4"
+                    className="
+                      font-semibold
+                    "
+                  >
+                    {
+                      form.cardName ? 
+                      form.cardName : 
+                      "Card Name"
+                    }
+                  </Typography>
+                  {/* Card Creator*/}
+                  <Typography
+                    variant="overline"
+                    className="text-emerald-400"
+                  >
+                    <Typography
+                      variant="overline"
+                      className="text-neutral-400"
+                      component="span"
+                    >
+                      by{" "}
+                    </Typography>
+                      {
+                        userProfileData?.username ? 
+                        userProfileData?.username : 
+                        "Card creator"
+                      }
+                  </Typography>
+                </Box>
+
+                <Box
+                  id="card-submit-container"
+                  className="
+                    flex
+                    flex-row
+                    justify-between
+                    items-baseline
+                    gap-2
+                  "
+                >
+                  {/* Upload to Discord */}
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={postToDiscord}
+                        onChange={handlePostToDiscordChange}
+                      />
+                    }
+                    label={
+                      <Typography
+                        variant="caption"
+                        component="span"
+                        className="
+                          w-full
+                          font-medium
+                          mt-1
+                          gap-1
+                        "
+                      >
+                        Post card to {""}
+                        <Link
+                          href="/https://discord.gg/HENgvaAmk2"
+                          target="_blank"
+                        >
+                          <Typography
+                            variant="caption"
+                            component="span"
+                            className="
+                            text-teal-400
+                            hover:text-teal-300
+                            hover:underline
+                            "
+                          >
+                            Nexus&apos;s Discord
+                          </Typography>
+                        </Link>
+                      </Typography>
+                    }
+                    className={clsx("hover:opacity-100 text-sm", {
+                      "opacity-100": postToDiscord,
+                      "opacity-50": !postToDiscord,
+                    })}
+                  />
+                  {/* Save button */}
+                  {!isSubmitting && !showAlertInfo ? (
+                    <Button
+                      type="submit"
+                      variant="outlined"
+                      disabled={
+                        !isValid || 
+                        isSubmitting ||
+                        form.cardArt === "/images/card-parts/card-art/default-art.jpg"
+                      }
+                      color={isValid ? "success" : "secondary"}
+                      startIcon={<Save />}
+                      size="large"
+                    >
+                      Save card
+                    </Button>
+                  ) : (
+                    <Alert
+                      severity={alertInfo?.type}
+                      icon={
+                        alertInfo ? 
+                        alertInfo.icon : 
+                        undefined
+                      }
+                    >
+                      {
+                        alertInfo ? 
+                        alertInfo.message : 
+                        "Error"
+                      }
+                    </Alert>
+                  )}
+                </Box>
+              </Box>
+              {isSubmitting && (<LinearProgress
+                color="primary"
+                className="w-full"
+              />)}
+            </Box>
+            <Box
+              id="create-form-container"
+              className="
+                flex
+                flex-col
+                justify-start
+                items-center
+                w-full
+                lg:px-12
+                md:px-8
+                sm:px-6
+                lg:mb-12
+                mb-8
+                md:mt-4
+              "
+            >
+              {/* Card Creator Form */}
+              <CardCreatorForm />
+            </Box>
           </Box>
-        </Box>
-      </form>
-    </FormProvider>
+        </form>
+      </FormProvider>
+      {openSnackbar && (<Snackbar
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right"
+        }}
+      >
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
+          severity={
+            postToDiscord ? 
+            "success" : 
+            "error"
+          }
+          className="
+            w-full
+            rounded-md
+          "
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>)}
+    </>
   );
 }
-
-// const [
-//   placeholderFormValidation,
-//   setPlaceholderFormValidation
-// ] = React.useState<boolean>(false); // Remove ??
-//  // Remove ??
-
-// useEffect(() => {
-//   if (!placeholderFormValidation) {
-//     setPlaceholderFormValidation(true);
-//   }
-// }, [placeholderFormValidation]); // Remove ??
