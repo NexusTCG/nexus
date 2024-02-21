@@ -1,14 +1,12 @@
 "use client";
 
-import React, {
-  useState,
-  useEffect
-} from "react";
+import React, { useState, useEffect } from "react";
 import { DashboardContext } from "@/app/context/DashboardContext";
-import useSession from "@/app/hooks/useSession";
 import fetchUserProfiles from "@/app/lib/actions/supabase-data/fetchUserProfilesData";
 import { UserProfilesTableType } from "@/app/utils/types/supabase/userProfilesTableType";
-import Sidebar from '@/app/components/sidebar/Sidebar';
+import useSession from "@/app/hooks/useSession";
+import Sidebar from '@/app/components/navigation/Sidebar';
+import AppBar from '@/app/components/navigation/AppBar';
 import { Box } from '@mui/material';
 
 export default function DashboardLayout({
@@ -17,7 +15,10 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
 
-  const [userProfileData, setUserProfileData] = useState<UserProfilesTableType | undefined>();
+  const [
+    userProfileData,
+    setUserProfileData
+  ] = useState<UserProfilesTableType | undefined>();
   const user = useSession()?.user;
   
   useEffect(() => {
@@ -46,16 +47,18 @@ export default function DashboardLayout({
   
   return (
     <Box
+      id="dashboard-layout-container"
       className="
         flex
-        flex-row
+        lg:flex-row
+        flex-col
         justify-start
         items-start
         w-full
-        z-30
       "
     >
       <Box
+        id="sidebar-container"
         className="
           sticky
           top-0
@@ -64,9 +67,24 @@ export default function DashboardLayout({
           h-screen
         "
       >
+        {/* Sidebar */}
         <Sidebar />
       </Box>
       <Box
+        id="appbar-container"
+        className="
+          sticky
+          top-0
+          lg:hidden
+          block
+          w-full
+        "
+      >
+        {/* AppBar */}
+        <AppBar />
+      </Box>
+      <Box
+        id="dashboard-content-container"
         className="
           flex
           flex-col

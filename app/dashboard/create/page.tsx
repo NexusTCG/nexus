@@ -19,7 +19,6 @@ import uploadCardImage from "@/app/lib/actions/supabase-data/uploadCardImage";
 import { postCardToDiscord } from "@/app/lib/actions/postCardToDiscord";
 import { createClient } from "@/app/lib/supabase/client";
 import clsx from "clsx";
-import Link from "next/link";
 import {
   FormControlLabel,
   LinearProgress,
@@ -349,7 +348,10 @@ export default function Create() {
                   md:pr-8
                   sm:pr-4
                   px-6
-                  py-4
+                  py-2
+                  lg:py-4
+                  bg-neutral-700/20
+                  lg:bg-transparent
                 "
               >
                 {/* Card Name + Creator */}
@@ -368,6 +370,8 @@ export default function Create() {
                     variant="h4"
                     className="
                       font-semibold
+                      lg:text-2xl
+                      text-xl
                     "
                   >
                     {
@@ -426,9 +430,10 @@ export default function Create() {
                         "
                       >
                         Post card to {""}
-                        <Link
-                          href="/https://discord.gg/HENgvaAmk2"
+                        <a
+                          href="https://discord.gg/HENgvaAmk2"
                           target="_blank"
+                          rel="noreferrer"
                         >
                           <Typography
                             variant="caption"
@@ -441,7 +446,7 @@ export default function Create() {
                           >
                             Nexus&apos;s Discord
                           </Typography>
-                        </Link>
+                        </a>
                       </Typography>
                     }
                     className={clsx("hover:opacity-100 text-sm", {

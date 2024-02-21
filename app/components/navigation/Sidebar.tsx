@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import SoMeButton from "@/app/components/sidebar/SoMeButton";
-import NavigationButton from "@/app/components/sidebar/NavigationButton";
+import SoMeButton from "@/app/components/navigation/SoMeButton";
+import NavigationButton from "@/app/components/navigation/NavigationButton";
 import SignOutButton from "@/app/components/auth/SignOutButton"
 import Image from "next/image";
 import { Box } from "@mui/material";
@@ -85,7 +85,7 @@ export default function Sidebar() {
             "
           >
             <Link
-              href="/dashboard/create" // Replace with actual route
+              href="/dashboard"
               className="
                 flex
                 flex-col
@@ -132,9 +132,14 @@ export default function Sidebar() {
             px-2
           "
         >
-          {primaryNavigation.map((route, index) => {
+          {primaryNavigation.map(
+            (route, index) => {
             return (
-              <NavigationButton key={index} route={route} />
+              <NavigationButton
+                key={index}
+                route={route}
+                type="sidebar"
+              />
             )
           })}
         </Box>
@@ -169,6 +174,7 @@ export default function Sidebar() {
               <NavigationButton
                 key={index}
                 route={route}
+                type="sidebar"
               />
             )
           })}
