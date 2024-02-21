@@ -76,7 +76,8 @@ export default function Create() {
     trigger,
     formState: {
       isValid,
-      isSubmitting
+      isSubmitting,
+      isSubmitted
     },
     setValue
   } = methods;
@@ -251,7 +252,6 @@ export default function Create() {
                     });
                   }
                 }
-
               if (cardIdError) {
                 setAlertInfo({
                   type: "error",
@@ -263,7 +263,7 @@ export default function Create() {
                 // Redirect to card page
                 setTimeout(() => {
                   router.push(`/dashboard/cards/${cardId.id}`);
-                }, 3000);
+                }, 5000);
               }
             } catch (error) {
               setAlertInfo({
@@ -274,9 +274,6 @@ export default function Create() {
               console.log("Error redirecting: ", error);
             }
           }
-
-          
-
         } else {
           setAlertInfo({
             type: "error",
@@ -359,10 +356,13 @@ export default function Create() {
                   id="card-name-creator-container"
                   className="
                     flex
-                    flex-row
+                    md:flex-row
+                    flex-col
                     justify-between
-                    items-baseline
-                    gap-2
+                    items-start
+                    md:items-baseline
+                    md:gap-2
+                    gap-0
                   "
                 >
                   {/* Card Name */}
@@ -416,6 +416,7 @@ export default function Create() {
                       <Checkbox
                         checked={postToDiscord}
                         onChange={handlePostToDiscordChange}
+                        disabled={isSubmitting || isSubmitted}
                       />
                     }
                     label={
@@ -460,13 +461,14 @@ export default function Create() {
                       type="submit"
                       variant="outlined"
                       disabled={
-                        !isValid || 
+                        // !isValid || 
                         isSubmitting ||
+                        isSubmitted ||
                         form.cardArt === "/images/card-parts/card-art/default-art.jpg"
                       }
                       color={isValid ? "success" : "secondary"}
                       startIcon={<Save />}
-                      size="large"
+                      size="large" // Dynamically change size based on screen size
                     >
                       Save card
                     </Button>

@@ -51,7 +51,8 @@ export default function NexusCardForm() {
   const {
     setValue,
     control,
-    watch
+    watch,
+    formState: { isSubmitting, isSubmitted },
   } = useFormContext<CardFormDataType>();
 
   const formCardData = watch();
@@ -354,13 +355,24 @@ export default function NexusCardForm() {
               />
             </Box> 
             
+            <Box
+              id="energy-cost-container"
+              className="
+                flex
+                flex-row
+                justify-end
+                items-center
+              "
+            >
+
+            </Box>
             {/* Card cost */}
             {formCardData.cardType !== "node" &&  (<EnergyCostIcons
               handleEnergyCostPopoverOpen={handleEnergyCostPopoverOpen}
             />)}
 
             {/* Energy cost popover */}
-            {formCardData.cardType !== "node" && (<EnergyCostPopover
+            {formCardData.cardType !== "node" && !isSubmitting && !isSubmitted && (<EnergyCostPopover
               anchorEl={energyCostAnchorEl}
               handleClose={handleEnergyCostPopoverClose}
               energyCostChangeCounter={energyCostChangeCounter}
@@ -415,6 +427,7 @@ export default function NexusCardForm() {
                 <Controller
                   name="cardSuperType"
                   control={control}
+                  disabled={isSubmitting || isSubmitted}
                   render={({ field }) => (
                     <FormControl 
                       className={clsx("flex-grow",
@@ -474,6 +487,7 @@ export default function NexusCardForm() {
               <Controller
                 name="cardType"
                 control={control}
+                disabled={isSubmitting || isSubmitted}
                 render={({ field }) => (
                   <FormControl
                     className={clsx("flex-grow",
@@ -789,6 +803,7 @@ export default function NexusCardForm() {
                 <Controller
                   name="cardFlavorText"
                   control={control}
+                  disabled={isSubmitting || isSubmitted}
                   render={({ field }) => (
                     <TextField
                       {...field}
@@ -861,6 +876,7 @@ export default function NexusCardForm() {
             <Controller
               name="cardAttack"
               control={control}
+              disabled={isSubmitting || isSubmitted}
               render={({ field, fieldState }) => (
                 <Tooltip
                   title="Entity attack"
@@ -955,6 +971,7 @@ export default function NexusCardForm() {
               >
                 <IconButton
                   aria-label="add grade"
+                  disabled={isSubmitting || isSubmitted}
                   size="large"
                   onClick={handleGradeChange}
                 >
@@ -1022,6 +1039,7 @@ export default function NexusCardForm() {
             <Controller
               name="cardDefense"
               control={control}
+              disabled={isSubmitting || isSubmitted}
               render={({ field, fieldState }) => (
                 <Tooltip
                   title="Entity defense"
@@ -1069,7 +1087,6 @@ export default function NexusCardForm() {
                 </Tooltip>
               )}
             />
-            
             <Image
               src={`${cardPartPath.base}/card-parts${cardPartPath.stats}/defense.png`}
               width={60}

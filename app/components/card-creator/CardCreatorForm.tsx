@@ -51,7 +51,7 @@ export default function CardCreatorForm() {
   const { userProfileData } = useContext(DashboardContext);
 
   // Prompt states
-  const [promptTab, setPromptTab] = React.useState(0);
+  const [promptTab, setPromptTab] = useState(0);
   const [generateArtLimit, setGenerateArtLimit] = useState(0);
   const [isGeneratingArt, setIsGeneratingArt] = useState(false);
   const [timerStart, setTimerStart] = useState(0);
@@ -329,9 +329,8 @@ export default function CardCreatorForm() {
               border-neutral-700
             "
           >
-            {/* Conditionally render based on currently active tab */}
             {/* Input: AI prompt */}
-            <Controller
+            {promptTab === 1 && (<Controller
               name="cardPrompt"
               control={control}
               defaultValue=""
@@ -344,29 +343,29 @@ export default function CardCreatorForm() {
                 <TextField
                   {...field}
                   multiline
-                  disabled={
-                    isSubmitting || 
-                    !userProfileData?.id
-                  }
-                  label="Card prompt"
+                  disabled // Disabled until functionality is added
+                  // disabled={
+                  //   isSubmitting || 
+                  //   !userProfileData?.id
+                  // }
+                  label="AI brainstorm (coming soon)"
                   error={!!error}
                   helperText={
                     error ? 
                     error.message : null
                   }
-                  rows={2}
+                  rows={4}
                   variant="outlined"
                   className="
                     w-full
                     bg-neutral-900/50
-                    hidden
                   "
                 />
               )}
-            />
+            />)}
             
             {/* Input: AI art prompt */}
-            <Controller
+            {promptTab === 0 && (<Controller
               name="cardArtPrompt"
               control={control}
               defaultValue=""
@@ -458,7 +457,7 @@ export default function CardCreatorForm() {
                   }}
                 />
               )}
-            />
+            />)}
 
             {/* Alert */}
             {showAlertInfo && (<Alert
@@ -477,7 +476,7 @@ export default function CardCreatorForm() {
             </Alert>)}
 
             {/* Art Prompt Selections */}
-            {artPromptSelections && (<Box
+            {promptTab === 0 && artPromptSelections && (<Box
               className="
                 flex
                 flex-row
@@ -510,7 +509,7 @@ export default function CardCreatorForm() {
             
           </Box>
           {/* Art Prompt Options Accordions */}
-          <Box
+          {promptTab === 0 && (<Box
             className="
               flex
               flex-col
@@ -609,7 +608,7 @@ export default function CardCreatorForm() {
               {/* Art Prompt Options Accordions */}
               {renderedAccordions}
             </Box>
-          </Box>
+          </Box>)}
         </Box>
 
         {/* Card Render */}
