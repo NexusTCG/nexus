@@ -78,33 +78,77 @@ export default function NexusCardForm() {
   // Dynamically adjust text size, line height and rows based on text length
   const textLength = activeCardText.length;
   const maxChars = 440;
-  let fontSize: string, lineHeight: string, textRows: number, flavorTextVisible: boolean;
 
-  if (textLength <= 110) {
-    // Default size
-    fontSize = '1rem';
-    lineHeight = '1.5rem';
-    textRows = 4;
-    flavorTextVisible = true;
-  } else if (textLength <= 220) {
-    // Medium size
-    fontSize = '0.9375rem';
-    lineHeight = '1.375rem';
-    textRows = 5;
-    flavorTextVisible = textLength <= maxChars / 6;
-  } else if (textLength <= 330) {
-    // Small size
-    fontSize = '0.85rem';
-    lineHeight = '1.25rem';
-    textRows = 7;
-    flavorTextVisible = textLength <= 295;
-  } else {
-    // Extra small size
-    fontSize = '0.75rem';
-    lineHeight = '1.1rem';
-    textRows = 10;
-    flavorTextVisible = false;
-  } 
+  const [dynamicCardText, setDynamicCardText] = useState({
+    fontSize: "16.5px",
+    lineHeight: "19px",
+    textFieldHeight: "76px",
+    textRows: 4,
+    flavorTextVisible: true,
+    maxFlavorTextChars: 80,
+    flavorTextFieldHeight: "76px",
+  });
+
+  // Dynamically adjust card text input sizing
+  useEffect(() => {
+    if (textLength <= 88) {
+      // Extra Large
+      setDynamicCardText({
+        fontSize: "16.5px",
+        lineHeight: "19px",
+        textFieldHeight: "76px",
+        textRows: 4,
+        flavorTextVisible: true,
+        maxFlavorTextChars: 80,
+        flavorTextFieldHeight: "76px",
+      });
+    } else if (textLength <= 176) {
+      // Large
+      setDynamicCardText({
+        fontSize: "16.5px",
+        lineHeight: "19px",
+        textFieldHeight: "96px",
+        textRows: 6,
+        flavorTextVisible: true,
+        maxFlavorTextChars: 62,
+        flavorTextFieldHeight: "57px",
+      });
+    } else if (textLength <= 264) {
+      // Medium
+      setDynamicCardText({
+        fontSize: "15px",
+        lineHeight: "17px",
+        textFieldHeight: "120px",
+        textRows: 7,
+        flavorTextVisible: true,
+        maxFlavorTextChars: 50,
+        flavorTextFieldHeight: "34px",
+      });
+    } else if (textLength <= 352) {
+      // Small
+      setDynamicCardText({
+        fontSize: "15px",
+        lineHeight: "17px",
+        textFieldHeight: "172px",
+        textRows: 9,
+        flavorTextVisible: false,
+        maxFlavorTextChars:0,
+        flavorTextFieldHeight: "0px",
+      });
+    } else if (textLength <= maxChars) {
+      // Extra small
+      setDynamicCardText({
+        fontSize: "13.5px",
+        lineHeight: "15.5px",
+        textFieldHeight: "172px",
+        textRows: 11,
+        flavorTextVisible: false,
+        maxFlavorTextChars: 0,
+        flavorTextFieldHeight: "0px",
+      });
+      
+    } 
+  }, [formCardData.cardText, formCardData.cardFlavorText]);
 
   // Determine color type based on cost
   useEffect(() => {
@@ -210,7 +254,7 @@ export default function NexusCardForm() {
         width: "400px",
         height: "560px",
         borderRadius: "12.5px",
-        padding: "12.5px 12.5px 22px 12.5px"
+        padding: "7.5px 12.5px 22px 12.5px"
       }}
       className="
         relative
@@ -606,7 +650,7 @@ export default function NexusCardForm() {
           id="card-image-content-outer"
           sx={{
             width: "375px",
-            height: "526x",
+            height: "526px",
             paddingLeft: "13.5px",
             paddingRight: "13.5px",
             marginTop: "-8px",
@@ -621,9 +665,8 @@ export default function NexusCardForm() {
           <Box
             id="card-image-content-inner"
             sx={{
-              width: "365px", // Increased by 6px to account for border
-              height: "456x", // Increased by 6px to account for border
-              padding: "4px",
+              height: "462px !important", // Increased by 6px to account for border
+              padding: "3px",
               border: "3.75px solid black",
               borderRadius: "8px",
             }}
@@ -644,7 +687,7 @@ export default function NexusCardForm() {
               id="card-image"
               sx={{
                 aspectRatio: "4 / 3 !important",
-                height: "249px !important", // Maybe 7px taller
+                height: "252px !important", // Maybe 7px taller
                 border: "2px solid black",
               }}
               className="
@@ -667,16 +710,15 @@ export default function NexusCardForm() {
             <Box
               id="card-text-flavor"
               sx={{
-                maxWidth: "340px",
-                maxHeight: "190x",
+                maxWidth: "340px !important",
+                height: "190px !important",
                 border: "2px solid black",
-                padding: "7.5px",
+                padding: "5px 7.5px",
               }}
               className={`
                 ${colorMapping[cardColorClass as keyof typeof colorMapping]?.[50] ?? "bg-slate-50"}
                 flex
                 flex-col
-                w-full
                 text-black
                 gap-1
               `}
@@ -691,14 +733,13 @@ export default function NexusCardForm() {
                     multiline
                     size="small"
                     variant="standard"
-                    // rows={activeCardText.length > 200 ? 7 : 4}
-                    rows={textRows}
+                    rows={dynamicCardText.textRows}
                     error={!!fieldState.error}
                     placeholder={
                       !fieldState.error ? 'Type "/" to insert a keyword ability.':
                       "Card text is required!"
                     }
-                    className={clsx("w-full h-full",
+                    className={clsx("w-full",
                       {
                         "!text-black": !fieldState.error,
                         "!text-red-500": fieldState.error,
@@ -707,8 +748,9 @@ export default function NexusCardForm() {
                     inputProps={{
                       maxLength: 440,
                       style: {
-                        fontSize: fontSize,
-                        lineHeight: lineHeight,
+                        fontSize: dynamicCardText.fontSize,
+                        lineHeight: dynamicCardText.lineHeight,
+                        height: dynamicCardText.textFieldHeight,
                       }
                     }}
                     sx={{
@@ -732,19 +774,18 @@ export default function NexusCardForm() {
               />
 
               {/* Divider */}
-              {activeCardText.length <= 200 && (
+              {dynamicCardText.flavorTextVisible && (
                 <Divider
                   className="
                     mx-4
-                    my-2
+                    my-0.5
                     opacity-25
                   "
                 />
               )}
               
               {/* Card flavor text */}
-              {/* {activeCardText.length <= 200 && ( */}
-              {flavorTextVisible && (
+              {dynamicCardText.flavorTextVisible  && (
                 <Controller
                   name="cardFlavorText"
                   control={control}
@@ -758,7 +799,14 @@ export default function NexusCardForm() {
                       className="w-full"
                       rows={2}
                       inputProps={{
-                        maxLength: 80
+                        maxLength: dynamicCardText.maxFlavorTextChars,
+                        style: {
+                          fontSize: dynamicCardText.fontSize,
+                          lineHeight: dynamicCardText.lineHeight,
+                          height: dynamicCardText.flavorTextFieldHeight,
+                          fontStyle: "italic",
+                          fontWeight: 300,
+                        }
                       }}
                       sx={{
                         '& .MuiInputBase-input': {
@@ -794,7 +842,7 @@ export default function NexusCardForm() {
             justify-between
             items-center
             w-full
-            -mt-6
+            -mt-4
             z-10
           "
         >
@@ -865,7 +913,6 @@ export default function NexusCardForm() {
               width={60}
               height={45}
               alt="Card attack icon"
-              className="w-full h-full"
             />
           </Box>)}
           {/* Card grade + info */}
@@ -884,7 +931,6 @@ export default function NexusCardForm() {
                 justify-start
                 items-center
                 w-full
-                h-full
               "
             >
               <Snackbar
@@ -1029,8 +1075,6 @@ export default function NexusCardForm() {
               width={60}
               height={45}
               alt="Card defense icon"
-              className="w-full h-full"
-              // style={{ objectFit: "cover" }}
             />
           </Box>)}
         </Box>
