@@ -29,6 +29,7 @@ import {
   DesignServices,
   Login
 } from "@mui/icons-material"
+// import { FaDiscord } from "react-icons/fa";
 
 export default function Card({
    params 
@@ -126,8 +127,11 @@ export default function Card({
         items-center
         w-full
         py-4
-        px-12
+        px-6
+        lg:px-12
         gap-4
+        bg-neutral-900
+        lg:bg-transparent
       "
     >
       <Breadcrumbs
@@ -428,6 +432,24 @@ export default function Card({
               >
                 Download Card
               </Button>
+              {/* <a
+                href="https://discord.gg/HENgvaAmk2"
+                target="_blank"
+                rel="noreferrer"
+                className="w-full"
+              >
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                  startIcon={<FaDiscord />}
+                  className="
+                    w-full
+                  "
+                >
+                  View on Discord
+                </Button>
+              </a> */}
               <Button
                 variant="outlined"
                 color="primary"

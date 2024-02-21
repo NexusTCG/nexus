@@ -29,10 +29,10 @@ export default function EnergyCostIcons({
             aria-label="add cost"
             size="small"
             onClick={handleEnergyCostPopoverOpen}
-            color="primary"
+            color="secondary"
             sx={{
-              height: "28px",
-              width: "28px",
+              height: "20px !important",
+              width: "20px !important",
               padding: "0",
             }}
           >
@@ -63,8 +63,8 @@ export default function EnergyCostIcons({
                       <Image
                         key={`${color}-${i}`}
                         src={`/images/card-parts/card-icons/card-cost/${color}.png`}
-                        width={26}
-                        height={26}
+                        width={21}
+                        height={21}
                         alt={`${color} energy icon`}
                       />
                     ))
@@ -73,8 +73,8 @@ export default function EnergyCostIcons({
                       <Image
                         key={`void-0`}
                         src={`/images/card-parts/card-icons/card-cost/void-${value}.png`}
-                        width={26}
-                        height={26}
+                        width={21}
+                        height={21}
                         alt={`void energy icon`}
                       />
                     )

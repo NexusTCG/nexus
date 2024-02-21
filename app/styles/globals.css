@@ -24,10 +24,10 @@ input.custom-input-base {
   width: auto;
   text-align: left;
   align-items: center;
-  height: 28px;
+  height: 20px;
   padding: 0px;
-  font-size: 20px;
-  line-height: 34px;
+  font-size: 15px;
+  line-height: 20px;
   font-weight: 500;
   color: black;
   background-color: transparent;

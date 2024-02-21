@@ -494,11 +494,11 @@ export default function CardCreatorForm() {
                   key={category}
                   variant="caption"
                   className="
-                    text-teal-500
+                    text-teal-400
                     font-light
                     rounded-full
                     text-xs
-                    bg-teal-900/50
+                    bg-teal-800/25
                     px-2
                     py-1
                   "

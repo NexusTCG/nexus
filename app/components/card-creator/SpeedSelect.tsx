@@ -95,8 +95,8 @@ export default function SpeedSelect() {
                     >
                         <Image
                             src={`/images/card-parts/card-icons/speed.png`}
-                            width={11}
-                            height={16}
+                            width={10}
+                            height={15}
                             alt={`Speed ${iconSpeed} icon`}
                             className={clsx(getOpacityClass(iconSpeed))}
                         />
