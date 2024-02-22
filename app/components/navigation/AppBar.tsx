@@ -40,7 +40,6 @@ export default function AppBar() {
       sx={{
         position: "sticky",
         top: 0,
-        zIndex: 1000,
         height: "60px"
       }}
       className="

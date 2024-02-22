@@ -8,6 +8,7 @@ import React, {
 import { DashboardContext } from "@/app/context/DashboardContext";
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
+import CardRender from "@/app/components/card-creator/CardRender";
 import Image from "next/image";
 import Link from "next/link";
 import { format } from 'date-fns';
@@ -51,7 +52,10 @@ export default function Card({
     const loadCardData = async () => {
       const cards = await fetchCards({
         from: "cards",
-        filter: { column: "id", value: params.slug },
+        filter: {
+          column: "id",
+          value: params.slug
+        },
       });
 
       if (cards && cards.length > 0) {
@@ -242,6 +246,25 @@ export default function Card({
               shadow-neutral-950/25
               "
             />
+          )}
+          <Box
+            className="
+              flex
+              flex-col
+              justify-center
+              items-center
+              w-full
+              px-24
+            "
+          >
+            <Typography
+              variant="body1"
+            >
+            {JSON.stringify(card)}
+            </Typography>
+          </Box>
+          {card && (
+            <CardRender cardId={card.id} />
           )}
           <Box
             id="card-details-container"

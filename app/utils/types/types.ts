@@ -1,5 +1,5 @@
 export type CardFormDataType = {
-  user_id: string;
+  user_id: string | null;
   cardCreator: string;
   cardName: string;
   cardEnergyValue: number;
@@ -18,6 +18,8 @@ export type CardFormDataType = {
   cardPrompt: string;
   cardArtPrompt: string;
   cardRender: string;
+  // cardMythic: boolean;
+  // cardBgImage: string;
 };
 
 export type CardTypesType = {

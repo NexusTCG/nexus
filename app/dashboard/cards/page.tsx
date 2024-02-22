@@ -134,8 +134,7 @@ export default function Cards() {
             id="cards-sort-pagination"
             className="
               flex
-              flex-col
-              lg:flex-row
+              flex-row
               justify-between
               items-center
               w-full

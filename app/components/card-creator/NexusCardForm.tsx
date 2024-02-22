@@ -189,7 +189,7 @@ export default function NexusCardForm() {
     cardColor
   ]); 
 
-  // Cetermine bg image based on color type and color
+  // Determine bg image based on color type and color
   useEffect(() => {
     const bgImage = determineBgImage(
       activeCardType,
@@ -364,7 +364,7 @@ export default function NexusCardForm() {
                 items-center
               "
             >
-
+              {/* for anchor */}
             </Box>
             {/* Card cost */}
             {formCardData.cardType !== "node" &&  (<EnergyCostIcons
@@ -659,7 +659,7 @@ export default function NexusCardForm() {
           </Box>
         </Box>
 
-        {/* Card image & content */}
+        {/* Card Image Content Outer */}
         <Box
           id="card-image-content-outer"
           sx={{
@@ -676,6 +676,7 @@ export default function NexusCardForm() {
             z-0
           `}
         >
+          {/* Card Image Content Inner */}
           <Box
             id="card-image-content-inner"
             sx={{

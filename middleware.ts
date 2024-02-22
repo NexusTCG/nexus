@@ -7,6 +7,7 @@ export async function middleware(request: NextRequest) {
   const publicUrls = [
     "/reset-password",
     "/login/complete-signup",
+    "/dashboard/cards/[slug]",
     "/guidelines",
     "policies",
     "terms",

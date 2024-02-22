@@ -7,45 +7,45 @@ export default function determineColorType(
 ) {
 
     if (activeCardType === "node") {
-        // If the card type is node, return node
-        return "node";
+      // If the card type is node, return node
+      return "node";
     }
 
     // Get color and value pairs
     const energyCostEntries = Object
     .entries(
-        activeCardCost ?? {}
+      activeCardCost ?? {}
     );
 
     // Get non-void colors with value > 0
     const coloredCosts = energyCostEntries
     .filter(
-        ([color, value]) =>
-        color !== monoColorOptions.void
-        && value > 0
+      ([color, value]) =>
+      color !== monoColorOptions.void
+      && value > 0
     );
 
     // Get void colors with value > 0
     const colorlessCost = energyCostEntries
     .filter(
-        ([color, value]) =>
-        color === monoColorOptions.void
-        && value > 0
+      ([color, value]) =>
+      color === monoColorOptions.void
+      && value > 0
     );
 
     // Determine color type
-    if (colorlessCost && !coloredCosts) {
-        // If there's only void costs, return mono
-        return "mono";
+    if (colorlessCost.length > 0 && coloredCosts.length === 0) {
+      // If there's only void costs, return mono
+      return "mono";
     } else if (coloredCosts.length === 1) {
-        // If there's only one non-void color, return mono
-        return "mono";
+      // If there's only one non-void color, return mono
+      return "mono";
     } else if (coloredCosts.length === 2) {
-        // If there's two non-void colors, return dual
-        return "dual";
+      // If there's two non-void colors, return dual
+      return "dual";
     } else if (coloredCosts.length >= 3) {
-        // If there's three or more non-void colors, return multi
-        return "multi";
+      // If there's three or more non-void colors, return multi
+      return "multi";
     }
 
     // If there's no costs, return default
