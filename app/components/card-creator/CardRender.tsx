@@ -175,7 +175,6 @@ export default function CardRender({
                 borderRadius: "4px",
                 border: "4px solid black",
               }}
-              // Dynamically set color based on card color
               className={`
                 ${bgColor?.[50] ?? "bg-slate-50"}
                 flex
@@ -234,21 +233,61 @@ export default function CardRender({
                       lineHeight: "20px"
                     }}
                   >
-                    {card.cardName}
+                    {
+                      card.cardName
+                        .split(" ")
+                        .map(word => word
+                          .charAt(0)
+                          .toUpperCase() + word
+                            .slice(1)
+                            .toLowerCase()
+                          )
+                        .join(" ")
+                    }
                   </Typography>
                 </Box> 
-                {/* Card Cost */}
+                {/* Card Energy Cost */}
                 <Box
-                  id="energy-cost-container"
+                  id="card-energy-cost"
                   className="
                     flex
                     flex-row
                     justify-end
                     items-center
+                    w-auto
+                    gap-0.25
                   "
                 >
-                  {/* for each icon render icon */}
-                  Card Cost Icons
+                  {Object.entries(card.cardEnergyCost ?? {})
+                    .sort(([colorA], [colorB]) => {
+                      const order = ["yellow", "blue", "purple", "red", "green", "void"];
+                      return order.indexOf(colorA) - order.indexOf(colorB);
+                    })
+                    .map(([color, value]) =>
+                      color !== "void"
+                        ? Array.from({
+                            length: typeof value === 'number' ? value : 0,
+                          }, (_, i) => (
+                            <Image
+                              key={`${color}-${i}`}
+                              src={`/images/card-parts/card-icons/card-cost/${color}.png`}
+                              width={21}
+                              height={21}
+                              alt={`${color} energy icon`}
+                            />
+                          ))
+                        : typeof value === 'number' && value > 0
+                        ? (
+                            <Image
+                              key={`void-0`}
+                              src={`/images/card-parts/card-icons/card-cost/void-${value}.png`}
+                              width={21}
+                              height={21}
+                              alt={`void energy icon`}
+                            />
+                          )
+                        : null
+                    )}
                 </Box>
               </Box>
 
@@ -296,23 +335,61 @@ export default function CardRender({
 
                     }}
                   >
-                    {/* Capitalize first letter of cardSuperType */}
-                    {card.cardSuperType !== "default" ? card.cardSuperType : "" } {""}
-                    {/* Capitalize first letter of cardType */}
-                    {card.cardType} {""}
-                    {/* Map cardSubType array, filter out first index which is empty */}
-                    {/* Filter out empty index when saving form */}
-                    {card.cardSubType ? `• ${card.cardSubType}` : ""}
+                    {
+                      card.cardType
+                        .charAt(0)
+                        .toUpperCase() + 
+                      card.cardType
+                        .slice(1)
+                        .toLowerCase()
+                    } {" "}
+                    {
+                      card.cardSuperType !== "default" ? 
+                      card.cardSuperType
+                        .charAt(0)
+                        .toUpperCase() + 
+                      card.cardSuperType
+                        .slice(1)
+                        .toLowerCase() : ""
+                    }
+                    {
+                      JSON.parse(card.cardSubType) > 0 && 
+                      JSON.parse(card.cardSubType)[0].trim() ? 
+                      " • " : ""
+                    }
+                    {
+                      card.cardSubType ? JSON
+                        .parse(card.cardSubType)
+                        .filter((subType: string) => subType)
+                        .join(" ") : ""
+                    }
                   </Typography>
                 </Box>
                 {/* Card Speed */}
-                {/* Map over for each icon */}
-                <Image
-                    src={`/images/card-parts/card-icons/speed.png`}
-                    width={10}
-                    height={15}
-                    alt="Speed icon"
-                />
+                <Box
+                  className="
+                    flex
+                    flex-row-reverse
+                    justify-start
+                    items-center
+                    h-full
+                    gap-0.5
+                    m-0
+                  "
+                >
+                  {Array.from({
+                    length: parseInt(
+                      card.cardSpeed, 10
+                    )}).map((_, index) => (
+                    <Image
+                      key={index}
+                      src={`/images/card-parts/card-icons/speed.png`}
+                      width={10}
+                      height={15}
+                      alt="Speed icon"
+                    />
+                  ))}
+                </Box>
               </Box>
             </Box>
             {/* Card image & content */}
@@ -341,9 +418,6 @@ export default function CardRender({
                   border: "3.75px solid black",
                   borderRadius: "8px",
                 }}
-                // ${colorMapping[
-                //   cardColorClass as keyof typeof colorMapping
-                // ]?.[400] ?? "bg-slate-400"}
                 className={`
                   ${bgColor?.[400] ?? "bg-slate-400"}
                   flex
@@ -419,12 +493,12 @@ export default function CardRender({
                     id="flavor-text"
                     variant="body2"
                   >
-                    {card.cardFlavorText}
+                    {`"${card.cardFlavorText}"`}
                   </Typography>
                 </Box>
               </Box> 
             </Box>
-            {/* Card stats, grade, creator and copyright */}
+            {/* Card Stats & Grade */}
             <Box
               id="card-stats-grade-creator-info"
               sx={{
@@ -454,6 +528,21 @@ export default function CardRender({
               >
                 <Typography
                   variant="body1"
+                  className="
+                    flex
+                    justify-center
+                    items-center
+                    w-full
+                    absolute
+                    z-10
+                    top-0
+                    bottom-0
+                    right-0
+                    left-0
+                    text-center
+                    px-6
+                    stats-text
+                  "
                 >
                   {card.cardAttack}
                 </Typography>
@@ -490,41 +579,10 @@ export default function CardRender({
                     alt={`${card.cardGrade} icon`}
                     className="
                       bg-black
-                      cursor-pointer
                       rounded-full
                       p-2
                     "
                   />
-                  {/* Card creator & copyright */}
-                  <Box
-                    className="
-                      flex
-                      flex-row
-                      justify-between
-                      items-center
-                      w-full
-                      text-xs
-                      -mt-4
-                    "
-                  >
-                    <Typography
-                      variant="caption"
-                      className="opacity-80"
-                    >
-                      {/* Creator: {" "} */}
-                      {card.cardCreator
-                        ? card.cardCreator
-                        : "Card Creator"}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      className="opacity-80"
-                    >
-                      © Nexus {
-                        new Date().getFullYear()
-                      } 
-                    </Typography>
-                  </Box>
                 </Box>
               </Box>
               {/* Card Defense */}
@@ -541,6 +599,21 @@ export default function CardRender({
               >
                 <Typography
                   variant="body1"
+                  className="
+                    flex
+                    justify-center
+                    items-center
+                    w-full
+                    absolute
+                    z-10
+                    top-0
+                    bottom-0
+                    right-0
+                    left-0
+                    text-center
+                    px-6
+                    stats-text
+                  "
                 >
                   {card.cardDefense}
                 </Typography>
@@ -551,6 +624,35 @@ export default function CardRender({
                   alt="Card defense icon"
                 />
               </Box>)}
+            </Box>
+            {/* Card creator & copyright */}
+            <Box
+              className="
+                flex
+                flex-row
+                justify-between
+                items-center
+                w-full
+                text-xs
+                -mt-1
+                px-4
+              "
+            >
+              <p
+                className="fineprint-text"
+              >
+                {/* Creator: {" "} */}
+                {card.cardCreator
+                  ? `Made by ${card.cardCreator}`
+                  : "Card Creator"}
+              </p>
+              <p
+                className="fineprint-text"
+              >
+                © Nexus {
+                  new Date().getFullYear()
+                } 
+              </p>
             </Box>
           </Box>
         </Box>

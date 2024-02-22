@@ -27,6 +27,7 @@ import {
   Fade,
   Snackbar,
   Divider,
+  ClickAwayListener
 } from "@mui/material/";
 import Image from "next/image";
 import clsx from "clsx";
@@ -62,7 +63,9 @@ export default function NexusCardForm() {
   const activeCardArt = watch("cardArt");
 
   // Track energy cost popover state
-  const [energyCostAnchorEl, setEnergyCostAnchorEl] = React.useState<HTMLElement | null>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  // const [energyCostAnchorEl, setEnergyCostAnchorEl] = React.useState<HTMLElement | null>(null);
+  const [energyCostPopoverOpen, setEnergyCostPopOver] = useState(false);
 
   // Track energy cost change (to force re-render)
   const [energyCostChangeCounter, setEnergyCostChangeCounter] = useState<number>(0);
@@ -150,6 +153,12 @@ export default function NexusCardForm() {
       
     } 
   }, [formCardData.cardText, formCardData.cardFlavorText]);
+  
+  useEffect(() => {
+    // This ensures code runs only in the client-side environment
+    const container = document.querySelector('#energy-cost-container');
+    setAnchorEl(container as HTMLElement);
+  }, []);
 
   // Determine color type based on cost
   useEffect(() => {
@@ -209,14 +218,15 @@ export default function NexusCardForm() {
   }, [formCardData.cardType]);
 
   // Handle energy cost popover
-  function handleEnergyCostPopoverOpen(
-    event: React.MouseEvent<HTMLElement>
-  ) {
-    setEnergyCostAnchorEl(event.currentTarget);
+  function handleEnergyCostPopoverOpen() {
+    setEnergyCostPopOver(true);
+    // const container = document.querySelector('#energyCostContainer') as HTMLElement;
+    // setEnergyCostAnchorEl(container);
   };
   
   function handleEnergyCostPopoverClose() {
-    setEnergyCostAnchorEl(null);
+    setEnergyCostPopOver(false);
+    // setEnergyCostAnchorEl(null);
   };
 
   function handleGradeChange() {
@@ -355,6 +365,7 @@ export default function NexusCardForm() {
               />
             </Box> 
             
+            {/* Energy Cost Icons */}
             <Box
               id="energy-cost-container"
               className="
@@ -364,21 +375,29 @@ export default function NexusCardForm() {
                 items-center
               "
             >
-              {/* for anchor */}
+              {formCardData.cardType !== "node" && (
+                <ClickAwayListener
+                  onClickAway={handleEnergyCostPopoverClose}
+                >
+                  <>
+                    {!energyCostPopoverOpen &&(
+                      <EnergyCostIcons
+                        handleEnergyCostPopoverOpen={handleEnergyCostPopoverOpen}
+                      />
+                    )}
+                    {!isSubmitting && !isSubmitted && (
+                      <EnergyCostPopover
+                        open={energyCostPopoverOpen}
+                        anchorEl={anchorEl}
+                        handleClose={handleEnergyCostPopoverClose}
+                        energyCostChangeCounter={energyCostChangeCounter}
+                        setEnergyCostChangeCounter={setEnergyCostChangeCounter}
+                      />
+                    )}
+                  </>
+                </ClickAwayListener>
+              )}
             </Box>
-            {/* Card cost */}
-            {formCardData.cardType !== "node" &&  (<EnergyCostIcons
-              handleEnergyCostPopoverOpen={handleEnergyCostPopoverOpen}
-            />)}
-
-            {/* Energy cost popover */}
-            {formCardData.cardType !== "node" && !isSubmitting && !isSubmitted && (<EnergyCostPopover
-              anchorEl={energyCostAnchorEl}
-              handleClose={handleEnergyCostPopoverClose}
-              energyCostChangeCounter={energyCostChangeCounter}
-              setEnergyCostChangeCounter={setEnergyCostChangeCounter}
-            />)}
-            
           </Box>
 
           {/* Card types and speed */}
@@ -992,7 +1011,7 @@ export default function NexusCardForm() {
               </Tooltip>
               
               {/* Card creator & copyright */}
-              <Box
+              {/* <Box
                 className="
                   flex
                   flex-row
@@ -1007,8 +1026,6 @@ export default function NexusCardForm() {
                   variant="caption"
                   className="opacity-80"
                 >
-                  {/* Creator: {" "} */}
-                  {/* Replace with username */}
                   {formCardData.cardCreator
                     ? formCardData.cardCreator
                     : "Card Creator"}
@@ -1021,7 +1038,7 @@ export default function NexusCardForm() {
                     new Date().getFullYear()
                   } 
                 </Typography>
-              </Box>
+              </Box> */}
             </Box>
           </Box>
           {/* Card defense */}
@@ -1036,7 +1053,6 @@ export default function NexusCardForm() {
               relative
             "
           >
-            
             <Controller
               name="cardDefense"
               control={control}

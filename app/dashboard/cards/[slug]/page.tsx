@@ -9,7 +9,7 @@ import { DashboardContext } from "@/app/context/DashboardContext";
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
 import CardRender from "@/app/components/card-creator/CardRender";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 import { format } from 'date-fns';
 import {
@@ -197,7 +197,7 @@ export default function Card({
             w-full
           "
         >
-          {card ? (<Box
+          {/* {card ? (<Box
             id="card-image-container"
             sx={{
               overflow: "hidden",
@@ -218,15 +218,16 @@ export default function Card({
               shadow-lg
             shadow-neutral-950/25
             "
-          >
-            <Image
+          > */}
+            {/* <Image
               src={card?.cardRender || "/images/nexus-cardback.png"}
               fill
               style={{ objectFit: "cover" }}
               alt={card?.cardName || "Card image"}
               priority
-            />
-          </Box>) : (
+            /> */}
+            
+          {/* </Box>) : (
             <Skeleton
               variant="rectangular"
               width={400}
@@ -246,26 +247,24 @@ export default function Card({
               shadow-neutral-950/25
               "
             />
-          )}
+          )} */}
           <Box
+            id="card-render-container"
             className="
               flex
               flex-col
               justify-center
               items-center
               w-full
-              px-24
+              py-4
+              px-6
             "
           >
-            <Typography
-              variant="body1"
-            >
-            {JSON.stringify(card)}
-            </Typography>
+            {/* Card Render */}
+            {card && card?.id && (<CardRender cardId={card?.id} />)}
           </Box>
-          {card && (
-            <CardRender cardId={card.id} />
-          )}
+          
+          {/* Card Details */}
           <Box
             id="card-details-container"
             className="

@@ -37,6 +37,8 @@ import {
 } from "@mui/icons-material";
 
 export default function Create() {
+  const { userProfileData } = useContext(DashboardContext); // From layout.tsx
+
   const methods = useForm<CardFormDataType>({
     defaultValues: {
       user_id: "", 
@@ -82,6 +84,13 @@ export default function Create() {
     setValue
   } = methods;
 
+  // Utils
+  const form = watch();
+  const supabase = createClient();
+  const posthog = PostHogClient();
+  const session = useSession(); // remove?
+  const router = useRouter();
+
   // States
   const [postToDiscord, setPostToDiscord] = useState<boolean>(true);
   const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
@@ -92,14 +101,6 @@ export default function Create() {
     icon: React.ReactNode;
     message: string;
   } | null>(null);
-
-  // Utils
-  const form = watch();
-  const supabase = createClient();
-  const posthog = PostHogClient();
-  const session = useSession(); // remove?
-  const router = useRouter();
-  const { userProfileData } = useContext(DashboardContext); // From layout.tsx
 
   // Set user_id and cardCreator values based on session
   useEffect(() => {

@@ -17,6 +17,7 @@ import Image from "next/image";
 import clsx from "clsx";
 
 type EnergyCostPopoverProps = {
+  open: boolean;
   anchorEl: HTMLElement | null;
   handleClose: () => void;
   energyCostChangeCounter: number;
@@ -28,6 +29,7 @@ type EnergyCosts = {
 };
 
 export default function EnergyCostPopover({
+  open,
   anchorEl,
   handleClose,
   energyCostChangeCounter,
@@ -41,7 +43,7 @@ export default function EnergyCostPopover({
     trigger
   } = useFormContext();
 
-  const open = Boolean(anchorEl);
+  // const open = Boolean(anchorEl);
   const id = open ? "energy-cost-popover" : undefined;
   const watchCardEnergyCost = watch("cardEnergyCost") as EnergyCosts;
   const watchCardEnergyValue = watch("cardEnergyValue");

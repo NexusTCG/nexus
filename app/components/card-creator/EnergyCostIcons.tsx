@@ -15,7 +15,7 @@ export default function EnergyCostIcons({
     handleEnergyCostPopoverOpen
   }: EnergyCostIconsProps) {
 
-    const {watch } = useFormContext<CardFormDataType>();
+    const { watch } = useFormContext<CardFormDataType>();
     const formCardData = watch();
 
     return (
