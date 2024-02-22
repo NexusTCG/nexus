@@ -128,7 +128,7 @@ export default function CardRender({
     <>
       {card ? (
         <Box
-          id="card-border"
+          id="card-render-container"
           sx={{
             aspectRatio: "5 / 7",
             width: "400px",

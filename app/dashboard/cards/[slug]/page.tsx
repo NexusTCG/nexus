@@ -197,57 +197,7 @@ export default function Card({
             w-full
           "
         >
-          {/* {card ? (<Box
-            id="card-image-container"
-            sx={{
-              overflow: "hidden",
-              position: "relative",
-              aspectRatio: "5/7",
-              maxWidth: "400px",
-            }}
-            className="
-              flex
-              flex-col
-              justify-center
-              items-center
-              w-full
-              pt-4
-              pb-6
-              m-4
-              rounded-2xl
-              shadow-lg
-            shadow-neutral-950/25
-            "
-          > */}
-            {/* <Image
-              src={card?.cardRender || "/images/nexus-cardback.png"}
-              fill
-              style={{ objectFit: "cover" }}
-              alt={card?.cardName || "Card image"}
-              priority
-            /> */}
-            
-          {/* </Box>) : (
-            <Skeleton
-              variant="rectangular"
-              width={400}
-              height={560}
-              animation="wave"
-              className="
-                flex
-                flex-col
-                justify-center
-                items-center
-                w-full
-                pt-4
-                pb-6
-                m-4
-                rounded-2xl
-                shadow-lg
-              shadow-neutral-950/25
-              "
-            />
-          )} */}
+          {/* Card Render Container */}
           <Box
             id="card-render-container"
             className="
@@ -261,7 +211,11 @@ export default function Card({
             "
           >
             {/* Card Render */}
-            {card && card?.id && (<CardRender cardId={card?.id} />)}
+            {card && card?.id && (
+              <CardRender
+                cardId={card?.id} 
+              />
+            )}
           </Box>
           
           {/* Card Details */}

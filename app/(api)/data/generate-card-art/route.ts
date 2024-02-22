@@ -1,6 +1,6 @@
 "use server";
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { uploadCardArtImage } from "@/app/lib/actions/supabase-data/uploadCardArtImage";
 import fetch from "node-fetch";
 
@@ -48,6 +48,6 @@ export async function POST(req: NextRequest) {
             });
         }
     } else {
-        return new NextResponse(null, { status: 405 });
+        return new Response(null, { status: 405 });
     }
 }

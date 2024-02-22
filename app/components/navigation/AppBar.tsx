@@ -19,7 +19,7 @@ const primaryNavigation = [
   "rules",
   "game",
   "roadmap",
-]
+];
 
 export default function AppBar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -32,6 +32,19 @@ export default function AppBar() {
 
   function handleClose() {
     setAnchorEl(null);
+  };
+
+  const handleSignOut = async () => {
+    setAnchorEl(null);
+    const response = await fetch(`${window.location.origin}/auth/logout-user`, {
+      method: "POST",
+    });
+
+    if (response.ok) {
+      window.location.href = "/login";
+    } else {
+      console.log("Logout failed.");
+    }
   };
 
   return (
@@ -116,6 +129,7 @@ export default function AppBar() {
           </Box>
         </Box>
         
+        {/* Secondary Navigation */}
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -141,31 +155,20 @@ export default function AppBar() {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem
-            onClick={handleClose}
+          <Link
+            href="/dashboard/profile"
           >
-            Profile
-          </MenuItem>
+            <MenuItem
+              onClick={handleClose}
+            >
+              Profile
+            </MenuItem>
+          </Link>
           <MenuItem
-            onClick={handleClose}
-          >
-            Subscription
-          </MenuItem>
-          <MenuItem
-            onClick={handleClose}
-          >
-            Settings
-          </MenuItem>
-          <MenuItem
-            onClick={handleClose}
-          >
-            Support
-          </MenuItem>
-          <MenuItem
-            onClick={handleClose}
-          >
-            Log out
-          </MenuItem>
+              onClick={handleSignOut}
+            >
+              Log Out
+            </MenuItem>
         </Menu>
       </Toolbar>  
     </Box>

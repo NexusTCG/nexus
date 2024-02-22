@@ -14,7 +14,7 @@ import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PostHogClient from "@/app/lib/posthog/posthog";
 import CardCreatorForm from "@/app/components/card-creator/CardCreatorForm";
-import convertCardCodeToImage from "@/app/lib/actions/convertCardCodeToImage"
+import convertCardCodeToImage from "@/app/lib/actions/convertCardCodeToImage";
 import uploadCardImage from "@/app/lib/actions/supabase-data/uploadCardImage";
 import { postCardToDiscord } from "@/app/lib/actions/postCardToDiscord";
 import { createClient } from "@/app/lib/supabase/client";

@@ -318,7 +318,7 @@ export default function NexusCardForm() {
             w-full
             shadow-md
             shadow-gray-950/50
-            z-10
+            z-30
             gap-1
           `}
         >
