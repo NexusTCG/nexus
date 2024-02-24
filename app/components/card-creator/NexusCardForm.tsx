@@ -53,12 +53,14 @@ type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
   showCardRender?: boolean;
   showSimpleCardRender?: boolean;
+  cardRenderRef?: React.RefObject<HTMLDivElement>;
 };
 
 export default function NexusCardForm({
   cardData,
   showCardRender,
   showSimpleCardRender,
+  cardRenderRef,
 }: CardRenderProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {
@@ -279,6 +281,7 @@ export default function NexusCardForm({
         <CardRender
           cardData={cardData}
           simpleCardRender={showSimpleCardRender}
+          cardRenderRef={cardRenderRef}
         />
       ) : (
         <Box

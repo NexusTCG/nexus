@@ -39,12 +39,14 @@ type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
   showCardRender?: boolean;
   showSimpleCardRender?: boolean;
+  cardRenderRef?: React.RefObject<HTMLDivElement>;
 };
 
 export default function CardCreatorForm({
   cardData,
   showCardRender,
   showSimpleCardRender,
+  cardRenderRef,
 }: CardRenderProps) {
   const {
     setValue,
@@ -651,6 +653,7 @@ export default function CardCreatorForm({
             cardData={cardData}
             showCardRender={showCardRender}
             showSimpleCardRender={showSimpleCardRender}
+            cardRenderRef={cardRenderRef}
           />
 
           {/* Card Art Options */}
