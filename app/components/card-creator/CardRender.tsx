@@ -33,612 +33,612 @@ const CardRender = forwardRef<HTMLDivElement, CardRenderProps>(
       "400": "bg-slate-400",
     });
 
-  // Determine bgColor
-  useEffect(() => {
-    if (cardData?.cardColor && cardData !== null) {
-      if (cardData?.cardColor === "blue") {
-        setBgColor({
-          "50":
-            colorMapping["sky"]?.[50],
-          "200":
-            colorMapping["sky"]?.[200],
-          "400":
-            colorMapping["sky"]?.[400],
-        })
-      } else if (cardData?.cardColor === "purple") {
-        setBgColor({
-          "50":
-            colorMapping["violet"]?.[50],
-          "200":
-            colorMapping["violet"]?.[200],
-          "400":
-            colorMapping["violet"]?.[400],
-        })
-      } else if (cardData?.cardColor === "green") {
-        setBgColor({
-          "50":
-            colorMapping["lime"]?.[50],
-          "200":
-            colorMapping["lime"]?.[200],
-          "400":
-            colorMapping["lime"]?.[400],
-        })
-      } else if (cardData?.cardColor === "void") {
-        setBgColor({
-          "50":
-            colorMapping["gray"]?.[50],
-          "200":
-            colorMapping["gray"]?.[200],
-          "400":
-            colorMapping["gray"]?.[400],
-        })
-      } else {
-        setBgColor({
-          "50":
-            colorMapping[
-              cardData?.cardColor as keyof typeof
-            colorMapping]?.[50],
-          "200":
-            colorMapping[
-              cardData?.cardColor as keyof typeof
-            colorMapping]?.[200],
-          "400":
-            colorMapping[
-              cardData?.cardColor as keyof typeof
-            colorMapping]?.[400],
-        })
-    }
-    
-    }
-  }, [cardData?.cardColor]);
+    // Determine bgColor
+    useEffect(() => {
+      if (cardData?.cardColor && cardData !== null) {
+        if (cardData?.cardColor === "blue") {
+          setBgColor({
+            "50":
+              colorMapping["sky"]?.[50],
+            "200":
+              colorMapping["sky"]?.[200],
+            "400":
+              colorMapping["sky"]?.[400],
+          })
+        } else if (cardData?.cardColor === "purple") {
+          setBgColor({
+            "50":
+              colorMapping["violet"]?.[50],
+            "200":
+              colorMapping["violet"]?.[200],
+            "400":
+              colorMapping["violet"]?.[400],
+          })
+        } else if (cardData?.cardColor === "green") {
+          setBgColor({
+            "50":
+              colorMapping["lime"]?.[50],
+            "200":
+              colorMapping["lime"]?.[200],
+            "400":
+              colorMapping["lime"]?.[400],
+          })
+        } else if (cardData?.cardColor === "void") {
+          setBgColor({
+            "50":
+              colorMapping["gray"]?.[50],
+            "200":
+              colorMapping["gray"]?.[200],
+            "400":
+              colorMapping["gray"]?.[400],
+          })
+        } else {
+          setBgColor({
+            "50":
+              colorMapping[
+                cardData?.cardColor as keyof typeof
+              colorMapping]?.[50],
+            "200":
+              colorMapping[
+                cardData?.cardColor as keyof typeof
+              colorMapping]?.[200],
+            "400":
+              colorMapping[
+                cardData?.cardColor as keyof typeof
+              colorMapping]?.[400],
+          })
+      }
+      
+      }
+    }, [cardData?.cardColor]);
 
-  // Determine bgImage
-  useEffect(() => {
-    if (
-      cardData?.cardType && 
+    // Determine bgImage
+    useEffect(() => {
+      if (
+        cardData?.cardType && 
+        cardData?.cardColor
+      ) {
+        const newBgImage = determineBgImage(
+          cardData?.cardType,
+          cardData?.cardColor,
+        );
+        setBgImage(newBgImage);
+      };
+    }, [
+      cardData?.cardType,
       cardData?.cardColor
-    ) {
-      const newBgImage = determineBgImage(
-        cardData?.cardType,
-        cardData?.cardColor,
-      );
-      setBgImage(newBgImage);
-    };
-  }, [
-    cardData?.cardType,
-    cardData?.cardColor
-  ]);
+    ]);
 
-  // Skeleton Card Render
-  if (!cardData) {
-    return (
-      <Skeleton
-        ref={ref}
-        variant="rectangular"
-        animation="wave"
-        width={400}
-        height={560}
-        sx={{
-          borderRadius: "12.5px",
-        }}
-        className="
-          shadow-lg
-          shadow-neutral-950/50
-        "
-      />
-    )
-  }
-
-  // Simple Card Render
-  if (cardData && simpleCardRender) {
-    return (
-      <div
-        ref={ref}
-        id="simple-card-render-container"
-        style={{
-          width: "400px",
-          height: "560px",
-          borderRadius: "12.5px",
-          padding: "7.5px 12.5px 22px 12.5px",
-          position: "relative",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          backgroundColor: "black",
-        }}
-      >
-        {/* Card frame */}
-        <div
-          id="card-frame"
-          style={{
-            width: "375px",
-            height: "526px",
+    // Skeleton Card Render
+    if (!cardData) {
+      return (
+        <Skeleton
+          ref={ref}
+          variant="rectangular"
+          animation="wave"
+          width={400}
+          height={560}
+          sx={{
             borderRadius: "12.5px",
+          }}
+          className="
+            shadow-lg
+            shadow-neutral-950/50
+          "
+        />
+      )
+    }
+
+    // Simple Card Render
+    if (cardData && simpleCardRender) {
+      return (
+        <div
+          ref={ref}
+          id="simple-card-render-container"
+          style={{
+            width: "400px",
+            height: "560px",
+            borderRadius: "12.5px",
+            padding: "7.5px 12.5px 22px 12.5px",
+            position: "relative",
             display: "flex",
             flexDirection: "column",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            backgroundColor: "black",
           }}
-          className={bgImage ?? "bg-[url('/images/card-parts/card-frames/other/default.png')]"}
         >
-          {/* Card header */}
+          {/* Card frame */}
           <div
-            id="card-header"
+            id="card-frame"
             style={{
-              width: "100%",
-              maxHeight: "56px",
-              padding: "3px",
-              borderRadius: "4px",
-              border: "4px solid black",
+              width: "375px",
+              height: "526px",
+              borderRadius: "12.5px",
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-between",
-              alignItems: "center",
-              zIndex: 10,
-              gap: "4px",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
             }}
-            className={`
-              ${bgColor?.[50] ?? "bg-slate-50"}
-            `}
+            className={bgImage ?? "bg-[url('/images/card-parts/card-frames/other/default.png')]"}
           >
-            {/* Card name and cost */}
+            {/* Card header */}
             <div
-              id="card-header-mythic-name-cost"
+              id="card-header"
               style={{
                 width: "100%",
-                height: "20px",
+                maxHeight: "56px",
+                padding: "3px",
+                borderRadius: "4px",
+                border: "4px solid black",
                 display: "flex",
-                flexDirection: "row",
+                flexDirection: "column",
                 justifyContent: "space-between",
                 alignItems: "center",
-                gap: "8px",
+                zIndex: 10,
+                gap: "4px",
               }}
+              className={`
+                ${bgColor?.[50] ?? "bg-slate-50"}
+              `}
             >
+              {/* Card name and cost */}
               <div
-                id="card-header-mythic-name"
-                className={`
-                  flex
-                  flex-row
-                  flex-grow
-                  justify-start
-                  items-center
-                  h-full
-                  gap-1
-                `}
-              >
-                {/* Mythic icon */}
-                {cardData.cardSuperType === "mythic" && (
-                  <Image
-                    src="/images/card-parts/card-icons/mythic.png"
-                    height={14}
-                    width={14}
-                    alt="Mythic icon"
-                  />
-                )}
-                {/* Card name */}
-                <Typography
-                  variant="subtitle1"
-                  style={{
-                    color: "black",
-                    fontWeight: 500,
-                    fontSize: "15px",
-                    lineHeight: "20px"
-                  }}
-                >
-                  {
-                    (cardData?.cardName ?? '')
-                      .split(" ")
-                      .map(word => word
-                        .charAt(0)
-                        .toUpperCase() + word
-                          .slice(1)
-                          .toLowerCase()
-                        )
-                      .join(" ")
-                  }
-                </Typography>
-              </div> 
-              {/* Card Energy Cost */}
-              <div
-                id="card-energy-cost"
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  alignItems: "center",
-                  gap: "2px",
-                }}
-              >
-                {Object.entries(cardData.cardEnergyCost ?? {})
-                  .sort(([colorA], [colorB]) => {
-                    const order = ["yellow", "blue", "purple", "red", "green", "void"];
-                    return order.indexOf(colorA) - order.indexOf(colorB);
-                  })
-                  .map(([color, value]) =>
-                    color !== "void"
-                      ? Array.from({
-                          length: typeof value === 'number' ? value : 0,
-                        }, (_, i) => (
-                          <Image
-                            key={`${color}-${i}`}
-                            src={`/images/card-parts/card-icons/card-cost/${color}.png`}
-                            width={21}
-                            height={21}
-                            alt={`${color} energy icon`}
-                          />
-                        ))
-                      : typeof value === 'number' && value > 0
-                      ? (
-                          <Image
-                            key={`void-0`}
-                            src={`/images/card-parts/card-icons/card-cost/void-${value}.png`}
-                            width={21}
-                            height={21}
-                            alt={`void energy icon`}
-                          />
-                        )
-                      : null
-                  )}
-              </div>
-            </div>
-
-            {/* Card types and speed */}
-            <div
-              id="card-header-types-speed"
-              style={{
-                width: "100%",
-                height: "20px",
-                borderRadius: "3px",
-                padding: "1px 2px",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                gap: "8px",
-                color: "black",
-              }}
-              className={`${bgColor?.[200] ?? "bg-slate-200"}`}
-            >
-              {/* Card types */}
-              <div
-                id="card-header-types"
+                id="card-header-mythic-name-cost"
                 style={{
                   width: "100%",
-                  height: "21px",
+                  height: "20px",
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  gap: "4px",
+                  gap: "8px",
                 }}
               >
-                <Typography
-                  variant="subtitle2"
-                  component="span"
+                <div
+                  id="card-header-mythic-name"
+                  className={`
+                    flex
+                    flex-row
+                    flex-grow
+                    justify-start
+                    items-center
+                    h-full
+                    gap-1
+                  `}
+                >
+                  {/* Mythic icon */}
+                  {cardData.cardSuperType === "mythic" && (
+                    <Image
+                      src="/images/card-parts/card-icons/mythic.png"
+                      height={14}
+                      width={14}
+                      alt="Mythic icon"
+                    />
+                  )}
+                  {/* Card name */}
+                  <Typography
+                    variant="subtitle1"
+                    style={{
+                      color: "black",
+                      fontWeight: 500,
+                      fontSize: "15px",
+                      lineHeight: "20px"
+                    }}
+                  >
+                    {
+                      (cardData?.cardName ?? '')
+                        .split(" ")
+                        .map(word => word
+                          .charAt(0)
+                          .toUpperCase() + word
+                            .slice(1)
+                            .toLowerCase()
+                          )
+                        .join(" ")
+                    }
+                  </Typography>
+                </div> 
+                {/* Card Energy Cost */}
+                <div
+                  id="card-energy-cost"
                   style={{
-                    padding: "0",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                    gap: "2px",
+                  }}
+                >
+                  {Object.entries(cardData.cardEnergyCost ?? {})
+                    .sort(([colorA], [colorB]) => {
+                      const order = ["yellow", "blue", "purple", "red", "green", "void"];
+                      return order.indexOf(colorA) - order.indexOf(colorB);
+                    })
+                    .map(([color, value]) =>
+                      color !== "void"
+                        ? Array.from({
+                            length: typeof value === 'number' ? value : 0,
+                          }, (_, i) => (
+                            <Image
+                              key={`${color}-${i}`}
+                              src={`/images/card-parts/card-icons/card-cost/${color}.png`}
+                              width={21}
+                              height={21}
+                              alt={`${color} energy icon`}
+                            />
+                          ))
+                        : typeof value === 'number' && value > 0
+                        ? (
+                            <Image
+                              key={`void-0`}
+                              src={`/images/card-parts/card-icons/card-cost/void-${value}.png`}
+                              width={21}
+                              height={21}
+                              alt={`void energy icon`}
+                            />
+                          )
+                        : null
+                    )}
+                </div>
+              </div>
+
+              {/* Card types and speed */}
+              <div
+                id="card-header-types-speed"
+                style={{
+                  width: "100%",
+                  height: "20px",
+                  borderRadius: "3px",
+                  padding: "1px 2px",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  gap: "8px",
+                  color: "black",
+                }}
+                className={`${bgColor?.[200] ?? "bg-slate-200"}`}
+              >
+                {/* Card types */}
+                <div
+                  id="card-header-types"
+                  style={{
+                    width: "100%",
+                    height: "21px",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: "4px",
+                  }}
+                >
+                  <Typography
+                    variant="subtitle2"
+                    component="span"
+                    style={{
+                      padding: "0",
+                      margin: "0",
+                    }}
+                  >
+                    {
+                      cardData?.cardType
+                        ? cardData.cardType
+                            .charAt(0)
+                            .toUpperCase() + 
+                            cardData.cardType
+                            .slice(1)
+                            .toLowerCase()
+                        : ""
+                    } {" "}
+                    {
+                      (cardData?.cardSuperType ?? "default") !== "default" ? 
+                      (cardData?.cardSuperType ?? "default")
+                        .charAt(0)
+                        .toUpperCase() + 
+                      (cardData?.cardSuperType ?? "default")
+                        .slice(1)
+                        .toLowerCase() : ""
+                    }
+                    {
+                      (cardData?.cardSubType?.[0]?.trim()) ?
+                      " • " : ""
+                    }
+                    {
+                      cardData.cardSubType
+                    }
+                  </Typography>
+                </div>
+                {/* Card Speed */}
+                <div
+                  id="card-header-speed"
+                  style={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "row-reverse",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                    gap: "4px",
                     margin: "0",
                   }}
                 >
-                  {
-                    cardData?.cardType
-                      ? cardData.cardType
-                          .charAt(0)
-                          .toUpperCase() + 
-                          cardData.cardType
-                          .slice(1)
-                          .toLowerCase()
-                      : ""
-                  } {" "}
-                  {
-                    (cardData?.cardSuperType ?? "default") !== "default" ? 
-                    (cardData?.cardSuperType ?? "default")
-                      .charAt(0)
-                      .toUpperCase() + 
-                    (cardData?.cardSuperType ?? "default")
-                      .slice(1)
-                      .toLowerCase() : ""
-                  }
-                  {
-                    (cardData?.cardSubType?.[0]?.trim()) ?
-                    " • " : ""
-                  }
-                  {
-                    cardData.cardSubType
-                  }
-                </Typography>
-              </div>
-              {/* Card Speed */}
-              <div
-                id="card-header-speed"
-                style={{
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "row-reverse",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                  gap: "4px",
-                  margin: "0",
-                }}
-              >
-                {Array.from({
-                  length: cardData.cardSpeed ? parseInt(cardData.cardSpeed, 10) : 0
-                }).map((_, index) => (
-                  <Image
-                    key={index}
-                    src={`/images/card-parts/card-icons/speed.png`}
-                    width={10}
-                    height={15}
-                    alt="Speed icon"
-                  />
-                ))}
+                  {Array.from({
+                    length: cardData.cardSpeed ? parseInt(cardData.cardSpeed, 10) : 0
+                  }).map((_, index) => (
+                    <Image
+                      key={index}
+                      src={`/images/card-parts/card-icons/speed.png`}
+                      width={10}
+                      height={15}
+                      alt="Speed icon"
+                    />
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-          {/* Card image & content */}
-          <div
-            id="card-image-content-outer"
-            style={{
-              width: "375px",
-              height: "526px",
-              paddingLeft: "13.5px",
-              paddingRight: "13.5px",
-              marginTop: "-8px",
-              display: "flex",
-              flexDirection: "column",
-              zIndex: 0,
-            }}
-          >
-            {/* Card Image Content Inner */}
+            {/* Card image & content */}
             <div
-              id="card-image-content-inner"
+              id="card-image-content-outer"
               style={{
-                height: "462px", // Increased by 6px to account for border
-                padding: "3px",
-                border: "3.75px solid black",
-                borderRadius: "8px",
+                width: "375px",
+                height: "526px",
+                paddingLeft: "13.5px",
+                paddingRight: "13.5px",
+                marginTop: "-8px",
                 display: "flex",
                 flexDirection: "column",
-                gap: "8px",
+                zIndex: 0,
               }}
-              className={`${bgColor?.[400] ?? "bg-slate-400"}`}
             >
-              {/* Card image */}
+              {/* Card Image Content Inner */}
               <div
-                id="card-image"
+                id="card-image-content-inner"
                 style={{
-                  aspectRatio: "4/3",
-                  width: "100%",
-                  height: "252px", // Maybe 7px taller
-                  border: "2px solid black",
-                  overflow: "hidden",
+                  height: "462px", // Increased by 6px to account for border
+                  padding: "3px",
+                  border: "3.75px solid black",
+                  borderRadius: "8px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "8px",
+                }}
+                className={`${bgColor?.[400] ?? "bg-slate-400"}`}
+              >
+                {/* Card image */}
+                <div
+                  id="card-image"
+                  style={{
+                    aspectRatio: "4/3",
+                    width: "100%",
+                    height: "252px", // Maybe 7px taller
+                    border: "2px solid black",
+                    overflow: "hidden",
+                    position: "relative",
+                  }}
+                >
+                  <Image
+                    src={cardData.cardArt || "/images/card-parts/card-art/default-art.jpg"}
+                    fill={true}
+                    alt={`${cardData.cardName} card art`}
+                    style={{
+                      objectFit: "cover"
+                    }}
+                  />
+                </div>
+                {/* Card text and flavor text */}
+                <div
+                  id="card-text-flavor"
+                  style={{
+                    maxWidth: "340px",
+                    height: "190px",
+                    border: "2px solid black",
+                    padding: "5px 7.5px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "4px",
+                    color: "black",
+
+                  }}
+                  className={`${bgColor?.[50] ?? "bg-slate-50"}`}
+                >
+                  {/* Dynamically change card text size depending on lengths */}
+                  {/* Card text */}
+                  <Typography
+                    id="card-text"
+                    variant="body1"
+                  >
+                    {cardData.cardText}
+                  </Typography>
+                  simple card render
+                  {/* Divider */}
+                  {cardData.cardFlavorText !== "" && (
+                    <Divider
+                      className="
+                        mx-4
+                        my-0.5
+                        opacity-25
+                      "
+                    />
+                  )}
+                  {/* Flavor text */}
+                  <Typography
+                    id="flavor-text"
+                    variant="body2"
+                  >
+                    {`"${cardData.cardFlavorText}"`}
+                  </Typography>
+                </div>
+              </div> 
+            </div>
+            {/* Card Stats & Grade */}
+            <div
+              id="card-stats-grade-creator-info"
+              style={{
+                width: "100%",
+                maxHeight: "45px",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: "-4px",
+                zIndex: 10,
+              }}
+            >
+              {/* Card Attack */}
+              {cardData.cardType === "entity" && (
+              <div
+                id="stats-attack"
+                style={{
+                  width: "20%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
                   position: "relative",
                 }}
               >
-                <Image
-                  src={cardData.cardArt || "/images/card-parts/card-art/default-art.jpg"}
-                  fill={true}
-                  alt={`${cardData.cardName} card art`}
+                <Typography
+                  variant="body1"
                   style={{
-                    objectFit: "cover"
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    position: "absolute",
+                    top: 0,
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                    textAlign: "center",
+                    padding: "0 24px",
+                    color: "black",
                   }}
+                >
+                  {cardData.cardAttack}
+                </Typography>
+                <Image
+                  src="/images/card-parts/card-stats/attack.png"
+                  width={60}
+                  height={45}
+                  alt="Card attack icon"
                 />
-              </div>
-              {/* Card text and flavor text */}
+              </div>)}
+              {/* Card grade + info */}
               <div
-                id="card-text-flavor"
+                id="stats-grade-info"
                 style={{
-                  maxWidth: "340px",
-                  height: "190px",
-                  border: "2px solid black",
-                  padding: "5px 7.5px",
+                  width: cardData.cardType !== "entity" ? "100%" : "60%",
                   display: "flex",
                   flexDirection: "column",
-                  gap: "4px",
-                  color: "black",
-
-                }}
-                className={`${bgColor?.[50] ?? "bg-slate-50"}`}
-              >
-                {/* Dynamically change card text size depending on lengths */}
-                {/* Card text */}
-                <Typography
-                  id="card-text"
-                  variant="body1"
-                >
-                  {cardData.cardText}
-                </Typography>
-                simple card render
-                {/* Divider */}
-                {cardData.cardFlavorText !== "" && (
-                  <Divider
-                    className="
-                      mx-4
-                      my-0.5
-                      opacity-25
-                    "
-                  />
-                )}
-                {/* Flavor text */}
-                <Typography
-                  id="flavor-text"
-                  variant="body2"
-                >
-                  {`"${cardData.cardFlavorText}"`}
-                </Typography>
-              </div>
-            </div> 
-          </div>
-          {/* Card Stats & Grade */}
-          <div
-            id="card-stats-grade-creator-info"
-            style={{
-              width: "100%",
-              maxHeight: "45px",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: "-4px",
-              zIndex: 10,
-            }}
-          >
-            {/* Card Attack */}
-            {cardData.cardType === "entity" && (
-            <div
-              id="stats-attack"
-              style={{
-                width: "20%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                position: "relative",
-              }}
-            >
-              <Typography
-                variant="body1"
-                style={{
-                  width: "100%",
-                  display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
-                  right: 0,
-                  left: 0,
-                  textAlign: "center",
-                  padding: "0 24px",
-                  color: "black",
+                
                 }}
               >
-                {cardData.cardAttack}
-              </Typography>
-              <Image
-                src="/images/card-parts/card-stats/attack.png"
-                width={60}
-                height={45}
-                alt="Card attack icon"
-              />
-            </div>)}
-            {/* Card grade + info */}
+                {/* Card grade */}
+                <div
+                  id="stats-grade"
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "start",
+                    alignItems: "center",
+                  }}
+                >
+                  {/* Card Grade */}
+                  <Image
+                    src={`/images/card-parts/card-icons/card-grades/grade-${cardData.cardGrade ? cardData.cardGrade.toLowerCase() : "common"}.png`}
+                    height={34}
+                    width={34}
+                    alt={`${cardData.cardGrade} icon`}
+                    className="
+                      bg-black
+                      rounded-full
+                      p-2
+                    "
+                  />
+                </div>
+              </div>
+              {/* Card Defense */}
+              {cardData.cardType === "entity" && (
+              <div
+                id="stats-defense"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "20%",
+                  position: "relative",
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    position: "absolute",
+                    top: 0,
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                    textAlign: "center",
+                    padding: "0 24px",
+                    color: "black",
+                  }}
+                >
+                  {cardData.cardDefense}
+                </Typography>
+                <Image
+                  src="/images/card-parts/card-stats/defense.png"
+                  width={60}
+                  height={45}
+                  alt="Card defense icon"
+                />
+              </div>)}
+            </div>
+            {/* Card creator & copyright */}
             <div
-              id="stats-grade-info"
+              id="card-stats-grade-creator-info"
               style={{
-                width: cardData.cardType !== "entity" ? "100%" : "60%",
+                width: "100%",
                 display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
+                flexDirection: "row",
+                justifyContent: "space-between",
                 alignItems: "center",
+                marginTop: "-4px",
+                padding: "0 16px",
+                fontSize: "12px",
               
               }}
             >
-              {/* Card grade */}
-              <div
-                id="stats-grade"
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "start",
-                  alignItems: "center",
-                }}
+              <p
+                className="fineprint-text"
               >
-                {/* Card Grade */}
-                <Image
-                  src={`/images/card-parts/card-icons/card-grades/grade-${cardData.cardGrade ? cardData.cardGrade.toLowerCase() : "common"}.png`}
-                  height={34}
-                  width={34}
-                  alt={`${cardData.cardGrade} icon`}
-                  className="
-                    bg-black
-                    rounded-full
-                    p-2
-                  "
-                />
-              </div>
+                {/* Creator: {" "} */}
+                {cardData.cardCreator
+                  ? `Made by ${cardData.cardCreator}`
+                  : "Card Creator"}
+              </p>
+              <p
+                className="fineprint-text"
+              >
+                © Nexus {
+                  new Date().getFullYear()
+                } 
+              </p>
             </div>
-            {/* Card Defense */}
-            {cardData.cardType === "entity" && (
-            <div
-              id="stats-defense"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "20%",
-                position: "relative",
-              }}
-            >
-              <Typography
-                variant="body1"
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
-                  right: 0,
-                  left: 0,
-                  textAlign: "center",
-                  padding: "0 24px",
-                  color: "black",
-                }}
-              >
-                {cardData.cardDefense}
-              </Typography>
-              <Image
-                src="/images/card-parts/card-stats/defense.png"
-                width={60}
-                height={45}
-                alt="Card defense icon"
-              />
-            </div>)}
-          </div>
-          {/* Card creator & copyright */}
-          <div
-            id="card-stats-grade-creator-info"
-            style={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: "-4px",
-              padding: "0 16px",
-              fontSize: "12px",
-            
-            }}
-          >
-            <p
-              className="fineprint-text"
-            >
-              {/* Creator: {" "} */}
-              {cardData.cardCreator
-                ? `Made by ${cardData.cardCreator}`
-                : "Card Creator"}
-            </p>
-            <p
-              className="fineprint-text"
-            >
-              © Nexus {
-                new Date().getFullYear()
-              } 
-            </p>
           </div>
         </div>
-      </div>
-    )
-  }
+      )
+    }
 
-  // High Quality Card Render
-  if (cardData && !simpleCardRender) {
+    // High Quality Card Render
+    if (cardData && !simpleCardRender) {
     return (
       <Box
         ref={ref}
@@ -1167,7 +1167,8 @@ const CardRender = forwardRef<HTMLDivElement, CardRenderProps>(
       </Box>
     )
   }
-  
-);
+});
+
+CardRender.displayName = "CardRender";
 
 export default CardRender;
