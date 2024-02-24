@@ -95,7 +95,6 @@ export default function Create() {
   const [uploadedFormData, setUploadedFormData] = useState<CardsTableType | null>(null);
   const [submitSuccessful, setSubmitSuccessful] = useState<boolean>(false);
   const [postToDiscord, setPostToDiscord] = useState<boolean>(true);
-  const [showCardRender, setShowCardRender] = useState<boolean>(true);
   const [showSimpleCardRender, setShowSimpleCardRender] = useState<boolean>(true);
   const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
@@ -231,8 +230,7 @@ export default function Create() {
     }
   }, [
     submittedFormData,
-    cardRenderRef.current, 
-    showCardRender
+    cardRenderRef.current
   ]);
   // setShowSimpleCardRender(false);
 
@@ -265,7 +263,6 @@ export default function Create() {
       });
       setShowAlertInfo(true);
       setSubmittedFormData(data);
-      setShowCardRender(true);
     } catch (error) {
       setAlertInfo({
         type: "error",
@@ -273,6 +270,8 @@ export default function Create() {
         message: `Error submitting card: ${error}`
       });
     }
+    console.log("Submitted form data:", data);
+    console.log("Submitted form data:", submittedFormData);
   };
 
   // Post to Discord change handler
@@ -506,7 +505,6 @@ export default function Create() {
               {/* Card Creator Form */}
               <CardCreatorForm
                 cardData={uploadedFormData ? uploadedFormData : submittedFormData}
-                showCardRender={showCardRender}
                 showSimpleCardRender={showSimpleCardRender}
                 cardRenderRef={cardRenderRef}
               />

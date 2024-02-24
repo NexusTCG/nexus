@@ -51,14 +51,12 @@ import CustomInput from "@/app/components/card-creator/CustomInput";
 
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
-  showCardRender?: boolean;
   showSimpleCardRender?: boolean;
   cardRenderRef?: React.RefObject<HTMLDivElement>;
 };
 
 export default function NexusCardForm({
   cardData,
-  showCardRender,
   showSimpleCardRender,
   cardRenderRef,
 }: CardRenderProps) {
@@ -277,7 +275,7 @@ export default function NexusCardForm({
 
   return (
     <>
-      {cardData && showCardRender ? (
+      {cardData ? (
         <CardRender
           cardData={cardData}
           simpleCardRender={showSimpleCardRender}

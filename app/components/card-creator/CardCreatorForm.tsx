@@ -37,14 +37,12 @@ import {
 
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
-  showCardRender?: boolean;
   showSimpleCardRender?: boolean;
   cardRenderRef?: React.RefObject<HTMLDivElement>;
 };
 
 export default function CardCreatorForm({
   cardData,
-  showCardRender,
   showSimpleCardRender,
   cardRenderRef,
 }: CardRenderProps) {
@@ -651,7 +649,6 @@ export default function CardCreatorForm({
           {/* Card Render / Form */}
           <NexusCardForm
             cardData={cardData}
-            showCardRender={showCardRender}
             showSimpleCardRender={showSimpleCardRender}
             cardRenderRef={cardRenderRef}
           />
