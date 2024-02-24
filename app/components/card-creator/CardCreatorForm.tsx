@@ -36,13 +36,15 @@ import {
 } from "@mui/icons-material";
 
 type CardRenderProps = {
-  cardData?: CardsTableType | null;
+  cardData?: CardsTableType | CardFormDataType | null;
   showCardRender?: boolean;
+  showSimpleCardRender?: boolean;
 };
 
 export default function CardCreatorForm({
   cardData,
   showCardRender,
+  showSimpleCardRender,
 }: CardRenderProps) {
   const {
     setValue,
@@ -648,6 +650,7 @@ export default function CardCreatorForm({
           <NexusCardForm
             cardData={cardData}
             showCardRender={showCardRender}
+            showSimpleCardRender={showSimpleCardRender}
           />
 
           {/* Card Art Options */}

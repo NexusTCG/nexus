@@ -9,7 +9,7 @@ export async function postCardToDiscord(card: {
   const webhookUrl = process.env.DISCORD_WEBHOOK_URL!;
 
   if (card.cardRender !== undefined) {
-    const cardRender = JSON.stringify(card.cardRender);
+    const cardRender = card.cardRender;
 
     console.log(`Posting card render to Discord: ${cardRender}`)
 

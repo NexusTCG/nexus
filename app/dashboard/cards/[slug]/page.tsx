@@ -211,12 +211,31 @@ export default function Card({
               px-6
             "
           >
-            {/* Card Render */}
-            {cardData && cardData?.id && (
-              <CardRender
-                cardData={cardData} 
-              />
-            )}
+            <Box
+              className="flex flex-row justify-center items-center w-full gap-6"
+            >
+              {/* Card Render */}
+              {cardData && cardData?.id && (
+                <div className="flex flex-col gap-2">
+                  high quality render
+                  <CardRender
+                    cardData={cardData} 
+                    simpleCardRender={false}
+                  />
+                </div>
+              )}
+              {/* Card Render */}
+              {cardData && cardData?.id && (
+                <div className="flex flex-col gap-2">
+                  simple quality render
+                  <CardRender
+                    cardData={cardData} 
+                    simpleCardRender={true}
+                  />
+                </div>
+              )}
+            </Box>
+            
           </Box>
           
           {/* Card Details */}

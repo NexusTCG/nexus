@@ -50,13 +50,15 @@ import CustomInput from "@/app/components/card-creator/CustomInput";
 // Add debouncer to reduce input lag
 
 type CardRenderProps = {
-  cardData?: CardsTableType | null;
+  cardData?: CardsTableType | CardFormDataType | null;
   showCardRender?: boolean;
+  showSimpleCardRender?: boolean;
 };
 
 export default function NexusCardForm({
   cardData,
   showCardRender,
+  showSimpleCardRender,
 }: CardRenderProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {
@@ -276,7 +278,7 @@ export default function NexusCardForm({
       {cardData && showCardRender ? (
         <CardRender
           cardData={cardData}
-          simpleStyling={true}
+          simpleCardRender={showSimpleCardRender}
         />
       ) : (
         <Box
