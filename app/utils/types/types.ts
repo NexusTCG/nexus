@@ -1,25 +1,25 @@
 export type CardFormDataType = {
-  user_id: string | null;
-  cardCreator: string;
-  cardName: string;
-  cardEnergyValue: number;
-  cardEnergyCost?: { [key: string]: number };
-  cardColor: string;
-  cardArt: string;
-  cardType: string;
-  cardSuperType: string;
-  cardSubType: string[];
-  cardSpeed?: string;
-  cardGrade: string;
-  cardText: string;
-  cardFlavorText: string;
-  cardAttack: string;
-  cardDefense: string;
-  cardPrompt: string;
-  cardArtPrompt: string;
-  cardRender: string;
-  // cardMythic: boolean;
-  // cardBgImage: string;
+  cardArt?: string
+  cardArtPrompt?: string | null
+  cardAttack?: string | null
+  cardColor: string | null
+  cardCreator?: string | null
+  cardDefense?: string | null
+  cardEnergyCost?: { [key: string]: number } | null;
+  cardEnergyValue?: number | null
+  cardFlavorText?: string | null
+  cardGrade?: string
+  cardName?: string
+  cardPrompt?: string | null
+  cardRender?: string | null
+  cardSpeed?: string | null
+  cardSubType?: string[] | null
+  cardSuperType?: string | null
+  cardText?: string
+  cardType?: string
+  created_at?: string
+  id?: number
+  user_id: string
 };
 
 export type CardTypesType = {

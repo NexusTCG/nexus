@@ -41,7 +41,7 @@ export default function Card({
   const [isCardOwner, setIsCardOwner] = useState<boolean>(false);
   const [createNewCardHref, setCreateNewCardHref] = useState<string>("/login");
   const [createNewCardHrefIcon, setCreateNewCardHrefIcon] = useState<React.ReactNode>(<Login />);
-  const [card, setCard] = useState<CardsTableType | null>(null);
+  const [cardData, setCardData] = useState<CardsTableType | null>(null);
   const [formattedDate, setFormattedDate] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -50,11 +50,12 @@ export default function Card({
   // Fetch card data from Supabase
   useEffect(() => {
     const loadCardData = async () => {
+      const cardId = parseInt(params.slug, 10);
       const cards = await fetchCards({
         from: "cards",
         filter: {
           column: "id",
-          value: params.slug
+          value: cardId
         },
       });
 
@@ -64,7 +65,7 @@ export default function Card({
           userProfileData?.username
         );
         if (card) {
-          setCard(card);
+          setCardData(card);
         } else {
           console.error("Card not found or does not belong to the current user.");
         }
@@ -78,20 +79,20 @@ export default function Card({
 
   // Format date from card data
   useEffect(() => {
-    if (card) {
-      const formattedDate = format(new Date(card.created_at), 'MMMM dd, yyyy');
+    if (cardData) {
+      const formattedDate = format(new Date(cardData.created_at), 'MMMM dd, yyyy');
       setFormattedDate(formattedDate);
     }
-  }, [card]);
+  }, [cardData]);
 
   // Check if current user is the card creator
   useEffect(() => {
-    if (card?.cardCreator === userProfileData?.username) {
+    if (cardData?.cardCreator === userProfileData?.username) {
       setIsCardOwner(true);
       setCreateNewCardHref("/dashboard/create");
       setCreateNewCardHrefIcon(<DesignServices />);
     }
-  }, [card, userProfileData?.username]);
+  }, [cardData, userProfileData?.username]);
 
   function handleDownload() {
     console.log("Download button clicked");
@@ -156,12 +157,12 @@ export default function Card({
             Cards
           </Typography>
         </Link>
-        {card ? (<Typography
+        {cardData ? (<Typography
           className="
             text-white
           "
         >
-          {card?.cardName || "Card"}
+          {cardData?.cardName || "Card"}
         </Typography>
         ) : (
           <Skeleton
@@ -211,9 +212,9 @@ export default function Card({
             "
           >
             {/* Card Render */}
-            {card && card?.id && (
+            {cardData && cardData?.id && (
               <CardRender
-                cardId={card?.id} 
+                cardData={cardData} 
               />
             )}
           </Box>
@@ -264,7 +265,7 @@ export default function Card({
                     gap-2
                   "
                 >
-                  {card ? (
+                  {cardData ? (
                     <Typography
                       variant="h4"
                       className="
@@ -272,7 +273,7 @@ export default function Card({
                         text-white
                       "
                     >
-                      {card?.cardName}
+                      {cardData?.cardName}
                     </Typography>
                   ) : (
                     <Skeleton
@@ -282,7 +283,7 @@ export default function Card({
                       animation="wave"
                     />
                   )}
-                  {card ? (<Typography
+                  {cardData ? (<Typography
                     variant="overline"
                     component="span"
                     className="
@@ -290,7 +291,7 @@ export default function Card({
                     "
                   >
                     by {""}
-                    <Link href={`/dashboard/profile/${card?.cardCreator}`}>
+                    <Link href={`/dashboard/profile/${cardData?.cardCreator}`}>
                       <Typography
                         variant="overline"
                         className="
@@ -300,7 +301,7 @@ export default function Card({
                           hover:text-lime-300
                         "
                       >
-                        {card?.cardCreator}
+                        {cardData?.cardCreator}
                       </Typography>
                     </Link>
                   </Typography>
@@ -313,7 +314,7 @@ export default function Card({
                     />
                   )}
                 </Box>
-                {card ? (<Typography
+                {cardData ? (<Typography
                   variant="overline"
                   className="
                     font-medium
@@ -331,40 +332,42 @@ export default function Card({
                   />
                 )}
               </Box>
-              {userProfileData?.username === card?.cardCreator && card && (<Box
-                id="crud-buttons-container"
-                className="
-                  flex
-                  flex-row
-                  justify-end
-                  items-center
-                  gap-1
-                "
-              >
-                <IconButton
-                  aria-label="edit"
-                  size="small"
-                  onClick={handleEdit}
+              {userProfileData?.username === cardData?.cardCreator && cardData && (
+                <Box
+                  id="crud-buttons-container"
                   className="
-                    opacity-50
-                    hover:opacity-100
+                    flex
+                    flex-row
+                    justify-end
+                    items-center
+                    gap-1
                   "
                 >
-                  <Edit />
-                </IconButton>
-                <IconButton
-                  aria-label="delete"
-                  size="small"
-                  onClick={handleDelete}
-                  className="
-                    opacity-50
-                    hover:opacity-100
-                    hover:text-red-500
-                  "
-                >
-                  <Delete />
-                </IconButton>
-              </Box>)}
+                  <IconButton
+                    aria-label="edit"
+                    size="small"
+                    onClick={handleEdit}
+                    className="
+                      opacity-50
+                      hover:opacity-100
+                    "
+                  >
+                    <Edit />
+                  </IconButton>
+                  <IconButton
+                    aria-label="delete"
+                    size="small"
+                    onClick={handleDelete}
+                    className="
+                      opacity-50
+                      hover:opacity-100
+                      hover:text-red-500
+                    "
+                  >
+                    <Delete />
+                  </IconButton>
+                </Box>
+              )}
             </Box>
             <Box
               id="card-details-buttons-container"
@@ -493,7 +496,7 @@ export default function Card({
                 text-white
               "
             >
-              Share {card?.cardName || "card"}
+              Share {cardData?.cardName || "card"}
               {/* Share on Discord */}
               {/* Share on Reddit */}
               {/* Share on X */}

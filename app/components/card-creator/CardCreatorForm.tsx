@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import { DashboardContext } from "@/app/context/DashboardContext";
+import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import { CardFormDataType } from "@/app/utils/types/types";
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
 import ConstructArtPrompt from "@/app/lib/actions/constructArtPrompt";
@@ -34,7 +35,15 @@ import {
   Info,
 } from "@mui/icons-material";
 
-export default function CardCreatorForm() {
+type CardRenderProps = {
+  cardData?: CardsTableType | null;
+  showCardRender?: boolean;
+};
+
+export default function CardCreatorForm({
+  cardData,
+  showCardRender,
+}: CardRenderProps) {
   const {
     setValue,
     control,
@@ -89,7 +98,7 @@ export default function CardCreatorForm() {
     }, 1000) as unknown as number;
     setIntervalId(newIntervalId);
 
-    if (generateArtLimit < 3) {
+    if (generateArtLimit < 3 && form.cardArtPrompt) {
       setAlertInfo({
         type: "info",
         icon: <Info />,
@@ -636,7 +645,10 @@ export default function CardCreatorForm() {
           "
         >
           {/* Card Render / Form */}
-          <NexusCardForm />
+          <NexusCardForm
+            cardData={cardData}
+            showCardRender={showCardRender}
+          />
 
           {/* Card Art Options */}
           {showCardArtOptions && (<Box

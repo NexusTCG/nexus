@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useForm, FormProvider } from "react-hook-form";
 import useSession from "@/app/hooks/useSession";
 import { DashboardContext } from "@/app/context/DashboardContext";
+import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import { CardFormDataType } from "@/app/utils/types/types";
 import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -75,11 +76,10 @@ export default function Create() {
   const {
     handleSubmit,
     watch,
-    trigger,
     formState: {
       isValid,
       isSubmitting,
-      isSubmitted
+      isSubmitted,
     },
     setValue
   } = methods;
@@ -92,8 +92,13 @@ export default function Create() {
   const router = useRouter();
 
   // States
+  const [submittedCard, setSubmittedCard] = useState<CardsTableType | null>(null);
+  const [cardIdToUpdate, setCardIdToUpdate] = useState<number | null>(null);
+  const [cardRenderUrl, setCardRenderUrl] = useState<string | null>("");
+  const [cardRenderUrlUpdated, setCardRenderUrlUpdated] = useState<boolean>(false);
   const [postToDiscord, setPostToDiscord] = useState<boolean>(true);
   const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
+  const [showCardRender, setShowCardRender] = useState<boolean>(false);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [alertInfo, setAlertInfo] = useState<{
@@ -102,7 +107,8 @@ export default function Create() {
     message: string;
   } | null>(null);
 
-  // Set user_id and cardCreator values based on session
+  // Set user_id and cardCreator
+  // values based on user session
   useEffect(() => {
     if (
       session?.user?.id
@@ -119,7 +125,7 @@ export default function Create() {
     ) {
       setValue(
         "cardCreator",
-        userProfileData?.username as string // Need assertion?
+        userProfileData?.username as string
       );
     }
   }, [
@@ -127,6 +133,36 @@ export default function Create() {
     userProfileData,
     setValue
   ]);
+
+  // Update cardRender in Supabase
+  useEffect(() => {
+    const updateCardRender = (async () => {
+      const { data, error } = await supabase
+      .from("cards")
+      .update({ cardRender: cardRenderUrl })
+      .eq("id", cardIdToUpdate)
+      .select();
+
+      console.log(`cardRenderData data: ${data} cardRenderData error: ${error}`);
+      if (data && data.length > 0) {
+        setCardRenderUrlUpdated(true);
+      }
+    });
+    updateCardRender();
+  }), [submittedCard?.id, cardRenderUrl];
+
+  // Post to Discord
+  // useEffect(() => {
+  //   if (submittedCard && cardRenderUrl !== null) {
+  //     postCardToDiscord({
+  //       cardName: submittedCard?.cardName,
+  //       cardRender: cardRenderUrl,
+  //       cardCreator: submittedCard?.cardCreator,
+  //       cardIdUrl: `https://www.play.nexus/dashboard/cards/${submittedCard?.id}`
+  //     });
+  //   }
+
+  // }, [submittedCard, cardRenderUrl, cardRenderUrlUpdated, postCardToDiscord])
 
   // Re-open snackbar when message changes
   useEffect(() => {
@@ -136,6 +172,13 @@ export default function Create() {
       setOpenSnackbar(true);
     }
   }, [snackbarMessage]);
+
+  // Show card render when submitted
+  useEffect(() => {
+    if (submittedCard && !showCardRender) {
+      setShowCardRender(true);
+    }
+  }, [submittedCard]);
 
   // Post to Discord change handler
   function handlePostToDiscordChange() {
@@ -160,128 +203,141 @@ export default function Create() {
         message: "Submitting card..."
       });
 
-      // User Puppeteer instead
-      const imageDataUrl = await convertCardCodeToImage("card-border"); 
-      const imagePublicUrl = await uploadCardImage(imageDataUrl);
-      
-      if (!imagePublicUrl) {
-        setAlertInfo({
-          type: "error",
-          icon: <Error />,
-          message: "Failed to upload card render.."
-        });
-      } else if (imagePublicUrl) {
-        setValue("cardRender",
-          imagePublicUrl, {
-          shouldValidate: true
-        });
-        await trigger("cardRender");
+      // Submit form data & get inserted row data
+      const response = await fetch("/data/submit-card", { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...data
+        }),
+      });
 
-        console.log("Card render uploaded: ", imagePublicUrl);
+      const submittedCardData = await response.json();
+      if (submittedCardData) {
+        setSubmittedCard(submittedCardData.data);
+        setCardIdToUpdate(submittedCardData.data.id);
       }
-
-      // Submit card if cardRender is updated
-      if (imagePublicUrl) {
-        console.log("Submitting card: ", data);
-
-        const response = await fetch("/data/submit-card", { 
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            ...data, 
-            cardRender: imagePublicUrl
-          }),
+      
+      // Form submit success
+      if (response.ok) {
+        setAlertInfo({
+          type: "success",
+          icon: <Check />,
+          message: "Card submitted successfully! Redirecting..."
         });
+        
+        if (submittedCardData.data) {
 
-        console.log("Card submitted: ", response);
-        const responseData = await response.json();
+          // Convert HTML to PNG
+          const imageDataUrl = await convertCardCodeToImage(
+            "card-render-container"
+          ); 
 
-        console.log("Card submitted (responseData): ", responseData);
+          console.log(`imageDataUrl: ${imageDataUrl}`)
 
-        // Upload success
-        if (response.ok) {
-          setAlertInfo({
-            type: "success",
-            icon: <Check />,
-            message: "Card submitted successfully! Redirecting..."
-          });
+          // Upload PNG to Supabase
+          const imagePublicUrl = await uploadCardImage(
+            imageDataUrl
+          );
 
-          // Track event in PostHog
-          if (session && session.user && session.user.id) {
-            posthog.capture({
-              distinctId: session.user.id,
-              event: '🎉 New Card Submitted'
-            })
+          setCardRenderUrl(imagePublicUrl);
+
+          // console.log(`imagePublicUrl: ${imagePublicUrl}`) // Logs a very long URL
+          console.log(`submittedCardData: ${submittedCardData}`) // logs [object Object]
           
-            try {
-              // Fetch card id
-              const {
-                data: cardId,
-                error: cardIdError
-              } = await supabase
-                .from("cards")
-                .select("*")
-                .eq(
-                  "user_id",
-                  session.user.id
-                )
-                .order("created_at", {
-                  ascending: false
-                })
-                .limit(1)
-                .single();
+          if (!imagePublicUrl) {
+            setAlertInfo({
+              type: "error",
+              icon: <Error />,
+              message: "Failed to upload card render.."
+            });
 
-                console.log("Uploaded card ID: ", cardId, cardIdError);
+          } else {
+            // Update the card image of the submitted card
 
-                // Post card to Discord
-                if (postToDiscord) {
-                  if (cardId) {
-                    postCardToDiscord({
-                      cardName: data.cardName,
-                      cardRender: imagePublicUrl,
-                      cardCreator: data.cardCreator,
-                      cardIdUrl: `https://www.play.nexus/dashboard/cards/${cardId.id}`
-                    });
-                  } else {
-                    postCardToDiscord({
-                      cardName: data.cardName,
-                      cardRender: imagePublicUrl,
-                      cardCreator: data.cardCreator,
-                      cardIdUrl: ""
-                    });
-                  }
-                }
-              if (cardIdError) {
-                setAlertInfo({
-                  type: "error",
-                  icon: <Error />,
-                  message: "Error redirecting..."
-                });
-                console.log("Error redirecting: ", cardIdError);
-              } else if (cardId) {
-                // Redirect to card page
-                setTimeout(() => {
-                  router.push(`/dashboard/cards/${cardId.id}`);
-                }, 5000);
-              }
-            } catch (error) {
+            console.log(`submittedCardData.data.id to update: ${submittedCardData?.data.id} `) // Logs the correct card id
+
+            // const { data: cardRenderData, error: cardRenderError } = await supabase
+            //   .from("cards")
+            //   .update({ cardRender: imagePublicUrl })
+            //   .eq("id", submittedCardData?.data.id)
+            //   .select();
+            
+            // console.log(`cardRenderData: ${cardRenderData}`) // Logs nothing
+            // cardRenderData: is not being updated in the Supabase table row
+
+            // if (cardRenderError) {
+            //   console.log(`cardRenderError: ${cardRenderError}`) // Logs the error
+            //   setAlertInfo({
+            //     type: "error",
+            //     icon: <Error />,
+            //     message: `Error submitting card: ${cardRenderError}`
+            //   });
+            // } else {
+
+            // Placeholder
+            if (!imagePublicUrl) {
+              console.log(`cardRenderError: ${imagePublicUrl}`) // Logs the error
               setAlertInfo({
                 type: "error",
                 icon: <Error />,
-                message: `Error redirecting...: ${error}`
+                message: `Error submitting card: ${imagePublicUrl}`
               });
-              console.log("Error redirecting: ", error);
+            } else {
+              
+              // Track event in PostHog
+              if (
+                submittedCardData?.data.user_id !== null && 
+                submittedCardData?.data.user_id  !== undefined
+              ) {
+                posthog.capture({
+                  distinctId: submittedCardData?.data.user_id,
+                  event: '🎉 New Card Submitted'
+                })
+                // PostHog is working
+              }
+
+              if (submittedCardData?.data.id) {
+                // setReadyToPostToDiscord(true);
+                const cardId = submittedCardData?.data.id.toString();
+
+                // if (cardRenderData && cardRenderData.length > 0) {
+                //   const cardRenderUrl = cardRenderData.toString();
+                //   // Post card to Discord
+                //   console.log(`postToDiscord: ${postToDiscord}`);
+                //   console.log(`cardId: ${cardId}`);
+                //   if (postToDiscord && cardId) {
+                //     postCardToDiscord({
+                //       cardName: submittedCardData?.data.cardName,
+                //       cardRender: cardRenderUrl,
+                //       cardCreator: submittedCardData?.data.cardCreator,
+                //       cardIdUrl: `https://www.play.nexus/dashboard/cards/${cardId}`
+                //     });
+                //     console.log(`Card posted to Discord: ${submittedCardData?.data.cardName} by ${submittedCardData?.data.cardCreator}! ${cardId} ${submittedCardData?.data.cardRender}`);
+                //   }; 
+                // }
+
+                if (cardId) {
+                  // Redirect to card page
+                  setTimeout(() => {
+                    setShowAlertInfo(false);
+                    router.push(`/dashboard/cards/${cardId}`);
+                  }, 5000);
+                  console.log(`Redirecting to card page: /dashboard/cards/${cardId}`); // Logs the correct card id
+                }
+              }
             }
           }
-        } else {
-          setAlertInfo({
-            type: "error",
-            icon: <Error />,
-            message: `Error submitting card: ${responseData.error}`
-          });
         }
+        
+      } else {
+        setAlertInfo({
+          type: "error",
+          icon: <Error />,
+          message: `Error submitting card: ${submittedCardData.error}`
+        });
       }
     } catch (error) {
       setAlertInfo({
@@ -290,10 +346,6 @@ export default function Create() {
         message: `Error submitting card: ${error}`
       });
     }
-    // Hide alert
-    setTimeout(() => {
-      setShowAlertInfo(false);
-    }, 3000);
   };
   
   return (
@@ -513,7 +565,10 @@ export default function Create() {
               "
             >
               {/* Card Creator Form */}
-              <CardCreatorForm />
+              <CardCreatorForm
+                showCardRender={showCardRender}
+                cardData={submittedCard}
+              />
             </Box>
           </Box>
         </form>

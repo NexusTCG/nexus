@@ -5,7 +5,6 @@ import React, {
   useEffect
 } from "react";
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
-import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
 import colorMapping from "@/app/utils/data/colorMapping";
 import determineBgImage from "@/app/lib/actions/determineBgImage";
 import Image from "next/image";
@@ -18,13 +17,13 @@ import {
 } from "@mui/material";
 
 type CardRenderProps = {
-  cardId: number | null;
+  cardData?: CardsTableType | null;
+  simpleStyling?: boolean;
 };
 
 export default function CardRender({
-  cardId
+  cardData
 }: CardRenderProps) {
-  const [card, setCard] = useState<CardsTableType | null>(null);
   const [bgImage, setBgImage] = useState<string>("");
   const [bgColor, setBgColor] = useState<Record<string, string>>({
     "50": "bg-slate-50",
@@ -32,101 +31,82 @@ export default function CardRender({
     "400": "bg-slate-400",
   });
 
-  useEffect(() => {
-    const loadCardData = async () => {
-      if (cardId !== null) {
-        const card = await fetchCards({
-          from: "cards",
-          filter: {
-            column: "id",
-            value: cardId
-          }
-        })
-        if (card && card.length > 0) {
-          setCard(card[0]);
-        }
-      }
-      
-    };
-
-    if (cardId) {
-      loadCardData();
-    };
-  }, [cardId])
-
   // Determine bgColor
   useEffect(() => {
-    if (card?.cardColor === "blue") {
-      setBgColor({
-        "50":
-          colorMapping["sky"]?.[50],
-        "200":
-          colorMapping["sky"]?.[200],
-        "400":
-          colorMapping["sky"]?.[400],
-      })
-    } else if (card?.cardColor === "purple") {
-      setBgColor({
-        "50":
-          colorMapping["violet"]?.[50],
-        "200":
-          colorMapping["violet"]?.[200],
-        "400":
-          colorMapping["violet"]?.[400],
-      })
-    } else if (card?.cardColor === "green") {
-      setBgColor({
-        "50":
-          colorMapping["lime"]?.[50],
-        "200":
-          colorMapping["lime"]?.[200],
-        "400":
-          colorMapping["lime"]?.[400],
-      })
-    } else if (card?.cardColor === "void") {
-      setBgColor({
-        "50":
-          colorMapping["gray"]?.[50],
-        "200":
-          colorMapping["gray"]?.[200],
-        "400":
-          colorMapping["gray"]?.[400],
-      })
-    } else {
-      setBgColor({
-        "50":
-          colorMapping[
-          card?.cardColor as keyof typeof
-          colorMapping]?.[50],
-        "200":
-          colorMapping[
-          card?.cardColor as keyof typeof
-          colorMapping]?.[200],
-        "400":
-          colorMapping[
-          card?.cardColor as keyof typeof
-          colorMapping]?.[400],
-      })
+    if (cardData?.cardColor && cardData !== null) {
+      if (cardData?.cardColor === "blue") {
+        setBgColor({
+          "50":
+            colorMapping["sky"]?.[50],
+          "200":
+            colorMapping["sky"]?.[200],
+          "400":
+            colorMapping["sky"]?.[400],
+        })
+      } else if (cardData?.cardColor === "purple") {
+        setBgColor({
+          "50":
+            colorMapping["violet"]?.[50],
+          "200":
+            colorMapping["violet"]?.[200],
+          "400":
+            colorMapping["violet"]?.[400],
+        })
+      } else if (cardData?.cardColor === "green") {
+        setBgColor({
+          "50":
+            colorMapping["lime"]?.[50],
+          "200":
+            colorMapping["lime"]?.[200],
+          "400":
+            colorMapping["lime"]?.[400],
+        })
+      } else if (cardData?.cardColor === "void") {
+        setBgColor({
+          "50":
+            colorMapping["gray"]?.[50],
+          "200":
+            colorMapping["gray"]?.[200],
+          "400":
+            colorMapping["gray"]?.[400],
+        })
+      } else {
+        setBgColor({
+          "50":
+            colorMapping[
+              cardData?.cardColor as keyof typeof
+            colorMapping]?.[50],
+          "200":
+            colorMapping[
+              cardData?.cardColor as keyof typeof
+            colorMapping]?.[200],
+          "400":
+            colorMapping[
+              cardData?.cardColor as keyof typeof
+            colorMapping]?.[400],
+        })
     }
-  }, [card?.cardColor]);
+    
+    }
+  }, [cardData?.cardColor]);
 
   // Determine bgImage
   useEffect(() => {
-    if (card?.cardType && card?.cardColor) {
+    if (cardData?.cardType && cardData?.cardColor) {
       const newBgImage = determineBgImage(
-        card?.cardType,
-        card?.cardColor,
+        cardData?.cardType,
+        cardData?.cardColor,
       );
       setBgImage(newBgImage);
     };
   }, [
-    card?.cardType,
-    card?.cardColor
+    cardData?.cardType,
+    cardData?.cardColor
   ]);
 
   return (
     <>
-      {card ? (
+      {cardData && cardData !== null ? (
         <Box
           id="card-render-container"
           sx={{
@@ -155,7 +135,6 @@ export default function CardRender({
               height: "526px",
               borderRadius: "12.5px",
             }}
-            // replace bg with bgImage
             className={`
               flex
               flex-col
@@ -163,7 +142,10 @@ export default function CardRender({
               bg-cover
               bg-center
               bg-no-repeat
-              ${bgImage ?? "bg-[url('/images/card-parts/card-frames/other/default.png')]"}
+              ${
+                bgImage ?? 
+                "bg-[url('/images/card-parts/card-frames/other/default.png')]"
+              }
             `}
           >
             {/* Card header */}
@@ -177,7 +159,7 @@ export default function CardRender({
               }}
               className={`
                 ${bgColor?.[50] ?? "bg-slate-50"}
-                flex
+                flexs
                 flex-col
                 justify-between
                 items-center
@@ -234,7 +216,7 @@ export default function CardRender({
                     }}
                   >
                     {
-                      card.cardName
+                      cardData.cardName
                         .split(" ")
                         .map(word => word
                           .charAt(0)
@@ -258,7 +240,7 @@ export default function CardRender({
                     gap-0.25
                   "
                 >
-                  {Object.entries(card.cardEnergyCost ?? {})
+                  {Object.entries(cardData.cardEnergyCost ?? {})
                     .sort(([colorA], [colorB]) => {
                       const order = ["yellow", "blue", "purple", "red", "green", "void"];
                       return order.indexOf(colorA) - order.indexOf(colorB);
@@ -336,32 +318,36 @@ export default function CardRender({
                     }}
                   >
                     {
-                      card.cardType
+                      cardData.cardType
                         .charAt(0)
                         .toUpperCase() + 
-                      card.cardType
+                        cardData.cardType
                         .slice(1)
                         .toLowerCase()
                     } {" "}
                     {
-                      card.cardSuperType !== "default" ? 
-                      card.cardSuperType
+                      cardData.cardSuperType !== "default" ? 
+                      cardData.cardSuperType
                         .charAt(0)
                         .toUpperCase() + 
-                      card.cardSuperType
+                      cardData.cardSuperType
                         .slice(1)
                         .toLowerCase() : ""
                     }
                     {
-                      JSON.parse(card.cardSubType) > 0 && 
-                      JSON.parse(card.cardSubType)[0].trim() ? 
+                      (cardData.cardSubType.length) > 0 &&
+                      (cardData.cardSubType[0].trim()) ?
                       " • " : ""
+                      // JSON.parse(cardData.cardSubType) > 0 && 
+                      // JSON.parse(cardData.cardSubType)[0].trim() ? 
+                      // " • " : ""
                     }
                     {
-                      card.cardSubType ? JSON
-                        .parse(card.cardSubType)
-                        .filter((subType: string) => subType)
-                        .join(" ") : ""
+                      cardData.cardSubType
+                      // cardData.cardSubType ? JSON
+                      //   .parse(cardData.cardSubType)
+                      //   .filter((subType: string) => subType)
+                      //   .join(" ") : ""
                     }
                   </Typography>
                 </Box>
@@ -379,7 +365,7 @@ export default function CardRender({
                 >
                   {Array.from({
                     length: parseInt(
-                      card.cardSpeed, 10
+                      cardData.cardSpeed, 10
                     )}).map((_, index) => (
                     <Image
                       key={index}
@@ -443,10 +429,10 @@ export default function CardRender({
                   "
                 >
                   <Image
-                    src={card.cardArt || "/images/card-parts/card-art/default-art.jpg"}
+                    src={cardData.cardArt || "/images/card-parts/card-art/default-art.jpg"}
                     fill={true}
                     sizes="100%"
-                    alt={`${card.cardName} card art`}
+                    alt={`${cardData.cardName} card art`}
                     style={{
                       objectFit: "cover"
                     }}
@@ -476,10 +462,10 @@ export default function CardRender({
                     id="card-text"
                     variant="body1"
                   >
-                    {card.cardText}
+                    {cardData.cardText}
                   </Typography>
                   {/* Divider */}
-                  {card.cardFlavorText !== "" && (
+                  {cardData.cardFlavorText !== "" && (
                     <Divider
                       className="
                         mx-4
@@ -493,7 +479,7 @@ export default function CardRender({
                     id="flavor-text"
                     variant="body2"
                   >
-                    {`"${card.cardFlavorText}"`}
+                    {`"${cardData.cardFlavorText}"`}
                   </Typography>
                 </Box>
               </Box> 
@@ -515,7 +501,7 @@ export default function CardRender({
               "
             >
               {/* Card Attack */}
-              {card.cardType === "entity" && (<Box
+              {cardData.cardType === "entity" && (<Box
                 id="stats-attack"
                 className="
                   flex
@@ -544,7 +530,7 @@ export default function CardRender({
                     stats-text
                   "
                 >
-                  {card.cardAttack}
+                  {cardData.cardAttack}
                 </Typography>
                 <Image
                   src="/images/card-parts/card-stats/attack.png"
@@ -557,7 +543,7 @@ export default function CardRender({
               <Box
                 id="stats-grade-info"
                 className={clsx("flex flex-col justify-center items-center",
-                      card.cardType !== "entity" ? "w-full" : "w-3/5"
+                      cardData.cardType !== "entity" ? "w-full" : "w-3/5"
                 )}
               >
                 {/* Card grade */}
@@ -573,10 +559,10 @@ export default function CardRender({
                 >
                   {/* Card Grade */}
                   <Image
-                    src={`/images/card-parts/card-icons/card-grades/grade-${card.cardGrade.toLowerCase()}.png`}
+                    src={`/images/card-parts/card-icons/card-grades/grade-${cardData.cardGrade.toLowerCase()}.png`}
                     height={34}
                     width={34}
-                    alt={`${card.cardGrade} icon`}
+                    alt={`${cardData.cardGrade} icon`}
                     className="
                       bg-black
                       rounded-full
@@ -586,7 +572,7 @@ export default function CardRender({
                 </Box>
               </Box>
               {/* Card Defense */}
-              {card.cardType === "entity" && (<Box
+              {cardData.cardType === "entity" && (<Box
                 id="stats-defense"
                 className="
                   flex
@@ -615,7 +601,7 @@ export default function CardRender({
                     stats-text
                   "
                 >
-                  {card.cardDefense}
+                  {cardData.cardDefense}
                 </Typography>
                 <Image
                   src="/images/card-parts/card-stats/defense.png"
@@ -642,8 +628,8 @@ export default function CardRender({
                 className="fineprint-text"
               >
                 {/* Creator: {" "} */}
-                {card.cardCreator
-                  ? `Made by ${card.cardCreator}`
+                {cardData.cardCreator
+                  ? `Made by ${cardData.cardCreator}`
                   : "Card Creator"}
               </p>
               <p
