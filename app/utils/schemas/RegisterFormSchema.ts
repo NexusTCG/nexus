@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,100}$/;
 
-const AuthFormSchema = z.object({
+const RegisterFormSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z
     .string()
@@ -17,4 +17,4 @@ const AuthFormSchema = z.object({
     path: ["confirmPassword"],
 });
 
-export default AuthFormSchema;
+export default RegisterFormSchema;

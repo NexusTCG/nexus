@@ -3,12 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { useForm, FormProvider, FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import AuthFormSchema from "@/app/utils/schemas/AuthFormSchema";
+import RegisterFormSchema from "@/app/utils/schemas/RegisterFormSchema";
+import LoginFormSchema from "@/app/utils/schemas/LoginFormSchema";
 import PasswordResetSchema  from "@/app/utils/schemas/PasswordResetSchema";
 import { createClient } from "@/app/lib/supabase/client";
 import OAuthButton from "@/app/components/auth/OAuthButton";
 import Image from "next/image";
 import Link from "next/link"
+import clsx from "clsx";
 import {
   Box,
   Typography,
@@ -20,7 +22,8 @@ import {
   Button,
   Alert,
   Checkbox,
-  FormControlLabel
+  FormControlLabel,
+  CircularProgress
 } from "@mui/material";
 import {
   Visibility,
@@ -40,6 +43,7 @@ export default function AuthForm({
 }) {
   const [showSignUp, setShowSignUp] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [confirmPasswordMatch, setConfirmPasswordMatch] = useState<boolean>(false);
   const [showResetPassword, setShowResetPassword] = useState<boolean>(false);
   const [showPasswordResetAlert, setShowPasswordResetAlert] = useState<boolean>(false);
   const [showLoginAlert, setShowLoginAlert] = useState<boolean>(false);
@@ -56,8 +60,9 @@ export default function AuthForm({
     defaultValues: {
       email: "",
       password: "",
+      ...(showSignUp ? { confirmPassword: "" } : {}),
     },
-    resolver: zodResolver(AuthFormSchema),
+    resolver: zodResolver(showSignUp ? RegisterFormSchema : LoginFormSchema),
     mode: "onChange"
   });
 
@@ -89,11 +94,36 @@ export default function AuthForm({
 
   const form = watch();
 
+  const password = watch("password");
+  const confirmPassword = watch("confirmPassword");
+
+  // Set random background image
   useEffect(() => {
     if (authBg !== null) return;
     const randomBg = Math.floor(Math.random() * 13) + 1;
     setAuthBg(randomBg);
   }, []);
+
+  // Check if passwords match
+  useEffect(() => {
+      if (!showSignUp) {
+        return;
+      } else {
+        if (
+          password === confirmPassword
+        ) {
+          setConfirmPasswordMatch(true);
+        } else if (
+          password !== confirmPassword
+        ) {
+          setConfirmPasswordMatch(false);
+        }
+      }
+  }, [
+    showSignUp, 
+    password, 
+    confirmPassword
+  ]);
 
   // Password visibility toggle
   function handleClickShowPassword() {
@@ -108,7 +138,9 @@ export default function AuthForm({
   };
 
   // Reset password function
-  async function onPasswordReset(data: PasswordResetFormData) {
+  async function onPasswordReset(
+    data: PasswordResetFormData
+  ) {
     try {
       const { resetEmail } = data;
       const {
@@ -145,6 +177,7 @@ export default function AuthForm({
     const { email, password } = data;
     const endpoint = showSignUp ? "/auth/register-user" : "/auth/login-user";
 
+    console.log('im here')
     try {
       const response = await fetch(endpoint, {
         method: "POST",
@@ -159,15 +192,25 @@ export default function AuthForm({
 
       const resultUrl = response.url;
 
-      if (response.ok) {
+      if (!response.ok) {
+        const result = await response.json();
+        setShowLoginAlert(true);
+        if(showSignUp) {
+          if (result.error && result.error.includes("Password is known to be weak and easy to guess, please choose a different one.")) {
+            setAlertInfo({
+              type: "error",
+              message: "Your password is too easy to guess. Please choose a stronger password."
+            });
+          } 
+        } else {
+          setAlertInfo({
+            type: "error",
+            message: "Failed to process request. Please try again."
+          });
+        }
+      } else if (response.ok) {
         window.location.href = resultUrl;
-      } else {
-        setAlertInfo({
-          type: "error",
-          message: "Failed to process request. Please try again."
-        });
-      };
-
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
       setAlertInfo({
@@ -175,7 +218,10 @@ export default function AuthForm({
         message: "An unexpected error occurred. Please try again."
       });
     };
-    setShowLoginAlert(true);
+
+    setTimeout(() => {
+      setShowLoginAlert(true);
+    }, 10000);
   };
 
   return (
@@ -353,7 +399,12 @@ export default function AuthForm({
         {!showResetPassword && (
           <FormProvider {...methods}>
             <form
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={(e) => {
+                console.log(e)
+                methods.clearErrors()
+                handleSubmit(onSubmit)(e)
+                // handleSubmit(onSubmit)
+              }}
               className="w-full"
             >
               <Box
@@ -548,6 +599,62 @@ export default function AuthForm({
                       </Typography>
                     )}
 
+                    {/* Confirm Password Input */}
+                    {showSignUp && (
+                      <FormControl
+                        variant="outlined"
+                        className="w-full"
+                      >
+                        <InputLabel
+                          htmlFor="confirm-password-input"
+                        >
+                          Confirm password
+                        </InputLabel>
+                        <OutlinedInput
+                          id="confirm-password-input"
+                          label="Confirm password"
+                          placeholder="••••••••"
+                          {...register("confirmPassword")}
+                          error={Boolean(errors.password)}
+                          type={showPassword ? 'text' : 'password'}
+                          endAdornment={
+                            <InputAdornment
+                              position="end"
+                              className="
+                                mr-2
+                              "
+                            >
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                              >
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                              </IconButton>
+                            </InputAdornment>
+                          }
+                          className="
+                            w-full
+                          "
+                        />
+                      </FormControl>
+                    )}
+
+                    {showSignUp && (
+                      <Typography
+                        variant="body2"
+                        className={clsx("",
+                          {
+                            "text-green-500": confirmPasswordMatch,
+                            "text-red-500": !confirmPasswordMatch
+                          }
+                        )}
+                      >
+                        {confirmPasswordMatch ? "Passwords match." : "Passwords do not match."}
+                      </Typography>
+                    )}
+
                     {/* Password reset toggle */}
                     <Typography
                       variant="subtitle2"
@@ -564,116 +671,165 @@ export default function AuthForm({
                   </Box>
 
                   {/* Terms of Service Checkbox */}
-                  {showSignUp && (<Box
-                    id="terms-checkbox-container"
-                    className="
-                      flex
-                      flex-row
-                      justify-between
-                      items-center
-                      w-full
-                      gap-8
-                    "
-                  >
-                    <Typography
-                      variant="caption"
-                      component="span"
+                  {showSignUp && (
+                    <Box
+                      id="terms-checkbox-container"
                       className="
-                      flex-grow
-                      flex-row
-                      flex-wrap
-                      justify-start
-                      items-center
-                      gap-1
-                      text-neutral-400
+                        flex
+                        flex-row
+                        justify-between
+                        items-center
+                        w-full
+                        gap-8
                       "
                     >
-                      By signing up, you agree to our {""}
-                      <Link
-                        href="/terms"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
-                        <Typography
-                          variant="caption"
-                          className="
-                          text-teal-500
-                          hover:text-teal-400
-                          "
-                        >
-                          Terms of Service
-                        </Typography>
-                      </Link>
-                      {""} and {""}
-                      <Link
-                        href="/policies"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
-                        <Typography
-                          variant="caption"
-                          className="
-                          text-teal-500
-                          hover:text-teal-400
-                          "
-                        >
-                          Policies
-                        </Typography>
-                      </Link>
-                    </Typography>
-                    <FormControlLabel
-                      required
-                      control={
-                        <Checkbox
-                          defaultChecked
-                          onClick={() => setCheckedCheckbox(!checkedCheckbox)}
-                        />
-                      }
-                      label="Required"
-                      className="
+                      <Typography
+                        variant="caption"
+                        component="span"
+                        className="
+                        flex-grow
+                        flex-row
+                        flex-wrap
                         justify-start
                         items-center
-                        w-2/5
-                        -mr-2
-                      "
-                    />
-                  </Box>)}
+                        gap-1
+                        text-neutral-400
+                        "
+                      >
+                        By signing up, you agree to our {""}
+                        <Link
+                          href="/terms"
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          <Typography
+                            variant="caption"
+                            className="
+                            text-teal-500
+                            hover:text-teal-400
+                            "
+                          >
+                            Terms of Service
+                          </Typography>
+                        </Link>
+                        {""} and {""}
+                        <Link
+                          href="/policies"
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          <Typography
+                            variant="caption"
+                            className="
+                            text-teal-500
+                            hover:text-teal-400
+                            "
+                          >
+                            Policies
+                          </Typography>
+                        </Link>
+                      </Typography>
+                      <FormControlLabel
+                        required
+                        control={
+                          <Checkbox
+                            defaultChecked
+                            onClick={() => setCheckedCheckbox(!checkedCheckbox)}
+                          />
+                        }
+                        label="Required"
+                        className="
+                          justify-start
+                          items-center
+                          w-2/5
+                          -mr-2
+                        "
+                      />
+                    </Box>
+                  )}
 
                   {/* Sign Up Button */}
-                  {showSignUp && checkedCheckbox && ( <Button
-                    type="submit"
-                    variant="outlined"
-                    disabled={
-                      isSubmitting && 
-                      isValid && 
-                      !checkedCheckbox 
-                      ? true : false
-                    }
-                    color={isValid ? "success" : "primary"}
-                    size="large"
-                    className="
-                      w-full
-                    "
-                  >
-                    Sign up
-                  </Button>)}
+                  {showSignUp && checkedCheckbox && ( 
+                    <Button
+                      type="submit"
+                      variant="outlined"
+                      disabled={
+                        isSubmitting && 
+                        isValid && 
+                        !checkedCheckbox 
+                        ? true : false
+                      }
+                      color={isValid ? "success" : "primary"}
+                      size="large"
+                      className="
+                        w-full
+                        gap-2
+                      "
+                    >
+                      {isSubmitting ? (
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 2,
+                          }}
+                        >
+                          <CircularProgress
+                            size={24}
+                            color="inherit"
+                          />
+                          <Typography
+                            variant="button" 
+                            sx={{ 
+                              textTransform: 'none'
+                            }}
+                          >
+                            Signing up...
+                          </Typography>
+                        </Box>
+                      ) : "Sign up"}
+                    </Button>
+                  )}
                   {/* Sign In Button */}
-                  {!showSignUp && ( <Button
-                    type="submit"
-                    variant="outlined"
-                    disabled={
-                      isSubmitting && 
-                      isValid 
-                      ? true : false
-                    }
-                    color={isValid ? "success" : "primary"}
-                    size="large"
-                    className="
-                      w-full
-                    "
-                  >
-                    Sign in
-                  </Button>)}
+                  {!showSignUp && ( 
+                    <Button
+                      type="submit"
+                      variant="outlined"
+                      disabled={
+                        isSubmitting && 
+                        isValid 
+                        ? true : false
+                      }
+                      color={isValid ? "success" : "primary"}
+                      size="large"
+                      className="
+                        w-full
+                      "
+                    >
+                      {isSubmitting ? (
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 2,
+                          }}
+                        >
+                          <CircularProgress
+                            size={24}
+                            color="inherit"
+                          />
+                          <Typography
+                            variant="button" 
+                            sx={{ 
+                              textTransform: 'none'
+                            }}
+                          >
+                            Signing in...
+                          </Typography>
+                        </Box>
+                      ) : "Sign in"}
+                    </Button>
+                  )}
 
                   {/* Register toggle */}
                   <Box

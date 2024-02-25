@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/app/lib/supabase/server";
-import { NextResponse } from "next/server";
+// import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
 import type { NextRequest } from "next/server";
@@ -28,10 +28,10 @@ export async function POST(req: NextRequest) {
   if (error) {
     console.log(`Error when attempting sign up: ${error.message}`);
     const errorMessage = encodeURIComponent(error.message);
-    return NextResponse.redirect(`${url}/login?error=${errorMessage}`);
+    return Response.redirect(`${url}/login?error=${errorMessage}`); // Swapped out NextResponse for Response
   }
 
-  return NextResponse.redirect(
+  return Response.redirect(
     `${url}/login?message=Check your email to continue sign in process!`,
   );
 }
