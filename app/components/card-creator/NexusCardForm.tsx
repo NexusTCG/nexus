@@ -51,14 +51,14 @@ import CustomInput from "@/app/components/card-creator/CustomInput";
 
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
-  showSimpleCardRender?: boolean;
-  cardRenderRef?: React.RefObject<HTMLDivElement>;
+  showCardRender?: boolean;
+  simpleCardRender?: boolean;
 };
 
 export default function NexusCardForm({
   cardData,
-  showSimpleCardRender,
-  cardRenderRef,
+  showCardRender,
+  simpleCardRender
 }: CardRenderProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {
@@ -275,11 +275,10 @@ export default function NexusCardForm({
 
   return (
     <>
-      {cardData ? (
+      {cardData && showCardRender ? (
         <CardRender
           cardData={cardData}
-          simpleCardRender={showSimpleCardRender}
-          cardRenderRef={cardRenderRef}
+          simpleCardRender={simpleCardRender}
         />
       ) : (
         <Box
@@ -910,7 +909,8 @@ export default function NexusCardForm({
               "
             >
               {/* Card attack */}
-              {formCardData.cardType === "entity" && (<Box
+              {formCardData.cardType === "entity" && (
+              <Box
                 id="stats-attack"
                 className="
                   flex

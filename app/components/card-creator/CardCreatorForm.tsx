@@ -37,14 +37,13 @@ import {
 
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
-  showSimpleCardRender?: boolean;
-  cardRenderRef?: React.RefObject<HTMLDivElement>;
+  showCardRender?: boolean;
+  simpleCardRender?: boolean;
 };
 
 export default function CardCreatorForm({
   cardData,
-  showSimpleCardRender,
-  cardRenderRef,
+  simpleCardRender
 }: CardRenderProps) {
   const {
     setValue,
@@ -82,11 +81,33 @@ export default function CardCreatorForm({
   });
   // Alert states
   const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
+  const [showCardRender, setShowCardRender] = useState<boolean>(false);
   const [alertInfo, setAlertInfo] = useState<{
     type: "success" | "error" | "info" | "warning";
     icon: React.ReactNode;
     message: string;
   } | null>(null);
+
+  // Swap form for card render if data is available
+  useEffect(() => {
+    if (cardData !== null) {
+      setShowCardRender(true);
+    }
+  }, [cardData]);
+
+  // Reset timer on new art generation
+  useEffect(() => {
+    if (isGeneratingArt) {
+      setElapsedTime(0);
+    }
+  }, [isGeneratingArt]);
+
+  // Clear interval on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [intervalId]);
 
   // Generate card art
   async function generateArt() {
@@ -185,20 +206,6 @@ export default function CardCreatorForm({
       setShowAlertInfo(false);
     }, 5000);
   }
-
-  // Reset timer on new art generation
-  useEffect(() => {
-    if (isGeneratingArt) {
-      setElapsedTime(0);
-    }
-  }, [isGeneratingArt]);
-
-  // Clear interval on unmount to prevent memory leaks
-  useEffect(() => {
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [intervalId]);
 
   // AI prompt tab handler
   function handlePromptTabChange(
@@ -649,8 +656,8 @@ export default function CardCreatorForm({
           {/* Card Render / Form */}
           <NexusCardForm
             cardData={cardData}
-            showSimpleCardRender={showSimpleCardRender}
-            cardRenderRef={cardRenderRef}
+            showCardRender={showCardRender}
+            simpleCardRender={simpleCardRender}
           />
 
           {/* Card Art Options */}

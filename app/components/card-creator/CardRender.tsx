@@ -3,7 +3,6 @@
 import React, {
   useState,
   useEffect,
-  forwardRef,
 } from "react";
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import { CardFormDataType } from "@/app/utils/types/types";
@@ -21,17 +20,19 @@ import {
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
   simpleCardRender?: boolean;
-  cardRenderRef?: React.RefObject<HTMLDivElement>;
 };
 
-const CardRender = forwardRef<HTMLDivElement, CardRenderProps>(
-  ({ cardData, simpleCardRender }, ref) => {
+export default function CardRender({
+   cardData,
+    simpleCardRender,
+}: CardRenderProps)  {
     const [bgImage, setBgImage] = useState<string>("");
     const [bgColor, setBgColor] = useState<Record<string, string>>({
       "50": "bg-slate-50",
       "200": "bg-slate-200",
       "400": "bg-slate-400",
     });
+
 
     // Determine bgColor
     useEffect(() => {
@@ -113,7 +114,6 @@ const CardRender = forwardRef<HTMLDivElement, CardRenderProps>(
     if (!cardData) {
       return (
         <Skeleton
-          ref={ref}
           variant="rectangular"
           animation="wave"
           width={400}
@@ -133,7 +133,6 @@ const CardRender = forwardRef<HTMLDivElement, CardRenderProps>(
     if (cardData && simpleCardRender) {
       return (
         <div
-          ref={ref}
           id="simple-card-render-container"
           style={{
             width: "400px",
@@ -641,7 +640,6 @@ const CardRender = forwardRef<HTMLDivElement, CardRenderProps>(
     if (cardData && !simpleCardRender) {
     return (
       <Box
-        ref={ref}
         id="high-quality-card-render-container"
         sx={{
           aspectRatio: "5 / 7",
@@ -1167,8 +1165,4 @@ const CardRender = forwardRef<HTMLDivElement, CardRenderProps>(
       </Box>
     )
   }
-});
-
-CardRender.displayName = "CardRender";
-
-export default CardRender;
+};

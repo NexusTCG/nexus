@@ -4,7 +4,6 @@ import React, {
   useState,
   useEffect,
   useContext,
-  useRef
 } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, FormProvider } from "react-hook-form";
@@ -93,9 +92,8 @@ export default function Create() {
   // States
   const [submittedFormData, setSubmittedFormData] = useState<CardFormDataType | null>(null);
   const [uploadedFormData, setUploadedFormData] = useState<CardsTableType | null>(null);
-  const [submitSuccessful, setSubmitSuccessful] = useState<boolean>(false);
+  const [simpleCardRender, setSimpleCardRender] = useState<boolean>(true);
   const [postToDiscord, setPostToDiscord] = useState<boolean>(true);
-  const [showSimpleCardRender, setShowSimpleCardRender] = useState<boolean>(true);
   const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
@@ -104,8 +102,6 @@ export default function Create() {
     icon: React.ReactNode;
     message: string;
   } | null>(null);
-
-  const cardRenderRef = useRef(null);
 
   // Set user_id and cardCreator
   // values based on user session
@@ -141,10 +137,20 @@ export default function Create() {
     }
   }, [snackbarMessage]);
 
-  // Show card render when submitted
-  useEffect(() => {
-    if (submittedFormData && cardRenderRef.current) {
-      const screenshotAndUploadCardData = async () => {
+  // Form submit handler
+  async function onSubmit(
+    data: CardFormDataType
+  ) {
+    setAlertInfo({
+      type: "info",
+      icon: <Info />,
+      message: "Submitting card..."
+    });
+    setShowAlertInfo(true);
+    setSubmittedFormData(data);
+
+    try {
+      if (document.getElementById("card-render-container")) {
         // Convert HTML to PNG
         const imageDataUrl = await convertCardCodeToImage(
           "card-render-container"
@@ -167,11 +173,11 @@ export default function Create() {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              ...submittedFormData,
+              ...data,
               cardRender: imagePublicUrl,
             }),
           });
-
+  
           if (!response.ok) {
             console.log("card submit error:", response.json());
           };
@@ -179,6 +185,7 @@ export default function Create() {
           // Update state to include card id, and cardRender
           const responseData = await response.json();
           setUploadedFormData(responseData.data);
+          setSimpleCardRender(false);
 
           if (response.ok && responseData.data) {
             setAlertInfo({
@@ -196,7 +203,10 @@ export default function Create() {
             }
             
             // Post to Discord
-            if (postToDiscord && responseData.data) {
+            if (
+              postToDiscord && 
+              responseData.data
+            ) {
               postCardToDiscord({
                 cardName: responseData.data.cardName,
                 cardRender: responseData.data.cardRender,
@@ -205,9 +215,12 @@ export default function Create() {
               });
             }
 
-            // Update form submission state
-            setSubmitSuccessful(true);
-
+            // Redirect to card page
+            setTimeout(() => {
+              setShowAlertInfo(false);
+              router.push(`/dashboard/cards/${responseData.data.id}`);
+            }, 5000);
+  
           } else {
             setAlertInfo({
               type: "error",
@@ -215,54 +228,20 @@ export default function Create() {
               message: "Error submitting card!"
             });
           }
-          console.log("card submit error:", response);
-
-        } else {
+        }  else {
           setAlertInfo({
             type: "error",
             icon: <Error />,
             message: "Error uploading card render! Submission failed."
           });
         }
-      };
-
-      screenshotAndUploadCardData();
-    }
-  }, [
-    submittedFormData,
-    cardRenderRef.current
-  ]);
-  // setShowSimpleCardRender(false);
-
-  // Redirect to card page on successful submission
-  useEffect(() => {
-    if (uploadedFormData) {
-      const redirectToCardPage = async () => {
-        setTimeout(() => {
-          setShowSimpleCardRender(false);
-          setShowAlertInfo(false);
-          router.push(`/dashboard/cards/${uploadedFormData.id}`);
-        }, 5000);
+      } else {
+        setAlertInfo({
+          type: "error",
+          icon: <Error />,
+          message: "Error capturing card render! Submission failed."
+        });
       }
-      redirectToCardPage();
-    }
-  }, [
-    submitSuccessful, 
-    uploadedFormData
-  ]); 
-
-  // Form submit handler
-  async function onSubmit(
-    data: CardFormDataType
-  ) {
-    try {
-      setAlertInfo({
-        type: "info",
-        icon: <Info />,
-        message: "Submitting card..."
-      });
-      setShowAlertInfo(true);
-      setSubmittedFormData(data);
     } catch (error) {
       setAlertInfo({
         type: "error",
@@ -270,8 +249,6 @@ export default function Create() {
         message: `Error submitting card: ${error}`
       });
     }
-    console.log("Submitted form data:", data);
-    console.log("Submitted form data:", submittedFormData);
   };
 
   // Post to Discord change handler
@@ -505,8 +482,7 @@ export default function Create() {
               {/* Card Creator Form */}
               <CardCreatorForm
                 cardData={uploadedFormData ? uploadedFormData : submittedFormData}
-                showSimpleCardRender={showSimpleCardRender}
-                cardRenderRef={cardRenderRef}
+                simpleCardRender={simpleCardRender}
               />
             </Box>
           </Box>
