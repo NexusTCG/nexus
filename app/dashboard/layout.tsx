@@ -91,6 +91,7 @@ export default function DashboardLayout({
           justify-center
           items-center
           w-full
+          bg-neutral-900
         "
       >
          <DashboardContext.Provider

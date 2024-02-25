@@ -18,11 +18,12 @@
 
 /* Card Stats */
 .stats-text {
-  color: white;
-  -webkit-text-stroke: 2px black;
-  font-size: 30px;
+  color: black;
+  font-size: 24px;
   line-height: 36px;
   font-weight: bold;
+  text-align: center;
+  margin-top: 2px;
 }
 
 /* Custom Input Component */

@@ -648,17 +648,18 @@ export default function CardCreatorForm({
             md:border-neutral-700
             md:bg-neutral-800
             md:rounded-md
-            md:shadow-xl
-            md:shadow-neutral-950/25
             gap-6
           "
         >
+          {/* Div is for screenshot */}
+          <div id="nexus-form-container" style={{ borderRadius: "12.5px" }}>
           {/* Card Render / Form */}
           <NexusCardForm
             cardData={cardData}
             showCardRender={showCardRender}
             simpleCardRender={simpleCardRender}
           />
+          </div>
 
           {/* Card Art Options */}
           {showCardArtOptions && (<Box

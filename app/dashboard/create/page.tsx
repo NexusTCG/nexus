@@ -150,10 +150,10 @@ export default function Create() {
     setSubmittedFormData(data);
 
     try {
-      if (document.getElementById("card-render-container")) {
+      if (document.getElementById("nexus-form-container")) {
         // Convert HTML to PNG
         const imageDataUrl = await convertCardCodeToImage(
-          "card-render-container"
+          "nexus-form-container"
         ); 
 
         // Upload PNG to Supabase

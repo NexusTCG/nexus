@@ -641,7 +641,7 @@ export default function NexusCardForm({
                             MenuProps={{
                               PaperProps: {
                                 style: {
-                                  maxHeight: 176,
+                                  maxHeight: 236,
                                 },
                               },
                             }}
@@ -919,6 +919,7 @@ export default function NexusCardForm({
                   items-center
                   w-1/5
                   relative
+                  stats-text
                 "
               >
                 <Controller
@@ -936,6 +937,16 @@ export default function NexusCardForm({
                         variant="standard"
                         placeholder="0"
                         type="number"
+                        error={!!fieldState.error}
+                        inputProps={{
+                          maxLength: 2
+                        }}
+                        InputProps={{
+                          className: "stats-text",
+                          style: {
+                            textAlign: 'center',
+                          },
+                        }}
                         className="
                           flex
                           justify-center
@@ -949,11 +960,8 @@ export default function NexusCardForm({
                           left-0
                           text-center
                           px-6
+                          stats-text
                         "
-                        error={!!fieldState.error}
-                        inputProps={{
-                          maxLength: 2
-                        }}
                         sx={{
                           '& .MuiInputBase-input': {
                             color: 'black',
@@ -966,6 +974,13 @@ export default function NexusCardForm({
                           },
                           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
                             borderColor: 'blue',
+                          },
+                          '& .MuiInputBase-input[type="number"]': {
+                            '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+                              WebkitAppearance: 'none',
+                              margin: 0,
+                            },
+                            MozAppearance: 'textfield',
                           },
                         }}
                       />
@@ -1070,7 +1085,8 @@ export default function NexusCardForm({
                 </Box>
               </Box>
               {/* Card defense */}
-              {formCardData.cardType === "entity" && (<Box
+              {formCardData.cardType === "entity" && (
+              <Box
                 id="stats-defense"
                 className="
                   flex
@@ -1096,6 +1112,16 @@ export default function NexusCardForm({
                         variant="standard"
                         placeholder="0"
                         type="number"
+                        error={!!fieldState.error}
+                        inputProps={{
+                          maxLength: 2
+                        }}
+                        InputProps={{
+                          className: "stats-text",
+                          style: {
+                            textAlign: 'center',
+                          },
+                        }}
                         className="
                           flex
                           justify-center
@@ -1109,6 +1135,7 @@ export default function NexusCardForm({
                           left-0
                           text-center
                           px-6
+                          stats-text
                         "
                         sx={{
                           '& .MuiInputBase-input': {
@@ -1123,10 +1150,13 @@ export default function NexusCardForm({
                           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
                             borderColor: 'blue',
                           },
-                        }}
-                        error={!!fieldState.error}
-                        inputProps={{
-                          maxLength: 2
+                          '& .MuiInputBase-input[type="number"]': {
+                            '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+                              WebkitAppearance: 'none',
+                              margin: 0,
+                            },
+                            MozAppearance: 'textfield',
+                          },
                         }}
                       />
                     </Tooltip>
