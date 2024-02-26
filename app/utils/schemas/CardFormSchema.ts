@@ -23,7 +23,7 @@ const CardFormSchema = z
       .string()
       .min(1, "Card art is required.")
       .default("/images/card-parts/card-art/default-art.jpg"),
-    cardType: z.string().min(1, "Card type is required."),
+    cardType: z.array(z.string()).optional(),
     cardSuperType: z.string().optional(),
     cardSubType: z.array(z.string()).optional(),
     cardSpeed: z.string().optional(),
@@ -37,7 +37,10 @@ const CardFormSchema = z
     cardRender: z.string().optional(),
   })
   .superRefine((data, ctx) => {
-    if (data.cardType !== "node") {
+    if (
+      data.cardType && 
+      !data.cardType.includes("node")
+    ) {
       if (!data.cardEnergyCost) {
         ctx.addIssue({
           path: ["cardCost"],

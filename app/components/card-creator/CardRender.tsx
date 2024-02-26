@@ -22,10 +22,10 @@ type CardRenderProps = {
   simpleCardRender?: boolean;
 };
 
-export default function CardRender({
+const CardRender = ({
    cardData,
     simpleCardRender,
-}: CardRenderProps)  {
+}: CardRenderProps) => {
     const [bgImage, setBgImage] = useState<string>("");
     const [bgColor, setBgColor] = useState<Record<string, string>>({
       "50": "bg-slate-50",
@@ -323,10 +323,10 @@ export default function CardRender({
                   >
                     {
                       cardData?.cardType
-                        ? cardData.cardType
+                        ? cardData.cardType.join(' ')
                             .charAt(0)
                             .toUpperCase() + 
-                            cardData.cardType
+                            cardData.cardType.join(' ')
                             .slice(1)
                             .toLowerCase()
                         : ""
@@ -485,7 +485,7 @@ export default function CardRender({
               }}
             >
               {/* Card Attack */}
-              {cardData.cardType === "entity" && (
+              {cardData.cardType && cardData.cardType.includes("entity") && (
               <div
                 id="stats-attack"
                 style={{
@@ -527,7 +527,7 @@ export default function CardRender({
               <div
                 id="stats-grade-info"
                 style={{
-                  width: cardData.cardType !== "entity" ? "100%" : "60%",
+                  width: cardData.cardType && !cardData.cardType.includes("entity") ? "100%" : "60%",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "center",
@@ -561,7 +561,7 @@ export default function CardRender({
                 </div>
               </div>
               {/* Card Defense */}
-              {cardData.cardType === "entity" && (
+              {cardData.cardType && cardData.cardType.includes("entity") && (
               <div
                 id="stats-defense"
                 style={{
@@ -851,10 +851,10 @@ export default function CardRender({
                 >
                   {
                     cardData?.cardType
-                      ? cardData.cardType
+                      ? cardData.cardType.join(' ')
                           .charAt(0)
                           .toUpperCase() + 
-                          cardData.cardType
+                          cardData.cardType.join(' ')
                           .slice(1)
                           .toLowerCase()
                       : ""
@@ -1027,7 +1027,7 @@ export default function CardRender({
             "
           >
             {/* Card Attack */}
-            {cardData.cardType === "entity" && (<Box
+            {cardData.cardType && cardData.cardType.includes("entity") && (<Box
               id="stats-attack"
               className="
                 flex
@@ -1069,7 +1069,7 @@ export default function CardRender({
             <Box
               id="stats-grade-info"
               className={clsx("flex flex-col justify-center items-center",
-                    cardData.cardType !== "entity" ? "w-full" : "w-3/5"
+                cardData.cardType && !cardData.cardType.includes("entity") ? "w-full" : "w-3/5"
               )}
             >
               {/* Card grade */}
@@ -1098,7 +1098,8 @@ export default function CardRender({
               </Box>
             </Box>
             {/* Card Defense */}
-            {cardData.cardType === "entity" && (<Box
+            {cardData.cardType && cardData.cardType.includes("entity") && (
+            <Box
               id="stats-defense"
               className="
                 flex
@@ -1141,7 +1142,7 @@ export default function CardRender({
           <Box
             className={clsx("flex flex-row justify-between items-center w-full text-xs -mt-1 px-4",
               {
-                "mt-2": cardData.cardType !== "entity",
+                "mt-2": cardData.cardType && !cardData.cardType.includes("entity"),
               }
             )}
           >
@@ -1166,3 +1167,5 @@ export default function CardRender({
     )
   }
 };
+
+export default React.memo(CardRender);

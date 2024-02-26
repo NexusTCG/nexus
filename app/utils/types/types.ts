@@ -16,7 +16,7 @@ export type CardFormDataType = {
   cardSubType?: string[] | null
   cardSuperType?: string | null
   cardText?: string
-  cardType?: string
+  cardType?: string[] | null
   created_at?: string
   id?: number
   user_id: string

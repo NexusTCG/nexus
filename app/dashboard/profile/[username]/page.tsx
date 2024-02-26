@@ -4,14 +4,12 @@ import React, {
   useState,
   useEffect,
   useRef,
-  // useRouter,
-  // useContext
 } from "react";
-// import { DashboardContext } from "@/app/context/DashboardContext";
-// import useSession from "@/app/hooks/useSession";
 import fetchUserProfiles from "@/app/lib/actions/supabase-data/fetchUserProfilesData";
 import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
+import Image from "next/image";
+import Link from "next/link";
 import {
   Box,
   Typography,
@@ -21,9 +19,6 @@ import {
   CircularProgress
 } from "@mui/material";
 import UploadIcon from '@mui/icons-material/Upload';
-// import EditIcon from '@mui/icons-material/Edit';
-import Image from "next/image";
-import Link from "next/link";
 
 export default function ProfileId({
   params 

@@ -55,7 +55,7 @@ export default function Create() {
       },
       cardColor: "",
       cardArt: "/images/card-parts/card-art/default-art.jpg",
-      cardType: "entity",
+      cardType: ["entity"],
       cardSuperType: "default",
       cardSubType: [""],
       cardSpeed: "1",
@@ -432,6 +432,7 @@ export default function Create() {
                         // !isValid || 
                         isSubmitting ||
                         isSubmitted ||
+                        form.cardType === null ||
                         form.cardArt === "/images/card-parts/card-art/default-art.jpg"
                       }
                       color={isValid ? "success" : "secondary"}

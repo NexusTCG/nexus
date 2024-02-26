@@ -7,7 +7,7 @@ export type CardsTableType = {
     cardEnergyValue: number;
     cardEnergyCost: { key: string, value: { color: string; value: number}};
     cardArt: string;
-    cardType: string;
+    cardType: string[];
     cardSuperType: string;
     cardSubType: string;
     cardSpeed: string;

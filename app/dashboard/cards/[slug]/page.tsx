@@ -30,7 +30,7 @@ import {
   DesignServices,
   Login
 } from "@mui/icons-material"
-// import { FaDiscord } from "react-icons/fa";
+import { FaDiscord } from "react-icons/fa";
 
 export default function Card({
    params 
@@ -430,7 +430,7 @@ export default function Card({
               >
                 Download Card
               </Button>
-              {/* <a
+              <a
                 href="https://discord.gg/HENgvaAmk2"
                 target="_blank"
                 rel="noreferrer"
@@ -447,7 +447,7 @@ export default function Card({
                 >
                   View on Discord
                 </Button>
-              </a> */}
+              </a>
               <Button
                 variant="outlined"
                 color="primary"

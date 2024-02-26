@@ -651,14 +651,35 @@ export default function CardCreatorForm({
             gap-6
           "
         >
+          {
+            form.cardType && 
+            form.cardType.length === 1 && 
+            form.cardType.includes("") && (
+            <Typography
+              variant="body2"
+              className="
+                flex 
+                justify-center
+                items-center
+                w-full
+                py-2
+                rounded-sm
+                bg-red-500/20
+                text-red-500
+              "
+            >
+              Card type is required!
+            </Typography>)
+          }
+
           {/* Div is for screenshot */}
           <div id="nexus-form-container" style={{ borderRadius: "12.5px" }}>
-          {/* Card Render / Form */}
-          <NexusCardForm
-            cardData={cardData}
-            showCardRender={showCardRender}
-            simpleCardRender={simpleCardRender}
-          />
+            {/* Card Render / Form */}
+            <NexusCardForm
+              cardData={cardData}
+              showCardRender={showCardRender}
+              simpleCardRender={simpleCardRender}
+            />
           </div>
 
           {/* Card Art Options */}

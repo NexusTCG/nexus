@@ -6,7 +6,7 @@ export default function determineColorType(
     activeCardType: CardFormDataType["cardType"]
 ) {
 
-    if (activeCardType === "node") {
+    if (activeCardType?.includes("node")) {
       // If the card type is node, return node
       return "node";
     }
@@ -21,7 +21,8 @@ export default function determineColorType(
     const coloredCosts = energyCostEntries
     .filter(
       ([color, value]) =>
-      color !== monoColorOptions.void
+      monoColorOptions.void && 
+      !monoColorOptions.void.includes(color)
       && value > 0
     );
 
@@ -29,7 +30,8 @@ export default function determineColorType(
     const colorlessCost = energyCostEntries
     .filter(
       ([color, value]) =>
-      color === monoColorOptions.void
+      monoColorOptions.void && 
+      monoColorOptions.void.includes(color)
       && value > 0
     );
 
