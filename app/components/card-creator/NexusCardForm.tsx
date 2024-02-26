@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useFormContext, Controller } from "react-hook-form";
 
 // Types & data
@@ -33,6 +33,8 @@ import {
 } from "@mui/material/";
 import Image from "next/image";
 import clsx from "clsx";
+import { debounce } from "lodash";
+// import debounce from "debounce";
 
 // Custom actions
 import determineColorType from "@/app/lib/actions/determineColorType";
@@ -70,13 +72,12 @@ export default function NexusCardForm({
 
   const formCardData = watch();
   const activeCardCost = watch("cardEnergyCost");
-  const activeCardType = watch("cardType");
-  const activeCardText = watch("cardText");
+  const activeCardType = watch("cardType") || "";
+  const activeCardText = watch("cardText") || "";
   const activeCardArt = watch("cardArt");
 
   // Track energy cost popover state
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  // const [energyCostAnchorEl, setEnergyCostAnchorEl] = React.useState<HTMLElement | null>(null);
   const [energyCostPopoverOpen, setEnergyCostPopOver] = useState(false);
 
   // Track energy cost change (to force re-render)
@@ -87,85 +88,83 @@ export default function NexusCardForm({
   const [cardColor, setCardColor] = useState<string>("default");
   const [cardColorClass, setCardColorClass] = useState<string>("default");
   const [cardBgImage, setCardBgImage] = useState<string>("bg-[url('/images/card-parts/card-frames/other/default.png')]");
-
+  
   // Snackbars
   const [openGradeSnackbar, setOpenGradeSnackBar] = React.useState(false);
 
-  // Dynamically adjust text size, line height and rows based on text length
-  const textLength = activeCardText?.length;
-  const maxChars = 440;
+   // Debounce function for cardText
+   const debouncedSetCardText = useCallback(debounce((value: string) => {
+    setValue("cardText", value);
+  }, 200), []);
 
-  const [dynamicCardText, setDynamicCardText] = useState({
-    fontSize: "16.5px",
-    lineHeight: "19px",
-    textFieldHeight: "76px",
-    textRows: 4,
-    flavorTextVisible: true,
-    maxFlavorTextChars: 80,
-    flavorTextFieldHeight: "76px",
-  });
+  // Debounce function for cardFlavorText
+  const debouncedSetCardFlavorText = useCallback(debounce((value: string) => {
+    setValue("cardFlavorText", value);
+  }, 200), []);
 
-  // Dynamically adjust card text input sizing
-  useEffect(() => {
-    if (!textLength) return;
+  // Dynamically calculate cardText & cardFlavorText styles
+  const calculateCardTextSize = (
+    textLength: number
+  ) => {
     if (textLength <= 88) {
       // Extra Large
-      setDynamicCardText({
-        fontSize: "16.5px",
-        lineHeight: "19px",
-        textFieldHeight: "76px",
-        textRows: 4,
+      return { 
+        fontSize: "16.5px", 
+        lineHeight: "19px", 
+        textFieldHeight: "76px", 
+        textRows: 4, 
         flavorTextVisible: true,
-        maxFlavorTextChars: 80,
-        flavorTextFieldHeight: "76px",
-      });
+        maxFlavorTextChars: 80, 
+        flavorTextFieldHeight: "76px"
+      };
     } else if (textLength <= 176) {
       // Large
-      setDynamicCardText({
-        fontSize: "16.5px",
-        lineHeight: "19px",
-        textFieldHeight: "96px",
-        textRows: 6,
-        flavorTextVisible: true,
+      return { 
+        fontSize: "16.5px", 
+        lineHeight: "19px", 
+        textFieldHeight: "96px", 
+        textRows: 6, 
+        flavorTextVisible: true, 
         maxFlavorTextChars: 62,
-        flavorTextFieldHeight: "57px",
-      });
+        flavorTextFieldHeight: "57px"
+      };
     } else if (textLength <= 264) {
       // Medium
-      setDynamicCardText({
-        fontSize: "15px",
-        lineHeight: "17px",
-        textFieldHeight: "120px",
-        textRows: 7,
-        flavorTextVisible: true,
+      return { 
+        fontSize: "15px", 
+        lineHeight: "17px", 
+        textFieldHeight: "120px", 
+        textRows: 7, 
+        flavorTextVisible: true, 
         maxFlavorTextChars: 50,
-        flavorTextFieldHeight: "34px",
-      });
+        flavorTextFieldHeight: "34px"
+      };
     } else if (textLength <= 352) {
       // Small
-      setDynamicCardText({
-        fontSize: "15px",
-        lineHeight: "17px",
-        textFieldHeight: "172px",
-        textRows: 9,
-        flavorTextVisible: false,
-        maxFlavorTextChars:0,
-        flavorTextFieldHeight: "0px",
-      });
-    } else if (textLength <= maxChars) {
-      // Extra small
-      setDynamicCardText({
-        fontSize: "13.5px",
-        lineHeight: "15.5px",
-        textFieldHeight: "172px",
-        textRows: 11,
-        flavorTextVisible: false,
+      return { 
+        fontSize: "15px", 
+        lineHeight: "17px", 
+        textFieldHeight: "172px", 
+        textRows: 9, 
+        flavorTextVisible: false, 
         maxFlavorTextChars: 0,
-        flavorTextFieldHeight: "0px",
-      });
-      
-    } 
-  }, [formCardData.cardText, formCardData.cardFlavorText]);
+        flavorTextFieldHeight: "0px"
+      };
+    } else {
+      // Extra Small
+      return { 
+        fontSize: "13.5", 
+        lineHeight: "15.5", 
+        textFieldHeight: "172px", 
+        textRows: 11, 
+        flavorTextVisible: false, 
+        maxFlavorTextChars: 0,
+        flavorTextFieldHeight: "0px"
+      };
+    }
+  };
+
+  const cardTextProps = calculateCardTextSize(activeCardText.length);
   
   useEffect(() => {
     // This ensures code runs only in the client-side environment
@@ -223,7 +222,7 @@ export default function NexusCardForm({
     cardColor
   ]);
 
-  // Clear sub type when card type changes
+  // On cardType change: Clear cardSubType
   useEffect(() => {
     if (
       formCardData.cardSubType && 
@@ -236,40 +235,36 @@ export default function NexusCardForm({
   // Handle energy cost popover
   function handleEnergyCostPopoverOpen() {
     setEnergyCostPopOver(true);
-    // const container = document.querySelector('#energyCostContainer') as HTMLElement;
-    // setEnergyCostAnchorEl(container);
   };
   
   function handleEnergyCostPopoverClose() {
     setEnergyCostPopOver(false);
-    // setEnergyCostAnchorEl(null);
   };
 
+  // Handle grade change
   function handleGradeChange() {
     switch (formCardData.cardGrade) {
-        case "rare":
-            setValue("cardGrade", "epic");
-            break;
-        case "epic":
-            setValue("cardGrade", "prime");
-            break;
-        case "prime":
-            setValue("cardGrade", "common");
-            break;
-        default:
-            setValue("cardGrade", "rare");
-      }
+      case "rare":
+          setValue("cardGrade", "epic");
+          break;
+      case "epic":
+          setValue("cardGrade", "prime");
+          break;
+      case "prime":
+          setValue("cardGrade", "common");
+          break;
+      default:
+          setValue("cardGrade", "rare");
+    }
     setOpenGradeSnackBar(true);
   }
 
+  // Handle grade snackbar
   function handleCloseGradeSnackbar(
     event: React.SyntheticEvent |
     Event, reason?: string
   ) {
-    if (reason === 'clickaway') {
-      return;
-    }
-
+    if (reason === 'clickaway') return;
     setOpenGradeSnackBar(false);
   };
 
@@ -523,8 +518,7 @@ export default function NexusCardForm({
                       )}
                     />
                   )}
-
-                  {/* Replace with custom select component */}              
+         
                   {/* Type */}
                   <Controller
                     name="cardType"
@@ -540,8 +534,6 @@ export default function NexusCardForm({
                         )}
                       >
                         <Select
-                          // multiple // change to multiple but only for entity + object/effect
-                          // change to custom component
                           {...field}
                           label="Type"
                           sx={{
@@ -791,10 +783,14 @@ export default function NexusCardForm({
                     render={({ field, fieldState }) => (
                       <TextField
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          debouncedSetCardText(e.target.value);
+                        }}
                         multiline
                         size="small"
                         variant="standard"
-                        rows={dynamicCardText.textRows}
+                        rows={cardTextProps.textRows}
                         error={!!fieldState.error}
                         placeholder={
                           !fieldState.error ? 'Type "/" to insert a keyword ability.':
@@ -808,11 +804,11 @@ export default function NexusCardForm({
                         )}
                         inputProps={{
                           maxLength: 440,
-                          style: {
-                            fontSize: dynamicCardText.fontSize,
-                            lineHeight: dynamicCardText.lineHeight,
-                            height: dynamicCardText.textFieldHeight,
-                          }
+                          style: { 
+                            fontSize: cardTextProps.fontSize,
+                            lineHeight: cardTextProps.lineHeight,
+                            height: cardTextProps.textFieldHeight,
+                          },
                         }}
                         sx={{
                           '& .MuiInputBase-input': {
@@ -835,7 +831,7 @@ export default function NexusCardForm({
                   />
 
                   {/* Divider */}
-                  {dynamicCardText.flavorTextVisible && (
+                  {cardTextProps.flavorTextVisible  && (
                     <Divider
                       className="
                         mx-4
@@ -846,7 +842,7 @@ export default function NexusCardForm({
                   )}
                   
                   {/* Card flavor text */}
-                  {dynamicCardText.flavorTextVisible  && (
+                  {cardTextProps.flavorTextVisible  && (
                     <Controller
                       name="cardFlavorText"
                       control={control}
@@ -854,21 +850,25 @@ export default function NexusCardForm({
                       render={({ field }) => (
                         <TextField
                           {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            debouncedSetCardFlavorText(e.target.value);
+                          }}
                           multiline
                           size="small"
                           variant="standard"
                           placeholder="The greatest flavor text you've ever read!"
-                          className="w-full"
                           rows={2}
+                          className={"w-full"}
                           inputProps={{
-                            maxLength: dynamicCardText.maxFlavorTextChars,
+                            maxLength: cardTextProps.maxFlavorTextChars,
                             style: {
-                              fontSize: dynamicCardText.fontSize,
-                              lineHeight: dynamicCardText.lineHeight,
-                              height: dynamicCardText.flavorTextFieldHeight,
+                              fontSize: cardTextProps.fontSize,
+                              lineHeight: cardTextProps.lineHeight,
+                              height: cardTextProps.flavorTextFieldHeight,
                               fontStyle: "italic",
                               fontWeight: 300,
-                            }
+                            },
                           }}
                           sx={{
                             '& .MuiInputBase-input': {
@@ -1173,8 +1173,6 @@ export default function NexusCardForm({
           </Box>
         </Box>
       )}
-    
-    
     </>
   );
 }
