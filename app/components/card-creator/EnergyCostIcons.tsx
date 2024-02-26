@@ -22,7 +22,8 @@ export default function EnergyCostIcons({
       <>
         {((
             formCardData.cardEnergyValue === 0 &&
-            formCardData.cardType === "node") ||
+            formCardData.cardType &&
+            formCardData.cardType.includes("node")) ||
             Object.values(formCardData.cardEnergyCost ?? {}
         ).every(value => value === 0)) ? (
           <IconButton
