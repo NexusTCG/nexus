@@ -15,6 +15,7 @@ import {
   TextField,
   Button,
   Alert,
+  CircularProgress,
 } from "@mui/material"
 import {
   Send,
@@ -37,7 +38,8 @@ export default function Roadmap() {
     watch,
     formState: { 
       errors, 
-      isValid 
+      isValid,
+      isSubmitting,
     }
 } = useForm<FeatureRequestType>();
 
@@ -55,11 +57,11 @@ export default function Roadmap() {
 
   // Set requester to username if available
   useEffect(() => {
-    if (userProfileData?.username) {
+    if (userProfileData?.username && userProfileData?.id) {
       setValue("requester", userProfileData.username);
       setValue("user_id", userProfileData.id);
     }
-  }, [userProfileData?.username]);
+  }, [userProfileData?.username, userProfileData?.id]);
 
   // Submit feature request
   async function submitFeatureRequest(
@@ -69,25 +71,25 @@ export default function Roadmap() {
     const { error } = await supabase
       .from("feature_requests")
       .insert([{ 
-        feature_request: feature,
+        feature: feature,
         requester: userProfileData?.username,
       }]);
     if (error) {
       setAlertInfo({
         type: "error",
         icon: <Error />,
-        message: "Error submitting feature request"
+        message: `Error submitting feature request: ${error.message}`
       });
       setShowAlertInfo(true);
       setTimeout(() => {
         setShowAlertInfo(false);
       }, 6000);
-      console.error("Error submitting feature request", error);
+      console.error("Error submitting feature request. Please try again.", error);
     } else {
       setAlertInfo({
         type: "success",
         icon: <Check />,
-        message: "Error submitting feature request"
+        message: "Request submitted! Thanks for your feedback!"
       });
       setShowAlertInfo(true);
       setTimeout(() => {
@@ -128,15 +130,6 @@ export default function Roadmap() {
           We can then grow the community of people who enjoy making TCG cards. {""}
           With enough cards created, we can start playtesting the game. {" "}
         </Typography>
-        <Typography
-          variant="subtitle1"
-          className="
-            text-white
-            font-semibold
-          "
-        >
-          Request a feature!
-        </Typography>
         {userProfileData?.id && (
           <form onSubmit={handleSubmit(submitFeatureRequest)}>
             <Box
@@ -174,7 +167,7 @@ export default function Roadmap() {
                 variant="outlined"
                 color="primary"
                 disabled={!isValid || !userProfileData?.username}
-                endIcon={<Send />}
+                startIcon={isSubmitting ? <CircularProgress size={24} /> : <Send />}
                 type="submit"
                 size="large"
                 className="
@@ -191,6 +184,7 @@ export default function Roadmap() {
         {userProfileData?.username && showAlertInfo && (
           <Alert
             severity={alertInfo?.type}
+            className="w-full mt-2 rounded-md"
             icon={
               alertInfo ? 
               alertInfo.icon : 
