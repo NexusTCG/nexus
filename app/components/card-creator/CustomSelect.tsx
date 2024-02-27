@@ -17,7 +17,12 @@ export default function CustomSelect({
     label,
     ...rest
 }: CustomSelectProps) {
-    const { control, formState: { errors } } = useFormContext();
+    const { 
+      control, 
+      formState: { 
+        errors 
+      } 
+    } = useFormContext();
 
     return (
         <Controller

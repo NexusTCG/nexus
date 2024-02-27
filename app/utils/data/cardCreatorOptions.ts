@@ -11,7 +11,9 @@ export const cardTypeOptions = {
   entity: "Entity",
   event: "Event",
   effect: "Effect",
+  entityEffect: "Entity Effect",
   object: "Object",
+  entityObject: "Entity Object",
   node: "Node",
 };
 

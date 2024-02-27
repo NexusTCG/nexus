@@ -24,7 +24,10 @@ import {
   Tooltip,
   Tab,
   Tabs,
-  Badge
+  Badge,
+  FormControlLabel,
+  Checkbox,
+  FormGroup,
 } from "@mui/material/";
 import {
   Send,
@@ -38,12 +41,10 @@ import {
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
   showCardRender?: boolean;
-  simpleCardRender?: boolean;
 };
 
 export default function CardCreatorForm({
   cardData,
-  simpleCardRender
 }: CardRenderProps) {
   const {
     setValue,
@@ -52,6 +53,7 @@ export default function CardCreatorForm({
     trigger,
     formState: {
       isSubmitting,
+      isDirty,
     },
   } = useFormContext<CardFormDataType>();
 
@@ -72,6 +74,7 @@ export default function CardCreatorForm({
   }>({});
   // Card art states
   const [showCardArtOptions, setShowCardArtOptions] = useState<boolean>(false);
+  const [showFlavorText, setShowFlavorText] = useState<boolean>(true);
   const [cardArtOptions, setCardArtOptions] = useState<{
     options: string[];
     activeOption: number;
@@ -206,6 +209,11 @@ export default function CardCreatorForm({
       setShowAlertInfo(false);
     }, 5000);
   }
+
+  // Toggle flavor text visibility
+  function handleShowFlavorTextChange() {
+    setShowFlavorText(!showFlavorText);
+  };
 
   // AI prompt tab handler
   function handlePromptTabChange(
@@ -641,44 +649,127 @@ export default function CardCreatorForm({
             h-full
             md:w-1/2
             px-0
-            py-4
+            pb-6
+            pt-2
             md:px-6
-            md:py-6
+            md:pt-4
+            md:pb-8
             md:border
             md:border-neutral-700
             md:bg-neutral-800
             md:rounded-md
-            gap-6
+            gap-4
           "
         >
-          {
-            form.cardType && 
-            form.cardType.length === 1 && 
-            form.cardType.includes("") && (
-            <Typography
-              variant="body2"
+          {/* Additional Options */}
+          {isDirty && (<Box
+            className="
+              flex
+              flex-col
+              justify-center
+              items-center
+              w-full
+            "
+          >
+            <FormGroup
+              row={true}
+            >
+              {form.cardText && (<FormControlLabel
+                onChange={handleShowFlavorTextChange}
+                control={
+                  <Checkbox
+                    checked={
+                      showFlavorText && 
+                      form.cardText.length <= 352
+                    }
+                    size="small"
+                  />
+                } 
+                label={
+                  <Typography
+                    variant="subtitle2"
+                    className="
+                      hover:text-neutral-400
+                      font-medium
+                    "
+                  >
+                    Flavor Text
+                  </Typography>
+                }
+              />)}
+              {form.cardType && form.cardType !== "event" && (
+                <FormControlLabel
+                  onChange={() => {
+                    form.cardSuperType === "default" || 
+                    form.cardSuperType === "" ? 
+                    setValue("cardSuperType", "mythic") : 
+                    setValue("cardSuperType", "default")
+                  }}
+                  control={
+                    <Checkbox
+                      checked={form.cardSuperType === "mythic"}
+                      size="small"
+                    />
+                  } 
+                  label={
+                    <Typography
+                      variant="subtitle2"
+                      className="
+                      hover:text-neutral-400
+                        font-medium
+                      "
+                    >
+                      Mythic
+                    </Typography>
+                  }
+                />
+              )}
+            </FormGroup>
+            {/* Alerts */}
+            <Box
               className="
-                flex 
-                justify-center
-                items-center
+                flex
+                flex-col
+                justify-start
+                items-start
                 w-full
-                py-2
-                rounded-sm
-                bg-red-500/20
-                text-red-500
               "
             >
-              Card type is required!
-            </Typography>)
-          }
+            {
+              form.cardType && 
+              form.cardType.length === 1 && 
+              form.cardType.includes("") && (
+              <Typography
+                variant="body2"
+                className="
+                  flex 
+                  justify-center
+                  items-center
+                  w-full
+                  py-2
+                  rounded-sm
+                  bg-red-500/20
+                  text-red-500
+                "
+              >
+                Card type is required!
+              </Typography>)
+            }
+            </Box>
+          </Box>)}
 
           {/* Div is for screenshot */}
-          <div id="nexus-form-container" style={{ borderRadius: "12.5px" }}>
+          <div 
+            id="nexus-form-container" 
+            style={{ 
+              borderRadius: "12.5px" 
+            }}
+          >
             {/* Card Render / Form */}
             <NexusCardForm
               cardData={cardData}
               showCardRender={showCardRender}
-              simpleCardRender={simpleCardRender}
+              showFlavorText={showFlavorText}
             />
           </div>
 
@@ -759,4 +850,4 @@ export default function CardCreatorForm({
       </Box>
     </Box>
   );
-}
+};

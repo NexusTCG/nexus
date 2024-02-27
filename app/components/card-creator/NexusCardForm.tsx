@@ -52,13 +52,13 @@ import CardRender from "@/app/components/card-creator/CardRender";
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
   showCardRender?: boolean;
-  simpleCardRender?: boolean;
+  showFlavorText?: boolean;
 };
 
 export default function NexusCardForm({
   cardData,
   showCardRender,
-  simpleCardRender
+  showFlavorText
 }: CardRenderProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {
@@ -270,7 +270,6 @@ export default function NexusCardForm({
       {cardData && showCardRender ? (
         <CardRender
           cardData={cardData}
-          simpleCardRender={simpleCardRender}
         />
       ) : (
         <Box
@@ -450,12 +449,16 @@ export default function NexusCardForm({
                   "
                 >
                   {/* Super type */}
-                  {formCardData.cardType && (
+
+                  {/* Remove Supertype? */}
+
+                  {/* {formCardData.cardType && (
                     formCardData.cardType.includes("object") || 
                     formCardData.cardType.includes("entity") || 
                     formCardData.cardType.includes("effect") || 
                     formCardData.cardType.includes("node")
-                  ) && (
+                  ) && ( */}
+                  {formCardData.cardType === null && (
                     <Controller
                       name="cardSuperType"
                       control={control}
@@ -464,9 +467,13 @@ export default function NexusCardForm({
                         <FormControl 
                           className={clsx("flex-grow",
                             {
-                              "w-1/5": formCardData.cardType && formCardData.cardType.length <= 1 && formCardData.cardType.includes("entity"),
-                              // "w-1/5": formCardData.cardType && formCardData.cardType.includes("entity") && formCardData.cardType.includes("node"),
-                              "w-2/5": formCardData.cardType && formCardData.cardType.includes("node"),
+                              "w-1/5": 
+                                formCardData.cardType && 
+                                formCardData.cardType.length <= 1 && 
+                                formCardData.cardType.includes("entity"),
+                              "w-2/5": 
+                                formCardData.cardType && 
+                                formCardData.cardType.includes("node"),
                             }
                           )}
                         >
@@ -524,31 +531,13 @@ export default function NexusCardForm({
                     render={({ field }) => (
                       <FormControl
                         className={clsx("flex-grow", {
-                          "w-1/5": formCardData.cardType && formCardData.cardType.length <= 1 && formCardData.cardType.includes("entity"),
-                          "w-2/5": formCardData.cardType && formCardData.cardType.length === 2 && formCardData.cardType.includes("entity"),
-                          "w-3/5": formCardData.cardType && formCardData.cardType.includes("node"),
+                          "w-1/5": formCardData.cardType === "entity",
+                          "w-3/5": formCardData.cardType === "node",
                         })}
                       >
                         <Select
                           {...field}
                           label="Type"
-                          multiple
-                          // sx={{
-                          //   '& .MuiInputBase-input': {
-                          //     color: "black",
-                          //     padding: "0",
-                          //     display: "flex",
-                          //     justifyContent: "start",
-                          //     alignItems: "center",
-                          //     fontSize: "20px",
-                          //     lineHeight: "28px",
-                          //     fontWeight: "semi-bold",
-                          //   },
-                          //   '& .MuiOutlinedInput-notchedOutline': {
-                          //     border: "none",
-                          //     borderColor: "black",
-                          //   },
-                          // }}
                           sx={{
                             '& .MuiInputBase-input': {
                               color: "black",
@@ -567,43 +556,13 @@ export default function NexusCardForm({
                             },
                           }}
                           onChange={async (e) => {
-                            const selectedOptions: string[] = Array.isArray(e.target.value) ? e.target.value : [];
-                            const currentSelection = field.value || [];
-                            let newSelection = [];
-                          
-                            // If "node" is selected or switching to "node"
-                            if (selectedOptions.includes("node")) {
-                              newSelection = ["node"];
-                            } else if (currentSelection.includes("event") && selectedOptions.length) {
-                              // Allow switching from "event" to anything else
-                              newSelection = selectedOptions;
-                            } else if (currentSelection.includes("entity")) {
-                              if (selectedOptions.includes("event")) {
-                                newSelection = ["event"];
-                              } else {
-                                // Toggle "effect" or "object" when "entity" is already selected
-                                const toggleOption = selectedOptions.find(option => option === "effect" || option === "object");
-                                if (toggleOption && currentSelection.includes(toggleOption)) {
-                                  // If trying to unselect "effect" or "object"
-                                  newSelection = ["entity"];
-                                } else if (toggleOption && !currentSelection.includes(toggleOption)) {
-                                  // If adding "effect" or "object"
-                                  newSelection = ["entity", toggleOption];
-                                } else {
-                                  // Keep existing selection if no toggle action is performed
-                                  newSelection = currentSelection;
-                                }
-                              }
-                            } else {
-                              // Default to switching to the latest selection if none of the above conditions are met
-                              newSelection = selectedOptions;
-                            }
-                          
-                            // Apply the new selection
-                            field.onChange(newSelection);
-                          
-                            // Reset fields if "node" is the final selection
-                            if (newSelection.includes("node")) {
+                            const selectedOption = e.target.value;
+
+                            // Directly call field.onChange with the selectedOption
+                            field.onChange(selectedOption);
+
+                            // Check if the selected option is "node" and reset fields accordingly
+                            if (selectedOption === "node") {
                               const newEnergyCost = await resetFieldsOnNode(activeCardCost);
                               setValue("cardEnergyCost", newEnergyCost);
                               setValue("cardEnergyValue", 0);
@@ -613,16 +572,16 @@ export default function NexusCardForm({
                                 setValue("cardSuperType", "");
                               }
                             }
-                          }}                                              
+                          }}
                           renderValue={(selected) => (
-                            (Array.isArray(selected) ? selected : []).map(option => 
-                              typeof option === 'string' ? option.charAt(0).toUpperCase() + option.slice(1) : ''
-                            ).join(' ')
+                            typeof selected === "string" ? selected.charAt(0).toUpperCase() + selected.slice(1) : ""
                           )}
                         >
                           {Object.entries(cardTypeOptions).map(([value, label]) => (
                             <MenuItem key={value} value={value}>
-                              <Typography variant="body2">{label}</Typography>
+                              <Typography variant="body2">
+                                {label}
+                              </Typography>
                             </MenuItem>
                           ))}
                         </Select>
@@ -876,7 +835,8 @@ export default function NexusCardForm({
                   />
 
                   {/* Divider */}
-                  {cardTextProps.flavorTextVisible  && (
+                  {cardTextProps.flavorTextVisible && 
+                    showFlavorText  && (
                     <Divider
                       className="
                         mx-4
@@ -887,7 +847,8 @@ export default function NexusCardForm({
                   )}
                   
                   {/* Card flavor text */}
-                  {cardTextProps.flavorTextVisible  && (
+                  {cardTextProps.flavorTextVisible && 
+                    showFlavorText && (
                     <Controller
                       name="cardFlavorText"
                       control={control}
@@ -1043,7 +1004,7 @@ export default function NexusCardForm({
               <Box
                 id="stats-grade-info"
                 className={clsx("flex flex-col justify-center items-center",
-                      formCardData.cardType && !formCardData.cardType.includes("entity") ? "w-full" : "w-3/5"
+                  formCardData.cardType && !formCardData.cardType.includes("entity") ? "w-full" : "w-3/5"
                 )}
               >
                 {/* Card grade */}
@@ -1130,7 +1091,8 @@ export default function NexusCardForm({
                 </Box>
               </Box>
               {/* Card defense */}
-              {formCardData.cardType && formCardData.cardType.includes("entity") && (
+              {formCardData.cardType && 
+              formCardData.cardType.includes("entity") && (
               <Box
                 id="stats-defense"
                 className="

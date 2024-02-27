@@ -10,10 +10,10 @@ export default function determineBgImage(
             return "bg-[url('/images/card-parts/card-frames/other/node.png')]"
 
         case "yellow":
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/mono/object/object-yellow.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/mono/effect/effect-yellow.png')]";
 
             } else {
@@ -21,10 +21,10 @@ export default function determineBgImage(
             };
 
         case "blue":
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/mono/object/object-blue.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/mono/effect/effect-blue.png')]";
 
             } else {
@@ -32,10 +32,10 @@ export default function determineBgImage(
             };
 
         case "purple":
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/mono/object/object-purple.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/mono/effect/effect-purple.png')]";
 
             } else {
@@ -43,10 +43,10 @@ export default function determineBgImage(
             };
 
         case "red":
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/mono/object/object-red.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/mono/effect/effect-red.png')]";
 
             } else {
@@ -54,10 +54,10 @@ export default function determineBgImage(
             };
             
         case "green":
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/mono/object/object-green.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/mono/effect/effect-green.png')]";
 
             } else {
@@ -65,10 +65,10 @@ export default function determineBgImage(
             };
 
         case "void":
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/mono/object/object-void.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/mono/effect/effect-void.png')]";
 
             } else {
@@ -76,10 +76,10 @@ export default function determineBgImage(
             }
 
         case "yellowBlue":
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-yellow-blue.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-yellow-blue.png')]";
 
             } else {
@@ -87,10 +87,10 @@ export default function determineBgImage(
             };
 
         case "yellowPurple":
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-yellow-purple.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-yellow-purple.png')]";
 
             } else {
@@ -98,10 +98,10 @@ export default function determineBgImage(
             };
 
         case "yellowRed":
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-yellow-red.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-yellow-red.png')]";
 
             } else {
@@ -109,10 +109,10 @@ export default function determineBgImage(
             };
 
         case "yellowGreen":
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-yellow-green.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-yellow-green.png')]";
 
             } else {
@@ -120,10 +120,10 @@ export default function determineBgImage(
             };
 
         case "bluePurple":
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-blue-purple.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-blue-purple.png')]";
 
             } else {
@@ -131,10 +131,10 @@ export default function determineBgImage(
             };
 
         case "blueRed":
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-blue-red.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-blue-red.png')]";
 
             } else {
@@ -142,10 +142,10 @@ export default function determineBgImage(
             };
 
         case "blueGreen":
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-blue-green.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-blue-green.png')]";
 
             } else {
@@ -153,10 +153,10 @@ export default function determineBgImage(
             };
 
         case "purpleRed":
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-purple-red.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-purple-red.png')]";
 
             } else {
@@ -164,10 +164,10 @@ export default function determineBgImage(
             };
 
         case "purpleGreen":
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-purple-green.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-purple-green.png')]";
 
             } else {
@@ -175,10 +175,10 @@ export default function determineBgImage(
             };
 
         case "redGreen":
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-red-green.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-red-green.png')]";
 
             } else {
@@ -186,20 +186,21 @@ export default function determineBgImage(
             };
 
         case "multi":
-            if (activeCardType?.includes("object")) {
-                "bg-[url('/images/card-parts/card-frames/other/effect-multi.png')]";
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
+                return "bg-[url('/images/card-parts/card-frames/other/object/object-multi.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
-                "bg-[url('/images/card-parts/card-frames/other/effect-multi.png')]";
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
+                return "bg-[url('/images/card-parts/card-frames/other/effect/effect-multi.png')]";
 
+            } else {
+              return "bg-[url('/images/card-parts/card-frames/other/multi.png')]";
             };
-            return "bg-[url('/images/card-parts/card-frames/other/multi.png')]";
 
         default:
-            if (activeCardType?.includes("object")) {
+            if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {
                 return "bg-[url('/images/card-parts/card-frames/other/object/object-default.png')]";
 
-            } else if (activeCardType?.includes("effect")) {
+            } else if (activeCardType?.includes("effect") || activeCardType?.includes("entityEffect")) {
                 return "bg-[url('/images/card-parts/card-frames/other/effect/effect-default.png')]";
 
             };

@@ -55,7 +55,7 @@ export default function Create() {
       },
       cardColor: "",
       cardArt: "/images/card-parts/card-art/default-art.jpg",
-      cardType: ["entity"],
+      cardType: "entity",
       cardSuperType: "default",
       cardSubType: [""],
       cardSpeed: "1",
@@ -92,7 +92,6 @@ export default function Create() {
   // States
   const [submittedFormData, setSubmittedFormData] = useState<CardFormDataType | null>(null);
   const [uploadedFormData, setUploadedFormData] = useState<CardsTableType | null>(null);
-  const [simpleCardRender, setSimpleCardRender] = useState<boolean>(true);
   const [postToDiscord, setPostToDiscord] = useState<boolean>(true);
   const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
@@ -185,7 +184,6 @@ export default function Create() {
           // Update state to include card id, and cardRender
           const responseData = await response.json();
           setUploadedFormData(responseData.data);
-          setSimpleCardRender(false);
 
           if (response.ok && responseData.data) {
             setAlertInfo({
@@ -483,7 +481,6 @@ export default function Create() {
               {/* Card Creator Form */}
               <CardCreatorForm
                 cardData={uploadedFormData ? uploadedFormData : submittedFormData}
-                simpleCardRender={simpleCardRender}
               />
             </Box>
           </Box>

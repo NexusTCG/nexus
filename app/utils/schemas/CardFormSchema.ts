@@ -23,7 +23,7 @@ const CardFormSchema = z
       .string()
       .min(1, "Card art is required.")
       .default("/images/card-parts/card-art/default-art.jpg"),
-    cardType: z.array(z.string()).optional(),
+    cardType: z.array(z.string()).min(1, "Card type is required."),
     cardSuperType: z.string().optional(),
     cardSubType: z.array(z.string()).optional(),
     cardSpeed: z.string().optional(),

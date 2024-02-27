@@ -217,20 +217,8 @@ export default function Card({
               {/* Card Render */}
               {cardData && cardData?.id && (
                 <div className="flex flex-col gap-2">
-                  high quality render
                   <CardRender
                     cardData={cardData} 
-                    simpleCardRender={false}
-                  />
-                </div>
-              )}
-              {/* Card Render */}
-              {cardData && cardData?.id && (
-                <div className="flex flex-col gap-2">
-                  simple quality render
-                  <CardRender
-                    cardData={cardData} 
-                    simpleCardRender={true}
                   />
                 </div>
               )}
