@@ -800,7 +800,7 @@ export default function NexusCardForm({
                           !fieldState.error ? 'Type "/" to insert a keyword ability.':
                           "Card text is required!"
                         }
-                        className={clsx("w-full",
+                        className={clsx("w-full text-wrap",
                           {
                             "!text-black": !fieldState.error,
                             "!text-red-500": fieldState.error,
@@ -865,7 +865,7 @@ export default function NexusCardForm({
                           variant="standard"
                           placeholder="The greatest flavor text you've ever read!"
                           rows={2}
-                          className={"w-full"}
+                          className="w-full text-wrap"
                           inputProps={{
                             maxLength: cardTextProps.maxFlavorTextChars,
                             style: {

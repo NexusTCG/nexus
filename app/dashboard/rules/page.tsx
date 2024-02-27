@@ -1,12 +1,14 @@
-"use client";
-
 import React from "react";
-import {
-  Box, Typography
-} from "@mui/material"
 import RulesSection from "@/app/components/rules/RulesSection";
 import RuleItem from "@/app/components/rules/RuleItem";
+import SpecialText from "@/app/components/rules/SpecialText";
 import Image from "next/image";
+import {
+  Box,
+  Typography,
+  List,
+  ListItem,
+} from "@mui/material"
 
 export default function Rules() {
     return (
@@ -126,7 +128,6 @@ export default function Rules() {
                 The Color of biology, growth, and ruthlessness. 
                 Command nature across the universe to smash the opposition.
               </Box>
-                
             </RuleItem>
           </Box>
         </RulesSection>
@@ -339,21 +340,127 @@ export default function Rules() {
                   </Box>
                 </Box>
             </RuleItem>
+            {/* Variable Energy Cost */}
             <RuleItem
               title="Variable Energy Cost"
             >
               <Typography
                 variant="body1"
                 className="
-                  title-white
                   font-medium
                 "
               >
-                When any Energy can be used to pay a Cost, it&apos;s considered a Variable Energy Cost.
-                You&apos;ll see a number like 2 or an X. 
-                X means the Cost is determined by the player, and it can be any number between zero and 15. 
-                Variable Energy Costs are Void, and can therefore be paid for with any Color of Energy.
+                When any <SpecialText color="teal" style="semibold">Energy</SpecialText>. can be used to pay a Cost, {" "}
+                it&apos;s considered a <SpecialText color="teal" style="semibold">Variable Energy Cost</SpecialText>.
+                You&apos;ll see a number like <SpecialText color="teal" style="semibold">2</SpecialText> {" "}
+                or an <SpecialText color="teal" style="semibold">X</SpecialText>. {" "}
+                <SpecialText color="teal" style="semibold">X</SpecialText> means the Cost is determined {""}
+                by the player, and it can be any number between zero and 15. 
+                <SpecialText color="teal" style="semibold">Variable Energy Costs</SpecialText>. {" "}
+                are <SpecialText color="teal" style="semibold">Void</SpecialText>, and can therefore be paid for with any {" "}
+                <SpecialText color="teal" style="semibold">Color</SpecialText> of {" "}
+                <SpecialText color="teal" style="semibold">Energy</SpecialText>.
               </Typography>
+            </RuleItem>
+            {/* Energy Value */}
+            <RuleItem
+              title="Energy Value"
+            >
+              <Typography
+                variant="body1"
+                className="
+                  font-medium
+                  text-wrap
+                "
+              >
+                The <SpecialText color="teal" style="semibold">Energy</SpecialText> value of a card is the {" "}
+                <SpecialText color="teal" style="semibold">Total Energy Cost</SpecialText> needed to pay for it.
+                The <SpecialText color="teal" style="semibold">Base Energy</SpecialText> value of a card is the {" "}
+                <SpecialText color="teal" style="semibold">Energy</SpecialText> value it has from the start.
+              </Typography>
+            </RuleItem>
+            {/* Example: Energy Value */}
+            <RuleItem
+              title="Example"
+            >
+              <List>
+                  <ListItem>
+                    <Typography
+                      variant="body2"
+                      className="
+                        font-medium
+                        text-wrap
+                      "
+                    >
+                      {"—"} A card <SpecialText color="teal" style="semibold">Costs</SpecialText> 2 void {""}
+                      <SpecialText color="teal" style="semibold">Energy</SpecialText>, 1 {" "}
+                      <SpecialText color="teal" style="semibold">Yellow Energy</SpecialText>, and 1 {" "}
+                      <SpecialText color="teal" style="semibold">Red Energy</SpecialText>.
+                    </Typography>
+                  </ListItem>
+                  <ListItem>
+                    <Typography
+                      variant="body2"
+                      className="
+                        font-medium
+                        text-wrap
+                      "
+                    >
+                      {"—"} Its <SpecialText color="teal" style="semibold">Colors</SpecialText> are {""}
+                      <SpecialText color="teal" style="semibold">Yellow</SpecialText> and {" "}
+                      <SpecialText color="teal" style="semibold">Red</SpecialText>.
+                    </Typography>
+                  </ListItem>
+                  <ListItem>
+                    <Typography
+                      variant="body2"
+                      className="
+                        font-medium
+                        text-wrap
+                      "
+                    >
+                      {"—"} Its total <SpecialText color="teal" style="semibold">Energy</SpecialText> value is 4.
+                    </Typography>
+                  </ListItem>
+                  <ListItem>
+                    <Typography
+                      variant="body2"
+                      className="
+                        font-medium
+                        text-wrap
+                      "
+                    >
+                      {"—"} It must be paid for with at least 1 <SpecialText color="teal" style="semibold">Yellow</SpecialText>, {" "}
+                      and 1 <SpecialText color="teal" style="semibold">Red Energy</SpecialText>.
+                    </Typography>
+                  </ListItem>
+                  <ListItem>
+                    <Typography
+                      variant="body2"
+                      className="
+                        font-medium
+                        text-wrap
+                      "
+                    >
+                      {"—"} The 2 <SpecialText color="teal" style="semibold">Void Energy</SpecialText> can be paid for {" "}
+                      with any combination of <SpecialText color="teal" style="semibold">Energy</SpecialText>.
+                    </Typography>
+                  </ListItem>
+                  <ListItem>
+                    <Typography
+                      variant="body2"
+                      className="
+                        font-medium
+                        text-wrap
+                      "
+                    >
+                      {"—"} It could be paid for with 1 <SpecialText color="teal" style="semibold">Yellow</SpecialText>, {" "}
+                      1 <SpecialText color="teal" style="semibold">Red</SpecialText>, {""}
+                      1 <SpecialText color="teal" style="semibold">Blue</SpecialText>, and {""}
+                      1 <SpecialText color="teal" style="semibold">Green Energy</SpecialText>.
+                    </Typography>
+                  </ListItem>
+                </List>
             </RuleItem>
           </Box>
         </RulesSection>

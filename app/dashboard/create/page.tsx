@@ -274,6 +274,8 @@ export default function Create() {
               items-center
               w-full
               gap-4
+              md:bg-transparent
+              bg-neutral-800
             "
           >
             <Box
