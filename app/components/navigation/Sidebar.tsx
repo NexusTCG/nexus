@@ -5,8 +5,12 @@ import SoMeButton from "@/app/components/navigation/SoMeButton";
 import NavigationButton from "@/app/components/navigation/NavigationButton";
 import SignOutButton from "@/app/components/auth/SignOutButton"
 import Image from "next/image";
-import { Box } from "@mui/material";
 import Link from "next/link";
+import {
+  Box,
+  Button,
+} from "@mui/material";
+import FeedbackIcon from '@mui/icons-material/Feedback';
 
 const soMeChannels = [
   "github",
@@ -21,6 +25,7 @@ const primaryNavigation = [
   "rules",
   "game",
   "roadmap",
+  "feedback",
 ]
 
 const secondaryNavigation = [
@@ -31,6 +36,7 @@ const secondaryNavigation = [
 ]
 
 export default function Sidebar() {
+
   return (
     <Box
       id="sidebar-container"
@@ -142,6 +148,26 @@ export default function Sidebar() {
               />
             )
           })}
+          <Button
+            id={"feedback-button"}
+            variant="outlined"
+            href="https://discord.gg/vKdkBZYcc6"
+            startIcon={<FeedbackIcon />}
+            size="large"
+            color="secondary"
+            className="
+              flex
+              justify-start
+              items-center
+              w-full
+              hover:cursor-pointer
+              hover:bg-teal-600/30
+              hover:text-white
+              hover:border-teal-600
+            "
+          >
+            Feedback
+          </Button>
         </Box>
       </Box>
 

@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Box,
   Typography,
@@ -11,6 +12,8 @@ type TextSectionProps = {
   imageSide: "left" | "right",
   overline: string,
   title: string,
+  link?: string,
+  linkLabel?: string,
   children: React.ReactNode,
 };
 
@@ -20,10 +23,14 @@ export default function TextSection({
   imageSide,
   overline,
   title,
+  link,
+  linkLabel,
   children,
 }: TextSectionProps) {
   let imagePlacement = "md:flex-row";
-  if (imageSide === "right") {imagePlacement = "md:flex-row-reverse"};
+  if (imageSide === "right") {
+    imagePlacement = "md:flex-row-reverse"
+  };
 
   return (
     <Box
@@ -38,7 +45,9 @@ export default function TextSection({
         pb-8
         gap-4
         rounded-lg
-        bg-neutral-900
+        bg-neutral-800
+        shadow-xl
+        shadow-neutral-950/20
       "
     >
       <Box
@@ -98,7 +107,7 @@ export default function TextSection({
             <Typography
               variant="overline"
               className="
-                font-medium
+                font-semibold
                 w-full
                 text-teal-500
               "
@@ -125,6 +134,23 @@ export default function TextSection({
           >
             {children}
           </Typography>
+          {link && (
+            <Link
+              href={link}
+            >
+              <Typography
+                variant="caption"
+                className="
+                  font-medium
+                  text-teal-500
+                  hover:text-teal-400
+                  w-full
+                "
+              >
+                {linkLabel?.toUpperCase()}
+              </Typography>
+            </Link>
+          )}
         </Box>
       </Box>
     </Box>

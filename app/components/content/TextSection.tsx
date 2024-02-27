@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import {
   Box,
   Typography,
@@ -8,6 +9,8 @@ type TextSectionProps = {
   sectionId: string,
   overline: string,
   title: string,
+  link?: string,
+  linkLabel?: string,
   children: React.ReactNode,
 };
 
@@ -15,6 +18,8 @@ export default function TextSection({
   sectionId,
   overline,
   title,
+  link,
+  linkLabel,
   children,
 }: TextSectionProps) {
   return (
@@ -30,7 +35,9 @@ export default function TextSection({
         p-6
         pb-8
         rounded-lg
-        bg-neutral-900
+        bg-neutral-800
+        shadow-xl
+        shadow-neutral-950/20
       "
     >
       <Box
@@ -73,6 +80,23 @@ export default function TextSection({
       >
         {children}
       </Typography>
+      {link && (
+        <Link
+          href={link}
+        >
+          <Typography
+            variant="caption"
+            className="
+              font-medium
+              text-teal-500
+              hover:text-teal-400
+              w-full
+            "
+          >
+            {linkLabel?.toUpperCase()}
+          </Typography>
+        </Link>
+      )}
     </Box>
   )
 };

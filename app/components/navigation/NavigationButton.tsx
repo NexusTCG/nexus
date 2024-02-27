@@ -12,7 +12,7 @@ import {
   Flag,
   Payments,
   Help,
-  Settings
+  Settings,
 } from '@mui/icons-material';
 import clsx from "clsx";
 
@@ -62,9 +62,11 @@ export default function NavigationButton({
         break;
       case "rules":
         setIcon(<Rule />);
+        setDisabled(false);
         break;
       case "game":
         setIcon(<Casino />);
+        setDisabled(false);
         break;
       case "roadmap":
         setIcon(<Flag />);

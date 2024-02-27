@@ -78,6 +78,7 @@ export default function DashboardLayout({
           lg:hidden
           block
           w-full
+          z-10
         "
       >
         {/* AppBar */}
@@ -91,6 +92,7 @@ export default function DashboardLayout({
           justify-center
           items-center
           w-full
+          h-full
           bg-neutral-900
         "
       >
