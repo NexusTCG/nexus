@@ -1,7 +1,8 @@
 import React from "react";
 import RulesSection from "@/app/components/rules/RulesSection";
 import RuleItem from "@/app/components/rules/RuleItem";
-import SpecialText from "@/app/components/rules/SpecialText";
+import RulesHighlight from "@/app/components/rules/RulesHighlight";
+// import RulesKeyword from "@/app/components/rules/RulesKeyword"; // All keywords get styled with text-neutral-500
 import Image from "next/image";
 import {
   Box,
@@ -146,7 +147,7 @@ export default function Rules() {
               justify-start
               items-start
               w-full
-              gap-2
+              gap-4
             "
           >
             <RuleItem
@@ -350,16 +351,16 @@ export default function Rules() {
                   font-medium
                 "
               >
-                When any <SpecialText color="teal" style="semibold">Energy</SpecialText>. can be used to pay a Cost, {" "}
-                it&apos;s considered a <SpecialText color="teal" style="semibold">Variable Energy Cost</SpecialText>.
-                You&apos;ll see a number like <SpecialText color="teal" style="semibold">2</SpecialText> {" "}
-                or an <SpecialText color="teal" style="semibold">X</SpecialText>. {" "}
-                <SpecialText color="teal" style="semibold">X</SpecialText> means the Cost is determined {""}
+                When any <RulesHighlight color="teal" style="semibold">Energy</RulesHighlight>. can be used to pay a Cost, {" "}
+                it&apos;s considered a <RulesHighlight color="teal" style="semibold">Variable Energy Cost</RulesHighlight>.
+                You&apos;ll see a number like <RulesHighlight color="teal" style="semibold">2</RulesHighlight> {" "}
+                or an <RulesHighlight color="teal" style="semibold">X</RulesHighlight>. {" "}
+                <RulesHighlight color="teal" style="semibold">X</RulesHighlight> means the Cost is determined {""}
                 by the player, and it can be any number between zero and 15. 
-                <SpecialText color="teal" style="semibold">Variable Energy Costs</SpecialText>. {" "}
-                are <SpecialText color="teal" style="semibold">Void</SpecialText>, and can therefore be paid for with any {" "}
-                <SpecialText color="teal" style="semibold">Color</SpecialText> of {" "}
-                <SpecialText color="teal" style="semibold">Energy</SpecialText>.
+                <RulesHighlight color="teal" style="semibold">Variable Energy Costs</RulesHighlight>. {" "}
+                are <RulesHighlight color="teal" style="semibold">Void</RulesHighlight>, and can therefore be paid for with any {" "}
+                <RulesHighlight color="teal" style="semibold">Color</RulesHighlight> of {" "}
+                <RulesHighlight color="teal" style="semibold">Energy</RulesHighlight>.
               </Typography>
             </RuleItem>
             {/* Energy Value */}
@@ -373,17 +374,28 @@ export default function Rules() {
                   text-wrap
                 "
               >
-                The <SpecialText color="teal" style="semibold">Energy</SpecialText> value of a card is the {" "}
-                <SpecialText color="teal" style="semibold">Total Energy Cost</SpecialText> needed to pay for it.
-                The <SpecialText color="teal" style="semibold">Base Energy</SpecialText> value of a card is the {" "}
-                <SpecialText color="teal" style="semibold">Energy</SpecialText> value it has from the start.
+                The <RulesHighlight color="teal" style="semibold">Energy</RulesHighlight> value of a card is the {" "}
+                <RulesHighlight color="teal" style="semibold">Total Energy Cost</RulesHighlight> needed to pay for it.
+                The <RulesHighlight color="teal" style="semibold">Base Energy</RulesHighlight> value of a card is the {" "}
+                <RulesHighlight color="teal" style="semibold">Energy</RulesHighlight> value it has from the start.
               </Typography>
-            </RuleItem>
-            {/* Example: Energy Value */}
-            <RuleItem
-              title="Example"
-            >
-              <List>
+              {/* Example: Energy Value */}
+              <Box
+                className="
+                  flex
+                  flex-col
+                  justify-start
+                  items-start
+                  w-full
+                  gap-2
+                  mt-4
+                  rounded-md
+                  px-2
+                  py-1
+                  bg-neutral-900
+                "
+              >
+                <List>
                   <ListItem>
                     <Typography
                       variant="body2"
@@ -392,10 +404,10 @@ export default function Rules() {
                         text-wrap
                       "
                     >
-                      {"—"} A card <SpecialText color="teal" style="semibold">Costs</SpecialText> 2 void {""}
-                      <SpecialText color="teal" style="semibold">Energy</SpecialText>, 1 {" "}
-                      <SpecialText color="teal" style="semibold">Yellow Energy</SpecialText>, and 1 {" "}
-                      <SpecialText color="teal" style="semibold">Red Energy</SpecialText>.
+                      {"—"} A card <RulesHighlight color="teal" style="semibold">Costs</RulesHighlight> 2 void {""}
+                      <RulesHighlight color="teal" style="semibold">Energy</RulesHighlight>, 1 {" "}
+                      <RulesHighlight color="teal" style="semibold">Yellow Energy</RulesHighlight>, and 1 {" "}
+                      <RulesHighlight color="teal" style="semibold">Red Energy</RulesHighlight>.
                     </Typography>
                   </ListItem>
                   <ListItem>
@@ -406,9 +418,9 @@ export default function Rules() {
                         text-wrap
                       "
                     >
-                      {"—"} Its <SpecialText color="teal" style="semibold">Colors</SpecialText> are {""}
-                      <SpecialText color="teal" style="semibold">Yellow</SpecialText> and {" "}
-                      <SpecialText color="teal" style="semibold">Red</SpecialText>.
+                      {"—"} Its <RulesHighlight color="teal" style="semibold">Colors</RulesHighlight> are {""}
+                      <RulesHighlight color="teal" style="semibold">Yellow</RulesHighlight> and {" "}
+                      <RulesHighlight color="teal" style="semibold">Red</RulesHighlight>.
                     </Typography>
                   </ListItem>
                   <ListItem>
@@ -419,7 +431,7 @@ export default function Rules() {
                         text-wrap
                       "
                     >
-                      {"—"} Its total <SpecialText color="teal" style="semibold">Energy</SpecialText> value is 4.
+                      {"—"} Its total <RulesHighlight color="teal" style="semibold">Energy</RulesHighlight> value is 4.
                     </Typography>
                   </ListItem>
                   <ListItem>
@@ -430,8 +442,8 @@ export default function Rules() {
                         text-wrap
                       "
                     >
-                      {"—"} It must be paid for with at least 1 <SpecialText color="teal" style="semibold">Yellow</SpecialText>, {" "}
-                      and 1 <SpecialText color="teal" style="semibold">Red Energy</SpecialText>.
+                      {"—"} It must be paid for with at least 1 <RulesHighlight color="teal" style="semibold">Yellow</RulesHighlight>, {" "}
+                      and 1 <RulesHighlight color="teal" style="semibold">Red Energy</RulesHighlight>.
                     </Typography>
                   </ListItem>
                   <ListItem>
@@ -442,8 +454,8 @@ export default function Rules() {
                         text-wrap
                       "
                     >
-                      {"—"} The 2 <SpecialText color="teal" style="semibold">Void Energy</SpecialText> can be paid for {" "}
-                      with any combination of <SpecialText color="teal" style="semibold">Energy</SpecialText>.
+                      {"—"} The 2 <RulesHighlight color="teal" style="semibold">Void Energy</RulesHighlight> can be paid for {" "}
+                      with any combination of <RulesHighlight color="teal" style="semibold">Energy</RulesHighlight>.
                     </Typography>
                   </ListItem>
                   <ListItem>
@@ -454,13 +466,49 @@ export default function Rules() {
                         text-wrap
                       "
                     >
-                      {"—"} It could be paid for with 1 <SpecialText color="teal" style="semibold">Yellow</SpecialText>, {" "}
-                      1 <SpecialText color="teal" style="semibold">Red</SpecialText>, {""}
-                      1 <SpecialText color="teal" style="semibold">Blue</SpecialText>, and {""}
-                      1 <SpecialText color="teal" style="semibold">Green Energy</SpecialText>.
+                      {"—"} It could be paid for with 1 <RulesHighlight color="teal" style="semibold">Yellow</RulesHighlight>, {" "}
+                      1 <RulesHighlight color="teal" style="semibold">Red</RulesHighlight>, {""}
+                      1 <RulesHighlight color="teal" style="semibold">Blue</RulesHighlight>, and {""}
+                      1 <RulesHighlight color="teal" style="semibold">Green Energy</RulesHighlight>.
+                    </Typography>
+                  </ListItem>
+                  <ListItem>
+                    <Typography
+                      variant="body2"
+                      className="
+                        font-medium
+                        text-wrap
+                      "
+                    >
+                      {"—"} It would still only be considered a {""}
+                      <RulesHighlight color="teal" style="semibold">Yellow</RulesHighlight>, {" "}
+                      and 1 <RulesHighlight color="teal" style="semibold">Red Energy</RulesHighlight>.
                     </Typography>
                   </ListItem>
                 </List>
+              </Box>
+            </RuleItem>
+            {/* Energy Store */}
+            <RuleItem
+              title="Energy Store"
+            >
+              <Typography
+                variant="body1"
+                className="
+                  font-medium
+                "
+              >
+                When any <RulesHighlight color="teal" style="semibold">Energy</RulesHighlight>. can be used to pay a Cost, {" "}
+                it&apos;s considered a <RulesHighlight color="teal" style="semibold">Variable Energy Cost</RulesHighlight>.
+                You&apos;ll see a number like <RulesHighlight color="teal" style="semibold">2</RulesHighlight> {" "}
+                or an <RulesHighlight color="teal" style="semibold">X</RulesHighlight>. {" "}
+                <RulesHighlight color="teal" style="semibold">X</RulesHighlight> means the Cost is determined {""}
+                by the player, and it can be any number between zero and 15. 
+                <RulesHighlight color="teal" style="semibold">Variable Energy Costs</RulesHighlight>. {" "}
+                are <RulesHighlight color="teal" style="semibold">Void</RulesHighlight>, and can therefore be paid for with any {" "}
+                <RulesHighlight color="teal" style="semibold">Color</RulesHighlight> of {" "}
+                <RulesHighlight color="teal" style="semibold">Energy</RulesHighlight>.
+              </Typography>
             </RuleItem>
           </Box>
         </RulesSection>

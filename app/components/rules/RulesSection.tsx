@@ -50,7 +50,7 @@ export default function RulesSection({
           items-start
           w-full
           p-4
-          gap-4
+          gap-6
         "
       >
         {children}

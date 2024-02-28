@@ -1,16 +1,16 @@
 import React from "react";
 
-type SpecialText = {
+type RulesHighlightProps = {
   children: React.ReactNode;
   color?: "teal" | "yellow";
   style?: "bold" | "italic" | "semibold" | "bold italic" | "semibold italic";
 }
 
-export default function TextBold({ 
+export default function RulesHighlight({ 
   children, 
   color,
   style
-}: SpecialText) {
+}: RulesHighlightProps) {
   const textColor = `text-${color}-500`;
   let textStyle = "";
 

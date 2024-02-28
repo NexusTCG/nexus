@@ -22,7 +22,7 @@ export default function RuleItem({
         w-full
         bg-neutral-900/50
         rounded-sm
-        py-2
+        py-3
         px-3
         gap-1
       `}
@@ -40,7 +40,7 @@ export default function RuleItem({
       {children && <Box
         id={`rule-${title}-content`}
         className="
-          pl-4
+          pl-3
         "
       >
         {children}
