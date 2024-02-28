@@ -8,9 +8,9 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   Box,
-  Button,
+  // Button,
 } from "@mui/material";
-import FeedbackIcon from '@mui/icons-material/Feedback';
+// import FeedbackIcon from '@mui/icons-material/Feedback';
 
 const soMeChannels = [
   "github",
@@ -25,7 +25,7 @@ const primaryNavigation = [
   "rules",
   "game",
   "roadmap",
-  "feedback",
+  "request",
 ]
 
 const secondaryNavigation = [
@@ -148,7 +148,7 @@ export default function Sidebar() {
               />
             )
           })}
-          <Button
+          {/* <Button
             id={"feedback-button"}
             variant="outlined"
             href="https://discord.gg/vKdkBZYcc6"
@@ -167,7 +167,7 @@ export default function Sidebar() {
             "
           >
             Feedback
-          </Button>
+          </Button> */}
         </Box>
       </Box>
 

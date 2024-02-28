@@ -13,6 +13,7 @@ import {
   Payments,
   Help,
   Settings,
+  SpeakerNotes,
 } from '@mui/icons-material';
 import clsx from "clsx";
 
@@ -70,6 +71,11 @@ export default function NavigationButton({
         break;
       case "roadmap":
         setIcon(<Flag />);
+        setDisabled(false);
+        break;
+      case "request":
+        setIcon(<SpeakerNotes />);
+        setDisabled(false);
         break;
       case "profile":
         setIcon(<AccountCircle />);

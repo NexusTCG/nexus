@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 
 type RuleItemProps = {
+  id?: string,
   title: string;
   children?: React.ReactNode;
 };

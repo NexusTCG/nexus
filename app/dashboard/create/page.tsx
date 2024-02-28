@@ -429,7 +429,7 @@ export default function Create() {
                       type="submit"
                       variant="outlined"
                       disabled={
-                        // !isValid || 
+                        !isValid || // Commented out before
                         isSubmitting ||
                         isSubmitted ||
                         form.cardType === null ||
@@ -438,6 +438,12 @@ export default function Create() {
                       color={isValid ? "success" : "secondary"}
                       startIcon={<Save />}
                       size="large" // TODO: Dynamically change size based on screen size
+                      className="
+                        hover:cursor-pointer
+                        hover:bg-teal-600/30
+                        hover:text-white
+                        hover:border-teal-600
+                      "
                     >
                       Save card
                     </Button>

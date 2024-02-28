@@ -1,6 +1,7 @@
 import React from "react";
 import RulesSection from "@/app/components/rules/RulesSection";
 import RuleItem from "@/app/components/rules/RuleItem";
+import RuleItemWithImage from "@/app/components/rules/RuleItemWithImage";
 import RulesHighlight from "@/app/components/rules/RulesHighlight";
 // import RulesKeyword from "@/app/components/rules/RulesKeyword"; // All keywords get styled with text-neutral-500
 import Image from "next/image";
@@ -510,7 +511,326 @@ export default function Rules() {
                 <RulesHighlight color="teal" style="semibold">Energy</RulesHighlight>.
               </Typography>
             </RuleItem>
+            {/* Making Energy */}
+            <RuleItem
+              title="Making Energy"
+            >
+              <Typography
+                variant="body1"
+                className="
+                  font-medium
+                "
+              >
+                To add Energy to your Energy store, you must make Energy.
+                Energy is made by certain abilities, effects, and card types.
+                Cards that can make Energy must be Locked to do so. 
+                More on how Locking works later.
+                Making energy always has speed 3.
+
+                Typically Nodes make Energy, but some Entities, 
+                Objects, and Events also make Energy.
+                If a card can make Energy, it will be stated in 
+                their card text like: <em>Make Y Energy.</em>
+              </Typography>
+            </RuleItem>
           </Box>
+        </RulesSection>
+        {/* Nodes */}
+        <RulesSection
+          title="Nodes"
+        >
+          {/* Update description */}
+          In Nexus, Nodes are phenomena that appear across the universe. 
+          They distort the simulation, creating pockets of immense Energy that leak out of them. 
+          Energy which players harness. Nodes don&apos;t have a Speed, and can only be played 
+          in any of your Primary Phases. Nodes is the only card type that can NOT be responded to.
+          Some Nodes do more than make Energy. Some Nodes make Void Energy.
+          But Common Nodes only make Energy. And only of a specific Color.
+          There are five Common Nodes, one for each Color:
+          {/* Common Nodes */}
+          <Box
+            className="
+              flex
+              flex-col
+              justify-start
+              items-start
+              w-full
+              gap-4
+            "
+          >
+            {/* Common Node - Yellow */}
+            <RuleItemWithImage
+              title="Common Node – Yellow"
+              imageUrl="/images/cards/common-node-yellow.png"
+              imageWidth={300}
+              imageHeight={420}
+              imageSide="left"
+            >
+              <Typography
+                variant="body1"
+                className="
+                  font-medium
+                "
+              >
+                Makes Yellow Energy.
+                Light&apos;s appear in meadows, open fields, and sunny places.
+              </Typography>
+            </RuleItemWithImage>
+            {/* Common Node - Blue */}
+            <RuleItemWithImage
+              title="Common Node – Blue"
+              imageUrl="/images/cards/common-node-blue.png"
+              imageWidth={300}
+              imageHeight={420}
+              imageSide="right"
+            >
+              <Typography
+                variant="body1"
+                className="
+                  font-medium
+                "
+              >
+                Common Node - Vortex: Makes Blue Energy.
+                Vortex&apos;s appear in water, lightning storms, and windy places.
+              </Typography>
+            </RuleItemWithImage>
+            {/* Common Node - Purple */}
+            <RuleItemWithImage
+              title="Common Node – Purple"
+              imageUrl="/images/cards/common-node-purple.png"
+              imageWidth={300}
+              imageHeight={420}
+              imageSide="left"
+            >
+              <Typography
+                variant="body1"
+                className="
+                  font-medium
+                "
+              >
+                Common Node - Corruption: Makes Purple Energy.
+                Void&apos;s appear in mires, ruins, and shadowy places.
+              </Typography>
+            </RuleItemWithImage>
+            {/* Common Node - Red */}
+            <RuleItemWithImage
+              title="Common Node – Red"
+              imageUrl="/images/cards/common-node-red.png"
+              imageWidth={300}
+              imageHeight={420}
+              imageSide="right"
+            >
+              <Typography
+                variant="body1"
+                className="
+                  font-medium
+                "
+              >
+                Common Node - Inferno: Makes Red Energy.
+                Inferno&apos;s appear in volcanos, hot springs, and tectonic places.
+              </Typography>
+            </RuleItemWithImage>
+            {/* Common Node - Green */}
+            <RuleItemWithImage
+              title="Common Node – Green"
+              imageUrl="/images/cards/common-node-green.png"
+              imageWidth={300}
+              imageHeight={420}
+              imageSide="left"
+            >
+              <Typography
+                variant="body1"
+                className="
+                  font-medium
+                "
+              >
+                Common Node - Shimmer: Makes Green Energy.
+                Bloom&apos;s appear in glades, streams, and verdant places.
+              </Typography>
+            </RuleItemWithImage>
+          </Box>
+          Players can only play Nodes during their Primary Phase.
+          A Deck can have any number of Common Nodes.
+        </RulesSection>
+        {/* Generating */}
+        <RulesSection
+          title="Generating"
+        >
+          Sometimes you don&apos;t Draw the Nodes you need to make enough Energy
+          or a certain Color of Energy. To mitigate this, each player 
+          will automatically Generate up to two Common Nodes each match. 
+          Generating means a Common Node of the player&apos;s choice is added to their Hand.
+          <RuleItem
+            title="Generated Common Nodes are NOT:"
+          >
+            <List>
+              <ListItem>
+                <Typography
+                  variant="body2"
+                  className="
+                    font-medium
+                    text-wrap
+                  "
+                >
+                  Part of the player&apos;s Decks.
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography
+                  variant="body2"
+                  className="
+                    font-medium
+                    text-wrap
+                  "
+                >
+                  Considered Drawn.
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography
+                  variant="body2"
+                  className="
+                    font-medium
+                    text-wrap
+                  "
+                >
+                  Tokens.
+                </Typography>
+              </ListItem>
+            </List>
+          </RuleItem>
+          <RuleItem
+            title="Generated Common Nodes ARE:"
+          >
+            <List>
+              <ListItem>
+                <Typography
+                  variant="body2"
+                  className="
+                    font-medium
+                    text-wrap
+                  "
+                >
+                  The Common Node type of the player&apos;s choice.
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography
+                  variant="body2"
+                  className="
+                    font-medium
+                    text-wrap
+                  "
+                >
+                  Automatically added to player&apos;s Hands.
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography
+                  variant="body2"
+                  className="
+                    font-medium
+                    text-wrap
+                  "
+                >
+                  Generated on specific turns.
+                </Typography>
+              </ListItem>
+            </List>
+          </RuleItem>
+          <RuleItem
+            title="Players Generate on:"
+          >
+            <List>
+              <ListItem>
+                <Typography
+                  variant="body2"
+                  className="
+                    font-medium
+                    text-wrap
+                  "
+                >
+                  Turn 1.
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography
+                  variant="body2"
+                  className="
+                    font-medium
+                    text-wrap
+                  "
+                >
+                  Turn 2 if they are NOT the starting player.
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography
+                  variant="body2"
+                  className="
+                    font-medium
+                    text-wrap
+                  "
+                >
+                  Turn 3 if they ARE the starting player.
+                </Typography>
+              </ListItem>
+            </List>
+          </RuleItem>
+          <RuleItem
+            title="Generation Conditions"
+          >
+            <Typography
+              variant="body2"
+              className="
+                font-medium
+                text-wrap
+              "
+            >
+              Players can only generate a Common Node if their Deck has at least 16 Nodes.
+              Generated Common Node options are limited to the Colors of the cards 
+              in the player&apos;s Deck.
+              Players can pick the same option multiple times.
+              Example:
+              If a player has a Deck with Yellow, Purple, and Green cards they can only choose between:
+              
+            </Typography>
+            <List>
+              <ListItem>
+                <Typography
+                  variant="body2"
+                  className="
+                    font-medium
+                    text-wrap
+                  "
+                >
+                  Common Node - Yellow
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography
+                  variant="body2"
+                  className="
+                    font-medium
+                    text-wrap
+                  "
+                >
+                  Common Node - Blue
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography
+                  variant="body2"
+                  className="
+                    font-medium
+                    text-wrap
+                  "
+                >
+                  Common Node - Green
+                </Typography>
+              </ListItem>
+            </List>
+          </RuleItem>
         </RulesSection>
       </Box>
     );
