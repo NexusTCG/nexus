@@ -14,6 +14,7 @@ import {
   Help,
   Settings,
   SpeakerNotes,
+  Login,
 } from '@mui/icons-material';
 import clsx from "clsx";
 
@@ -89,6 +90,10 @@ export default function NavigationButton({
         break;
       case "support":
         setIcon(<Help />);
+        break;
+      case "login":
+        setIcon(<Login />);
+        setDisabled(false);
         break;
       default:
         setIcon(null);
