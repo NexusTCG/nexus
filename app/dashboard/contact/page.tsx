@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { 
+  useEffect
+} from "react";
 import Cal, { getCalApi } from "@calcom/embed-react";
 import {
   Box,
-  Typography
-} from "@mui/material";
+  Typography,
+} from "@mui/material"
 
 export default function Contact() {
-
-  // Contact form
-  // Tabs to switch between contact methods
+  
 
   // Fetch Cal.com Embed
   useEffect(()=>{
@@ -121,7 +121,8 @@ export default function Contact() {
               Got a question, comment, or suggestion? Send us an email and we&apos;ll get back to you as soon as we can!
             </Typography>
           </Box>
-          {/* Resend form */}
+          {/* Loops form */}
+          
         </Box>
         
         {/* Cal.com Embed */}
