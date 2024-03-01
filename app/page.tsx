@@ -1,17 +1,53 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { 
+  useEffect, 
+  useState 
+} from "react";
 import AppBarLandingPage from "@/app/components/navigation/AppBarLandingPage";
+import LandingPageFeature from "@/app//components/card-creator/LandingPageFeature";
 import Image from "next/image";
 import {
   Box,
-  Divider,
-  Typography
+  Grid,
+  Typography,
 } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
+import {
+  DesignServices,
+  AttachMoney,
+  Feedback,
+  People,
+  TravelExplore,
+  RecentActors,
+
+} from "@mui/icons-material";
 
 const headlineOptions = ["CARDS", "PLAYS", "MONEY"];
-const totalBackgrounds = 13; // Assuming you have 13 background images
+const totalBackgrounds = 13;
+const featureTitles = [
+  "What it is",
+  "What do you do",
+  "How does it work",
+  "Contribute",
+  "Earn cash",
+  "Join the community",
+];
+const featureDescriptions = [
+  "Create custom cards for your favorite games.",
+  "Play custom cards with friends and family.",
+  "Earn money by creating and playing custom cards.",
+  "Customize your cards with images, text, and more.",
+  "Join a community of players and creators.",
+  "Compete in tournaments and events.",
+];
+const featureIcons = [
+  <DesignServices key="design" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
+  <AttachMoney key="money" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
+  <RecentActors key="cards" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
+  <TravelExplore key="planet" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
+  <Feedback key="feedback" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
+  <People key="community" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
+];
 
 export default function Home() {
   const [currentBg, setCurrentBg] = useState(1);
@@ -31,25 +67,21 @@ export default function Home() {
         setFade(true);
       }, 500);
     }, 3000);
-
     return () => clearTimeout(timer);
   }, [headlineIndex]);
 
-  // Update background image with smooth transition
+  // Update background image
   useEffect(() => {
     const bgTimer = setInterval(() => {
-      // Start fading out the current background
       setOpacity(0);
       
       setTimeout(() => {
-        // After fade out, update backgrounds
         setCurrentBg(nextBg);
         setNextBg((prevBg) => prevBg % totalBackgrounds + 1);
 
-        // Immediately start fading in the new current background without delay
         setOpacity(1);
-      }, 1000); // This timeout matches the CSS transition duration
-    }, 10000); // Adjusted time to allow full visibility before starting the next transition
+      }, 1000);
+    }, 10000);
 
     return () => clearInterval(bgTimer);
   }, [nextBg]);
@@ -57,19 +89,29 @@ export default function Home() {
   return (
     <Box
       id="landing-page-container"
+      className="
+        flex
+        flex-col
+        justify-start
+        items-center
+        w-full
+        min-h-screen
+        bg-black
+        gap-12
+        lg:gap-24
+      "
       style={{
         position: "relative",
-        overflow: "hidden",
-        width: "100%",
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "start",
-        alignItems: "center",
-        backgroundColor: "black",
+        overflow: "auto",
       }}
     >
-      <div style={{ position: "absolute", width: "100%", height: "100%", transition: "opacity 1s", opacity: opacity }}>
+      <div style={{ 
+        position: "absolute", 
+        width: "100%", 
+        height: "100%", 
+        transition: "opacity 1s", 
+        opacity: opacity 
+      }}>
         <Image
           src={`/images/auth-bg/nexus-auth-bg-${currentBg}.jpg`}
           alt="Current background"
@@ -78,7 +120,12 @@ export default function Home() {
           className="opacity-25"
         />
       </div>
-      <div style={{ position: "absolute", width: "100%", height: "100%", opacity: 0 }}>
+      <div style={{ 
+        position: "absolute", 
+        width: "100%", 
+        height: "100%", 
+        opacity: 0 
+      }}>
         <Image
           src={`/images/auth-bg/nexus-auth-bg-${nextBg}.jpg`}
           alt="Next background"
@@ -87,7 +134,16 @@ export default function Home() {
           className="opacity-25"
         />
       </div>
-      <AppBarLandingPage />
+      <Box
+        id="app-bar-container"
+        className="w-full"
+        sx={{
+          overflow: "auto",
+          position: "sticky",
+        }}
+      >
+        <AppBarLandingPage />
+      </Box>
       <Box
         id="landing-page-hero-container"
         className="
@@ -98,10 +154,10 @@ export default function Home() {
           w-full
           z-10
           gap-8
-          pt-32
-          md:pt-48
-          pb-24
-          md:pb-32
+          pt-24
+          md:pt-32
+          pb-8
+          md:pb-12
           px-12
         "
       >
@@ -111,7 +167,7 @@ export default function Home() {
           className="
             text-white
             text-8xl
-            font-bold
+            font-light
             text-center
           "
         >
@@ -126,7 +182,7 @@ export default function Home() {
             className="
               text-teal-400
               text-8xl
-              font-bold
+              font-semibold
             "
           >
             {headline}
@@ -144,138 +200,73 @@ export default function Home() {
           Create custom cards. Play them. Earn money.
         </Typography>
       </Box>
-      <Divider />
+      {/* Video Embed */}
       <Box
         id="landing-page-features-container"
         className="
           flex
-          flex-row
+          flex-col
           justify-center
           items-center
           w-full
+          z-10
           gap-8
-          py-8
-          px-12
-          md:px-24
-          lg:px-48
+          px-4
+          md:px-8
+          pt-12
+          md:pt-24
         "
       >
-        <Box
-          id="landing-page-feature-1"
+        <Grid
+          container
+          spacing={3}
+          sx={{
+            width: "100%",
+            px: 2,
+          }}
+        >
+          {[...Array(6)].map((_, index) => (
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              key={index}
+            >
+              <LandingPageFeature
+                id={`feature-${index}`}
+                title={featureTitles[index]}
+                description={featureDescriptions[index]}
+                icon={featureIcons[index]}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+      <Box
+        id="landing-page-footer-container"
+        className="
+          flex
+          flex-col
+          justify-center
+          items-center
+          w-full
+          py-8
+          px-12
+          bg-black/80
+          backdrop-blur-sm
+          mt-12
+          z-10
+        "
+      >
+        <Typography
+          variant="overline"
           className="
-            flex
-            flex-row
-            justify-start
-            items-start
-            w-full
-            z-10
-            p-4
-            gap-4
-            bg-teal-500/20
-            border
-            border-teal-500/50
-            rounded-md
-            shadow-lg
-            shadow-black/50
-            backdrop-blur-sm
+            text-neutral-500
           "
         >
-          <HomeIcon
-            sx={{ fontSize: 40 }}
-            className="
-              p-1
-              rounded-full
-              bg-teal-500
-            "
-          />
-          <Box
-            className="
-              flex
-              flex-col
-              justify-start
-              items-start
-              w-full
-              gap-2
-            "
-          >
-            <Typography
-              variant="subtitle1"
-              className="
-                text-xl
-                font-medium
-                text-wrap
-              "
-            >
-              USP Title
-            </Typography>
-            <Typography
-              variant="body1"
-              className="
-                text-wrap
-              "
-            >
-              Lorem ipsum dolor sit amet
-            </Typography>
-          </Box>
-        </Box>
-        <Box
-          id="landing-page-feature-1"
-          className="
-            flex
-            flex-row
-            justify-start
-            items-start
-            w-full
-            z-10
-            p-4
-            gap-4
-            bg-teal-500/20
-            border
-            border-teal-500/50
-            rounded-md
-            shadow-lg
-            shadow-black/50
-            backdrop-blur-sm
-          "
-        >
-          <HomeIcon
-            sx={{ fontSize: 40 }}
-            className="
-              p-1
-              rounded-full
-              bg-teal-500
-            "
-          />
-          <Box
-            className="
-              flex
-              flex-col
-              justify-start
-              items-start
-              w-full
-              gap-2
-            "
-          >
-            <Typography
-              variant="subtitle1"
-              className="
-                text-xl
-                font-medium
-                text-wrap
-              "
-            >
-              USP Title
-            </Typography>
-            <Typography
-              variant="body1"
-              className="
-                text-wrap
-              "
-            >
-              Lorem ipsum dolor sit amet
-            </Typography>
-          </Box>
-        </Box>
+          © Nexus Games, Inc., {new Date().getFullYear()}
+        </Typography>
       </Box>
     </Box>
   );
