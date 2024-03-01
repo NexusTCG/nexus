@@ -72,7 +72,7 @@ export default function CompleteProfile() {
   // Randomize the background image
   useEffect(() => {
     if (authBg !== null) return;
-    const randomBg = Math.floor(Math.random() * 13) + 1;
+    const randomBg = Math.floor(Math.random() * 29) + 1;
     setAuthBg(randomBg);
   }, []);
 

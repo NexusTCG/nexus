@@ -16,7 +16,7 @@ export default function AppBarLandingPage() {
       sx={{
         position: "sticky",
         top: 0,
-        height: "72px"
+        height: "96px"
       }}
       className="
         flex
@@ -33,6 +33,7 @@ export default function AppBarLandingPage() {
       "
     >
       <Toolbar
+        id="appbar-toolbar"
         className="
           flex
           flex-row
@@ -40,6 +41,7 @@ export default function AppBarLandingPage() {
           items-center
           w-full
           gap-4
+          px-12
         "
       >
         <Box

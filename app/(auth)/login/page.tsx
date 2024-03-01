@@ -55,7 +55,6 @@ export default function AuthForm({
   } | null>(null);
   
   const supabase = createClient();
-  // const authBg = Math.floor(Math.random() * 13) + 1;
   const methods = useForm({
     defaultValues: {
       email: "",
@@ -100,7 +99,7 @@ export default function AuthForm({
   // Set random background image
   useEffect(() => {
     if (authBg !== null) return;
-    const randomBg = Math.floor(Math.random() * 13) + 1;
+    const randomBg = Math.floor(Math.random() * 29) + 1;
     setAuthBg(randomBg);
   }, []);
 

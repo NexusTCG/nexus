@@ -4,13 +4,17 @@ import React, {
   useEffect, 
   useState 
 } from "react";
-import AppBarLandingPage from "@/app/components/navigation/AppBarLandingPage";
-import LandingPageFeature from "@/app//components/card-creator/LandingPageFeature";
+import AppBarLandingPage from "@/app/components/landing-page/AppBarLandingPage";
+import LandingPageFeature from "@/app/components/landing-page/LandingPageFeature";
+import CardImageGallery from "@/app/components/landing-page/CardImageGallery";
 import Image from "next/image";
+import { useTheme } from "@mui/material/styles";
 import {
   Box,
   Grid,
+  Button,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import {
   DesignServices,
@@ -19,26 +23,26 @@ import {
   People,
   TravelExplore,
   RecentActors,
-
+  ArrowForward,
 } from "@mui/icons-material";
 
 const headlineOptions = ["CARDS", "PLAYS", "MONEY"];
-const totalBackgrounds = 13;
+const totalBackgrounds = 29;
 const featureTitles = [
-  "What it is",
-  "What do you do",
-  "How does it work",
-  "Contribute",
-  "Earn cash",
-  "Join the community",
+  "Enter Nexus",
+  "Create Cards",
+  "Earn Cash",
+  "Initializing...",
+  "Open Source",
+  "Join the Community",
 ];
 const featureDescriptions = [
-  "Create custom cards for your favorite games.",
-  "Play custom cards with friends and family.",
-  "Earn money by creating and playing custom cards.",
-  "Customize your cards with images, text, and more.",
-  "Join a community of players and creators.",
-  "Compete in tournaments and events.",
+  "Nexus is a sci-fi- and fantasy-themed digital trading card game set in a simulated universe.",
+  "Create custom cards with the help of AI. Then play the with friends and other players.",
+  "When the game launches, players can earn a share of revenue from cards they create.",
+  "Before building the game, we're building a Card Creator Tool, and community of creators.",
+  "Make your mark on the universe. Create characters, and stories. Nexus will go open source.",
+  `Love making custom cards? Join our community to get involved in Nexus' development.`,
 ];
 const featureIcons = [
   <DesignServices key="design" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
@@ -49,13 +53,91 @@ const featureIcons = [
   <People key="community" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
 ];
 
+const images = [
+  {
+    src: "/images/cards/common-node-yellow.png",
+    alt: "Description of image 1",
+    name: "Yellow Node",
+    creator: "Username",
+  },
+  {
+    src: "/images/cards/common-node-blue.png",
+    alt: "Description of image 1",
+    name: "Blue Node",
+    creator: "Username",
+  },
+  {
+    src: "/images/cards/common-node-purple.png",
+    alt: "Description of image 1",
+    name: "Purple Node",
+    creator: "Username",
+  },
+  {
+    src: "/images/cards/common-node-red.png",
+    alt: "Description of image 1",
+    name: "Red Node",
+    creator: "Username",
+  },
+];
+
 export default function Home() {
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.down('sm'));
+  const isSm = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  const isMd = useMediaQuery(theme.breakpoints.between('md', 'lg'));
+  const isLg = useMediaQuery(theme.breakpoints.up('lg'));
+
   const [currentBg, setCurrentBg] = useState(1);
   const [nextBg, setNextBg] = useState(2);
   const [opacity, setOpacity] = useState(1);
   const [headlineIndex, setHeadlineIndex] = useState(0);
   const [headline, setHeadline] = useState<string>(headlineOptions[headlineIndex]);
   const [fade, setFade] = useState(true);
+  const [imageWidth, setImageWidth] = useState(200);
+  const [imageHeight, setImageHeight] = useState(280);
+  const [visibleImages, setVisibleImages] = useState<{
+    src: string; 
+    alt: string; 
+    name: string; 
+    creator: string; 
+  }[]>([]);
+
+  useEffect(() => {
+    if (visibleImages.length > 3) {
+      setImageWidth(200);
+      setImageHeight(280);
+    } else {
+      setImageWidth(400);
+      setImageHeight(560);
+    }
+  }, [visibleImages]);
+
+  // Set visible images
+  useEffect(() => {
+    let visibleCount, width, height;
+    if (isLg) {
+      visibleCount = 4;
+      width = 500;
+      height = 700;
+    } else if (isMd) {
+      visibleCount = 3;
+      width = 400;
+      height = 560;
+    } else {
+      visibleCount = 2;
+      width = 300;
+      height = 420;
+    }
+  
+    setImageWidth(width);
+    setImageHeight(height);
+    setVisibleImages(images.slice(0, visibleCount));
+  }, [
+    isXs, 
+    isSm, 
+    isMd, 
+    isLg
+  ]);
 
   // Set headline
   useEffect(() => {
@@ -116,7 +198,9 @@ export default function Home() {
           src={`/images/auth-bg/nexus-auth-bg-${currentBg}.jpg`}
           alt="Current background"
           fill
-          style={{ objectFit: "cover" }}
+          style={{
+            objectFit: "cover"
+          }}
           className="opacity-25"
         />
       </div>
@@ -130,7 +214,9 @@ export default function Home() {
           src={`/images/auth-bg/nexus-auth-bg-${nextBg}.jpg`}
           alt="Next background"
           fill
-          style={{ objectFit: "cover" }}
+          style={{ 
+            objectFit: "cover" 
+          }}
           className="opacity-25"
         />
       </div>
@@ -145,117 +231,229 @@ export default function Home() {
         <AppBarLandingPage />
       </Box>
       <Box
-        id="landing-page-hero-container"
+        id="landing-page-content-container"
         className="
           flex
           flex-col
           justify-center
           items-center
           w-full
+          h-full
+          gap-6
+          px-3
+          md:px-6
+          lg:px-12
+          xl:px-24
           z-10
-          gap-8
-          pt-24
-          md:pt-32
-          pb-8
-          md:pb-12
-          px-12
         "
       >
-        <Typography
-          variant="h1"
-          component="span"
+        <Box
+          id="landing-page-hero-container"
           className="
-            text-white
-            text-8xl
-            font-light
-            text-center
+            flex
+            flex-col
+            justify-center
+            items-center
+            w-full
+            gap-2
+            md:gap-4
+            mt-2
           "
         >
-          MAKE {" "}
+          <Typography
+              variant="subtitle2"
+              className="
+                text-teal-400
+                text-center
+                md:text-lg
+              "
+            >
+              AI-POWERED DIGITAL TRADING CARD GAME
+            </Typography>
           <Typography
             variant="h1"
-            style={{
-              transition: 'opacity 0.5s',
-              opacity: fade ? 1 : 0,
-            }}
             component="span"
             className="
-              text-teal-400
+              text-white
               text-8xl
-              font-semibold
+              md:text-9xl
+              font-light
+              text-center
             "
           >
-            {headline}
+            MAKE<br/>
+            <Typography
+              variant="h1"
+              style={{
+                transition: 'opacity 0.5s',
+                opacity: fade ? 1 : 0,
+                fontSize: "inherit",
+              }}
+              component="span"
+              className="
+                text-teal-300
+                font-semibold
+              "
+            >
+              {headline}
+            </Typography>
           </Typography>
-        </Typography>
-        <Typography
-          variant="subtitle1"
+          <Typography
+            variant="subtitle1"
+            className="
+            text-white
+              text-center
+              text-lg
+              md:text-xl
+              font-medium
+              text-wrap
+            "
+          >
+            Create custom cards. Play them with friends. Earn revenue share.
+          </Typography>
+          <Button
+            variant="outlined"
+            endIcon={<ArrowForward />}
+            href="/login"
+            size="large"
+            className="
+              flex
+              flex-row
+              justify-center
+              items-center
+              hover:text-white
+              bg-teal-500/20
+              hover:bg-teal-500/50
+              border-teal-500/80
+              hover:border-teal-500
+              shadow-md
+              shadow-black/25
+              rounded-md
+              mt-4
+              text-neutral-300
+            "
+          >
+            Join Nexus
+          </Button>
+        </Box>
+        {/* Video Embed */}
+        {/* Card Gallery */}
+        <Box
+          id="landing-page-card-gallery-container"
           className="
-            text-center
-            text-xl
-            font-medium
-            text-wrap
+            flex
+            flex-col
+            justify-center
+            items-center
+            w-full
+            pt-6
+            md:pt-12
           "
         >
-          Create custom cards. Play them. Earn money.
-        </Typography>
-      </Box>
-      {/* Video Embed */}
-      <Box
-        id="landing-page-features-container"
-        className="
-          flex
-          flex-col
-          justify-center
-          items-center
-          w-full
-          z-10
-          gap-8
-          px-4
-          md:px-8
-          pt-12
-          md:pt-24
-        "
-      >
-        <Grid
-          container
-          spacing={3}
-          sx={{
-            width: "100%",
-            px: 2,
-          }}
+          <Grid
+            container
+            spacing={4}
+            sx={{
+              width: "100%",
+              px: 2,
+            }}
+          >
+            {visibleImages.map((image, index) => (
+              <Grid
+                key={index}
+                item
+                xs={6}
+                sm={6}
+                md={4}
+                lg={3}
+              >
+                <CardImageGallery
+                  images={[{
+                    src: image.src,
+                    alt: image.alt,
+                    name: image.name,
+                    creator: image.creator,
+                    width: imageWidth,
+                    height: imageHeight,
+                  }]}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+        {/* Features */}
+        <Box
+          id="landing-page-features-container"
+          className="
+            flex
+            flex-col
+            justify-center
+            items-center
+            w-full
+            gap-4
+            md:gap-8
+            pt-4
+            md:pt-8
+          "
         >
-          {[...Array(6)].map((_, index) => (
-            <Grid
-              item
-              xs={12}
-              sm={6}
-              md={4}
-              key={index}
-            >
-              <LandingPageFeature
-                id={`feature-${index}`}
-                title={featureTitles[index]}
-                description={featureDescriptions[index]}
-                icon={featureIcons[index]}
-              />
-            </Grid>
-          ))}
-        </Grid>
+          <Typography
+            variant="subtitle1"
+            className="
+              text-white
+              text-center
+              text-2xl
+              md:text-3xl
+              font-medium
+            "
+          >
+            Features
+          </Typography>
+          <Grid
+            container
+            spacing={3}
+            sx={{
+              width: "100%",
+              px: 2,
+            }}
+          >
+            {[...Array(6)].map((_, index) => (
+              <Grid
+                item
+                sm={12}
+                md={6}
+                lg={4}
+                key={index}
+                className="w-full"
+              >
+                <LandingPageFeature
+                  id={`feature-${index}`}
+                  title={featureTitles[index]}
+                  description={featureDescriptions[index]}
+                  icon={featureIcons[index]}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
       </Box>
+      {/* Footer */}
       <Box
         id="landing-page-footer-container"
         className="
           flex
           flex-col
+          md:flex-row-reverse
           justify-center
+          md:justify-between
           items-center
           w-full
+          gap-8
+          md:gap-12
           py-8
           px-12
           bg-black/80
           backdrop-blur-sm
-          mt-12
+          mt-4
           z-10
         "
       >
@@ -266,6 +464,28 @@ export default function Home() {
           "
         >
           © Nexus Games, Inc., {new Date().getFullYear()}
+        </Typography>
+        <Typography
+          variant="caption"
+          component="span"
+          className="
+            text-red-800
+            text-center
+            md:text-left
+          "
+        >
+          Disclaimer<br/>
+          <Typography
+            variant="caption"
+            className="
+              text-neutral-700
+              text-center
+              md:text-left
+            "
+          >
+            The Nexus trading card game is not yet released.<br/>
+            This page outlines the vision for the game.
+          </Typography>
         </Typography>
       </Box>
     </Box>
