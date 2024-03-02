@@ -17,39 +17,40 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import {
+  RocketLaunch,
   DesignServices,
   AttachMoney,
-  Feedback,
-  People,
-  TravelExplore,
-  RecentActors,
+  Handyman,
+  TipsAndUpdates,
   ArrowForward,
+  People,
 } from "@mui/icons-material";
+
 
 const headlineOptions = ["CARDS", "PLAYS", "MONEY"];
 const totalBackgrounds = 29;
 const featureTitles = [
-  "Enter Nexus",
-  "Create Cards",
-  "Earn Cash",
-  "Initializing...",
-  "Open Source",
-  "Join the Community",
+  "Game",
+  "Create",
+  "Earn",
+  "Development",
+  "Contribute",
+  "Community",
 ];
 const featureDescriptions = [
-  "Nexus is a sci-fi- and fantasy-themed digital trading card game set in a simulated universe.",
-  "Create custom cards with the help of AI. Then play the with friends and other players.",
+  "Nexus is a sci-fi- and fantasy-themed digital TCG set in a simulated universe.",
+  "Create custom cards with the help of AI. Play them with friends and other players.",
   "When the game launches, players can earn a share of revenue from cards they create.",
-  "Before building the game, we're building a Card Creator Tool, and community of creators.",
-  "Make your mark on the universe. Create characters, and stories. Nexus will go open source.",
-  `Love making custom cards? Join our community to get involved in Nexus' development.`,
+  "First, we're building a Card Creator Tool and community of creators. Then, the game.",
+  "Contribute more than cards, when we open source. From game design, to game story.",
+  "Join the Nexus community and get involved early in the game's development.",
 ];
 const featureIcons = [
+  <RocketLaunch key="design" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
   <DesignServices key="design" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
   <AttachMoney key="money" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
-  <RecentActors key="cards" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
-  <TravelExplore key="planet" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
-  <Feedback key="feedback" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
+  <Handyman key="planet" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
+  <TipsAndUpdates key="cards" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
   <People key="community" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
 ];
 
