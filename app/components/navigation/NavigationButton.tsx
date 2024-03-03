@@ -104,7 +104,10 @@ export default function NavigationButton({
   return (
     <>
       {isSidebar && (
-        <Link href={`/dashboard/${routeLowerCase}`}>
+        <Link 
+          href={`/dashboard/${routeLowerCase}`}
+          className="w-full"
+        >
           <Button
             id={`navigation-button-${routeLowerCase}`}
             disabled={disabled}
@@ -124,7 +127,10 @@ export default function NavigationButton({
         </Link>
       )}
       {!isSidebar && !disabled && (
-        <Link href={`/dashboard/${routeLowerCase}`}>
+        <Link
+          href={`/dashboard/${routeLowerCase}`}
+          className="w-full"
+        >
         <Button
           id={`navigation-button-${routeLowerCase}`}
           variant="outlined"
