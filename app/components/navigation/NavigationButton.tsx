@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { usePathname } from 'next/navigation';
 import { Button } from "@mui/material";
+import Link from "next/link";
 import {
   AccountCircle,
   Collections,
@@ -103,29 +104,30 @@ export default function NavigationButton({
   return (
     <>
       {isSidebar && (
-        <Button
-          id={`navigation-button-${routeLowerCase}`}
-          disabled={disabled}
-          variant="outlined"
-          href={`/dashboard/${routeLowerCase}`}
-          startIcon={icon}
-          size="large"
-          color={currentColor}
-          className={clsx("flex justify-start items-center w-full hover:cursor-pointer hover:bg-teal-600/30 hover:text-white hover:border-teal-600",
-            {
-              "opacity-50": disabled,
-              "bg-teal-500/30": routeLowerCase === "login",
-            }
-          )}
-        >
-          {routeName} {disabled ? "🚧" : ""}
-        </Button>
+        <Link href={`/dashboard/${routeLowerCase}`}>
+          <Button
+            id={`navigation-button-${routeLowerCase}`}
+            disabled={disabled}
+            variant="outlined"
+            startIcon={icon}
+            size="large"
+            color={currentColor}
+            className={clsx("flex justify-start items-center w-full hover:cursor-pointer hover:bg-teal-600/30 hover:text-white hover:border-teal-600",
+              {
+                "opacity-50": disabled,
+                "bg-teal-500/30": routeLowerCase === "login",
+              }
+            )}
+          >
+            {routeName} {disabled ? "🚧" : ""}
+          </Button>
+        </Link>
       )}
       {!isSidebar && !disabled && (
+        <Link href={`/dashboard/${routeLowerCase}`}>
         <Button
           id={`navigation-button-${routeLowerCase}`}
           variant="outlined"
-          href={`/dashboard/${routeLowerCase}`}
           size={routeLowerCase === "login" ? "large" : "small"}
           endIcon={routeLowerCase === "login" ? <Login /> : null}
           color={currentColor}
@@ -138,6 +140,7 @@ export default function NavigationButton({
         >
           {routeName}
         </Button>
+        </Link>
       )}
     </>
   );
