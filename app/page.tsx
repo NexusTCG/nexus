@@ -337,7 +337,6 @@ export default function Home() {
             Join Nexus
           </Button>
         </Box>
-        {/* Video Embed */}
         {/* Card Gallery */}
         <Box
           id="landing-page-card-gallery-container"

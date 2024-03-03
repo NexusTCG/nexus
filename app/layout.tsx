@@ -22,14 +22,16 @@ export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Nexus TCG",
   description:
-    "Nexus is an open source digital trading card game where players can make playable custom TCG cards with the help of generative AI.",
+    "Nexus is a digital trading card game where players can make the cards they play.",
 };
 
 type RootLayoutProps = {
   children: React.ReactNode;
 };
 
-export default function RootLayout(props: RootLayoutProps) {
+export default function RootLayout(
+  props: RootLayoutProps
+  ) {
   const { children } = props;
 
   return (
