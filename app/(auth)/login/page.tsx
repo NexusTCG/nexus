@@ -404,7 +404,6 @@ export default function AuthForm({
                 console.log(e)
                 methods.clearErrors()
                 handleSubmit(onSubmit)(e)
-                // handleSubmit(onSubmit)
               }}
               className="w-full"
             >
