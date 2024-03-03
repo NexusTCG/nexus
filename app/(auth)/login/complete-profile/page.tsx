@@ -183,7 +183,9 @@ export default function CompleteProfile() {
         src={`/images/auth-bg/nexus-auth-bg-${authBg}.jpg`}
         alt="Nexus background"
         fill
-        style={{ objectFit: "cover"}}
+        style={{
+          objectFit: "cover"
+        }}
         className="
           opacity-25
         "

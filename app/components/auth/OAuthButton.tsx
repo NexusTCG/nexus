@@ -78,7 +78,6 @@ export default function OAuthButton({
       disabled={disabled}
       startIcon={providerIcon}
       size="large"
-      // sx={{ height: "56px"}}
       className="
         flex
         justify-center

@@ -178,14 +178,14 @@ export default function Contact() {
             </Typography>
           </Box>
           <Cal 
-            calLink="nilswestgardh/talk-nexus"
+            calLink="nexus-tcg/30min"
             style={{
               width:"100%",
               height:"100%",
               overflow:"scroll"
             }}
             config={{
-              layout: "month_view",
+              layout: "week_view",
             }}
           />
         </Box>
