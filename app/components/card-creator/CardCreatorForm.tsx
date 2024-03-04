@@ -12,7 +12,7 @@ import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
 import PostHogClient from "@/app/lib/posthog/posthog";
 import Image from "next/image";
 import clsx from "clsx";
-// Add debouncer to reduce input lag in art prompt
+// TODO: Add debouncer to reduce input lag in art prompt
 import {
   Box,
   Typography,
@@ -139,7 +139,7 @@ export default function CardCreatorForm({
         );
 
         // Generate card art
-        const response = await fetch("/data/generate-card-art", {
+        const response = await fetch("nexus-art-generation-production.up.railway.app", {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
