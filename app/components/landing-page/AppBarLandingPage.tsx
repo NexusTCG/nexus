@@ -42,8 +42,6 @@ export default function AppBarLandingPage() {
           w-full
           gap-4
           px-12
-          border
-            border-sky-500
         "
       >
         {/* Logo */}
@@ -61,8 +59,6 @@ export default function AppBarLandingPage() {
             justify-end
             items-center
             gap-6
-            border
-            border-yellow-500
           "
         >
           <Link href="https://discord.gg/8t6XjdUuqH">
