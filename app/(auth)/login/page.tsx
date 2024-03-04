@@ -430,11 +430,11 @@ export default function AuthForm({
                     gap-2
                   "
                 >
-                  {/* <OAuthButton
+                  <OAuthButton
                     cta={showSignUp ? "Sign up with Google" : "Log in with Google"}
                     provider="google"
                     disabled={false}
-                  /> */}
+                  />
                   <OAuthButton
                     cta={showSignUp ? "Sign up with GitHub" : "Log in with GitHub"}
                     provider="github"
