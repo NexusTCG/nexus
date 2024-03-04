@@ -42,24 +42,27 @@ export default function AppBarLandingPage() {
           w-full
           gap-4
           px-12
+          border
+            border-sky-500
         "
       >
         {/* Logo */}
         <Image
-            src="/images/nexus-logo.png" // Repace with SVG
-            alt="Nexus Logo Placeholder"
-            width={150}
-            height={36}
-          />
+          src="/images/nexus-logo.png" // Repace with SVG
+          alt="Nexus Logo Placeholder"
+          width={150}
+          height={36}
+        />
         <Box
           id="appbar-logo-navigation-container"
           className="
             flex
             flex-row
-            justify-between
+            justify-end
             items-center
             gap-6
-            w-full
+            border
+            border-yellow-500
           "
         >
           <Link href="https://discord.gg/8t6XjdUuqH">
