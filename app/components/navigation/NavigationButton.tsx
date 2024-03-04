@@ -131,21 +131,21 @@ export default function NavigationButton({
           href={`/dashboard/${routeLowerCase}`}
           className="w-full"
         >
-        <Button
-          id={`navigation-button-${routeLowerCase}`}
-          variant="outlined"
-          size={routeLowerCase === "login" ? "large" : "small"}
-          endIcon={routeLowerCase === "login" ? <Login /> : null}
-          color={currentColor}
-          className={clsx("flex justify-between items-center hover:cursor-pointer hover:bg-teal-600/30 hover:text-white hover:border-teal-600",
-            {
-              "opacity-50": disabled,
-              "bg-teal-500/30 text-white hover:text-white/80 border-teal-500 hover:border-teal-600 px-4": routeLowerCase === "login",
-            }
-          )}
-        >
-          {routeName}
-        </Button>
+          <Button
+            id={`navigation-button-${routeLowerCase}`}
+            variant="outlined"
+            size={routeLowerCase === "login" ? "large" : "small"}
+            endIcon={routeLowerCase === "login" ? <Login /> : null}
+            color={currentColor}
+            className={clsx("flex justify-between items-center hover:cursor-pointer hover:bg-teal-600/30 hover:text-white hover:border-teal-600",
+              {
+                "opacity-50": disabled,
+                "bg-teal-500/30 text-white hover:text-white/80 border-teal-500 hover:border-teal-600 px-4": routeLowerCase === "login",
+              }
+            )}
+          >
+            {routeName}
+          </Button>
         </Link>
       )}
     </>

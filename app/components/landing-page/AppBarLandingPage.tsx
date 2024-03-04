@@ -44,6 +44,13 @@ export default function AppBarLandingPage() {
           px-12
         "
       >
+        {/* Logo */}
+        <Image
+            src="/images/nexus-logo.png" // Repace with SVG
+            alt="Nexus Logo Placeholder"
+            width={150}
+            height={36}
+          />
         <Box
           id="appbar-logo-navigation-container"
           className="
@@ -55,13 +62,6 @@ export default function AppBarLandingPage() {
             w-full
           "
         >
-          {/* Logo */}
-          <Image
-            src="/images/nexus-logo.png" // Repace with SVG
-            alt="Nexus Logo Placeholder"
-            width={150}
-            height={36}
-          />
           <Box
             id="appbar-logo-navigation-container"
             className="
@@ -100,7 +100,6 @@ export default function AppBarLandingPage() {
               type="appbar"
             />
           </Box>
-          
         </Box>
       </Toolbar>  
     </Box>
