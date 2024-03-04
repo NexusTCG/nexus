@@ -47,5 +47,7 @@ export async function POST(request: Request) {
       }
   }
 
+  console.log(`login-user route: User ${email} signed in successfully`)
+  console.log(`login-user route: User session: ${data.session}`)
   return NextResponse.redirect(`${requestUrl}/dashboard`);
 }

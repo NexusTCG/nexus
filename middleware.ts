@@ -53,6 +53,7 @@ export async function middleware(
     path !== "/" && 
     path !== "/login"
   ) {
+    console.log("Redirecting to login, no session found.") // For testing
     return NextResponse
       .redirect(new URL(
         "/login", 

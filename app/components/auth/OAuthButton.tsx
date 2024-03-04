@@ -46,6 +46,7 @@ export default function OAuthButton({
   }, [provider]);
 
   const handleSignIn = async () => {
+    console.log(`Logging in with: ${provider}`); // For testing
     if (provider !== null) {
       const {
         error

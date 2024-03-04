@@ -8,6 +8,8 @@ import { cookies } from "next/headers";
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   const code = url.searchParams.get("code");
+  console.log(`code: ${code}`) // For testing
+  console.log(`url: ${url}`) // For testing
 
   if (code) {
     const cookieStore = cookies();
@@ -22,6 +24,7 @@ export async function GET(req: NextRequest) {
       .exchangeCodeForSession(code);
 
     if (error) {
+      console.error(error); // For testing
       return NextResponse.redirect(
         `${url.origin}/login?error=${encodeURIComponent(error.message)}`,
       );
@@ -51,6 +54,7 @@ export async function GET(req: NextRequest) {
       );
     }
   }
+  console.log("No code found") // For testing
   // If no code, redirect to login
   return NextResponse.redirect(
     `${url.origin}/login`
