@@ -3,7 +3,7 @@
 // If its the first time logging in, redirect to /login/complete-signup
 
 import { createClient } from "@/app/lib/supabase/server";
-import { NextResponse } from "next/server";
+// import { NextResponse } from "next/server"; // Swapped out NextResponse for Response
 import { cookies } from "next/headers";
 
 export async function POST(request: Request) {
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   if (error) {
     console.log(`Error when attempting sign in: ${error.message}`);
     const errorMessage = encodeURIComponent(error.message);
-    return NextResponse.redirect(`${requestUrl}/login?error=${errorMessage}`);
+    return Response.redirect(`${requestUrl}/login?error=${errorMessage}`);
   }
 
   // Check if it's the user's first login
@@ -41,13 +41,13 @@ export async function POST(request: Request) {
 
       if (profileError) {
         console.error(`Error fetching user profile: ${profileError.message}`);
-        return NextResponse.redirect(`${requestUrl}/login?error=Error%20fetching%20user%20profile`);
+        return Response.redirect(`${requestUrl}/login?error=Error%20fetching%20user%20profile`);
       } else if (!profile) {
-        return NextResponse.redirect(`${requestUrl}/login/complete-profile`);
+        return Response.redirect(`${requestUrl}/login/complete-profile`);
       }
   }
 
   console.log(`login-user route: User ${email} signed in successfully`)
   console.log(`login-user route: User session: ${data.session}`)
-  return NextResponse.redirect(`${requestUrl}/dashboard`);
+  return Response.redirect(`${requestUrl}/dashboard`);
 }
