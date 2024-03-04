@@ -83,7 +83,7 @@ export default function CompleteProfile() {
     last_name: string,
     bio: string
   }) {
-    console.log("Form submitted", data);
+    console.log("Form submitted:", data);
     const {
       username,
       first_name,
@@ -91,6 +91,8 @@ export default function CompleteProfile() {
       bio
     } = data;
 
+    console.log("Session:", session);
+    console.log("user.id:", session?.user.id);
     try {
       if (!session?.user.id) return;
       if (watchId === "") {
