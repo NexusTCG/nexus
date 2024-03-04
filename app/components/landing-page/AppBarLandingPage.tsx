@@ -62,44 +62,32 @@ export default function AppBarLandingPage() {
             w-full
           "
         >
-          <Box
-            id="appbar-logo-navigation-container"
-            className="
-              flex
-              flex-row
-              justify-end
-              items-center
-              gap-6
-              w-full
-            "
-          >
-            <Link href="https://discord.gg/8t6XjdUuqH">
-              <FaDiscord
-                style={{
-                  fontSize: "24px"
-                }}
-                className="
-                  text-white
-                  hover:opacity-80
-                "
-              />
-            </Link>
-            <Link href="https://github.com/NexusTCG">
-              <GitHub
-                style={{
-                  fontSize: "24px"
-                }}
-                className="
-                  text-white
-                  hover:opacity-80
-                "
-              />
-            </Link>
-            <NavigationButton
-              route={"login"}
-              type="appbar"
+          <Link href="https://discord.gg/8t6XjdUuqH">
+            <FaDiscord
+              style={{
+                fontSize: "24px"
+              }}
+              className="
+                text-white
+                hover:opacity-80
+              "
             />
-          </Box>
+          </Link>
+          <Link href="https://github.com/NexusTCG">
+            <GitHub
+              style={{
+                fontSize: "24px"
+              }}
+              className="
+                text-white
+                hover:opacity-80
+              "
+            />
+          </Link>
+          <NavigationButton
+            route={"login"}
+            type="appbar"
+          />
         </Box>
       </Toolbar>  
     </Box>
