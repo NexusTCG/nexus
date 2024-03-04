@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 import { useForm, FormProvider, FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import RegisterFormSchema from "@/app/utils/schemas/RegisterFormSchema";
@@ -56,7 +56,7 @@ export default function AuthForm({
   } | null>(null);
   
   const supabase = createClient();
-  const router = useRouter();
+  // const router = useRouter();
   const methods = useForm({
     defaultValues: {
       email: "",
@@ -211,8 +211,8 @@ export default function AuthForm({
           });
         }
       } else if (response.ok) {
-        // window.location.href = resultUrl;
-        router.push(resultUrl);
+        window.location.href = resultUrl;
+        // router.push(resultUrl);
         // router.push("/dashboard");
       }
     } catch (error) {
