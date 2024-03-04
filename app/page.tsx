@@ -42,7 +42,7 @@ const featureDescriptions = [
   "Create custom cards with the help of AI. Play them with friends and other players.",
   "When the game launches, players can earn a share of revenue from cards they create.",
   "First, we're building a Card Creator Tool and community of creators. Then, the game.",
-  "Contribute more than cards, when we open source. From game design, to game story.",
+  "Contribute more than cards, when we open source. From game design, to game lore.",
   "Join the Nexus community and get involved early in the game's development.",
 ];
 const featureIcons = [
