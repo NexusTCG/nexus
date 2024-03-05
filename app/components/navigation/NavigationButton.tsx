@@ -89,8 +89,9 @@ export default function NavigationButton({
       case "subscription":
         setIcon(<Payments />);
         break;
-      case "support":
+      case "contact":
         setIcon(<Help />);
+        setDisabled(false);
         break;
       case "login":
         setIcon(<Login />);

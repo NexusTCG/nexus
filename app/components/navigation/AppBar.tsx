@@ -17,9 +17,8 @@ const primaryNavigation = [
   "create",
   "cards",
   "rules",
-  "game",
-  "roadmap",
   "request",
+  "contact",
 ];
 
 export default function AppBar() {
