@@ -139,7 +139,7 @@ export default function CardCreatorForm({
         );
 
         // Generate card art
-        const response = await fetch("https://nexus-art-generation-production.up.railway.app/", {
+        const response = await fetch("/data/generate-card-art", {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
