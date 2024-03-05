@@ -4,6 +4,7 @@ import React, {
   useEffect
 } from "react";
 import Cal, { getCalApi } from "@calcom/embed-react";
+import Link from "next/link";
 import {
   Box,
   Typography,
@@ -61,7 +62,6 @@ export default function Contact() {
         className="
           flex
           flex-col
-          lg:flex-row
           justify-start
           items-start
           w-full
@@ -118,7 +118,19 @@ export default function Contact() {
             <Typography
               variant="subtitle1"
             >
-              Got a question, comment, or suggestion? Send us an email and we&apos;ll get back to you as soon as we can!
+              Got a question, comment, or suggestion? Send us an email to 
+              <Link
+                href="mailto:example@example.com"
+                passHref
+                className="
+                  text-teal-500
+                  hover:text-teal-400
+                  hover:text-underline
+                "
+              >
+                <a style={{ textDecoration: "none", color: "inherit" }}>Send Email</a>
+              </Link>
+              and we&apos;ll get back to you as soon as we can!
             </Typography>
           </Box>
           {/* Loops form */}
