@@ -2,7 +2,6 @@
 
 import { createClient } from "@/app/lib/supabase/server";
 import type { NextRequest } from "next/server";
-// import { NextResponse } from "next/server"; // Swapped out NextResponse for Response
 import { cookies } from "next/headers";
 
 export async function GET(req: NextRequest) {

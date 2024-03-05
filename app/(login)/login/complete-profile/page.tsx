@@ -10,20 +10,16 @@ import PostHogClient from "@/app/lib/posthog/posthog";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { debounce } from "lodash";
-import {
-  Box,
-  Typography,
-  OutlinedInput,
-  InputLabel,
-  TextField,
-  Button,
-  FormControl,
-  Alert
-} from "@mui/material";
-import {
-  Check,
-  Error
-} from "@mui/icons-material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
+import Alert from "@mui/material/Alert";
+import CheckIcon from "@mui/icons-material/Check";
+import ErrorIcon from "@mui/icons-material/Error";
 import checkUsernameUnique from "@/app/lib/actions/supabase-data/checkUsernameUnique";
 
 export default function CompleteProfile() {
@@ -428,8 +424,8 @@ export default function CompleteProfile() {
                 <Alert
                   icon={
                     alertInfo?.type === "success" ?
-                    <Check fontSize="inherit" /> : 
-                    <Error fontSize="inherit" />
+                    <CheckIcon fontSize="inherit" /> : 
+                    <ErrorIcon fontSize="inherit" />
                   }
                   severity={alertInfo?.type}
                   className="w-full"

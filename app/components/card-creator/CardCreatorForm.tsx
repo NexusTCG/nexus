@@ -12,31 +12,26 @@ import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
 import PostHogClient from "@/app/lib/posthog/posthog";
 import Image from "next/image";
 import clsx from "clsx";
-// TODO: Add debouncer to reduce input lag in art prompt
-import {
-  Box,
-  Typography,
-  TextField,
-  Alert,
-  CircularProgress,
-  InputAdornment,
-  IconButton,
-  Tooltip,
-  Tab,
-  Tabs,
-  Badge,
-  FormControlLabel,
-  Checkbox,
-  FormGroup,
-} from "@mui/material/";
-import {
-  Send,
-  SmartToy,
-  Palette,
-  Check,
-  Error,
-  Info,
-} from "@mui/icons-material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import Tab from "@mui/material/Tab";
+import Tabs from "@mui/material/Tabs";
+import Badge from "@mui/material/Badge";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import FormGroup from "@mui/material/FormGroup";
+import SendIcon from "@mui/icons-material/Send";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
+import PaletteIcon from "@mui/icons-material/Palette";
+import CheckIcon from "@mui/icons-material/Check";
+import ErrorIcon from "@mui/icons-material/Error";
+import InfoIcon from "@mui/icons-material/Info";
 
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
@@ -127,7 +122,7 @@ export default function CardCreatorForm({
     if (generateArtLimit < 3 && form.cardArtPrompt) {
       setAlertInfo({
         type: "info",
-        icon: <Info />,
+        icon: <InfoIcon />,
         message: "Generating art..."
       });
       
@@ -152,7 +147,7 @@ export default function CardCreatorForm({
         if (!response.ok) {
           setAlertInfo({
             type: "error",
-            icon: <Error />,
+            icon: <ErrorIcon />,
             message: "Failed to generate artwork. Please try again later or check OpenAI's status here: https://status.openai.com/"
           });
         }
@@ -165,7 +160,7 @@ export default function CardCreatorForm({
           ) {
             setAlertInfo({
               type: "success",
-              icon: <Check />,
+              icon: <CheckIcon />,
               message: "Artwork generated successfully!"
             });
 
@@ -196,7 +191,7 @@ export default function CardCreatorForm({
       } catch (error) {        
         setAlertInfo({
           type: "error",
-          icon: <Error />,
+          icon: <ErrorIcon />,
           message: "Failed to generate artwork. Please try again later or check OpenAI's status here: https://status.openai.com/"
         });
       }
@@ -328,12 +323,12 @@ export default function CardCreatorForm({
               aria-label="icon position tabs example"
             >
               <Tab
-                icon={<Palette />}
+                icon={<PaletteIcon />}
                 iconPosition="start"
                 label="Generate Art"
               />
               <Tab
-                icon={<SmartToy />}
+                icon={<SmartToyIcon />}
                 iconPosition="start"
                 label="Brainstorm"
               />
@@ -465,7 +460,7 @@ export default function CardCreatorForm({
                                     "error" : "success"
                                   }
                                 >
-                                  <Send
+                                  <SendIcon
                                     className={clsx(
                                       "",
                                       field.value === "" ? 

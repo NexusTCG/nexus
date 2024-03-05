@@ -7,21 +7,17 @@ import PasswordSchema from "@/app/utils/schemas/PasswordSchema";
 import { createClient } from "@/app/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import {
-  Box,
-  Typography,
-  OutlinedInput,
-  FormControl,
-  InputAdornment,
-  IconButton,
-  InputLabel,
-  Button,
-  Alert
-} from "@mui/material";
-import {
-  Visibility,
-  VisibilityOff
-} from "@mui/icons-material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import FormControl from "@mui/material/FormControl";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import InputLabel from "@mui/material/InputLabel";
+import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 export default function ResetPassword() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -260,7 +256,7 @@ export default function ResetPassword() {
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
                       >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                       </IconButton>
                     </InputAdornment>
                   }
@@ -304,7 +300,7 @@ export default function ResetPassword() {
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
                       >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                       </IconButton>
                     </InputAdornment>
                   }

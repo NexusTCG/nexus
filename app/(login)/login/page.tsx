@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-// import { useRouter } from "next/router";
 import { useForm, FormProvider, FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import RegisterFormSchema from "@/app/utils/schemas/RegisterFormSchema";
@@ -12,26 +11,22 @@ import OAuthButton from "@/app/components/auth/OAuthButton";
 import Image from "next/image";
 import Link from "next/link"
 import clsx from "clsx";
-import {
-  Box,
-  Typography,
-  InputAdornment,
-  IconButton,
-  OutlinedInput,
-  InputLabel,
-  FormControl,
-  Button,
-  Alert,
-  Checkbox,
-  FormControlLabel,
-  CircularProgress
-} from "@mui/material";
-import {
-  Visibility,
-  VisibilityOff,
-  Check,
-  Error
-} from "@mui/icons-material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import CircularProgress from "@mui/material/CircularProgress";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Check from "@mui/icons-material/Check";
+import Error from "@mui/icons-material/Error";
 
 type PasswordResetFormData = {
   resetEmail: string;
