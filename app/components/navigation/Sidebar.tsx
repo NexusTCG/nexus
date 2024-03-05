@@ -32,7 +32,7 @@ const secondaryNavigation = [
   "profile",
   "subscription",
   "settings",
-  "support"
+  "contact"
 ]
 
 export default function Sidebar() {
