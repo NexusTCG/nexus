@@ -390,34 +390,37 @@ export default function Card({
                 gap-2
               "
             >
-              <Link
-                href={createNewCardHref}
-                className="w-full"
-              >
+              {isCardOwner ? (
                 <Button
                   variant="outlined"
                   color="primary"
                   size="large"
-                  startIcon={createNewCardHrefIcon}
+                  startIcon={<Download />}
+                  onClick={handleDownload}
                   className="
                     w-full
                   "
                 >
-                  {isCardOwner ? "Create card" : "Join & create card"}
+                  Download Card
                 </Button>
-              </Link>
-              <Button
-                variant="outlined"
-                color="primary"
-                size="large"
-                startIcon={<Download />}
-                onClick={handleDownload}
-                className="
-                  w-full
-                "
-              >
-                Download Card
-              </Button>
+              ) : (
+                <Link
+                  href={createNewCardHref}
+                  className="w-full"
+                >
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="large"
+                    startIcon={createNewCardHrefIcon}
+                    className="
+                      w-full
+                    "
+                  >
+                    Join & create card
+                  </Button>
+                </Link>
+              )}
               <a
                 href="https://discord.gg/HENgvaAmk2"
                 target="_blank"
