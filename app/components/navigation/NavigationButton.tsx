@@ -122,6 +122,8 @@ export default function NavigationButton({
         <Link 
           href={externalLink ? externalLink : `/dashboard/${routeLowerCase}`}
           className="w-full"
+          target={externalLink ? "_blank" : "_self"}
+          rel={externalLink ? "noopener noreferrer" : undefined}
         >
           <Button
             id={`navigation-button-${routeLowerCase}`}

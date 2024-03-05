@@ -31,7 +31,6 @@ const primaryNavigation = [
 const secondaryNavigation = [
   "profile",
   "subscription",
-  "settings",
   "contact"
 ]
 

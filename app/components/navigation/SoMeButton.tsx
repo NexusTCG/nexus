@@ -41,7 +41,7 @@ export default function SoMeButton({ channel }: SoMeButtonProps) {
         setSoMeIcon(<FaDiscord />);
         break;
         case "x":
-        setSoMeLink("https://twitter.com/NexusCardGame");
+        setSoMeLink("https://twitter.com/PlayNexusTcg");
         setSoMeIcon(<X />);
     }
   }, [channel]);
