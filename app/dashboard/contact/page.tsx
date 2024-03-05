@@ -4,7 +4,6 @@ import React, {
   useEffect
 } from "react";
 import Cal, { getCalApi } from "@calcom/embed-react";
-import Link from "next/link";
 import {
   Box,
   Typography,
@@ -102,26 +101,44 @@ export default function Contact() {
             variant="subtitle1"
           >
             Got a question, comment, or suggestion? Send us an email to {" "}
-            <Link
+            <a
               href="mailto:contact@play.nexus"
-              passHref
               className="
-                text-teal-500
-                hover:text-teal-400
-                hover:text-underline
+                text-teal-500 
+                hover:text-teal-400 
+                transition
+                duration-150
+                ease-in-out
               "
             >
-              <a
-                style={{
-                  textDecoration: "none", 
-                  color: "inherit" 
-                }}
-              >
-                Send Email
-              </a>
-            </Link>
+              contact@play.nexus
+            </a>
             {" "} and we&apos;ll get back to you as soon as we can!
+            
           </Typography>
+          <Typography
+              variant="caption"
+              component="span"
+              className="
+                text-red-600
+                italic
+                py-2
+                px-3 
+                rounded-md
+                bg-red-800/20
+                mt-2
+              "
+            >
+              Want to delete your account and data? Email us at {""}
+              <Typography
+                variant="caption"
+                className="
+                  font-bold
+                "
+              >
+                contact@play.nexus
+              </Typography>
+            </Typography>
         </Box>
         
         {/* Cal.com Embed */}

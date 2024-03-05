@@ -32,6 +32,7 @@ export default function NavigationButton({
   const [disabled, setDisabled] = useState<boolean>(true);
   const [currentColor, setCurrentColor] = useState<"secondary" | "primary">("secondary");
   const [isSidebar, setIsSidebar] = useState<boolean>(false);
+  const [externalLink, setExternalLink] = useState<string>("");
 
   const routeLowerCase = route.toLowerCase();
   const routeName = routeLowerCase.charAt(0).toUpperCase() + route.slice(1);
@@ -45,6 +46,19 @@ export default function NavigationButton({
     }
   }, [type])
 
+  // If
+  useEffect(() => {
+    if(routeLowerCase !== "") {
+      switch (routeLowerCase) {
+        case "rules":
+          setExternalLink("https://docs.google.com/document/d/1PWQd2QIsjYE5sRsFce_VBGPBQOqb7TVlIoUI-eAU10Y/edit?usp=sharing");
+          break;
+        case "game":
+      }
+    }
+  }, [routeLowerCase, externalLink]);
+
+  // Set color based on current pathname
   useEffect(() => {
     if (currentPathname.includes(routeLowerCase)) {
       setCurrentColor("primary");
@@ -106,7 +120,7 @@ export default function NavigationButton({
     <>
       {isSidebar && (
         <Link 
-          href={`/dashboard/${routeLowerCase}`}
+          href={externalLink ? externalLink : `/dashboard/${routeLowerCase}`}
           className="w-full"
         >
           <Button
@@ -129,7 +143,7 @@ export default function NavigationButton({
       )}
       {!isSidebar && !disabled && (
         <Link
-          href={`/dashboard/${routeLowerCase}`}
+          href={externalLink ? externalLink : `/dashboard/${routeLowerCase}`}
           className="w-full"
         >
           <Button
