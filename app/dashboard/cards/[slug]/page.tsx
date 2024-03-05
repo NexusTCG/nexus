@@ -303,9 +303,9 @@ export default function Card({
                         variant="overline"
                         className="
                           font-medium
-                          text-lime-500
+                          text-teal-500
                           hover:cursor-pointer
-                          hover:text-lime-300
+                          hover:text-teal-400
                         "
                       >
                         {cardData?.cardCreator}
