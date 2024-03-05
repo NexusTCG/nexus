@@ -70,71 +70,58 @@ export default function Contact() {
           md:gap-8
         "
       >
+        {/* Contact Info */}
         <Box
-          id="contact-cal-embed-container"
+          id="contact-info-container"
           className="
             flex
             flex-col
             justify-start
             items-start
             w-full
-            lg:w-2/5
-            gap-4
-            p-4
-            bg-neutral-800
-            rounded-lg
-            border
-            border-neutral-700
+            gap-2
           "
         >
-          {/* Email form */}
-          <Box
-            id="contact-email-form-container"
+          <Typography
+            variant="overline"
             className="
-              flex
-              flex-col
-              justify-start
-              items-start
-              w-full
-              gap-2
+              text-teal-400
             "
           >
-            <Typography
-              variant="overline"
+            Email us
+          </Typography>
+          <Typography
+            variant="h3"
+            className="
+              text-white
+            "
+          >
+            Send us a message!
+          </Typography>
+          <Typography
+            variant="subtitle1"
+          >
+            Got a question, comment, or suggestion? Send us an email to {" "}
+            <Link
+              href="mailto:contact@play.nexus"
+              passHref
               className="
-                text-teal-400
+                text-teal-500
+                hover:text-teal-400
+                hover:text-underline
               "
             >
-              Email us
-            </Typography>
-            <Typography
-              variant="h3"
-              className="
-                text-white
-              "
-            >
-              Send us a message!
-            </Typography>
-            <Typography
-              variant="subtitle1"
-            >
-              Got a question, comment, or suggestion? Send us an email to 
-              <Link
-                href="mailto:example@example.com"
-                passHref
-                className="
-                  text-teal-500
-                  hover:text-teal-400
-                  hover:text-underline
-                "
+              <a
+                style={{
+                  textDecoration: "none", 
+                  color: "inherit" 
+                }}
               >
-                <a style={{ textDecoration: "none", color: "inherit" }}>Send Email</a>
-              </Link>
-              and we&apos;ll get back to you as soon as we can!
-            </Typography>
-          </Box>
-          {/* Loops form */}
-          
+                Send Email
+              </a>
+            </Link>
+            {" "} and we&apos;ll get back to you as soon as we can!
+          </Typography>
         </Box>
         
         {/* Cal.com Embed */}
@@ -146,7 +133,6 @@ export default function Contact() {
             justify-start
             items-start
             w-full
-            lg:w-3/5
             gap-4
             p-4
             bg-neutral-800
@@ -172,7 +158,7 @@ export default function Contact() {
                 text-teal-400
               "
             >
-              Interview with Nexus&apos;s creator
+              Interview with Nils
             </Typography>
             <Typography
               variant="h3"
