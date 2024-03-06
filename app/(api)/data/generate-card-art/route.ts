@@ -1,5 +1,3 @@
-"use server";
-
 import { NextRequest } from "next/server";
 import { uploadCardArtImage } from "@/app/lib/actions/supabase-data/uploadCardArtImage";
 import fetch from "node-fetch";
