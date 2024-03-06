@@ -6,9 +6,7 @@ export const maxDuration = 45;
 
 export async function POST(req: NextRequest) {
     if (req.method === 'POST') {
-        let { prompt } = await req.json();
-
-        prompt = `Concept art, digital art, illustration, sci-fi, fantasy. ${prompt}. Dramatic mood, rule of thirds, dynamic poses.`;
+        const { prompt } = await req.json();
         
         try {
             // Generate image

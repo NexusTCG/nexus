@@ -16,6 +16,7 @@ export default async function ConstructArtPrompt(
   userPrompt: string
 ): Promise<string> {
 
+    const promptStart = "Digital painting, digital illustration, sci-fi, fantasy, rule of thirds, dynamic poses, centered focus. ";
     const style = selections.style ? `Style: ${selections.style}` : "";
     const technique = selections.technique ? `Technique: ${selections.technique}` : "";
     const subject = selections.subject ? `subject: ${selections.subject}` : "";
@@ -25,12 +26,7 @@ export default async function ConstructArtPrompt(
     const mood = selections.mood ? `Mood: ${selections.mood}` : "";
     const composition = selections.composition ? `Composition: ${selections.composition}` : "";
 
-    const promptStart = "Digital painting, illustration, sci-fi, fantasy, rule of thirds, dynamic poses, centered focus. ";
-    // const promptEnd = "Do NOT Include sexual content, do NOT include art tools (such as pencils, brushes, etc.), do NOT include hands of someone producing the art, do NOT user interfaces, do NOT generate characters with the likeness of proprietary characters, do NOT violate copyright protected material and intellectual property."
-
     const constructedArtPrompt = `${promptStart} ${style}. ${technique}. ${userPrompt}. ${subject}. ${setting}. ${time}. ${weather}. ${mood}. ${composition}.`;
-
-    // TODO: Dynamically add descriptions for entity types.
     
     return constructedArtPrompt.trim();
   }
