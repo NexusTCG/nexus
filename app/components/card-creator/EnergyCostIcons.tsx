@@ -66,7 +66,7 @@ export default function EnergyCostIcons({
               ? Array.from({ length: value }, (_, i) => (
                   <Image
                     key={`${color}-${i}`}
-                    src={`/images/card-parts/card-icons/card-cost/${color}.png`}
+                    src={`/images/card-parts/card-icons/card-cost/${color}.PNG`}
                     width={21}
                     height={21}
                     alt={`${color} energy icon`}
@@ -76,7 +76,7 @@ export default function EnergyCostIcons({
               ? (
                   <Image
                     key={`void-0`}
-                    src={`/images/card-parts/card-icons/card-cost/void-${value}.png`}
+                    src={`/images/card-parts/card-icons/card-cost/void-${value}.PNG`}
                     width={21}
                     height={21}
                     alt={`void energy icon`}
