@@ -4,10 +4,8 @@ import React, {
   useEffect
 } from "react";
 import Cal, { getCalApi } from "@calcom/embed-react";
-import {
-  Box,
-  Typography,
-} from "@mui/material"
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 export default function Contact() {
   

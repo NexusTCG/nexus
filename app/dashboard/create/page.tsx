@@ -19,22 +19,18 @@ import convertCardCodeToImage from "@/app/lib/actions/convertCardCodeToImage";
 import uploadCardImage from "@/app/lib/actions/supabase-data/uploadCardImage";
 import { postCardToDiscord } from "@/app/lib/actions/postCardToDiscord";
 import clsx from "clsx";
-import {
-  FormControlLabel,
-  LinearProgress,
-  Typography,
-  Checkbox,
-  Snackbar,
-  Button,
-  Alert,
-  Box,
-} from "@mui/material";
-import {
-  Check,
-  Error,
-  Info,
-  Save,
-} from "@mui/icons-material";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import LinearProgress from "@mui/material/LinearProgress";
+import Typography from "@mui/material/Typography";
+import Checkbox from "@mui/material/Checkbox";
+import Snackbar from "@mui/material/Snackbar";
+import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
+import CheckIcon from "@mui/icons-material/Check";
+import ErrorIcon from "@mui/icons-material/Error";
+import InfoIcon from "@mui/icons-material/Info";
+import SaveIcon from "@mui/icons-material/Save";
 
 export default function Create() {
   const { userProfileData } = useContext(DashboardContext);
@@ -142,7 +138,7 @@ export default function Create() {
   ) {
     setAlertInfo({
       type: "info",
-      icon: <Info />,
+      icon: <InfoIcon />,
       message: "Submitting card..."
     });
     setShowAlertInfo(true);
@@ -188,7 +184,7 @@ export default function Create() {
           if (response.ok && responseData.data) {
             setAlertInfo({
               type: "success",
-              icon: <Check />,
+              icon: <CheckIcon />,
               message: "Card submitted successfully! Redirecting..."
             });
             
@@ -222,28 +218,28 @@ export default function Create() {
           } else {
             setAlertInfo({
               type: "error",
-              icon: <Error />,
+              icon: <ErrorIcon />,
               message: "Error submitting card!"
             });
           }
         }  else {
           setAlertInfo({
             type: "error",
-            icon: <Error />,
+            icon: <ErrorIcon />,
             message: "Error uploading card render! Submission failed."
           });
         }
       } else {
         setAlertInfo({
           type: "error",
-          icon: <Error />,
+          icon: <ErrorIcon />,
           message: "Error capturing card render! Submission failed."
         });
       }
     } catch (error) {
       setAlertInfo({
         type: "error",
-        icon: <Error />,
+        icon: <ErrorIcon />,
         message: `Error submitting card: ${error}`
       });
     }
@@ -436,7 +432,7 @@ export default function Create() {
                         form.cardArt === "/images/card-parts/card-art/default-art.jpg"
                       }
                       color={isValid ? "success" : "secondary"}
-                      startIcon={<Save />}
+                      startIcon={<SaveIcon />}
                       size="large" // TODO: Dynamically change size based on screen size
                       className="
                         hover:cursor-pointer

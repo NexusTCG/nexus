@@ -2,7 +2,9 @@
 
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { Popover, Box, Typography } from "@mui/material";
+import Popover from "@mui/material/Popover";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import Image from "next/image";
 
 type GradePopoverProps = {

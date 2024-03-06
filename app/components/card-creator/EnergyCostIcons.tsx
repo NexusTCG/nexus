@@ -2,7 +2,8 @@
 
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { IconButton, Box } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Box from "@mui/material/Box";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Image from "next/image";
 import { CardFormDataType } from "@/app/utils/types/types";

@@ -1,16 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  IconButton,
-  Link
-} from "@mui/material";
-import {
-  GitHub,
-  X,
-  LinkedIn,
-  Reddit
-} from '@mui/icons-material';
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
+import GitHubIcon from '@mui/icons-material/GitHub';
+import XIcon from '@mui/icons-material/X';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import RedditIcon from '@mui/icons-material/Reddit';
 import { FaDiscord } from "react-icons/fa";
 import clsx from "clsx";
 
@@ -26,15 +22,15 @@ export default function SoMeButton({ channel }: SoMeButtonProps) {
     switch (channel.toLowerCase()) {
       case "github":
         setSoMeLink("https://github.com/NexusTCG");
-        setSoMeIcon(<GitHub />);
+        setSoMeIcon(<GitHubIcon />);
         break;
       case "linkedin":
         setSoMeLink("https://www.linkedin.com/company/nexus-tcg");
-        setSoMeIcon(<LinkedIn />);
+        setSoMeIcon(<LinkedInIcon />);
         break;
       case "reddit":
         setSoMeLink("");
-        setSoMeIcon(<Reddit />);
+        setSoMeIcon(<RedditIcon />);
         break;
       case "discord":
         setSoMeLink("https://discord.gg/VGMTV996dy");
@@ -42,7 +38,7 @@ export default function SoMeButton({ channel }: SoMeButtonProps) {
         break;
         case "x":
         setSoMeLink("https://twitter.com/PlayNexusTcg");
-        setSoMeIcon(<X />);
+        setSoMeIcon(<XIcon />);
     }
   }, [channel]);
 

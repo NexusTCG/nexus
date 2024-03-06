@@ -2,10 +2,8 @@ import React from "react";
 import NavigationButton from "@/app/components/navigation/NavigationButton";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Box,
-  Toolbar,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
 import { GitHub } from "@mui/icons-material";
 import { FaDiscord } from "react-icons/fa";
 

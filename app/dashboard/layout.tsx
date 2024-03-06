@@ -7,7 +7,7 @@ import { UserProfilesTableType } from "@/app/utils/types/supabase/userProfilesTa
 import useSession from "@/app/hooks/useSession";
 import Sidebar from '@/app/components/navigation/Sidebar';
 import AppBar from '@/app/components/navigation/AppBar';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 
 export default function DashboardLayout({
   children,

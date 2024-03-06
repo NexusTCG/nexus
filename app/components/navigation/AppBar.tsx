@@ -4,13 +4,11 @@ import React, { useState } from "react";
 import NavigationButton from "@/app/components/navigation/NavigationButton";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Box,
-  IconButton,
-  Menu,
-  MenuItem,
-  Toolbar,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Toolbar from "@mui/material/Toolbar";
 import { AccountCircle } from "@mui/icons-material";
 
 const primaryNavigation = [

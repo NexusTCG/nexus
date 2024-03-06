@@ -5,20 +5,17 @@ import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
 import Image from "next/image";
 import Link from "next/link";
-import {
-    Box,
-    Grid,
-    Typography,
-    Tooltip,
-    Button,
-    FormControl,
-    MenuItem,
-    Select,
-    IconButton
-} from "@mui/material/";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
+import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import IconButton from "@mui/material/IconButton";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { SelectChangeEvent } from '@mui/material/Select';
-// import AddIcon from '@mui/icons-material/Add';
 
 export default function Cards() {
     const [cards, setCards] = useState<CardsTableType[] | null>([]);

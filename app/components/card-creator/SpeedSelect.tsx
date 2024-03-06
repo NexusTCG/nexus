@@ -2,7 +2,11 @@
 
 import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { Box, IconButton, Snackbar, Tooltip, Fade } from "@mui/material";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Snackbar from "@mui/material/Snackbar";
+import Tooltip from "@mui/material/Tooltip";
+import Fade from "@mui/material/Fade";
 import Image from "next/image";
 import clsx from "clsx";
 

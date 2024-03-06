@@ -6,10 +6,7 @@ import NavigationButton from "@/app/components/navigation/NavigationButton";
 import SignOutButton from "@/app/components/auth/SignOutButton"
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Box,
-  // Button,
-} from "@mui/material";
+import Box from "@mui/material/Box";
 // import FeedbackIcon from '@mui/icons-material/Feedback';
 
 const soMeChannels = [

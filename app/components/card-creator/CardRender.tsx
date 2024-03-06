@@ -10,12 +10,10 @@ import colorMapping from "@/app/utils/data/colorMapping";
 import determineBgImage from "@/app/lib/actions/determineBgImage";
 import Image from "next/image";
 import clsx from "clsx";
-import {
-  Box,
-  Typography,
-  Skeleton,
-  Divider
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Skeleton from "@mui/material/Skeleton";
+import Divider from "@mui/material/Divider";
 
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;

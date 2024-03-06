@@ -21,20 +21,18 @@ import { cardPartPath } from "@/app/utils/consts/cardPartPaths";
 import Image from "next/image";
 import clsx from "clsx";
 import { debounce } from "lodash";
-import {
-  Box,
-  FormControl,
-  Typography,
-  TextField,
-  MenuItem,
-  Select,
-  IconButton,
-  Tooltip,
-  Fade,
-  Snackbar,
-  Divider,
-  ClickAwayListener
-} from "@mui/material/";
+import Box from "@mui/material/Box";
+import FormControl from "@mui/material/FormControl";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import Fade from "@mui/material/Fade";
+import Snackbar from "@mui/material/Snackbar";
+import Divider from "@mui/material/Divider";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 // Custom actions
 import determineColorType from "@/app/lib/actions/determineColorType";
 import determineColor from "@/app/lib/actions/determineColor";

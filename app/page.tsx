@@ -9,23 +9,18 @@ import LandingPageFeature from "@/app/components/landing-page/LandingPageFeature
 import CardImageGallery from "@/app/components/landing-page/CardImageGallery";
 import Image from "next/image";
 import { useTheme } from "@mui/material/styles";
-import {
-  Box,
-  Grid,
-  Button,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
-import {
-  RocketLaunch,
-  DesignServices,
-  AttachMoney,
-  Handyman,
-  TipsAndUpdates,
-  ArrowForward,
-  People,
-} from "@mui/icons-material";
-
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import DesignServicesIcon from "@mui/icons-material/DesignServices";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import HandymanIcon from "@mui/icons-material/Handyman";
+import TipsAndUpdatesIcon from "@mui/icons-material/TipsAndUpdates";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import PeopleIcon from "@mui/icons-material/People";
 
 const headlineOptions = ["CARDS", "PLAYS", "MONEY"];
 const totalBackgrounds = 29;
@@ -46,12 +41,12 @@ const featureDescriptions = [
   "Join the Nexus community and get involved early in the game's development.",
 ];
 const featureIcons = [
-  <RocketLaunch key="design" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
-  <DesignServices key="design" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
-  <AttachMoney key="money" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
-  <Handyman key="planet" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
-  <TipsAndUpdates key="cards" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
-  <People key="community" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
+  <RocketLaunchIcon key="design" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
+  <DesignServicesIcon key="design" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
+  <AttachMoneyIcon key="money" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
+  <HandymanIcon key="planet" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
+  <TipsAndUpdatesIcon key="cards" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
+  <PeopleIcon key="community" className=" rounded-full bg-teal-500 text-neutral-950 shadow-md shadow-black/25 p-1" style={{fontSize: "36px"}}/>,
 ];
 
 const images = [
@@ -314,7 +309,7 @@ export default function Home() {
           </Typography>
           <Button
             variant="outlined"
-            endIcon={<ArrowForward />}
+            endIcon={<ArrowForwardIcon />}
             href="/login"
             size="large"
             className="

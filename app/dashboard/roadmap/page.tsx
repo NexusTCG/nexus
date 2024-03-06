@@ -2,14 +2,10 @@
 
 import React from "react";
 import TextSection from "@/app/components/content/TextSection";
-import {
-  Box,
-  Typography,
-} from "@mui/material"
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 export default function Roadmap() {
-  
-
   return (
     <Box
       className="

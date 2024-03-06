@@ -4,19 +4,17 @@ import React, { useEffect, useState } from "react";
 import { usePathname } from 'next/navigation';
 import { Button } from "@mui/material";
 import Link from "next/link";
-import {
-  AccountCircle,
-  Collections,
-  DesignServices,
-  Rule,
-  Casino,
-  Flag,
-  Payments,
-  Help,
-  Settings,
-  SpeakerNotes,
-  Login,
-} from '@mui/icons-material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import CollectionsIcon from '@mui/icons-material/Collections';
+import DesignServicesIcon from '@mui/icons-material/DesignServices';
+import RuleIcon from '@mui/icons-material/Rule';
+import CasinoIcon from '@mui/icons-material/Casino';
+import FlagIcon from '@mui/icons-material/Flag';
+import PaymentsIcon from '@mui/icons-material/Payments';
+import HelpIcon from '@mui/icons-material/Help';
+import SettingsIcon from '@mui/icons-material/Settings';
+import SpeakerNotesIcon from '@mui/icons-material/SpeakerNotes';
+import LoginIcon from '@mui/icons-material/Login';
 import clsx from "clsx";
 
 type NavigationButtonProps = {
@@ -70,45 +68,45 @@ export default function NavigationButton({
   useEffect(() => {
     switch (routeLowerCase) {
       case "create":
-        setIcon(<DesignServices />);
+        setIcon(<DesignServicesIcon />);
         setDisabled(false);
         break;
       case "cards":
-        setIcon(<Collections />);
+        setIcon(<CollectionsIcon />);
         setDisabled(false);
         break;
       case "rules":
-        setIcon(<Rule />);
+        setIcon(<RuleIcon />);
         setDisabled(false);
         break;
       case "game":
-        setIcon(<Casino />);
+        setIcon(<CasinoIcon />);
         setDisabled(false);
         break;
       case "roadmap":
-        setIcon(<Flag />);
+        setIcon(<FlagIcon />);
         setDisabled(false);
         break;
       case "request":
-        setIcon(<SpeakerNotes />);
+        setIcon(<SpeakerNotesIcon />);
         setDisabled(false);
         break;
       case "profile":
-        setIcon(<AccountCircle />);
+        setIcon(<AccountCircleIcon />);
         setDisabled(false);
         break;
       case "settings":
-        setIcon(<Settings />);
+        setIcon(<SettingsIcon />);
         break;
       case "subscription":
-        setIcon(<Payments />);
+        setIcon(<PaymentsIcon />);
         break;
       case "contact":
-        setIcon(<Help />);
+        setIcon(<HelpIcon />);
         setDisabled(false);
         break;
       case "login":
-        setIcon(<Login />);
+        setIcon(<LoginIcon />);
         setDisabled(false);
         break;
       default:
@@ -152,7 +150,7 @@ export default function NavigationButton({
             id={`navigation-button-${routeLowerCase}`}
             variant="outlined"
             size={routeLowerCase === "login" ? "large" : "small"}
-            endIcon={routeLowerCase === "login" ? <Login /> : null}
+            endIcon={routeLowerCase === "login" ? <LoginIcon /> : null}
             color={currentColor}
             className={clsx("flex justify-between items-center hover:cursor-pointer hover:bg-teal-600/30 hover:text-white hover:border-teal-600",
               {

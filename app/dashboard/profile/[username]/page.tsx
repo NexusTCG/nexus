@@ -10,14 +10,12 @@ import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Box,
-  Typography,
-  IconButton,
-  Grid,
-  Tooltip,
-  CircularProgress
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import Grid from "@mui/material/Grid";
+import Tooltip from "@mui/material/Tooltip";
+import CircularProgress from "@mui/material/CircularProgress";
 import UploadIcon from '@mui/icons-material/Upload';
 
 export default function ProfileId({

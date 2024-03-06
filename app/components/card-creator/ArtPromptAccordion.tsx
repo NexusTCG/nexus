@@ -1,26 +1,22 @@
 "use client";
 
 import React from "react";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Chip,
-  Typography
-} from "@mui/material";
-import {
-  ArrowDownward,
-  Check,
-  Palette,
-  Brush,
-  People,
-  Landscape,
-  AccessTime,
-  WbSunny,
-  Mood,
-  LocalSee,
-  InvertColors
-} from "@mui/icons-material"
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Chip from "@mui/material/Chip";
+import Typography from "@mui/material/Typography";
+import ArrowDownward from "@mui/icons-material/ArrowDownward";
+import Check from "@mui/icons-material/Check";
+import Palette from "@mui/icons-material/Palette";
+import Brush from "@mui/icons-material/Brush";
+import People from "@mui/icons-material/People";
+import Landscape from "@mui/icons-material/Landscape";
+import AccessTime from "@mui/icons-material/AccessTime";
+import WbSunny from "@mui/icons-material/WbSunny";
+import Mood from "@mui/icons-material/Mood";
+import LocalSee from "@mui/icons-material/LocalSee";
+import InvertColors from "@mui/icons-material/InvertColors";
 import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
 
 export type ArtPromptAccordionProps = {

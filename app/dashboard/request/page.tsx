@@ -8,20 +8,16 @@ import React, {
 import { useForm } from "react-hook-form";
 import { createClient } from "@/app/lib/supabase/client";
 import { DashboardContext } from "@/app/context/DashboardContext";
-import {
-  Box,
-  Typography,
-  TextField,
-  Button,
-  Alert,
-  CircularProgress,
-  Skeleton,
-} from "@mui/material"
-import {
-  Send,
-  Check,
-  Error,
-} from "@mui/icons-material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
+import Skeleton from "@mui/material/Skeleton";
+import SendIcon from "@mui/icons-material/Send";
+import CheckIcon from "@mui/icons-material/Check";
+import ErrorIcon from "@mui/icons-material/Error";
 
 type FeatureRequestType = {
   feature: string;
@@ -77,7 +73,7 @@ export default function Feedback() {
     if (error) {
       setAlertInfo({
         type: "error",
-        icon: <Error />,
+        icon: <ErrorIcon />,
         message: `Error submitting feature request: ${error.message}`
       });
       setShowAlertInfo(true);
@@ -88,7 +84,7 @@ export default function Feedback() {
     } else {
       setAlertInfo({
         type: "success",
-        icon: <Check />,
+        icon: <CheckIcon />,
         message: "Request submitted! Thanks for your feedback!"
       });
       setShowAlertInfo(true);
@@ -180,7 +176,7 @@ export default function Feedback() {
             variant="outlined"
             color="primary"
             disabled={!isValid || !userProfileData?.username}
-            startIcon={isSubmitting ? <CircularProgress size={24} /> : <Send />}
+            startIcon={isSubmitting ? <CircularProgress size={24} /> : <SendIcon />}
             type="submit"
             size="large"
             className="

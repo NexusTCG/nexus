@@ -9,27 +9,22 @@ import { DashboardContext } from "@/app/context/DashboardContext";
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
 import CardRender from "@/app/components/card-creator/CardRender";
-// import Image from "next/image";
 import Link from "next/link";
 import { format } from 'date-fns';
-import {
-  Box,
-  Typography,
-  IconButton,
-  Button,
-  Modal,
-  Skeleton,
-  Breadcrumbs
-} from "@mui/material"
-import {
-  Delete,
-  Edit,
-  IosShare,
-  Download,
-  Close,
-  DesignServices,
-  Login
-} from "@mui/icons-material"
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import Skeleton from "@mui/material/Skeleton";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import IosShareIcon from "@mui/icons-material/IosShare";
+import DownloadIcon from "@mui/icons-material/Download";
+import CloseIcon from "@mui/icons-material/Close";
+import DesignServicesIcon from "@mui/icons-material/DesignServices";
+import LoginIcon from "@mui/icons-material/Login";
 import { FaDiscord } from "react-icons/fa";
 
 export default function Card({
@@ -40,7 +35,7 @@ export default function Card({
   
   const [isCardOwner, setIsCardOwner] = useState<boolean>(false);
   const [createNewCardHref, setCreateNewCardHref] = useState<string>("/login");
-  const [createNewCardHrefIcon, setCreateNewCardHrefIcon] = useState<React.ReactNode>(<Login />);
+  const [createNewCardHrefIcon, setCreateNewCardHrefIcon] = useState<React.ReactNode>(<LoginIcon />);
   const [cardData, setCardData] = useState<CardsTableType | null>(null);
   const [formattedDate, setFormattedDate] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -90,7 +85,7 @@ export default function Card({
     if (cardData?.cardCreator === userProfileData?.username) {
       setIsCardOwner(true);
       setCreateNewCardHref("/dashboard/create");
-      setCreateNewCardHrefIcon(<DesignServices />);
+      setCreateNewCardHrefIcon(<DesignServicesIcon />);
     }
   }, [cardData, userProfileData?.username]);
 
@@ -359,7 +354,7 @@ export default function Card({
                       hover:opacity-100
                     "
                   >
-                    <Edit />
+                    <EditIcon />
                   </IconButton>
                   <IconButton
                     aria-label="delete"
@@ -371,7 +366,7 @@ export default function Card({
                       hover:text-red-500
                     "
                   >
-                    <Delete />
+                    <DeleteIcon />
                   </IconButton>
                 </Box>
               )}
@@ -395,7 +390,7 @@ export default function Card({
                   variant="outlined"
                   color="primary"
                   size="large"
-                  startIcon={<Download />}
+                  startIcon={<DownloadIcon />}
                   onClick={handleDownload}
                   className="
                     w-full
@@ -443,7 +438,7 @@ export default function Card({
                 variant="outlined"
                 color="primary"
                 size="large"
-                startIcon={<IosShare />}
+                startIcon={<IosShareIcon />}
                 onClick={handleShare}
                 className="
                   w-full
@@ -519,7 +514,7 @@ export default function Card({
                 hover:opacity-100
               "
             >
-              <Close />
+              <CloseIcon />
             </IconButton>
           </Box>
         </Box>

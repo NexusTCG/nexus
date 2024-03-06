@@ -4,6 +4,8 @@ import { NextRequest } from "next/server";
 import { uploadCardArtImage } from "@/app/lib/actions/supabase-data/uploadCardArtImage";
 import fetch from "node-fetch";
 
+export const maxDuration = 45;
+
 export async function POST(req: NextRequest) {
     if (req.method === 'POST') {
         let { prompt } = await req.json();
