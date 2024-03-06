@@ -46,8 +46,5 @@ export async function POST(request: Request) {
         return Response.redirect(`${requestUrl}/login/complete-profile`);
       }
   }
-
-  console.log(`login-user route: User ${email} signed in successfully`)
-  console.log(`login-user route: User session: ${data.session}`)
   return Response.redirect(`${requestUrl}/dashboard`);
 }
