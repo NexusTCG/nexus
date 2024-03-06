@@ -243,7 +243,7 @@ export default function Cards() {
                   >
                     <MenuItem value="created_at">Date created</MenuItem>
                     {/* <MenuItem value="cardVotes">Votes</MenuItem> */}
-                    {/* Card Named doesn't order alphabetically */}
+                    {/* Card Names doesn't order alphabetically */}
                     <MenuItem value="cardName">Name</MenuItem>
                     <MenuItem value="cardColor">Color</MenuItem>
                     <MenuItem value="cardGrade">Grade</MenuItem>
@@ -336,6 +336,7 @@ export default function Cards() {
             border
             border-neutral-700
             pr-4
+            py-4
             ml-2
             mt-4
             rounded-lg
@@ -362,7 +363,6 @@ export default function Cards() {
                   position: "relative",
                   aspectRatio: "5/7"
                 }}
-                // Addc clsx for breakpoints
                 className="
                   rounded-xl
                   hover:shadow-lg

@@ -107,19 +107,56 @@ export default function CardCreatorForm({
     };
   }, [intervalId]);
 
+  // DALL-E API fetch with retry
+  async function fetchWithRetry(
+    url: string, 
+    body: Record<string, unknown>, 
+    retries = 3, 
+    delay = 1000
+  ) {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        });
+  
+        if (!response.ok) {
+          throw new Error(`Attempt ${attempt}: Server responded with status ${response.status}`);
+        }
+  
+        return response;
+      } catch (error) {
+        console.error(`Attempt ${attempt}:`, error);
+  
+        if (attempt === retries) {
+          throw new Error(`Failed after ${retries} attempts.`);
+        }
+  
+        await new Promise(resolve => setTimeout(resolve, delay));
+        delay *= 2;
+      }
+    }
+  }
+  
   // Generate card art
   async function generateArt() {
     setIsGeneratingArt(true);
     setTimerStart(Date.now());
     setElapsedTime(0);
-
-    // Udate elapsed time every second
+  
     const newIntervalId = setInterval(() => {
       setElapsedTime((prevElapsedTime) => prevElapsedTime + 1000);
     }, 1000) as unknown as number;
     setIntervalId(newIntervalId);
-
-    if (generateArtLimit < 3 && form.cardArtPrompt) {
+  
+    if (
+      generateArtLimit < 3 && 
+      form.cardArtPrompt
+    ) {
       setAlertInfo({
         type: "info",
         icon: <InfoIcon />,
@@ -127,51 +164,41 @@ export default function CardCreatorForm({
       });
       
       try {
-        // Construct prompt based on user selections and input
         const constructedArtPrompt = await ConstructArtPrompt(
-          artPromptSelections,
-          form.cardArtPrompt
+          artPromptSelections, form.cardArtPrompt
         );
-
-        // Generate card art
-        const response = await fetch("/data/generate-card-art", {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            prompt: constructedArtPrompt
-          }),
+  
+        const response = await fetchWithRetry(
+          "/data/generate-card-art", {
+          prompt: constructedArtPrompt,
         });
+  
+        if (!response) {
+          throw new Error('No response received.');
+        }
 
         if (!response.ok) {
-          setAlertInfo({
-            type: "error",
-            icon: <ErrorIcon />,
-            message: "Failed to generate artwork. Please try again later or check OpenAI's status here: https://status.openai.com/"
-          });
+          throw new Error('Network response was not ok.');
         }
+  
+        const responseData = await response.json() as { imageUrl?: string };
         
-        const { imageUrl } = await response.json();
-        if (imageUrl) {
-          if (
-              userProfileData
-              && userProfileData.id
-          ) {
-            setAlertInfo({
-              type: "success",
-              icon: <CheckIcon />,
-              message: "Artwork generated successfully!"
-            });
-
-            // Track event in PostHog
+        if (responseData.imageUrl) {
+          const imageUrl = responseData.imageUrl;
+  
+          setAlertInfo({
+            type: "success",
+            icon: <CheckIcon />,
+            message: "Artwork generated successfully!"
+          });
+  
+          if (userProfileData && userProfileData.id) {
             posthog.capture({
               distinctId: userProfileData.id,
               event: "🎨 New Card Image Generated"
-            })
+            });
           }
-
-          // Update the card
+  
           setGenerateArtLimit(generateArtLimit + 1);
           setValue("cardArt", imageUrl);
           setCardArtOptions(prevState => {
@@ -182,27 +209,31 @@ export default function CardCreatorForm({
               activeOption: newActiveOption,
             };
           });
+  
           if (cardArtOptions.options.length > 0) {
             setShowCardArtOptions(true);
           };
           await trigger("cardArt");
+        } else {
+          throw new Error('Image URL not found in the response.');
         }
         
-      } catch (error) {        
+      } catch (error) {
+        console.error(error);
         setAlertInfo({
           type: "error",
           icon: <ErrorIcon />,
           message: "Failed to generate artwork. Please try again later or check OpenAI's status here: https://status.openai.com/"
         });
+      } finally {
+        setTimeout(() => {
+          clearInterval(newIntervalId);
+          setIsGeneratingArt(false);
+          setElapsedTime(Date.now() - timerStart);
+          setShowAlertInfo(false);
+        }, 5000);
       }
     }
-    // Cleanup with delay to match card art updating
-    setTimeout(() => {
-      clearInterval(newIntervalId);
-      setIsGeneratingArt(false);
-      setElapsedTime(Date.now() - timerStart);
-      setShowAlertInfo(false);
-    }, 5000);
   }
 
   // Toggle flavor text visibility
@@ -351,7 +382,8 @@ export default function CardCreatorForm({
             "
           >
             {/* Input: AI prompt */}
-            {promptTab === 1 && (<Controller
+            {promptTab === 1 && (
+            <Controller
               name="cardPrompt"
               control={control}
               defaultValue=""
@@ -386,7 +418,8 @@ export default function CardCreatorForm({
             />)}
             
             {/* Input: AI art prompt */}
-            {promptTab === 0 && (<Controller
+            {promptTab === 0 && (
+            <Controller
               name="cardArtPrompt"
               control={control}
               defaultValue=""
@@ -497,7 +530,8 @@ export default function CardCreatorForm({
             </Alert>)}
 
             {/* Art Prompt Selections */}
-            {promptTab === 0 && artPromptSelections && (<Box
+            {promptTab === 0 && artPromptSelections && (
+            <Box
               className="
                 flex
                 flex-row
@@ -657,7 +691,8 @@ export default function CardCreatorForm({
           "
         >
           {/* Additional Options */}
-          {isDirty && (<Box
+          {isDirty && (
+          <Box
             className="
               flex
               flex-col
@@ -669,29 +704,31 @@ export default function CardCreatorForm({
             <FormGroup
               row={true}
             >
-              {form.cardText && (<FormControlLabel
-                onChange={handleShowFlavorTextChange}
-                control={
-                  <Checkbox
-                    checked={
-                      showFlavorText && 
-                      form.cardText.length <= 352
-                    }
-                    size="small"
-                  />
-                } 
-                label={
-                  <Typography
-                    variant="subtitle2"
-                    className="
-                      hover:text-neutral-400
-                      font-medium
-                    "
-                  >
-                    Flavor Text
-                  </Typography>
-                }
-              />)}
+              {form.cardText && (
+                <FormControlLabel
+                  onChange={handleShowFlavorTextChange}
+                  control={
+                    <Checkbox
+                      checked={
+                        showFlavorText && 
+                        form.cardText.length <= 352
+                      }
+                      size="small"
+                    />
+                  } 
+                  label={
+                    <Typography
+                      variant="subtitle2"
+                      className="
+                        hover:text-neutral-400
+                        font-medium
+                      "
+                    >
+                      Flavor Text
+                    </Typography>
+                  }
+                />
+              )}
               {form.cardType && form.cardType !== "event" && (
                 <FormControlLabel
                   onChange={() => {
@@ -769,7 +806,8 @@ export default function CardCreatorForm({
           </div>
 
           {/* Card Art Options */}
-          {showCardArtOptions && (<Box
+          {showCardArtOptions && (
+          <Box
             className="
               flex
               flex-col
