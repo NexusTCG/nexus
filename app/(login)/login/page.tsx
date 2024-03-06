@@ -98,7 +98,7 @@ export default function AuthForm({
   // Set random background image
   useEffect(() => {
     if (authBg !== null) return;
-    const randomBg = Math.floor(Math.random() * 29) + 1;
+    const randomBg = Math.floor(Math.random() * 10) + 1;
     setAuthBg(randomBg);
   }, []);
 

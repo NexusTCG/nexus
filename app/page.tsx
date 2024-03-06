@@ -23,7 +23,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PeopleIcon from "@mui/icons-material/People";
 
 const headlineOptions = ["CARDS", "PLAYS", "MONEY"];
-const totalBackgrounds = 29;
+const totalBackgrounds = 10;
 const featureTitles = [
   "Game",
   "Create",
@@ -329,7 +329,7 @@ export default function Home() {
               text-neutral-300
             "
           >
-            Join Nexus
+            Join to start making cards!
           </Button>
         </Box>
         {/* Card Gallery */}

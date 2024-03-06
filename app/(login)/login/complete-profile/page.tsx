@@ -68,7 +68,7 @@ export default function CompleteProfile() {
   // Randomize the background image
   useEffect(() => {
     if (authBg !== null) return;
-    const randomBg = Math.floor(Math.random() * 29) + 1;
+    const randomBg = Math.floor(Math.random() * 10) + 1;
     setAuthBg(randomBg);
   }, []);
 
@@ -177,8 +177,8 @@ export default function CompleteProfile() {
         lg:pb-0
       "
     >
-      {authBg && (<Image
-        src={`/images/auth-bg/nexus-auth-bg-${authBg}.jpg`}
+      <Image
+        src={authBg ? `/images/auth-bg/nexus-auth-bg-${authBg}.jpg` : "/images/auth-bg/nexus-auth-bg-1.jpg"}
         alt="Nexus background"
         fill
         style={{
@@ -187,7 +187,7 @@ export default function CompleteProfile() {
         className="
           opacity-25
         "
-      />)}
+      />
       <Box
         id="complete-profile-logo-container"
         className="

@@ -20,6 +20,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 export default function ResetPassword() {
+  const [authBg, setAuthBg] = useState<number | null>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [alertInfo, setAlertInfo] = useState<{
@@ -50,6 +51,13 @@ export default function ResetPassword() {
     }
   } = methods;
   const form = watch();
+
+  // Randomize the background image
+  useEffect(() => {
+    if (authBg !== null) return;
+    const randomBg = Math.floor(Math.random() * 10) + 1;
+    setAuthBg(randomBg);
+  }, []);
 
   // Check if passwords match
   useEffect(() => {
@@ -154,13 +162,14 @@ export default function ResetPassword() {
       "
     >
       <Image
-        src="/images/nexus-404.png"
+        src={authBg ? `/images/auth-bg/nexus-auth-bg-${authBg}.jpg` : "/images/auth-bg/nexus-auth-bg-1.jpg"}
         alt="Nexus background"
         fill
-        style={{ objectFit: "cover"}}
+        style={{
+          objectFit: "cover"
+        }}
         className="
-          opacity-10
-          lg:opacity-20
+          opacity-25
         "
       />
       <Box
