@@ -841,6 +841,7 @@ export default function NexusCardForm({
                             fontSize: cardTextProps.fontSize,
                             lineHeight: cardTextProps.lineHeight,
                             height: cardTextProps.textFieldHeight,
+                            wordWrap: "break-word",
                           },
                         }}
                         sx={{
@@ -903,6 +904,7 @@ export default function NexusCardForm({
                               height: cardTextProps.flavorTextFieldHeight,
                               fontStyle: "italic",
                               fontWeight: 300,
+                              wordWrap: "break-word",
                             },
                           }}
                           sx={{
@@ -1075,10 +1077,11 @@ export default function NexusCardForm({
                     >
                       <Image
                         src={
+                          formCardData.cardGrade === "common" ? Common :
                           formCardData.cardGrade === "rare" ? Rare :
                           formCardData.cardGrade === "epic" ? Epic :
                           formCardData.cardGrade === "prime" ? Prime :
-                          Common
+                          null
                         }
                         height={34}
                         width={34}
