@@ -321,7 +321,6 @@ export default function NexusCardForm({
               sx={{
                 maxHeight: "56px", // Increased by 8px to account for border
                 padding: "3px",
-                borderRadius: "4px",
                 border: "4px solid black",
                 zIndex: 5,
               }}
@@ -740,7 +739,7 @@ export default function NexusCardForm({
                 height: "526px",
                 paddingLeft: "13.5px",
                 paddingRight: "13.5px",
-                marginTop: "-8px",
+                marginTop: "-3.75px",
                 zIndex: 0,
               }}
               className={`
@@ -756,7 +755,8 @@ export default function NexusCardForm({
                   height: "462px !important", // Increased by 6px to account for border
                   padding: "3px",
                   border: "3.75px solid black",
-                  borderRadius: "8px",
+                  borderBottomLeftRadius: "8px",
+                  borderBottomRightRadius: "8px",
                 }}
                 className={`
                   ${colorMapping[
@@ -940,7 +940,7 @@ export default function NexusCardForm({
                 justify-between
                 items-center
                 w-full
-                -mt-4
+                -mt-5
               "
             >
               {/* Card attack */}

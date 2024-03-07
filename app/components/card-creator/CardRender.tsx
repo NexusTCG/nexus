@@ -19,10 +19,10 @@ import Speed from "@/public/images/card-parts/card-icons/speed.svg";
 import Mythic from "@/public/images/card-parts/card-icons/mythic.svg";
 import Attack from "@/public/images/card-parts/card-stats/attack.svg";
 import Defense from "@/public/images/card-parts/card-stats/defense.svg";
-import Common from "@/public/images/card-parts/card-icons/card-grades/grade-common.svg";
-import Rare from "@/public/images/card-parts/card-icons/card-grades/grade-rare.svg";
-import Epic from "@/public/images/card-parts/card-icons/card-grades/grade-epic.svg";
-import Prime from "@/public/images/card-parts/card-icons/card-grades/grade-prime.svg";
+import Common from "@/public/images/card-parts/card-icons/card-grades/common.svg";
+import Rare from "@/public/images/card-parts/card-icons/card-grades/rare.svg";
+import Epic from "@/public/images/card-parts/card-icons/card-grades/epic.svg";
+import Prime from "@/public/images/card-parts/card-icons/card-grades/prime.svg";
 // Energy icons
 import Yellow from "@/public/images/card-parts/card-icons/card-cost/yellow.svg";
 import Blue from "@/public/images/card-parts/card-icons/card-cost/blue.svg";
@@ -226,7 +226,6 @@ const CardRender = ({
             sx={{
               maxHeight: "56px", // Increased by 8px to account for border
               padding: "3px",
-              borderRadius: "4px",
               border: "4px solid black",
             }}
             className={`
@@ -236,8 +235,6 @@ const CardRender = ({
               justify-between
               items-center
               w-full
-              shadow-md
-              shadow-gray-950/50
               z-10
               gap-1
             `}
@@ -440,7 +437,7 @@ const CardRender = ({
               height: "526px",
               paddingLeft: "13.5px",
               paddingRight: "13.5px",
-              marginTop: "-8px",
+              marginTop: "-3.75px",
             }}
             className={`
               flex
@@ -456,7 +453,8 @@ const CardRender = ({
                 height: "462px !important", // Increased by 6px to account for border
                 padding: "3px",
                 border: "3.75px solid black",
-                borderRadius: "8px",
+                borderBottomLeftRadius: "8px",
+                borderBottomRightRadius: "8px",
               }}
               className={`
                 ${bgColor?.[400] ?? "bg-slate-400"}
@@ -551,7 +549,7 @@ const CardRender = ({
               justify-between
               items-center
               w-full
-              -mt-4
+              -mt-5
               z-10
             "
           >
@@ -675,9 +673,9 @@ const CardRender = ({
           </Box>
           {/* Card creator & copyright */}
           <Box
-            className={clsx("flex flex-row justify-between items-center w-full text-xs -mt-1 px-4",
+            className={clsx("flex flex-row justify-between items-center w-full text-xs -mt-1 px-16",
               {
-                "mt-2": cardData.cardType && !cardData.cardType.includes("entity"),
+                "mt-1": cardData.cardType && !cardData.cardType.includes("entity"),
               }
             )}
           >
