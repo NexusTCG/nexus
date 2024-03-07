@@ -54,6 +54,7 @@ export default function Card({
         },
       });
 
+      // Update this to make cards public or private
       if (cards && cards.length > 0) {
         const card = cards.find(
           card => card.cardCreator ===

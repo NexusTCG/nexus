@@ -146,6 +146,7 @@ export default function Create() {
 
     try {
       if (document.getElementById("nexus-form-container")) {
+        setTimeout(() => {}, 2000); // Wait for form to render
         // Convert HTML to PNG
         const imageDataUrl = await convertCardCodeToImage(
           "nexus-form-container"
