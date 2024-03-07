@@ -14,10 +14,60 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
 import Divider from "@mui/material/Divider";
+// SVG icons
+import Speed from "@/public/images/card-parts/card-icons/speed.svg";
+import Mythic from "@/public/images/card-parts/card-icons/mythic.svg";
+import Attack from "@/public/images/card-parts/card-stats/attack.svg";
+import Defense from "@/public/images/card-parts/card-stats/defense.svg";
+import Common from "@/public/images/card-parts/card-icons/card-grades/grade-common.svg";
+import Rare from "@/public/images/card-parts/card-icons/card-grades/grade-rare.svg";
+import Epic from "@/public/images/card-parts/card-icons/card-grades/grade-epic.svg";
+import Prime from "@/public/images/card-parts/card-icons/card-grades/grade-prime.svg";
+// Energy icons
+import Yellow from "@/public/images/card-parts/card-icons/card-cost/yellow.svg";
+import Blue from "@/public/images/card-parts/card-icons/card-cost/blue.svg";
+import Purple from "@/public/images/card-parts/card-icons/card-cost/purple.svg";
+import Red from "@/public/images/card-parts/card-icons/card-cost/red.svg";
+import Green from "@/public/images/card-parts/card-icons/card-cost/green.svg";
+import Void0 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
+import Void1 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
+import Void2 from "@/public/images/card-parts/card-icons/card-cost/void-2.svg";
+import Void3 from "@/public/images/card-parts/card-icons/card-cost/void-3.svg";
+import Void4 from "@/public/images/card-parts/card-icons/card-cost/void-4.svg";
+import Void5 from "@/public/images/card-parts/card-icons/card-cost/void-5.svg";
+import Void6 from "@/public/images/card-parts/card-icons/card-cost/void-6.svg";
+import Void7 from "@/public/images/card-parts/card-icons/card-cost/void-7.svg";
+import Void8 from "@/public/images/card-parts/card-icons/card-cost/void-8.svg";
+import Void9 from "@/public/images/card-parts/card-icons/card-cost/void-9.svg";
+import Void10 from "@/public/images/card-parts/card-icons/card-cost/void-10.svg";
+import Void11 from "@/public/images/card-parts/card-icons/card-cost/void-11.svg";
+import Void12 from "@/public/images/card-parts/card-icons/card-cost/void-12.svg";
+import Void13 from "@/public/images/card-parts/card-icons/card-cost/void-13.svg";
+import Void14 from "@/public/images/card-parts/card-icons/card-cost/void-14.svg";
+import Void15 from "@/public/images/card-parts/card-icons/card-cost/void-15.svg";
 
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
 };
+
+const voidEnergyIcons = [
+  Void0,
+  Void1,
+  Void2,
+  Void3,
+  Void4,
+  Void5,
+  Void6,
+  Void7,
+  Void8,
+  Void9,
+  Void10,
+  Void11,
+  Void12,
+  Void13,
+  Void14,
+  Void15,
+];
 
 const CardRender = ({
    cardData,
@@ -219,10 +269,8 @@ const CardRender = ({
                   gap-1
                 `}
               >
-                {/* Mythic icon boolean */}
-                {/* If mythic check */}
                 <Image
-                  src="/images/card-parts/card-icons/mythic.png"
+                  src={Mythic}
                   height={14}
                   width={14}
                   alt="Mythic icon"
@@ -274,7 +322,14 @@ const CardRender = ({
                         }, (_, i) => (
                           <Image
                             key={`${color}-${i}`}
-                            src={`/images/card-parts/card-icons/card-cost/${color}.png`}
+                            src={
+                              color === "yellow" ? Yellow :
+                              color === "blue" ? Blue :
+                              color === "purple" ? Purple :
+                              color === "red" ? Red :
+                              color === "green" ? Green :
+                              null
+                            }
                             width={21}
                             height={21}
                             alt={`${color} energy icon`}
@@ -282,14 +337,14 @@ const CardRender = ({
                         ))
                       : typeof value === 'number' && value > 0
                       ? (
-                          <Image
-                            key={`void-0`}
-                            src={`/images/card-parts/card-icons/card-cost/void-${value}.png`}
-                            width={21}
-                            height={21}
-                            alt={`void energy icon`}
-                          />
-                        )
+                        <Image
+                          key={`void-${value}`}
+                          src={voidEnergyIcons[value]}
+                          width={21}
+                          height={21}
+                          alt={`void energy icon`}
+                        />
+                      )
                       : null
                   )}
               </Box>
@@ -368,7 +423,7 @@ const CardRender = ({
                 }).map((_, index) => (
                   <Image
                     key={index}
-                    src={`/images/card-parts/card-icons/speed.png`}
+                    src={Speed}
                     width={10}
                     height={15}
                     alt="Speed icon"
@@ -533,7 +588,7 @@ const CardRender = ({
                 {cardData.cardAttack}
               </Typography>
               <Image
-                src="/images/card-parts/card-stats/attack.png"
+                src={Attack}
                 width={60}
                 height={45}
                 alt="Card attack icon"
@@ -559,14 +614,20 @@ const CardRender = ({
               >
                 {/* Card Grade */}
                 <Image
-                  src={`/images/card-parts/card-icons/card-grades/grade-${cardData.cardGrade ? cardData.cardGrade.toLowerCase() : "common"}.png`}
+                  // src={`/images/card-parts/card-icons/card-grades/grade-${cardData.cardGrade ? cardData.cardGrade.toLowerCase() : "common"}.png`}
+                  src={
+                    cardData.cardGrade === "rare" ? Rare :
+                    cardData.cardGrade === "epic" ? Epic :
+                    cardData.cardGrade === "prime" ? Prime :
+                    Common
+                  }
                   height={34}
                   width={34}
                   alt={`${cardData.cardGrade} icon`}
                   className="
                     bg-black
                     rounded-full
-                    p-2
+                    p-0.5
                   "
                 />
               </Box>
@@ -605,7 +666,7 @@ const CardRender = ({
                 {cardData.cardDefense}
               </Typography>
               <Image
-                src="/images/card-parts/card-stats/defense.png"
+                src={Defense}
                 width={60}
                 height={45}
                 alt="Card defense icon"

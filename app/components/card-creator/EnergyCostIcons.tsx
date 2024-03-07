@@ -7,12 +7,12 @@ import Box from "@mui/material/Box";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Image from "next/image";
 import { CardFormDataType } from "@/app/utils/types/types";
+// Energy icons
 import Yellow from "@/public/images/card-parts/card-icons/card-cost/yellow.svg";
 import Blue from "@/public/images/card-parts/card-icons/card-cost/blue.svg";
 import Purple from "@/public/images/card-parts/card-icons/card-cost/purple.svg";
 import Red from "@/public/images/card-parts/card-icons/card-cost/red.svg";
 import Green from "@/public/images/card-parts/card-icons/card-cost/green.svg";
-
 import Void0 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
 import Void1 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
 import Void2 from "@/public/images/card-parts/card-icons/card-cost/void-2.svg";

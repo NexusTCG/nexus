@@ -346,6 +346,7 @@ export default function Card({
                   "
                 >
                   <IconButton
+                     disabled={true} // Disabled until edit functionality is implemented
                     aria-label="edit"
                     size="small"
                     onClick={handleEdit}
@@ -357,6 +358,7 @@ export default function Card({
                     <EditIcon />
                   </IconButton>
                   <IconButton
+                    disabled={true} // Disabled until delete functionality is implemented
                     aria-label="delete"
                     size="small"
                     onClick={handleDelete}
@@ -387,6 +389,7 @@ export default function Card({
             >
               {isCardOwner ? (
                 <Button
+                  disabled={true} // Disabled until download functionality is implemented
                   variant="outlined"
                   color="primary"
                   size="large"
@@ -404,6 +407,7 @@ export default function Card({
                   className="w-full"
                 >
                   <Button
+                    disabled={true} // Disabled until share functionality is implemented
                     variant="outlined"
                     color="primary"
                     size="large"
