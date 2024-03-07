@@ -12,6 +12,7 @@ import Blue from "@/public/images/card-parts/card-icons/card-cost/blue.svg";
 import Purple from "@/public/images/card-parts/card-icons/card-cost/purple.svg";
 import Red from "@/public/images/card-parts/card-icons/card-cost/red.svg";
 import Green from "@/public/images/card-parts/card-icons/card-cost/green.svg";
+
 import Void0 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
 import Void1 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
 import Void2 from "@/public/images/card-parts/card-icons/card-cost/void-2.svg";
@@ -34,6 +35,25 @@ type EnergyCostIconsProps = {
     event: React.MouseEvent<HTMLElement>
   ) => void;
 };
+
+const voidEnergyIcons = [
+  Void0,
+  Void1,
+  Void2,
+  Void3,
+  Void4,
+  Void5,
+  Void6,
+  Void7,
+  Void8,
+  Void9,
+  Void10,
+  Void11,
+  Void12,
+  Void13,
+  Void14,
+  Void15,
+];
 
 export default function EnergyCostIcons({
   handleEnergyCostPopoverOpen
@@ -102,33 +122,21 @@ export default function EnergyCostIcons({
                 ))
               : value > 0
               ? (
-                  <Image
-                    key={`void-${value}`}
-                    // src={`/images/card-parts/card-icons/card-cost/void-${value}.PNG`}
-                    src={
-                      value === 0 ? Void0 :
-                      value === 1 ? Void1 :
-                      value === 2 ? Void2 :
-                      value === 3 ? Void3 :
-                      value === 4 ? Void4 :
-                      value === 5 ? Void5 :
-                      value === 6 ? Void6 :
-                      value === 7 ? Void7 :
-                      value === 8 ? Void8 :
-                      value === 9 ? Void9 :
-                      value === 10 ? Void10 :
-                      value === 11 ? Void11 :
-                      value === 12 ? Void12 :
-                      value === 13 ? Void13 :
-                      value === 14 ? Void14 :
-                      value === 15 ? Void15 :
-                      null
-                    }
-                    width={21}
-                    height={21}
-                    alt={`void energy icon`}
-                  />
-                )
+                // <Image
+                //   key={`void-${value}`}
+                //   src={voidEnergyIcons[value]}
+                //   width={21}
+                //   height={21}
+                //   alt={`void energy icon`}
+                // />
+                <Image
+                  key={`void-${value}`}
+                  src={Void1}
+                  width={21}
+                  height={21}
+                  alt={`void energy icon`}
+                />
+              )
               : null
           )}
         </Box>
