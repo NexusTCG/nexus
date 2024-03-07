@@ -14,21 +14,21 @@ import Red from "@/public/images/card-parts/card-icons/card-cost/red.svg";
 import Green from "@/public/images/card-parts/card-icons/card-cost/green.svg";
 
 import Void0 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
-// import Void1 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
-// import Void2 from "@/public/images/card-parts/card-icons/card-cost/void-2.svg";
-// import Void3 from "@/public/images/card-parts/card-icons/card-cost/void-3.svg";
-// import Void4 from "@/public/images/card-parts/card-icons/card-cost/void-4.svg";
-// import Void5 from "@/public/images/card-parts/card-icons/card-cost/void-5.svg";
-// import Void6 from "@/public/images/card-parts/card-icons/card-cost/void-6.svg";
-// import Void7 from "@/public/images/card-parts/card-icons/card-cost/void-7.svg";
-// import Void8 from "@/public/images/card-parts/card-icons/card-cost/void-8.svg";
-// import Void9 from "@/public/images/card-parts/card-icons/card-cost/void-9.svg";
-// import Void10 from "@/public/images/card-parts/card-icons/card-cost/void-10.svg";
-// import Void11 from "@/public/images/card-parts/card-icons/card-cost/void-11.svg";
-// import Void12 from "@/public/images/card-parts/card-icons/card-cost/void-12.svg";
-// import Void13 from "@/public/images/card-parts/card-icons/card-cost/void-13.svg";
-// import Void14 from "@/public/images/card-parts/card-icons/card-cost/void-14.svg";
-// import Void15 from "@/public/images/card-parts/card-icons/card-cost/void-15.svg";
+import Void1 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
+import Void2 from "@/public/images/card-parts/card-icons/card-cost/void-2.svg";
+import Void3 from "@/public/images/card-parts/card-icons/card-cost/void-3.svg";
+import Void4 from "@/public/images/card-parts/card-icons/card-cost/void-4.svg";
+import Void5 from "@/public/images/card-parts/card-icons/card-cost/void-5.svg";
+import Void6 from "@/public/images/card-parts/card-icons/card-cost/void-6.svg";
+import Void7 from "@/public/images/card-parts/card-icons/card-cost/void-7.svg";
+import Void8 from "@/public/images/card-parts/card-icons/card-cost/void-8.svg";
+import Void9 from "@/public/images/card-parts/card-icons/card-cost/void-9.svg";
+import Void10 from "@/public/images/card-parts/card-icons/card-cost/void-10.svg";
+import Void11 from "@/public/images/card-parts/card-icons/card-cost/void-11.svg";
+import Void12 from "@/public/images/card-parts/card-icons/card-cost/void-12.svg";
+import Void13 from "@/public/images/card-parts/card-icons/card-cost/void-13.svg";
+import Void14 from "@/public/images/card-parts/card-icons/card-cost/void-14.svg";
+import Void15 from "@/public/images/card-parts/card-icons/card-cost/void-15.svg";
 
 type EnergyCostIconsProps = {
   handleEnergyCostPopoverOpen: (
@@ -36,24 +36,24 @@ type EnergyCostIconsProps = {
   ) => void;
 };
 
-// const voidEnergyIcons = [
-//   Void0,
-//   Void1,
-//   Void2,
-//   Void3,
-//   Void4,
-//   Void5,
-//   Void6,
-//   Void7,
-//   Void8,
-//   Void9,
-//   Void10,
-//   Void11,
-//   Void12,
-//   Void13,
-//   Void14,
-//   Void15,
-// ];
+const voidEnergyIcons = [
+  Void0,
+  Void1,
+  Void2,
+  Void3,
+  Void4,
+  Void5,
+  Void6,
+  Void7,
+  Void8,
+  Void9,
+  Void10,
+  Void11,
+  Void12,
+  Void13,
+  Void14,
+  Void15,
+];
 
 export default function EnergyCostIcons({
   handleEnergyCostPopoverOpen
@@ -122,16 +122,9 @@ export default function EnergyCostIcons({
                 ))
               : value > 0
               ? (
-                // <Image
-                //   key={`void-${value}`}
-                //   src={voidEnergyIcons[value]}
-                //   width={21}
-                //   height={21}
-                //   alt={`void energy icon`}
-                // />
                 <Image
                   key={`void-${value}`}
-                  src={Void0}
+                  src={voidEnergyIcons[value]}
                   width={21}
                   height={21}
                   alt={`void energy icon`}

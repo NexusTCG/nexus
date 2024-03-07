@@ -13,11 +13,28 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import Image from "next/image";
 import clsx from "clsx";
+// Energy icons
 import Yellow from "@/public/images/card-parts/card-icons/card-cost/yellow.svg";
 import Blue from "@/public/images/card-parts/card-icons/card-cost/blue.svg";
 import Purple from "@/public/images/card-parts/card-icons/card-cost/purple.svg";
 import Red from "@/public/images/card-parts/card-icons/card-cost/red.svg";
 import Green from "@/public/images/card-parts/card-icons/card-cost/green.svg";
+import Void0 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
+import Void1 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
+import Void2 from "@/public/images/card-parts/card-icons/card-cost/void-2.svg";
+import Void3 from "@/public/images/card-parts/card-icons/card-cost/void-3.svg";
+import Void4 from "@/public/images/card-parts/card-icons/card-cost/void-4.svg";
+import Void5 from "@/public/images/card-parts/card-icons/card-cost/void-5.svg";
+import Void6 from "@/public/images/card-parts/card-icons/card-cost/void-6.svg";
+import Void7 from "@/public/images/card-parts/card-icons/card-cost/void-7.svg";
+import Void8 from "@/public/images/card-parts/card-icons/card-cost/void-8.svg";
+import Void9 from "@/public/images/card-parts/card-icons/card-cost/void-9.svg";
+import Void10 from "@/public/images/card-parts/card-icons/card-cost/void-10.svg";
+import Void11 from "@/public/images/card-parts/card-icons/card-cost/void-11.svg";
+import Void12 from "@/public/images/card-parts/card-icons/card-cost/void-12.svg";
+import Void13 from "@/public/images/card-parts/card-icons/card-cost/void-13.svg";
+import Void14 from "@/public/images/card-parts/card-icons/card-cost/void-14.svg";
+import Void15 from "@/public/images/card-parts/card-icons/card-cost/void-15.svg";
 
 type EnergyCostPopoverProps = {
   open: boolean;
@@ -30,6 +47,25 @@ type EnergyCostPopoverProps = {
 type EnergyCosts = {
   [color: string]: number;
 };
+
+const voidEnergyIcons = [
+  Void0,
+  Void1,
+  Void2,
+  Void3,
+  Void4,
+  Void5,
+  Void6,
+  Void7,
+  Void8,
+  Void9,
+  Void10,
+  Void11,
+  Void12,
+  Void13,
+  Void14,
+  Void15,
+];
 
 export default function EnergyCostPopover({
   open,
@@ -50,6 +86,7 @@ export default function EnergyCostPopover({
   const id = open ? "energy-cost-popover" : undefined;
   const watchCardEnergyCost = watch("cardEnergyCost") as EnergyCosts;
   const watchCardEnergyValue = watch("cardEnergyValue");
+  const watchVoidEnergyValue = watchCardEnergyCost.void;
 
   // Cost change handler
   async function handleCostChange(
@@ -289,7 +326,9 @@ export default function EnergyCostPopover({
                       : color === "purple" ? Purple
                       : color === "red" ? Red
                       : color === "green" ? Green
-                      : `/images/card-parts/card-icons/card-cost/void-${watchCardEnergyCost.void}.PNG`
+                      : color === "void" ? voidEnergyIcons[watchVoidEnergyValue]
+                      : null
+                      // : `/images/card-parts/card-icons/card-cost/void-${watchCardEnergyCost.void}.PNG`
                     }
                     width={30}
                     height={30}
