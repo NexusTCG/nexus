@@ -323,13 +323,13 @@ export default function NexusCardForm({
                 padding: "3px",
                 borderRadius: "4px",
                 border: "4px solid black",
-                zIndex: 30,
+                zIndex: 2,
               }}
               className={`
                 ${colorMapping[
                   cardColorClass as keyof typeof
                   colorMapping]?.[50] ??
-                  "bg-teal-500"
+                  "bg-neutral-50"
                 }
                 flex
                 flex-col
@@ -713,12 +713,12 @@ export default function NexusCardForm({
                 paddingLeft: "13.5px",
                 paddingRight: "13.5px",
                 marginTop: "-8px",
+                zIndex: 0,
               }}
               className={`
                 flex
                 flex-col
                 w-full
-                z-0
               `}
             >
               {/* Card Image Content Inner */}
@@ -904,6 +904,7 @@ export default function NexusCardForm({
               id="card-stats-grade-creator-info"
               sx={{
                 maxHeight: "45px",
+                zIndex: 1,
               }}
               className="
                 flex
@@ -912,7 +913,6 @@ export default function NexusCardForm({
                 items-center
                 w-full
                 -mt-4
-                z-10
               "
             >
               {/* Card attack */}
