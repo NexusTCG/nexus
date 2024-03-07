@@ -323,7 +323,7 @@ export default function NexusCardForm({
                 padding: "3px",
                 borderRadius: "4px",
                 border: "4px solid black",
-                zIndex: 2,
+                zIndex: 5,
               }}
               className={`
                 ${colorMapping[
