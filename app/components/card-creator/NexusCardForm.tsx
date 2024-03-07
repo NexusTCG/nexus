@@ -83,7 +83,7 @@ export default function NexusCardForm({
   const [cardColorType, setCardColorType] = useState<string | null>(null);
   const [cardColor, setCardColor] = useState<string>("default");
   const [cardColorClass, setCardColorClass] = useState<string>("default");
-  // const [cardBgImage, setCardBgImage] = useState<string>("bg-[url('/images/card-parts/card-frames/other/default.png')]");
+  // const [cardBgImage, setCardBgImage] = useState<string>("bg-[url('/images/card-parts/card-frames/other/default.PNG')]");
   // Snackbars
   const [openGradeSnackbar, setOpenGradeSnackBar] = React.useState(false);
 
@@ -364,7 +364,7 @@ export default function NexusCardForm({
                   {/* Mythic icon boolean */}
                   {formCardData.cardSuperType === "mythic" && (
                     <Image
-                      src={`${cardPartPath.base}/card-parts${cardPartPath.icon}/mythic.png`}
+                      src={`${cardPartPath.base}/card-parts${cardPartPath.icon}/mythic.PNG`}
                       height={14}
                       width={14}
                       alt="Mythic icon"
@@ -992,7 +992,7 @@ export default function NexusCardForm({
                   )}
                 />
                 <Image
-                  src={`${cardPartPath.base}/card-parts${cardPartPath.stats}/attack.png`}
+                  src={`${cardPartPath.base}/card-parts${cardPartPath.stats}/attack.PNG`}
                   width={60}
                   height={45}
                   alt="Card attack icon"
@@ -1043,7 +1043,7 @@ export default function NexusCardForm({
                       onClick={handleGradeChange}
                     >
                       <Image
-                        src={`${cardPartPath.base}/card-parts${cardPartPath.icon}${cardPartPath.grade}/grade-${formCardData.cardGrade ? formCardData.cardGrade.toLowerCase() : 'common'}.png`}
+                        src={`${cardPartPath.base}/card-parts${cardPartPath.icon}${cardPartPath.grade}/grade-${formCardData.cardGrade ? formCardData.cardGrade.toLowerCase() : 'common'}.PNG`}
                         height={34}
                         width={34}
                         alt={`${formCardData.cardGrade} icon`}
@@ -1168,7 +1168,7 @@ export default function NexusCardForm({
                   )}
                 />
                 <Image
-                  src={`${cardPartPath.base}/card-parts${cardPartPath.stats}/defense.png`}
+                  src={`${cardPartPath.base}/card-parts${cardPartPath.stats}/defense.PNG`}
                   width={60}
                   height={45}
                   alt="Card defense icon"

@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Image from "next/image";
 import { CardFormDataType } from "@/app/utils/types/types";
+import Yellow from "@/public/images/card-parts/card-icons/card-cost/yellow.svg";
 
 type EnergyCostIconsProps = {
   handleEnergyCostPopoverOpen: (
@@ -60,6 +61,12 @@ export default function EnergyCostIcons({
             hover:opacity-80
           "
         >
+        <Image
+          src={Yellow}
+          width={21}
+          height={21}
+          alt={"yellow"}
+        />
         {Object.entries(formCardData.cardEnergyCost ?? {})
           .map(([color, value]) =>
             color !== "void"

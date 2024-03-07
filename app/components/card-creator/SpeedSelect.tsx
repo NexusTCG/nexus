@@ -97,7 +97,7 @@ export default function SpeedSelect() {
             className="p-0"
           >
             <Image
-              src={`/images/card-parts/card-icons/speed.png`}
+              src={`/images/card-parts/card-icons/speed.PNG`}
               width={10}
               height={15}
               alt={`Speed ${iconSpeed} icon`}

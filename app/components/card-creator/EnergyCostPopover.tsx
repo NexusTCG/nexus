@@ -13,6 +13,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
 import Image from "next/image";
 import clsx from "clsx";
+import Yellow from "@/public/images/card-parts/card-icons/card-cost/yellow.svg";
 
 type EnergyCostPopoverProps = {
   open: boolean;
@@ -280,9 +281,15 @@ export default function EnergyCostPopover({
                   <Image
                     src={
                       color !== "void"
-                        ? `/images/card-parts/card-icons/card-cost/${color}.png`
-                        : `/images/card-parts/card-icons/card-cost/void-${watchCardEnergyCost.void}.png`
+                        ? `/images/card-parts/card-icons/card-cost/${color}.PNG`
+                        : `/images/card-parts/card-icons/card-cost/void-${watchCardEnergyCost.void}.PNG`
                     }
+                    width={30}
+                    height={30}
+                    alt={`${color} energy icon`}
+                  />
+                  <Image
+                    src={Yellow}
                     width={30}
                     height={30}
                     alt={`${color} energy icon`}
