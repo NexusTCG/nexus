@@ -436,189 +436,138 @@ export default function NexusCardForm({
                   text-black
                 `}
               >
+                {/* Rendered card types */}
+                {isSubmitting && (
+                  <Box
+                    className="
+                      flex
+                      flex-row
+                      justify-start
+                      items-center
+                      gap-1
+                    "
+                  >
+                    <Typography
+                      variant="body2"
+                    >
+                      {formCardData.cardType}
+                    </Typography>
+
+                    {formCardData?.cardSubType && (
+                      <Typography
+                        variant="body2"
+                      >
+                      {" "} – {formCardData.cardSubType.join(" ")}
+                      </Typography>
+                    )}
+                  </Box>
+                )}
                 {/* Card types */}
-                <Box
-                  id="card-header-types"
-                  sx={{
-                    height: "21px",
-                  }}
-                  className="
-                    flex
-                    flex-row
-                    justify-between
-                    items-center
-                    w-full
-                    gap-1
-                  "
-                >
-                  {/* Super type */}
+                {!isSubmitting && (
+                  <Box
+                    id="card-header-types"
+                    sx={{
+                      height: "21px",
+                    }}
+                    className="
+                      flex
+                      flex-row
+                      justify-between
+                      items-center
+                      w-full
+                      gap-1
+                    "
+                  >
+                    {/* Super type */}
 
-                  {/* Remove Supertype? */}
+                    {/* Remove Supertype? */}
 
-                  {/* {formCardData.cardType && (
-                    formCardData.cardType.includes("object") || 
-                    formCardData.cardType.includes("entity") || 
-                    formCardData.cardType.includes("effect") || 
-                    formCardData.cardType.includes("node")
-                  ) && ( */}
-                  {formCardData.cardType === null && (
+                    {/* {formCardData.cardType && (
+                      formCardData.cardType.includes("object") || 
+                      formCardData.cardType.includes("entity") || 
+                      formCardData.cardType.includes("effect") || 
+                      formCardData.cardType.includes("node")
+                    ) && ( */}
+                    {formCardData.cardType === null && (
+                      <Controller
+                        name="cardSuperType"
+                        control={control}
+                        disabled={isSubmitting || isSubmitted}
+                        render={({ field }) => (
+                          <FormControl 
+                            className={clsx("flex-grow",
+                              {
+                                "w-1/5": 
+                                  formCardData.cardType && 
+                                  formCardData.cardType.length <= 1 && 
+                                  formCardData.cardType.includes("entity"),
+                                "w-2/5": 
+                                  formCardData.cardType && 
+                                  formCardData.cardType.includes("node"),
+                              }
+                            )}
+                          >
+                            {/* Replace with custom select component */}
+                            <Select
+                              {...field}
+                              label="Super type"
+                              sx={{
+                                '& .MuiInputBase-input': {
+                                  color: "black",
+                                  padding: "0",
+                                  display: "flex",
+                                  justifyContent: "start",
+                                  alignItems: "center",
+                                  fontSize: "20px",
+                                  lineHeight: "28px",
+                                  fontWeight: "semi-bold",
+                                  overflow: "hidden",
+                                },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                  border: "none",
+                                  borderColor: "black"
+                                },
+                              }}
+                            >
+                              {Object.entries(cardSuperTypeOptions)
+                                .filter(([value]) => 
+                                  formCardData.cardType && 
+                                  formCardData.cardType.includes("node") || 
+                                  value !== "core"
+                                )
+                                .map(([value, label]) => (
+                                  <MenuItem
+                                    key={value}
+                                    value={value}
+                                  >
+                                    <Typography
+                                      variant="body2"
+                                    >
+                                      {label}
+                                    </Typography>
+                                  </MenuItem>
+                                ))}
+                            </Select>
+                          </FormControl>
+                        )}
+                      />
+                    )}
+          
+                    {/* Type */}
                     <Controller
-                      name="cardSuperType"
+                      name="cardType"
                       control={control}
                       disabled={isSubmitting || isSubmitted}
                       render={({ field }) => (
-                        <FormControl 
-                          className={clsx("flex-grow",
-                            {
-                              "w-1/5": 
-                                formCardData.cardType && 
-                                formCardData.cardType.length <= 1 && 
-                                formCardData.cardType.includes("entity"),
-                              "w-2/5": 
-                                formCardData.cardType && 
-                                formCardData.cardType.includes("node"),
-                            }
-                          )}
-                        >
-                          {/* Replace with custom select component */}
-                          <Select
-                            {...field}
-                            label="Super type"
-                            sx={{
-                              '& .MuiInputBase-input': {
-                                color: "black",
-                                padding: "0",
-                                display: "flex",
-                                justifyContent: "start",
-                                alignItems: "center",
-                                fontSize: "20px",
-                                lineHeight: "28px",
-                                fontWeight: "semi-bold",
-                                overflow: "hidden",
-                              },
-                              '& .MuiOutlinedInput-notchedOutline': {
-                                border: "none",
-                                borderColor: "black"
-                              },
-                            }}
-                          >
-                            {Object.entries(cardSuperTypeOptions)
-                              .filter(([value]) => 
-                                formCardData.cardType && 
-                                formCardData.cardType.includes("node") || 
-                                value !== "core"
-                              )
-                              .map(([value, label]) => (
-                                <MenuItem
-                                  key={value}
-                                  value={value}
-                                >
-                                  <Typography
-                                    variant="body2"
-                                  >
-                                    {label}
-                                  </Typography>
-                                </MenuItem>
-                              ))}
-                          </Select>
-                        </FormControl>
-                      )}
-                    />
-                  )}
-         
-                  {/* Type */}
-                  <Controller
-                    name="cardType"
-                    control={control}
-                    disabled={isSubmitting || isSubmitted}
-                    render={({ field }) => (
-                      <FormControl
-                        className={clsx("flex-grow", {
-                          "w-1/5": formCardData.cardType === "entity",
-                          "w-3/5": formCardData.cardType === "node",
-                        })}
-                      >
-                        <Select
-                          {...field}
-                          label="Type"
-                          sx={{
-                            '& .MuiInputBase-input': {
-                              color: "black",
-                              padding: "0",
-                              height: "19px",
-                              display: "flex",
-                              justifyContent: "start",
-                              alignItems: "center",
-                              fontSize: "14px",
-                              lineHeight: "19px",
-                              fontWeight: "semi-bold",
-                            },
-                            '& .MuiOutlinedInput-notchedOutline': {
-                              border: "none",
-                              borderColor: "black",
-                            },
-                          }}
-                          onChange={async (e) => {
-                            const selectedOption = e.target.value;
-
-                            // Directly call field.onChange with the selectedOption
-                            field.onChange(selectedOption);
-
-                            // Check if the selected option is "node" and reset fields accordingly
-                            if (selectedOption === "node") {
-                              const newEnergyCost = await resetFieldsOnNode(activeCardCost);
-                              setValue("cardEnergyCost", newEnergyCost);
-                              setValue("cardEnergyValue", 0);
-                              setValue("cardSpeed", "");
-                              setValue("cardSubType", [""]);
-                              if (formCardData.cardSuperType !== "mythic") {
-                                setValue("cardSuperType", "");
-                              }
-                            }
-                          }}
-                          renderValue={(selected) => (
-                            typeof selected === "string" ? selected.charAt(0).toUpperCase() + selected.slice(1) : ""
-                          )}
-                        >
-                          {Object.entries(cardTypeOptions).map(([value, label]) => (
-                            <MenuItem key={value} value={value}>
-                              <Typography variant="body2">
-                                {label}
-                              </Typography>
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    )}
-                  />
-
-                  {/* Sub type */}
-                  {formCardData.cardType && (
-                    formCardData.cardType.includes("object") || 
-                    formCardData.cardType.includes("entity") || 
-                    formCardData.cardType.includes("effect")
-                  ) && (
-                    <Controller
-                      name="cardSubType"
-                      control={control}
-                      render={({ field }) => (
                         <FormControl
-                          className={clsx("flex-grow",
-                            {
-                              // "w-1/2": formCardData.cardType && formCardData.cardType.includes("node"),
-                              "w-3/5": formCardData.cardType && (
-                                formCardData.cardType.includes("object") || 
-                                formCardData.cardType.includes("entity") || 
-                                formCardData.cardType.includes("effect")
-                              )
-                            }
-                          )}
+                          className={clsx("flex-grow", {
+                            "w-1/5": formCardData.cardType === "entity",
+                            "w-3/5": formCardData.cardType === "node",
+                          })}
                         >
                           <Select
-                            multiple
                             {...field}
-                            value={Array.isArray(field.value) ? field.value : []}
-                            label="Sub type"
+                            label="Type"
                             sx={{
                               '& .MuiInputBase-input': {
                                 color: "black",
@@ -636,67 +585,146 @@ export default function NexusCardForm({
                                 borderColor: "black",
                               },
                             }}
-                            renderValue={(selected) => selected.join(' ')}
-                            MenuProps={{
-                              PaperProps: {
-                                style: {
-                                  maxHeight: 236,
-                                },
-                              },
+                            onChange={async (e) => {
+                              const selectedOption = e.target.value;
+
+                              // Directly call field.onChange with the selectedOption
+                              field.onChange(selectedOption);
+
+                              // Check if the selected option is "node" and reset fields accordingly
+                              if (selectedOption === "node") {
+                                const newEnergyCost = await resetFieldsOnNode(activeCardCost);
+                                setValue("cardEnergyCost", newEnergyCost);
+                                setValue("cardEnergyValue", 0);
+                                setValue("cardSpeed", "");
+                                setValue("cardSubType", [""]);
+                                if (formCardData.cardSuperType !== "mythic") {
+                                  setValue("cardSuperType", "");
+                                }
+                              }
                             }}
+                            renderValue={(selected) => (
+                              typeof selected === "string" ? selected.charAt(0).toUpperCase() + selected.slice(1) : ""
+                            )}
                           >
-                            {formCardData.cardType && formCardData.cardType.includes("entity") &&
-                              Object.entries(
-                                cardSubTypeOptions.entity
-                              ).map(
-                                ([value, label]) => (
-                                  <MenuItem
-                                    key={value}
-                                    value={value}
-                                  >
-                                    <Typography
-                                      variant="body2"
-                                    >
-                                      {label as string}
-                                    </Typography>
-                                  </MenuItem>
-                                ),
-                              )}
-                            {formCardData.cardType && formCardData.cardType.includes("object") &&
-                              Object.entries(
-                                cardSubTypeOptions.object
-                              ).map(
-                                ([value, label]) => (
-                                  <MenuItem key={value} value={value}>
-                                    <Typography variant="body2">
-                                      {label as string}
-                                    </Typography>
-                                  </MenuItem>
-                                ),
-                              )}
-                            {formCardData.cardType && formCardData.cardType.includes("effect") &&
-                              Object.entries(
-                                cardSubTypeOptions.effect
-                              ).map(
-                                ([value, label]) => (
-                                  <MenuItem
-                                    key={value}
-                                    value={value}
-                                  >
-                                    <Typography
-                                      variant="body2"
-                                    >
-                                      {label as string}
-                                    </Typography>
-                                  </MenuItem>
-                                ),
-                              )}
+                            {Object.entries(cardTypeOptions).map(([value, label]) => (
+                              <MenuItem key={value} value={value}>
+                                <Typography variant="body2">
+                                  {label}
+                                </Typography>
+                              </MenuItem>
+                            ))}
                           </Select>
                         </FormControl>
                       )}
                     />
-                  )}
-                </Box>
+
+                    {/* Sub type */}
+                    {formCardData.cardType && (
+                      formCardData.cardType.includes("object") || 
+                      formCardData.cardType.includes("entity") || 
+                      formCardData.cardType.includes("effect")
+                    ) && (
+                      <Controller
+                        name="cardSubType"
+                        control={control}
+                        render={({ field }) => (
+                          <FormControl
+                            className={clsx("flex-grow",
+                              {
+                                // "w-1/2": formCardData.cardType && formCardData.cardType.includes("node"),
+                                "w-3/5": formCardData.cardType && (
+                                  formCardData.cardType.includes("object") || 
+                                  formCardData.cardType.includes("entity") || 
+                                  formCardData.cardType.includes("effect")
+                                )
+                              }
+                            )}
+                          >
+                            <Select
+                              multiple
+                              {...field}
+                              value={Array.isArray(field.value) ? field.value : []}
+                              label="Sub type"
+                              sx={{
+                                '& .MuiInputBase-input': {
+                                  color: "black",
+                                  padding: "0",
+                                  height: "19px",
+                                  display: "flex",
+                                  justifyContent: "start",
+                                  alignItems: "center",
+                                  fontSize: "14px",
+                                  lineHeight: "19px",
+                                  fontWeight: "semi-bold",
+                                },
+                                '& .MuiOutlinedInput-notchedOutline': {
+                                  border: "none",
+                                  borderColor: "black",
+                                },
+                              }}
+                              renderValue={(selected) => selected.join(' ')}
+                              MenuProps={{
+                                PaperProps: {
+                                  style: {
+                                    maxHeight: 236,
+                                  },
+                                },
+                              }}
+                            >
+                              {formCardData.cardType && formCardData.cardType.includes("entity") &&
+                                Object.entries(
+                                  cardSubTypeOptions.entity
+                                ).map(
+                                  ([value, label]) => (
+                                    <MenuItem
+                                      key={value}
+                                      value={value}
+                                    >
+                                      <Typography
+                                        variant="body2"
+                                      >
+                                        {label as string}
+                                      </Typography>
+                                    </MenuItem>
+                                  ),
+                                )}
+                              {formCardData.cardType && formCardData.cardType.includes("object") &&
+                                Object.entries(
+                                  cardSubTypeOptions.object
+                                ).map(
+                                  ([value, label]) => (
+                                    <MenuItem key={value} value={value}>
+                                      <Typography variant="body2">
+                                        {label as string}
+                                      </Typography>
+                                    </MenuItem>
+                                  ),
+                                )}
+                              {formCardData.cardType && formCardData.cardType.includes("effect") &&
+                                Object.entries(
+                                  cardSubTypeOptions.effect
+                                ).map(
+                                  ([value, label]) => (
+                                    <MenuItem
+                                      key={value}
+                                      value={value}
+                                    >
+                                      <Typography
+                                        variant="body2"
+                                      >
+                                        {label as string}
+                                      </Typography>
+                                    </MenuItem>
+                                  ),
+                                )}
+                            </Select>
+                          </FormControl>
+                        )}
+                      />
+                    )}
+                  </Box>
+                )}
                 {/* Speed */}
                 {formCardData.cardType && !formCardData.cardType.includes("node") && (
                   <SpeedSelect />

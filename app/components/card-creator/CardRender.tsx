@@ -331,41 +331,23 @@ const CardRender = ({
                   gap-1
                 "
               >
-                <Typography
-                  variant="subtitle2"
-                  component="span"
-                  className="p-0 m-0"
-                  sx={{
-  
-                  }}
-                >
+                <Typography variant="subtitle2" component="span" className="p-0 m-0">
                   {
                     cardData?.cardType
                       ? Array.isArray(cardData.cardType)
-                        ? cardData.cardType.join(' ')
-                          .charAt(0)
-                          .toUpperCase() + 
-                          cardData.cardType.join(' ')
-                          .slice(1)
-                          .toLowerCase()
-                        : cardData.cardType
+                        ? cardData.cardType.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
+                        : cardData.cardType.charAt(0).toUpperCase() + cardData.cardType.slice(1).toLowerCase()
                       : ""
                   } {" "}
                   {
-                    (cardData?.cardSuperType ?? "default") !== "default" ? 
-                    (cardData?.cardSuperType ?? "default")
-                      .charAt(0)
-                      .toUpperCase() + 
-                    (cardData?.cardSuperType ?? "default")
-                      .slice(1)
-                      .toLowerCase() : ""
+                    cardData?.cardSubType ? " • " : ""
                   }
                   {
-                    (cardData?.cardSubType?.[0]?.trim()) ?
-                    " • " : ""
-                  }
-                  {
-                    cardData.cardSubType
+                    cardData?.cardSubType
+                      ? Array.isArray(cardData.cardSubType)
+                        ? cardData.cardSubType.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
+                        : cardData.cardSubType.charAt(0).toUpperCase() + cardData.cardSubType.slice(1).toLowerCase()
+                    : ""
                   }
                 </Typography>
               </Box>
@@ -473,8 +455,6 @@ const CardRender = ({
                   gap-1
                 `}
               >
-                {/* Dynamically change card text size depending on lengths */}
-                high quality card render 
                 {/* Card text */}
                 <Typography
                   id="card-text"
@@ -483,22 +463,24 @@ const CardRender = ({
                   {cardData.cardText}
                 </Typography>
                 {/* Divider */}
-                {cardData.cardFlavorText !== "" && (
-                  <Divider
-                    className="
-                      mx-4
-                      my-0.5
-                      opacity-25
-                    "
-                  />
-                )}
                 {/* Flavor text */}
-                <Typography
-                  id="flavor-text"
-                  variant="body2"
-                >
-                  {`"${cardData.cardFlavorText}"`}
-                </Typography>
+                {cardData.cardFlavorText !== "" && (
+                  <>
+                    <Divider
+                      className="
+                        mx-4
+                        my-0.5
+                        opacity-25
+                      "
+                    />
+                    <Typography
+                      id="flavor-text"
+                      variant="body2"
+                    >
+                      {`"${cardData.cardFlavorText}"`}
+                    </Typography>
+                  </>
+                )}
               </Box>
             </Box> 
           </Box>

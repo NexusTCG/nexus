@@ -106,6 +106,7 @@ export default function EnergyCostIcons({
                     key={`void-${value}`}
                     // src={`/images/card-parts/card-icons/card-cost/void-${value}.PNG`}
                     src={
+                      value === 0 ? Void0 :
                       value === 1 ? Void1 :
                       value === 2 ? Void2 :
                       value === 3 ? Void3 :
@@ -121,7 +122,7 @@ export default function EnergyCostIcons({
                       value === 13 ? Void13 :
                       value === 14 ? Void14 :
                       value === 15 ? Void15 :
-                      Void0 // 0 is default
+                      null
                     }
                     width={21}
                     height={21}
