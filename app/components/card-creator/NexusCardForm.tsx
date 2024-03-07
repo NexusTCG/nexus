@@ -70,6 +70,7 @@ export default function NexusCardForm({
     setValue,
     control,
     watch,
+    trigger,
     formState: { 
       isSubmitting, 
       isSubmitted 
@@ -248,15 +249,19 @@ export default function NexusCardForm({
     switch (formCardData.cardGrade) {
       case "rare":
           setValue("cardGrade", "epic");
+          trigger("cardGrade");
           break;
       case "epic":
           setValue("cardGrade", "prime");
+          trigger("cardGrade");
           break;
       case "prime":
           setValue("cardGrade", "common");
+          trigger("cardGrade");
           break;
       default:
           setValue("cardGrade", "rare");
+          trigger("cardGrade");
     }
     setOpenGradeSnackBar(true);
   }, []);
