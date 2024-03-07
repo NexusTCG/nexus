@@ -323,21 +323,19 @@ export default function NexusCardForm({
                 padding: "3px",
                 borderRadius: "4px",
                 border: "4px solid black",
+                zIndex: 30,
               }}
               className={`
                 ${colorMapping[
                   cardColorClass as keyof typeof
                   colorMapping]?.[50] ??
-                  "bg-slate-50"
+                  "bg-teal-500"
                 }
                 flex
                 flex-col
                 justify-between
                 items-center
                 w-full
-                shadow-md
-                shadow-gray-950/50
-                z-30
                 gap-1
               `}
             >
@@ -740,8 +738,6 @@ export default function NexusCardForm({
                   flex-col
                   w-full
                   gap-2
-                  shadow-md
-                  shadow-black/50
                 `}
               >
                 {/* Card image */}
