@@ -17,7 +17,6 @@ import {
 } from "@/app/utils/data/cardCreatorOptions";
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import { CardFormDataType } from "@/app/utils/types/types";
-import { cardPartPath } from "@/app/utils/consts/cardPartPaths";
 import Image from "next/image";
 import clsx from "clsx";
 import { debounce } from "lodash";
@@ -46,6 +45,14 @@ import SpeedSelect from "@/app/components/card-creator/SpeedSelect";
 import EnergyCostIcons from "@/app/components/card-creator/EnergyCostIcons";
 import CustomInput from "@/app/components/card-creator/CustomInput";
 import CardRender from "@/app/components/card-creator/CardRender";
+// Icons
+import Mythic from "@/public/images/card-parts/card-icons/mythic.svg";
+import Attack from "@/public/images/card-parts/card-stats/attack.svg";
+import Defense from "@/public/images/card-parts/card-stats/defense.svg";
+import Common from "@/public/images/card-parts/card-icons/card-grades/common.svg";
+import Rare from "@/public/images/card-parts/card-icons/card-grades/rare.svg";
+import Epic from "@/public/images/card-parts/card-icons/card-grades/epic.svg";
+import Prime from "@/public/images/card-parts/card-icons/card-grades/prime.svg";
 
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
@@ -364,7 +371,7 @@ export default function NexusCardForm({
                   {/* Mythic icon boolean */}
                   {formCardData.cardSuperType === "mythic" && (
                     <Image
-                      src={`${cardPartPath.base}/card-parts${cardPartPath.icon}/mythic.PNG`}
+                      src={Mythic}
                       height={14}
                       width={14}
                       alt="Mythic icon"
@@ -992,7 +999,7 @@ export default function NexusCardForm({
                   )}
                 />
                 <Image
-                  src={`${cardPartPath.base}/card-parts${cardPartPath.stats}/attack.PNG`}
+                  src={Attack}
                   width={60}
                   height={45}
                   alt="Card attack icon"
@@ -1043,7 +1050,12 @@ export default function NexusCardForm({
                       onClick={handleGradeChange}
                     >
                       <Image
-                        src={`${cardPartPath.base}/card-parts${cardPartPath.icon}${cardPartPath.grade}/grade-${formCardData.cardGrade ? formCardData.cardGrade.toLowerCase() : 'common'}.PNG`}
+                        src={
+                          formCardData.cardGrade === "rare" ? Rare :
+                          formCardData.cardGrade === "epic" ? Epic :
+                          formCardData.cardGrade === "prime" ? Prime :
+                          Common
+                        }
                         height={34}
                         width={34}
                         alt={`${formCardData.cardGrade} icon`}
@@ -1051,7 +1063,7 @@ export default function NexusCardForm({
                           bg-black
                           cursor-pointer
                           rounded-full
-                          p-2
+                          p-0.5
                         "
                       />
                     </IconButton>
@@ -1168,7 +1180,7 @@ export default function NexusCardForm({
                   )}
                 />
                 <Image
-                  src={`${cardPartPath.base}/card-parts${cardPartPath.stats}/defense.PNG`}
+                  src={Defense}
                   width={60}
                   height={45}
                   alt="Card defense icon"

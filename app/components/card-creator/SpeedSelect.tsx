@@ -9,6 +9,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
 import Image from "next/image";
 import clsx from "clsx";
+import Speed from "@/public/images/card-parts/card-icons/speed.svg";
 
 export default function SpeedSelect() {
   const { setValue, watch } = useFormContext();
@@ -97,7 +98,7 @@ export default function SpeedSelect() {
             className="p-0"
           >
             <Image
-              src={`/images/card-parts/card-icons/speed.PNG`}
+              src={Speed}
               width={10}
               height={15}
               alt={`Speed ${iconSpeed} icon`}
