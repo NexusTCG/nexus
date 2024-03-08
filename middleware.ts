@@ -13,9 +13,6 @@ export async function middleware(
     "/reset-password",
     "/login/complete-signup",
     "/dashboard/cards/[slug]",
-    "/guidelines",
-    "/policies",
-    "/terms",
   ];
   if (publicUrls
       .includes(
@@ -64,5 +61,5 @@ export async function middleware(
 }
 
 export const config = {
-  matcher: ["/((?!auth|_next/static|_next/image|images|favicon.ico|login).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|images|favicon.ico|login).*)"],
 };

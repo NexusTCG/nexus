@@ -173,7 +173,7 @@ export default function AuthForm({
     password: string
   }) {
     const { email, password } = data;
-    const endpoint = showSignUp ? "/auth/register-user" : "/auth/login-user";
+    const endpoint = showSignUp ? "/api/auth/register-user" : "/api/auth/login-user";
 
     try {
       const response = await fetch(endpoint, {
