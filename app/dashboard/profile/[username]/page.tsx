@@ -135,7 +135,7 @@ export default function ProfileId({
       formData.append("file", file);
       formData.append("filename", filename.toLowerCase());
 
-      const response = await fetch('/data/upload-avatar', {
+      const response = await fetch('/api/data/upload-avatar', {
         method: 'POST',
         body: formData,
       });

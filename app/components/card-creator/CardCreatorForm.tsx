@@ -169,7 +169,7 @@ export default function CardCreatorForm({
         );
   
         const response = await fetchWithRetry(
-          "/data/generate-card-art", {
+          "/api/data/generate-card-art", {
           prompt: constructedArtPrompt,
         });
   

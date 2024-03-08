@@ -163,7 +163,7 @@ export default function Create() {
 
         if (imagePublicUrl) {
           // Submit form data with cardRender
-          const response = await fetch("/data/submit-card", { 
+          const response = await fetch("/api/data/submit-card", { 
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
