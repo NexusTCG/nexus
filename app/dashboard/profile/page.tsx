@@ -8,8 +8,6 @@ export default function Profile() {
   const { userProfileData } = useContext(DashboardContext);
   const router = useRouter();
 
-  console.log("userProfileData:", userProfileData?.username);
-
   useEffect(() => {
     const redirect = async () => {
       if (userProfileData?.username) {

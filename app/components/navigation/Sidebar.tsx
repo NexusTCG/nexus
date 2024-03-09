@@ -7,6 +7,7 @@ import SignOutButton from "@/app/components/auth/SignOutButton"
 import Image from "next/image";
 import Link from "next/link";
 import Box from "@mui/material/Box";
+import PaymentButton from "../stripe/BuyCreditsButton";
 // import FeedbackIcon from '@mui/icons-material/Feedback';
 
 const soMeChannels = [
@@ -27,7 +28,6 @@ const primaryNavigation = [
 
 const secondaryNavigation = [
   "profile",
-  "subscription",
   "contact"
 ]
 
@@ -200,6 +200,7 @@ export default function Sidebar() {
               />
             )
           })}
+          <PaymentButton />
           <SignOutButton /> 
         </Box>
       </Box>
