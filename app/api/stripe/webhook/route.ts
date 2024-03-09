@@ -3,22 +3,14 @@
 import Stripe from "stripe";
 import stripe from "@/app/lib/stripe/stripe";
 import { supabaseAdmin } from "@/app/lib/supabase/admin";
-import { NextRequest } from "next/server";
 
 const relevantEvents = new Set([
   "checkout.session.completed",
 ]);
 
-// export const config = {
-//   api: {
-//     bodyParser: false,
-//   },
-// };
-
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const body = await req.text();
   const sig = req.headers.get('stripe-signature') as string;
-  // const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   let event: Stripe.Event;
 
@@ -83,9 +75,6 @@ export async function POST(req: NextRequest) {
               .eq("id", userId);
 
             if (updateError) throw updateError;
-
-            // Success
-            // Can I send a success message back to the user on the client side?
   
           } catch (error) {
             console.log(error);
