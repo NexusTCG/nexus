@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-// import { createClient } from "@/app/lib/supabase/client";
+import React, { useState, useEffect, useContext } from "react";
+import { createClient } from "@/app/lib/supabase/client";
 import { loadStripe } from '@stripe/stripe-js';
-// import { DashboardContext } from "@/app/context/DashboardContext";
+import { DashboardContext } from "@/app/context/DashboardContext";
 import Cal, { getCalApi } from "@calcom/embed-react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -18,13 +18,12 @@ import CloseIcon from '@mui/icons-material/Close';
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
-// const supabase = createClient();
+const supabase = createClient();
 
 export default function Credits() {
-  // const { userProfileData } = useContext(DashboardContext);
+  const { userProfileData } = useContext(DashboardContext);
 
-  const credits = 0;
-  // const [credits, setCredits] = useState(null);
+  const [credits, setCredits] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [alertInfo, setAlertInfo] = useState<{
     type: "success" | "error" | "info" | "warning";
@@ -58,51 +57,52 @@ export default function Credits() {
     }
   }, [showAlert, alertInfo]);
 
-  // useEffect(() => {
-  //   const userId = userProfileData?.id;
+  useEffect(() => {
+    const userId = userProfileData?.id;
+    if (!userId) return;
+    
+    const fetchCredits = async () => {
+      if (userId) {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('credits')
+          .eq('id', userId)
+          .single();
 
-  //   const fetchCredits = async () => {
-  //     if (userId) {
-  //       const { data, error } = await supabase
-  //         .from('profiles')
-  //         .select('credits')
-  //         .eq('id', userId)
-  //         .single();
+        if (error) {
+          console.error("Error fetching credits:", error.message);
+        } else if (data) {
+          setCredits(data.credits);
+        }
+      }
+    };
+    fetchCredits();
 
-  //       if (error) {
-  //         console.error("Error fetching credits:", error.message);
-  //       } else if (data) {
-  //         setCredits(data.credits);
-  //       }
-  //     }
-  //   };
-  //   fetchCredits();
-
-  //   // Subscribe to changes in user credits
-  //   if (userId) {
-  //     const channel = supabase
-  //       .channel("user credits")
-  //       .on("postgres_changes", {
-  //         event: "UPDATE",
-  //         schema: "public",
-  //         table: "profiles",
-  //         filter: `id=eq.${userId}`
-  //         }, payload => {
-  //           if (
-  //             payload.new.id === userId && 
-  //             payload.new.credits !== undefined
-  //           ) {
-  //             setCredits(payload.new.credits);
-  //           }
-  //         })
-  //       .subscribe()
-  //       return () => {
-  //     (async () => {await supabase
-  //       .removeChannel(channel);
-  //     })();
-  //   };
-  //   }
-  // }, [userProfileData?.id]);
+    // Subscribe to changes in user credits
+    if (userId) {
+      const channel = supabase
+        .channel("user credits")
+        .on("postgres_changes", {
+          event: "UPDATE",
+          schema: "public",
+          table: "profiles",
+          filter: `id=eq.${userId}`
+          }, payload => {
+            if (
+              payload.new.id === userId && 
+              payload.new.credits !== undefined
+            ) {
+              setCredits(payload.new.credits);
+            }
+          })
+        .subscribe()
+        return () => {
+        (async () => {await supabase
+          .removeChannel(channel);
+        })();
+      };
+    }
+  }, [userProfileData?.id]);
 
   // Fetch Cal.com Embed
   useEffect(()=>{
@@ -180,7 +180,7 @@ export default function Credits() {
           >
             Your credits
           </Typography>
-          {credits ? (
+          {credits !== null ? (
             <Box
               id="credits-amount-container"
               className="
