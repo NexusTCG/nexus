@@ -2,7 +2,10 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import { createClient } from "@/app/lib/supabase/client";
+import PostHogClient from "@/app/lib/posthog/posthog";
+
 import { loadStripe } from '@stripe/stripe-js';
+import useSession from "@/app/hooks/useSession";
 import { DashboardContext } from "@/app/context/DashboardContext";
 import Cal, { getCalApi } from "@calcom/embed-react";
 import Box from "@mui/material/Box";
@@ -19,9 +22,11 @@ const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
 const supabase = createClient();
+const posthog = PostHogClient();
 
 export default function Credits() {
   const { userProfileData } = useContext(DashboardContext);
+  const session = useSession();
 
   const [credits, setCredits] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
@@ -35,6 +40,10 @@ export default function Credits() {
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     if (query.get("success")) {
+      posthog.capture({
+        distinctId: session?.user?.id || 'anonymous',
+        event: "💰 Order Placed!"
+      })
       setAlertInfo({
         type: "success",
         icon: <CheckIcon />,
@@ -60,7 +69,7 @@ export default function Credits() {
   useEffect(() => {
     const userId = userProfileData?.id;
     if (!userId) return;
-    
+
     const fetchCredits = async () => {
       if (userId) {
         const { data, error } = await supabase
@@ -121,6 +130,37 @@ export default function Credits() {
       );
 	  })();
 	}, [])
+
+  // Handle buy credits
+  async function handleBuyCredits() {
+    const token = session?.access_token;
+
+    if (token) {
+      try {
+        const response = await fetch('/api/stripe/checkout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+    
+        const data = await response.json();
+    
+        if (response.ok) {
+          // Redirect the user to Stripe Checkout page
+          window.location.href = data.url;
+        } else {
+          // Handle any errors, such as displaying a message to the user
+          console.error('Checkout error:', data);
+        }
+      } catch (error) {
+        console.error('Request failed:', error);
+      }
+    } else (
+      console.error("No session token found")
+    );
+  };
 
   return (
     <Box
@@ -224,27 +264,23 @@ export default function Credits() {
           >
             Credits are used to generate art for your cards. Your purchase directly supports the development of Nexus.
           </Typography>
-          <form
-            action="/api/stripe/checkout"
-            method="POST"
+          <Button
+            type="submit"
+            role="link"
+            variant="outlined"
+            size="large"
+            startIcon={<PaymentIcon />}
+            onClick={handleBuyCredits}
+            className="
+              flex
+              justify-center
+              items-center
+              w-full
+              mt-4
+            "
           >
-            <Button
-              type="submit"
-              role="link"
-              variant="outlined"
-              size="large"
-              startIcon={<PaymentIcon />}
-              className="
-                flex
-                justify-center
-                items-center
-                w-full
-                mt-4
-              "
-            >
-              Buy credits
-            </Button>
-          </form>
+            Buy credits
+          </Button>
           {showAlert && (
             <Alert
               severity={alertInfo?.type}
