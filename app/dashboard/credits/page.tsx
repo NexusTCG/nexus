@@ -179,14 +179,6 @@ export default function Credits() {
         gap-8
       "
     >
-      <Typography
-        variant="h2"
-        className="
-          text-white
-        "
-      >
-        Credits
-      </Typography>
       <Box
         id="credits-options-container"
         className="
