@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import { createClient } from "@/app/lib/supabase/client";
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation';
 import { loadStripe } from '@stripe/stripe-js';
 import { DashboardContext } from "@/app/context/DashboardContext";
 import Cal, { getCalApi } from "@calcom/embed-react";
@@ -29,12 +29,12 @@ export default function Credits() {
     message: string;
   } | null>(null);
 
-  const searchParams = useSearchParams();
   const supabase = createClient();
   const { userProfileData } = useContext(DashboardContext);
 
   // Check for order success or cancelation
   useEffect(() => {
+    const searchParams = useSearchParams();
     if (searchParams.get("success")) {
       setAlertInfo({
         type: "success",
@@ -56,7 +56,7 @@ export default function Credits() {
         setShowAlert(false);
       }, 6000)
     }
-  }, [searchParams !== null]);
+  }, []);
 
   useEffect(() => {
     const userId = userProfileData?.id;

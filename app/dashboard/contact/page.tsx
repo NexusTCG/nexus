@@ -1,33 +1,10 @@
 "use client";
 
-import React, { 
-  useEffect
-} from "react";
-import Cal, { getCalApi } from "@calcom/embed-react";
+import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 export default function Contact() {
-  
-
-  // Fetch Cal.com Embed
-  useEffect(()=>{
-	  (async function () {
-      const cal = await getCalApi();
-      cal(
-        "ui", {
-          "theme": "dark",
-          "styles": {
-            "branding":{
-              "brandColor":"#14b8a6"
-            }},
-          "hideEventTypeDetails": true,
-          "layout": "month_view"
-        }
-      );
-	  })();
-	}, [])
-
   return (
     <Box
       id="contact-container"
@@ -115,92 +92,28 @@ export default function Contact() {
             
           </Typography>
           <Typography
-              variant="caption"
-              component="span"
-              className="
-                text-red-600
-                italic
-                py-2
-                px-3 
-                rounded-md
-                bg-red-800/20
-                mt-2
-              "
-            >
-              Want to delete your account and data? Email us at {""}
-              <Typography
-                variant="caption"
-                className="
-                  font-bold
-                "
-              >
-                contact@play.nexus
-              </Typography>
-            </Typography>
-        </Box>
-        
-        {/* Cal.com Embed */}
-        <Box
-          id="contact-cal-embed-container"
-          className="
-            flex
-            flex-col
-            justify-start
-            items-start
-            w-full
-            gap-4
-            p-4
-            bg-neutral-800
-            rounded-lg
-            border
-            border-neutral-700
-          "
-        >
-          <Box
-            id="contact-cal-embed-content-container"
+            variant="caption"
+            component="span"
             className="
-              flex
-              flex-col
-              justify-start
-              items-start
-              w-full
-              gap-2
+              text-red-600
+              italic
+              py-2
+              px-3 
+              rounded-md
+              bg-red-800/20
+              mt-2
             "
           >
+            Want to delete your account and data? Email us at {""}
             <Typography
-              variant="overline"
+              variant="caption"
               className="
-                text-teal-400
+                font-bold
               "
             >
-              Interview with Nils
+              contact@play.nexus
             </Typography>
-            <Typography
-              variant="h3"
-              className="
-                text-white
-              "
-            >
-              Get art credits!
-            </Typography>
-            <Typography
-              variant="subtitle1"
-            >
-              Participate in a 30 minute interview about trading card games, custom TCG cards, {" "}
-              and Nexus with Nils Westgårdh, creator of Nexus, to get 25 art credits!
-            </Typography>
-          </Box>
-          <Cal 
-            calLink="nexus-tcg/30min"
-            style={{
-              width:"100%",
-              height:"100%",
-              overflow:"scroll"
-            }}
-            config={{
-              layout: "week_view",
-            }}
-          />
+          </Typography>
         </Box>
       </Box>
     </Box>
