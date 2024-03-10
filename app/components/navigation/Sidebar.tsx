@@ -7,8 +7,6 @@ import SignOutButton from "@/app/components/auth/SignOutButton"
 import Image from "next/image";
 import Link from "next/link";
 import Box from "@mui/material/Box";
-import PaymentButton from "../stripe/BuyCreditsButton";
-// import FeedbackIcon from '@mui/icons-material/Feedback';
 
 const soMeChannels = [
   "github",
@@ -28,7 +26,8 @@ const primaryNavigation = [
 
 const secondaryNavigation = [
   "profile",
-  "contact"
+  "contact",
+  "credits",
 ]
 
 export default function Sidebar() {
@@ -144,26 +143,6 @@ export default function Sidebar() {
               />
             )
           })}
-          {/* <Button
-            id={"feedback-button"}
-            variant="outlined"
-            href="https://discord.gg/vKdkBZYcc6"
-            startIcon={<FeedbackIcon />}
-            size="large"
-            color="secondary"
-            className="
-              flex
-              justify-start
-              items-center
-              w-full
-              hover:cursor-pointer
-              hover:bg-teal-600/30
-              hover:text-white
-              hover:border-teal-600
-            "
-          >
-            Feedback
-          </Button> */}
         </Box>
       </Box>
 
@@ -200,7 +179,6 @@ export default function Sidebar() {
               />
             )
           })}
-          <PaymentButton />
           <SignOutButton /> 
         </Box>
       </Box>

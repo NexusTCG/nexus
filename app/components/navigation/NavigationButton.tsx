@@ -15,6 +15,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SpeakerNotesIcon from '@mui/icons-material/SpeakerNotes';
 import LoginIcon from '@mui/icons-material/Login';
+import PaidIcon from '@mui/icons-material/Paid';
 import clsx from "clsx";
 
 type NavigationButtonProps = {
@@ -73,6 +74,10 @@ export default function NavigationButton({
         break;
       case "cards":
         setIcon(<CollectionsIcon />);
+        setDisabled(false);
+        break;
+      case "credits":
+        setIcon(<PaidIcon />);
         setDisabled(false);
         break;
       case "rules":
