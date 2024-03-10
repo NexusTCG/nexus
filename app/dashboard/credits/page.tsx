@@ -23,6 +23,7 @@ const supabase = createClient();
 
 export default function Credits() {
   const { userProfileData } = useContext(DashboardContext);
+  const searchParams = useSearchParams();
 
   const [credits, setCredits] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
@@ -34,7 +35,7 @@ export default function Credits() {
 
   // Check for order success or cancelation
   useEffect(() => {
-    const searchParams = useSearchParams();
+    
     if (searchParams.get("success")) {
       setAlertInfo({
         type: "success",
