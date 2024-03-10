@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import { createClient } from "@/app/lib/supabase/client";
-import { useSearchParams } from 'next/navigation';
 import { loadStripe } from '@stripe/stripe-js';
 import { DashboardContext } from "@/app/context/DashboardContext";
 import Cal, { getCalApi } from "@calcom/embed-react";
@@ -23,7 +22,6 @@ const supabase = createClient();
 
 export default function Credits() {
   const { userProfileData } = useContext(DashboardContext);
-  const searchParams = useSearchParams();
 
   const [credits, setCredits] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
@@ -35,8 +33,8 @@ export default function Credits() {
 
   // Check for order success or cancelation
   useEffect(() => {
-    
-    if (searchParams.get("success")) {
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("success")) {
       setAlertInfo({
         type: "success",
         icon: <CheckIcon />,
@@ -46,7 +44,7 @@ export default function Credits() {
       setTimeout(() => {
         setShowAlert(false);
       }, 6000)
-    } else if (searchParams.get("canceled")) {
+    } else if (query.get("canceled")) {
       setAlertInfo({
         type: "error",
         icon: <CloseIcon />,
