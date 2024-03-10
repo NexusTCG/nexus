@@ -19,8 +19,11 @@ import CloseIcon from '@mui/icons-material/Close';
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
+const supabase = createClient();
 
 export default function Credits() {
+  const { userProfileData } = useContext(DashboardContext);
+
   const [credits, setCredits] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [alertInfo, setAlertInfo] = useState<{
@@ -28,9 +31,6 @@ export default function Credits() {
     icon: React.ReactNode;
     message: string;
   } | null>(null);
-
-  const supabase = createClient();
-  const { userProfileData } = useContext(DashboardContext);
 
   // Check for order success or cancelation
   useEffect(() => {
