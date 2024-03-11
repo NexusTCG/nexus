@@ -267,7 +267,6 @@ export default function Credits() {
               flex
               justify-center
               items-center
-              w-full
               mt-4
             "
           >

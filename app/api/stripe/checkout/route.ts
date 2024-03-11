@@ -1,11 +1,12 @@
 "use server";
 
-// import Stripe from "stripe";
 import stripe from "@/app/lib/stripe/stripe";
 import { supabaseAdmin } from "@/app/lib/supabase/admin";
 import { NextRequest } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest
+) {
   const token = req.headers.get('Authorization')?.split('Bearer ')[1];
 
   if (!token) {
@@ -28,7 +29,7 @@ export async function POST(req: NextRequest) {
       });
     }
   
-    if (user) {
+    if (user && user.id) {
       const session = await stripe.checkout.sessions.create({
         line_items: [
           {
@@ -37,8 +38,8 @@ export async function POST(req: NextRequest) {
           },
         ],
         mode: 'payment',
-        success_url: `${new URL(req.url).origin}/?success=true`,
-        cancel_url: `${new URL(req.url).origin}/?canceled=true`,
+        success_url: `${new URL(req.url).origin}/dashboard?success=true&redirect=credits`,
+        cancel_url: `${new URL(req.url).origin}/dashboard?canceled=true&redirect=credits`,
         automatic_tax: {enabled: true},
         metadata: {
           userId: user.id,
@@ -53,7 +54,6 @@ export async function POST(req: NextRequest) {
         } 
       });
     }
-
   } catch (error) {
     console.log(error);
     return new Response(

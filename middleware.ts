@@ -1,4 +1,7 @@
-import { NextResponse, NextRequest } from "next/server";
+import { 
+  NextResponse, 
+  NextRequest 
+} from "next/server";
 import { createClient } from "@/app/lib/supabase/middleware";
 
 export async function middleware(
@@ -8,16 +11,19 @@ export async function middleware(
     supabase,
     response
   } = createClient(request);
-
+  
   const publicUrls = [
     "/reset-password",
     "/login/complete-signup",
     "/dashboard/cards/[slug]",
   ];
+
+  const url = request.nextUrl;
+  const path = new URL(
+    request.url).pathname;
+
   if (publicUrls
-      .includes(
-        request.nextUrl.pathname
-      )) {
+      .includes(path)) {
     return response;
   }
 
@@ -27,9 +33,6 @@ export async function middleware(
   } = await supabase
     .auth
     .getSession();
-
-  const path = new URL(
-    request.url).pathname;
 
   if (error) {
     console.log(error);
@@ -53,6 +56,19 @@ export async function middleware(
     return NextResponse
       .redirect(new URL(
         "/login", 
+        request.url
+      ));
+  }
+
+  if (
+    session && 
+    url.searchParams.has('success') && 
+    url.searchParams.get('redirect') === 
+    'credits'
+  ) {
+    return NextResponse.redirect(
+      new URL(
+        "/dashboard/credits", 
         request.url
       ));
   }

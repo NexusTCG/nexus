@@ -13,6 +13,7 @@ export async function POST(req: Request) {
   const sig = req.headers.get('stripe-signature') as string;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   let event: Stripe.Event;
+  
 
   try {
     if (!sig || !webhookSecret) {
@@ -27,6 +28,7 @@ export async function POST(req: Request) {
         sig, 
         webhookSecret
       );
+    console.log(event.data.object);
     console.log(`🔔  Webhook received: ${event.type}`);
   } catch (error) {
     console.log(`❌ Error message: ${(error as Error).message}`);
@@ -37,12 +39,18 @@ export async function POST(req: Request) {
 
   if (relevantEvents.has(event.type)) {
     const session = event.data.object as Stripe.Checkout.Session | null;
+    console.log("Webhook received session:", session, "with metadata:", session?.metadata);
 
     if (
       session && 
       session.metadata
     ) {
-      const userId =session.metadata.userId;
+      const userId = session.metadata.userId;
+
+      if (!userId) {
+        console.error("userId is undefined or null");
+        return new Response("userId is required", { status: 400 });
+      }
     
       if (
         session.line_items && 
@@ -55,6 +63,7 @@ export async function POST(req: Request) {
           const creditsToAdd = quantity * 25;
   
           try {
+            console.log("Attempting to update credits for userID:", userId);
             const { 
               data: userProfile, 
               error: userProfileError 
@@ -64,7 +73,10 @@ export async function POST(req: Request) {
               .eq("id", userId)
               .single();
             
-            if (userProfileError) throw userProfileError;
+              if (userProfileError) {
+                console.error(`Error fetching user profile for ID ${userId}: ${userProfileError.message}`);
+                return new Response("Error fetching user profile", { status: 500 });
+              }
 
             const newCredits = userProfile?.credits + creditsToAdd;
             const {
