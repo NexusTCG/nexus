@@ -260,8 +260,13 @@ export default function Create() {
   
   return (
     <>
-      <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <FormProvider
+        {...methods}
+      >
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-full"
+        >
           <Box
             id="create-container"
             className="
@@ -491,30 +496,32 @@ export default function Create() {
           </Box>
         </form>
       </FormProvider>
-      {openSnackbar && (<Snackbar
-        open={openSnackbar}
-        autoHideDuration={5000}
-        onClose={() => setOpenSnackbar(false)}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right"
-        }}
-      >
-        <Alert
+      {openSnackbar && (
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={5000}
           onClose={() => setOpenSnackbar(false)}
-          severity={
-            postToDiscord ? 
-            "success" : 
-            "error"
-          }
-          className="
-            w-full
-            rounded-md
-          "
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right"
+          }}
         >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>)}
+          <Alert
+            onClose={() => setOpenSnackbar(false)}
+            severity={
+              postToDiscord ? 
+              "success" : 
+              "error"
+            }
+            className="
+              w-full
+              rounded-md
+            "
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      )}
     </>
   );
 }

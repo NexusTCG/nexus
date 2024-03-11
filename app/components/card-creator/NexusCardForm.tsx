@@ -11,7 +11,6 @@ import {
   Controller 
 } from "react-hook-form";
 import {
-  cardSuperTypeOptions,
   cardTypeOptions,
   cardSubTypeOptions,
 } from "@/app/utils/data/cardCreatorOptions";
@@ -246,25 +245,22 @@ export default function NexusCardForm({
 
   // Handle grade change
   const handleGradeChange = useCallback(() => {
-    switch (formCardData.cardGrade) {
-      case "rare":
-          setValue("cardGrade", "epic");
-          trigger("cardGrade");
-          break;
-      case "epic":
-          setValue("cardGrade", "prime");
-          trigger("cardGrade");
-          break;
-      case "prime":
-          setValue("cardGrade", "common");
-          trigger("cardGrade");
-          break;
-      default:
-          setValue("cardGrade", "rare");
-          trigger("cardGrade");
-    }
+    const grades = ["common", "rare", "epic", "prime"];
+    const currentGrade = formCardData.cardGrade ?? "common";
+    const currentIndex = grades.indexOf(currentGrade);
+    const nextIndex = (currentIndex + 1) % grades.length;
+    const nextGrade = grades[nextIndex];
+  
+    setValue("cardGrade", nextGrade);
+    trigger("cardGrade");
+    
     setOpenGradeSnackBar(true);
-  }, []);
+  }, [
+    formCardData.cardGrade, 
+    setValue, 
+    trigger, 
+    setOpenGradeSnackBar
+  ]);
 
   // Handle grade snackbar
   function handleCloseGradeSnackbar(
@@ -274,6 +270,14 @@ export default function NexusCardForm({
     if (reason === 'clickaway') return;
     setOpenGradeSnackBar(false);
   };
+
+  function formatCardTypeName(typeKey: string): string {
+    return typeKey
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
 
   return (
     <>
@@ -380,10 +384,18 @@ export default function NexusCardForm({
                     />
                   )}
                   {/* Card name */}
-                  <CustomInput
-                    name="cardName"
-                    placeholder="Card name"
-                  />
+                  {!isSubmitted ? (
+                    <CustomInput
+                      name="cardName"
+                      placeholder="Card name"
+                    />
+                  ) : (
+                    <Typography
+                      variant="body2"
+                    >
+                      {formCardData.cardName}
+                    </Typography>
+                  )}
                 </Box> 
                 
                 {/* Energy Cost Icons */}
@@ -482,81 +494,6 @@ export default function NexusCardForm({
                       gap-1
                     "
                   >
-                    {/* Super type */}
-
-                    {/* Remove Supertype? */}
-
-                    {/* {formCardData.cardType && (
-                      formCardData.cardType.includes("object") || 
-                      formCardData.cardType.includes("entity") || 
-                      formCardData.cardType.includes("effect") || 
-                      formCardData.cardType.includes("node")
-                    ) && ( */}
-                    {formCardData.cardType === null && (
-                      <Controller
-                        name="cardSuperType"
-                        control={control}
-                        disabled={isSubmitting || isSubmitted}
-                        render={({ field }) => (
-                          <FormControl 
-                            className={clsx("flex-grow",
-                              {
-                                "w-1/5": 
-                                  formCardData.cardType && 
-                                  formCardData.cardType.length <= 1 && 
-                                  formCardData.cardType.includes("entity"),
-                                "w-2/5": 
-                                  formCardData.cardType && 
-                                  formCardData.cardType.includes("node"),
-                              }
-                            )}
-                          >
-                            {/* Replace with custom select component */}
-                            <Select
-                              {...field}
-                              label="Super type"
-                              sx={{
-                                '& .MuiInputBase-input': {
-                                  color: "black",
-                                  padding: "0",
-                                  display: "flex",
-                                  justifyContent: "start",
-                                  alignItems: "center",
-                                  fontSize: "20px",
-                                  lineHeight: "28px",
-                                  fontWeight: "semi-bold",
-                                  overflow: "hidden",
-                                },
-                                '& .MuiOutlinedInput-notchedOutline': {
-                                  border: "none",
-                                  borderColor: "black"
-                                },
-                              }}
-                            >
-                              {Object.entries(cardSuperTypeOptions)
-                                .filter(([value]) => 
-                                  formCardData.cardType && 
-                                  formCardData.cardType.includes("node") || 
-                                  value !== "core"
-                                )
-                                .map(([value, label]) => (
-                                  <MenuItem
-                                    key={value}
-                                    value={value}
-                                  >
-                                    <Typography
-                                      variant="body2"
-                                    >
-                                      {label}
-                                    </Typography>
-                                  </MenuItem>
-                                ))}
-                            </Select>
-                          </FormControl>
-                        )}
-                      />
-                    )}
-          
                     {/* Type */}
                     <Controller
                       name="cardType"
@@ -572,6 +509,9 @@ export default function NexusCardForm({
                           <Select
                             {...field}
                             label="Type"
+                            renderValue={(selected) => (
+                              typeof selected === "string" ? formatCardTypeName(selected) : ""
+                            )}
                             sx={{
                               '& .MuiInputBase-input': {
                                 color: "black",
@@ -607,9 +547,6 @@ export default function NexusCardForm({
                                 }
                               }
                             }}
-                            renderValue={(selected) => (
-                              typeof selected === "string" ? selected.charAt(0).toUpperCase() + selected.slice(1) : ""
-                            )}
                           >
                             {Object.entries(cardTypeOptions).map(([value, label]) => (
                               <MenuItem key={value} value={value}>

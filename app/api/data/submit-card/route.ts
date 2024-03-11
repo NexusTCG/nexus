@@ -6,7 +6,6 @@ import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
-// Swapped out NextResponse for Response, for debugging
 
 // Insert a new card into the database
 export async function POST(req: NextRequest) {

@@ -123,6 +123,19 @@ export default function AuthForm({
     confirmPassword
   ]);
 
+  // Parse URL for error message
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const errorMessage = urlParams.get('error');
+    if (errorMessage) {
+      setAlertInfo({
+        type: "error",
+        message: decodeURIComponent(errorMessage)
+      });
+      setShowLoginAlert(true);
+    }
+  }, []);
+
   // Password visibility toggle
   function handleClickShowPassword() {
     setShowPassword((show) => !show)

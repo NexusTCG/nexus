@@ -56,21 +56,14 @@ export default function Card({
 
       // Update this to make cards public or private
       if (cards && cards.length > 0) {
-        const card = cards.find(
-          card => card.cardCreator ===
-          userProfileData?.username
-        );
-        if (card) {
-          setCardData(card);
-        } else {
-          console.error("Card not found or does not belong to the current user.");
-        }
+        const card = cards[0];
+        setCardData(card);
+        setIsCardOwner(card.cardCreator === userProfileData?.username);
+      } else {
+        console.error("Card not found.");
       }
     };
-
-    if (userProfileData?.username) {
-      loadCardData();
-    }
+    loadCardData();
   }, [params.slug, userProfileData?.username]);
 
   // Format date from card data
