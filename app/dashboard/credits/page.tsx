@@ -15,6 +15,7 @@ import Skeleton from "@mui/material/Skeleton";
 import PaymentIcon from '@mui/icons-material/Payment';
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from '@mui/icons-material/Close';
+import ErrorIcon from '@mui/icons-material/Error';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const stripePromise = loadStripe(
@@ -108,15 +109,42 @@ export default function Credits() {
           // Redirect the user to Stripe Checkout page
           window.location.href = data.url;
         } else {
-          // Handle any errors, such as displaying a message to the user
-          console.error('Checkout error:', data);
+          console.error('Checkout error:', data.error);
+          setAlertInfo({
+            type: "error",
+            icon: <ErrorIcon />,
+            message: data.error as string,
+          });
+          setShowAlert(true);
+          setTimeout(() => {
+            setShowAlert(false);
+          }, 6000)
+          
         }
       } catch (error) {
         console.error('Request failed:', error);
+        setAlertInfo({
+          type: "error",
+          icon: <ErrorIcon />,
+          message: error as string,
+        });
+        setShowAlert(true);
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 6000)
       }
-    } else (
+    } else {
       console.error("No session token found")
-    );
+      setAlertInfo({
+        type: "error",
+        icon: <ErrorIcon />,
+        message: "No session token found",
+      });
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 6000)
+    };
   };
 
   return (

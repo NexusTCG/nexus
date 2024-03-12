@@ -220,8 +220,6 @@ export default function AuthForm({
         }
       } else if (response.ok) {
         window.location.href = resultUrl;
-        // router.push(resultUrl);
-        // router.push("/dashboard");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
