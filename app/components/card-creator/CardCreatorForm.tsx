@@ -644,7 +644,7 @@ export default function CardCreatorForm({
                     font-light 
                     rounded-full 
                     text-xs 
-                    px-2 
+                    px-2
                     py-1
                   "
                 >
