@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { createClient } from "@/app/lib/supabase/client";
 import { DashboardContext } from "@/app/context/DashboardContext";
 import fetchUserProfiles from "@/app/lib/actions/supabase-data/fetchUserProfilesData";
 import { UserProfilesTableType } from "@/app/utils/types/supabase/userProfilesTableType";
@@ -8,6 +9,8 @@ import useSession from "@/app/hooks/useSession";
 import Sidebar from '@/app/components/navigation/Sidebar';
 import AppBar from '@/app/components/navigation/AppBar';
 import Box from '@mui/material/Box';
+
+const supabase = createClient();
 
 export default function DashboardLayout({
   children,
@@ -21,6 +24,7 @@ export default function DashboardLayout({
   ] = useState<UserProfilesTableType | undefined>();
   const user = useSession()?.user;
   
+  // Fetch user data
   useEffect(() => {
     const fetchUserData = async () => {
       if (user?.id) {
@@ -41,8 +45,43 @@ export default function DashboardLayout({
         }
       }
     };
-  
     fetchUserData();
+
+    // Subscribe to user credits changes
+    const userId = user?.id;
+    if (userId) {
+      const channel = supabase
+        .channel("user credits")
+        .on("postgres_changes", {
+          event: "UPDATE",
+          schema: "public",
+          table: "profiles",
+          filter: `id=eq.${userId}`
+          }, payload => {
+            if (
+              payload.new.id === userId && 
+              payload.new.credits !== undefined
+            ) {
+              console.log(
+                'Credit update received:', 
+                payload.new.credits
+              );
+              setUserProfileData(
+                prevState => prevState ? { 
+                  ...prevState, 
+                  credits: payload.new.credits 
+                } : undefined
+              );
+            }
+          })
+        .subscribe()
+        return () => {
+          (async () => {await supabase
+            .removeChannel(channel);
+        })();
+      };
+    }
+
   }, [user?.id]);
   
   return (

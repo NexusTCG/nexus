@@ -7,14 +7,17 @@ import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import { CardFormDataType } from "@/app/utils/types/types";
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
 import ConstructArtPrompt from "@/app/lib/actions/constructArtPrompt";
+import updateUserCredits from "@/app/lib/actions/supabase-data/updateUserCredits";
 import { ArtPromptAccordion, ArtPromptAccordionData } from "@/app/components/card-creator/ArtPromptAccordion";
 import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
 import PostHogClient from "@/app/lib/posthog/posthog";
 import Image from "next/image";
+import Link from "next/link";
 import clsx from "clsx";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -32,6 +35,7 @@ import PaletteIcon from "@mui/icons-material/Palette";
 import CheckIcon from "@mui/icons-material/Check";
 import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
+import PaidIcon from '@mui/icons-material/Paid';
 
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
@@ -54,12 +58,11 @@ export default function CardCreatorForm({
 
   const form = watch();
   const posthog = PostHogClient();
-  // const session = useSession(); // Remove?
   const { userProfileData } = useContext(DashboardContext);
 
   // Prompt states
   const [promptTab, setPromptTab] = useState(0);
-  const [generateArtLimit, setGenerateArtLimit] = useState(0);
+  const [currentCredits, setCurrentCredits] = useState<number>(0);
   const [isGeneratingArt, setIsGeneratingArt] = useState(false);
   const [timerStart, setTimerStart] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -78,15 +81,21 @@ export default function CardCreatorForm({
     activeOption: 0,
   });
   // Alert states
-  const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
   const [showCardRender, setShowCardRender] = useState<boolean>(false);
+  const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
   const [alertInfo, setAlertInfo] = useState<{
     type: "success" | "error" | "info" | "warning";
     icon: React.ReactNode;
     message: string;
   } | null>(null);
 
-  // Swap form for card render if data is available
+  useEffect(() => {
+    if (userProfileData?.credits !== undefined) {
+      setCurrentCredits(userProfileData?.credits);
+    }
+  }, [userProfileData?.credits])
+
+  // Show cardRender if data is available
   useEffect(() => {
     if (cardData !== null) {
       setShowCardRender(true);
@@ -154,9 +163,11 @@ export default function CardCreatorForm({
     setIntervalId(newIntervalId);
   
     if (
-      generateArtLimit < 3 && 
-      form.cardArtPrompt
-    ) {
+    userProfileData &&
+    userProfileData.credits !== undefined &&
+    userProfileData.credits > 0 && 
+    form.cardArtPrompt
+  ) {
       setAlertInfo({
         type: "info",
         icon: <InfoIcon />,
@@ -199,7 +210,8 @@ export default function CardCreatorForm({
             });
           }
   
-          setGenerateArtLimit(generateArtLimit + 1);
+          await handleUpdateCredits();
+          // setGenerateArtLimit(generateArtLimit + 1);
           setValue("cardArt", imageUrl);
           setCardArtOptions(prevState => {
             const newOptions = [...prevState.options, imageUrl];
@@ -233,6 +245,31 @@ export default function CardCreatorForm({
           setShowAlertInfo(false);
         }, 5000);
       }
+    }
+  }
+
+  // Update user credits
+  async function handleUpdateCredits() {
+    const userId = userProfileData?.id;
+    const userCreditsChange = 1;
+    const operation = "subtract";
+
+    try {
+      await updateUserCredits({
+        userId: userId as string,
+        currentUserCredits: currentCredits as number,
+        userCreditsChange: userCreditsChange,
+        operation: operation,
+      });
+      console.log("User spent 1 credit!");
+    } catch (error) {
+      setAlertInfo({
+        type: "error",
+        icon: <ErrorIcon />,
+          message: (error as Error).message || "Failed to update credits. Please try again."
+      });
+      setShowAlertInfo(true);
+      setTimeout(() => setShowAlertInfo(false), 5000);
     }
   }
 
@@ -433,10 +470,11 @@ export default function CardCreatorForm({
                   {...field}
                   multiline
                   disabled={
+                    !userProfileData?.id ||
+                    currentCredits === 0 ||
                     isGeneratingArt ||
-                    generateArtLimit >= 3 ||
-                    isSubmitting ||
-                    !userProfileData?.id
+                    isSubmitting
+                    // generateArtLimit >= 3 ||
                   }
                   placeholder="Generate art for the card..."
                   label={
@@ -451,18 +489,19 @@ export default function CardCreatorForm({
                   }
                   rows={4}
                   variant="outlined"
-                  className="
-                    flex
-                    w-full
-                    bg-neutral-900/50
-                  "
+                  className={clsx("flex w-full",
+                    {
+                    "bg-neutral-900/50": currentCredits > 0,
+                    "text-red-400 bg-red-900/50": currentCredits === 0,
+                    }
+                  )}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment
                         position="end"
                       >
                         <Tooltip
-                          title={`${3 - generateArtLimit} prompts left`}
+                          title={`${currentCredits} credits left`}
                           arrow
                         >
                           <span className="tooltip-wrapper">
@@ -470,26 +509,33 @@ export default function CardCreatorForm({
                               onClick={generateArt}
                               disabled={
                                 field.value === "" ||
+                                !userProfileData?.id ||
+                                currentCredits === 0 ||
                                 isGeneratingArt ||
-                                generateArtLimit >= 3 ||
-                                isSubmitting ||
-                                !userProfileData?.id
+                                isSubmitting
                               }
                               size="small"
                               className="ml-2 mt-auto"
                             >
                               {isGeneratingArt ? (
                                 <CircularProgress size={24} />
-                              ) : generateArtLimit >= 3 ? (
-                                <Typography>Limit reached</Typography>
+                              ) : currentCredits === 0 ? (
+                                <Typography
+                                  variant="overline"
+                                  className={clsx("font-semibold",
+                                    {
+                                    "text-white": currentCredits > 0,
+                                    "text-red-500": currentCredits === 0,
+                                    }
+                                  )}
+                                >
+                                  No credits left..
+                                </Typography>
                               ) : (
                                 <Badge
-                                  badgeContent={
-                                    generateArtLimit ? 
-                                    3 - generateArtLimit : 3
-                                  }
+                                  badgeContent={currentCredits}
                                   color={
-                                    generateArtLimit >= 3 ? 
+                                    currentCredits === 0 ? 
                                     "error" : "success"
                                   }
                                 >
@@ -512,7 +558,52 @@ export default function CardCreatorForm({
                 />
               )}
             />)}
-
+            {currentCredits === 0 && (
+              <Box
+                className="
+                  flex
+                  flex-col
+                  justify-start
+                  items-start
+                  w-full
+                  gap-4
+                  p-4
+                  rounded-md
+                  bg-neutral-900/50
+                "
+              >
+                <Typography
+                  variant="subtitle2"
+                  className="
+                  
+                  text-neutral-400"
+                >
+                  You&apos;re out of credits. Buy more credits to continue creating cards, and support the development of Nexus.
+                </Typography>
+                <Link
+                  href="/dashboard/credits"
+                  className="w-full"
+                >
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    startIcon={<PaidIcon />}
+                    className="
+                      w-full
+                      text-neutral-200
+                      hover:text-white
+                      bg-teal-400/25
+                      hover:bg-teal-400/50
+                      border-teal-400/80
+                      hover:border-teal-400
+                    "
+                  >
+                    Get more credits
+                  </Button>
+                </Link>
+              </Box>
+            )}
+            
             {/* Alert */}
             {showAlertInfo && (<Alert
               severity={alertInfo?.type}
@@ -549,11 +640,11 @@ export default function CardCreatorForm({
                   variant="caption"
                   className="
                     text-teal-400
-                    font-light
-                    rounded-full
-                    text-xs
-                    bg-teal-800/25
-                    px-2
+                    bg-teal-800/25 
+                    font-light 
+                    rounded-full 
+                    text-xs 
+                    px-2 
                     py-1
                   "
                 >

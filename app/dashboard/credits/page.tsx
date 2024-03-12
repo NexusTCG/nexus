@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import { createClient } from "@/app/lib/supabase/client";
+// import { createClient } from "@/app/lib/supabase/client";
 import PostHogClient from "@/app/lib/posthog/posthog";
 
 import { loadStripe } from '@stripe/stripe-js';
@@ -21,14 +21,14 @@ import CloseIcon from '@mui/icons-material/Close';
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
-const supabase = createClient();
+// const supabase = createClient();
 const posthog = PostHogClient();
 
 export default function Credits() {
   const { userProfileData } = useContext(DashboardContext);
   const session = useSession();
 
-  const [credits, setCredits] = useState(null);
+  const [currentCredits, setCurrentCredits] = useState<number>(0);
   const [showAlert, setShowAlert] = useState(false);
   const [alertInfo, setAlertInfo] = useState<{
     type: "success" | "error" | "info" | "warning";
@@ -36,7 +36,7 @@ export default function Credits() {
     message: string;
   } | null>(null);
 
-  // Check for order success or cancelation
+  // Check for order success or cancellation
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     if (query.get("success")) {
@@ -67,51 +67,57 @@ export default function Credits() {
   }, [showAlert, alertInfo]);
 
   useEffect(() => {
-    const userId = userProfileData?.id;
-    if (!userId) return;
-
-    const fetchCredits = async () => {
-      if (userId) {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('credits')
-          .eq('id', userId)
-          .single();
-
-        if (error) {
-          console.error("Error fetching credits:", error.message);
-        } else if (data) {
-          setCredits(data.credits);
-        }
-      }
-    };
-    fetchCredits();
-
-    // Subscribe to changes in user credits
-    if (userId) {
-      const channel = supabase
-        .channel("user credits")
-        .on("postgres_changes", {
-          event: "UPDATE",
-          schema: "public",
-          table: "profiles",
-          filter: `id=eq.${userId}`
-          }, payload => {
-            if (
-              payload.new.id === userId && 
-              payload.new.credits !== undefined
-            ) {
-              setCredits(payload.new.credits);
-            }
-          })
-        .subscribe()
-        return () => {
-        (async () => {await supabase
-          .removeChannel(channel);
-        })();
-      };
+    if (userProfileData?.credits !== undefined) {
+      setCurrentCredits(userProfileData?.credits);
     }
-  }, [userProfileData?.id]);
+  }, [userProfileData?.credits])
+
+  // useEffect(() => {
+  //   const userId = userProfileData?.id;
+  //   if (!userId) return;
+
+  //   const fetchCredits = async () => {
+  //     if (userId) {
+  //       const { data, error } = await supabase
+  //         .from('profiles')
+  //         .select('credits')
+  //         .eq('id', userId)
+  //         .single();
+
+  //       if (error) {
+  //         console.error("Error fetching credits:", error.message);
+  //       } else if (data) {
+  //         setCredits(data.credits);
+  //       }
+  //     }
+  //   };
+  //   fetchCredits();
+
+  //   // Subscribe to changes in user credits
+  //   if (userId) {
+  //     const channel = supabase
+  //       .channel("user credits")
+  //       .on("postgres_changes", {
+  //         event: "UPDATE",
+  //         schema: "public",
+  //         table: "profiles",
+  //         filter: `id=eq.${userId}`
+  //         }, payload => {
+  //           if (
+  //             payload.new.id === userId && 
+  //             payload.new.credits !== undefined
+  //           ) {
+  //             setCredits(payload.new.credits);
+  //           }
+  //         })
+  //       .subscribe()
+  //       return () => {
+  //       (async () => {await supabase
+  //         .removeChannel(channel);
+  //       })();
+  //     };
+  //   }
+  // }, [userProfileData?.id]);
 
   // Fetch Cal.com Embed
   useEffect(()=>{
@@ -212,7 +218,7 @@ export default function Credits() {
           >
             Your credits
           </Typography>
-          {credits !== null ? (
+          {currentCredits !== null ? (
             <Box
               id="credits-amount-container"
               className="
@@ -232,8 +238,7 @@ export default function Credits() {
                   flex-row
                 "
               >
-                {credits}
-                  
+                {currentCredits}
               </Typography>
               <Typography
                 variant="h3"
