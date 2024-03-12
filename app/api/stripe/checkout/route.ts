@@ -38,8 +38,8 @@ export async function POST(
           },
         ],
         mode: 'payment',
-        success_url: `${new URL(req.url).origin}/dashboard?success=true&redirect=credits`,
-        cancel_url: `${new URL(req.url).origin}/dashboard?canceled=true&redirect=credits`,
+        success_url: `${new URL(req.url).origin}/dashboard/credits?success=true&message=Your%20order%20has%20been%20placed%20successfully`,
+        cancel_url: `${new URL(req.url).origin}/dashboard/credits?canceled=true&message=Your%20order%20was%20canceled`,
         automatic_tax: {enabled: true},
         metadata: {
           userId: user.id,
