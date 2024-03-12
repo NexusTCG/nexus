@@ -60,14 +60,25 @@ export async function middleware(
       ));
   }
 
-  if (
-    session && 
-    url.searchParams.has('success') && 
-    url.searchParams.get('redirect') === 
-    'credits'
+  // Redirect to /credits on succesful Stripe checkout
+  if (session && 
+    url.searchParams.get("success") === "true" && 
+    url.searchParams.get("redirect") === "credits"
   ) {
-    return NextResponse.redirect(
-      new URL(
+    return NextResponse
+      .redirect(new URL(
+        "/dashboard/credits", 
+        request.url
+      ));
+  }
+
+  // Redirect to /credits on unsuccesful Stripe checkout
+  if (session && 
+    url.searchParams.get("canceled") === "true" && 
+    url.searchParams.get("redirect") === "credits"
+  ) {
+    return NextResponse
+      .redirect(new URL(
         "/dashboard/credits", 
         request.url
       ));

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-// import { createClient } from "@/app/lib/supabase/client";
 import PostHogClient from "@/app/lib/posthog/posthog";
 
 import { loadStripe } from '@stripe/stripe-js';
@@ -21,7 +20,6 @@ import CloseIcon from '@mui/icons-material/Close';
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
-// const supabase = createClient();
 const posthog = PostHogClient();
 
 export default function Credits() {
@@ -71,53 +69,6 @@ export default function Credits() {
       setCurrentCredits(userProfileData?.credits);
     }
   }, [userProfileData?.credits])
-
-  // useEffect(() => {
-  //   const userId = userProfileData?.id;
-  //   if (!userId) return;
-
-  //   const fetchCredits = async () => {
-  //     if (userId) {
-  //       const { data, error } = await supabase
-  //         .from('profiles')
-  //         .select('credits')
-  //         .eq('id', userId)
-  //         .single();
-
-  //       if (error) {
-  //         console.error("Error fetching credits:", error.message);
-  //       } else if (data) {
-  //         setCredits(data.credits);
-  //       }
-  //     }
-  //   };
-  //   fetchCredits();
-
-  //   // Subscribe to changes in user credits
-  //   if (userId) {
-  //     const channel = supabase
-  //       .channel("user credits")
-  //       .on("postgres_changes", {
-  //         event: "UPDATE",
-  //         schema: "public",
-  //         table: "profiles",
-  //         filter: `id=eq.${userId}`
-  //         }, payload => {
-  //           if (
-  //             payload.new.id === userId && 
-  //             payload.new.credits !== undefined
-  //           ) {
-  //             setCredits(payload.new.credits);
-  //           }
-  //         })
-  //       .subscribe()
-  //       return () => {
-  //       (async () => {await supabase
-  //         .removeChannel(channel);
-  //       })();
-  //     };
-  //   }
-  // }, [userProfileData?.id]);
 
   // Fetch Cal.com Embed
   useEffect(()=>{
