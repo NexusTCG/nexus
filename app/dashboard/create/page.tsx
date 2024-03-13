@@ -31,6 +31,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
 import SaveIcon from "@mui/icons-material/Save";
+import WarningIcon from '@mui/icons-material/Warning';
 
 export default function Create() {
   const { userProfileData } = useContext(DashboardContext);
@@ -486,8 +487,39 @@ export default function Create() {
                 lg:mb-12
                 mb-8
                 md:mt-4
+                gap-4
               "
             >
+              <Box
+                id="create-form-warning"
+                className="
+                  flex
+                  flex-row
+                  justify-start
+                  items-center
+                  w-full
+                  text-yellow-500
+                  bg-yellow-900/50
+                  rounded-md
+                  py-2
+                  px-3
+                  gap-3
+                "
+              >
+                <WarningIcon
+                  fontSize="small"
+                />
+                <Typography
+                variant="caption"
+                className="
+                  w-full
+                  text-xs
+                "
+              >
+                Do not deliberately attempt to create cards that would violate the intellectual property of others. Such as the names or likeness of recognizable characters, places, or items from other games, movies, real time, etc. Doing so will result in a warning or termination of your account.
+              </Typography>
+              </Box>
+              
               {/* Card Creator Form */}
               <CardCreatorForm
                 cardData={uploadedFormData ? uploadedFormData : submittedFormData}
