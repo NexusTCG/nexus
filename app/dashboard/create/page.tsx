@@ -516,7 +516,7 @@ export default function Create() {
                   text-xs
                 "
               >
-                Do not deliberately attempt to create cards that would violate the intellectual property of others. Such as the names or likeness of recognizable characters, places, or items from other games, movies, real time, etc. Doing so will result in a warning or termination of your account.
+                Do not deliberately attempt to create cards that would violate the intellectual property of others. Such as the names or likeness of recognizable characters, places, or items from other games, movies, real life, etc. Doing so will result in a warning or termination of your account.
               </Typography>
               </Box>
               

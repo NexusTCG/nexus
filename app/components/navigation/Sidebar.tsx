@@ -7,6 +7,14 @@ import SignOutButton from "@/app/components/auth/SignOutButton"
 import Image from "next/image";
 import Link from "next/link";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+
+const legalLinks = {
+  "terms": "https://app.termly.io/document/terms-of-service/ed073254-9c41-4933-b15f-884e216e16de",
+  "privacy": "https://app.termly.io/document/privacy-policy/ad50ccf1-c965-4b23-8bdb-77a1bca4cb54",
+  "cookies": "https://app.termly.io/document/cookie-policy/a25f2c19-179e-41dd-90d1-a797291d8669",
+  "guidelines": "https://docs.google.com/document/d/1Pojoxyo1YZPLi7ZEuIzG9-RcTAUSO-C86HvU_NplY9I/edit?usp=sharing",
+}
 
 const soMeChannels = [
   "github",
@@ -120,7 +128,6 @@ export default function Sidebar() {
           </Box>
         </Box>
         
-
         <Box
           id="sidebar-navigation-primary"
           className="
@@ -180,6 +187,62 @@ export default function Sidebar() {
             )
           })}
           <SignOutButton /> 
+        </Box>
+        <Box
+          id="legal-links"
+          className="
+            flex
+            flex-row
+            justify-between
+            items-center
+            gap-2
+            mb-2
+          "
+        >
+          <Link href={legalLinks.terms}>
+            <Typography
+              variant="caption"
+              className="
+                text-neutral-500
+                hover:text-neutral-400
+              "
+            >
+              Terms
+            </Typography>
+          </Link>
+          <Link href={legalLinks.privacy}>
+            <Typography
+              variant="caption"
+              className="
+                text-neutral-500
+                hover:text-neutral-400
+              "
+            >
+              Privacy
+            </Typography>
+          </Link>
+          <Link href={legalLinks.cookies}>
+            <Typography
+              variant="caption"
+              className="
+                text-neutral-500
+                hover:text-neutral-400
+              "
+            >
+              Cookies
+            </Typography>
+          </Link>
+          <Link href={legalLinks.guidelines}>
+            <Typography
+              variant="caption"
+              className="
+                text-neutral-500
+                hover:text-neutral-400
+              "
+            >
+              Guidelines
+            </Typography>
+          </Link>
         </Box>
       </Box>
     </Box>
