@@ -56,7 +56,7 @@ export default function Credits() {
       setAlertInfo({
         type: "error",
         icon: <CloseIcon />,
-        message: "Order canceled -- continue to shop around and checkout when you’re ready."
+        message: "Your order was canceled! You will not be charged."
       });
       setShowAlert(true);
       setTimeout(() => {

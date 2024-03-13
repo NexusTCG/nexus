@@ -1058,14 +1058,14 @@ export default function NexusCardForm({
                         ? formCardData.cardCreator
                         : "Card Creator"}
                     </Typography>
-                    <Typography
+                    {/* <Typography
                       variant="caption"
                       className="opacity-80"
                     >
                       © Nexus {
                         new Date().getFullYear()
                       } 
-                    </Typography>
+                    </Typography> */}
                   </Box>
                 </Box>
               </Box>

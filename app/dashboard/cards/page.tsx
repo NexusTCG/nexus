@@ -201,7 +201,7 @@ export default function Cards() {
                   <Typography
                     variant="overline"
                     className="
-                      text-lime-500
+                      text-teal-400
                       font-semibold
                       text-xs
                     "
