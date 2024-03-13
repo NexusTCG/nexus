@@ -57,7 +57,7 @@ export default function OAuthButton({
         .signInWithOAuth({
           provider: provider,
           options: {
-            redirectTo: `${window.location.origin}/auth/callback`,
+            redirectTo: `${window.location.origin}/api/auth/callback`,
           },
       });
       if (error) {

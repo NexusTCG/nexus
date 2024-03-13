@@ -26,7 +26,10 @@ export async function GET(req: NextRequest) {
       );
     } 
     
-    if (data?.session && data?.session.user) {
+    if (
+      data?.session && 
+      data?.session.user
+    ) {
       // Check if user has a profile
       const {
         data: profile,
@@ -38,7 +41,10 @@ export async function GET(req: NextRequest) {
         .maybeSingle();
       
       // If user has no profile, redirect to complete profile
-      if (profileError || !profile) {
+      if (
+        profileError || 
+        !profile
+      ) {
         return Response.redirect(
           `${url.origin}/login/complete-profile`
           );

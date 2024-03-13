@@ -1,9 +1,6 @@
 "use server";
 
-// If its the first time logging in, redirect to /login/complete-signup
-
 import { createClient } from "@/app/lib/supabase/server";
-// import { NextResponse } from "next/server"; // Swapped out NextResponse for Response
 import { cookies } from "next/headers";
 
 export async function POST(request: Request) {
@@ -15,7 +12,10 @@ export async function POST(request: Request) {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
 
-  const { data, error } = await supabase
+  const { 
+    data, 
+    error 
+  } = await supabase
     .auth
     .signInWithPassword({
       email,
@@ -29,7 +29,10 @@ export async function POST(request: Request) {
   }
 
   // Check if it's the user's first login
-  if (data.user && data.user.id) {
+  if (
+    data.user && 
+    data.user.id
+  ) {
     const {
       data: profile,
       error: profileError
