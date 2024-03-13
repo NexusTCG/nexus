@@ -266,12 +266,14 @@ const CardRender = ({
                   gap-1
                 `}
               >
-                <Image
-                  src={Mythic}
-                  height={14}
-                  width={14}
-                  alt="Mythic icon"
-                />
+                {cardData?.cardSuperType === "mythic" && (
+                  <Image
+                    src={Mythic}
+                    height={14}
+                    width={14}
+                    alt="Mythic icon"
+                  />
+                )}
                 {/* Card name */}
                 <Typography
                   variant="subtitle1"
