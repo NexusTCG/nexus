@@ -471,7 +471,8 @@ const CardRender = ({
                 id="card-image"
                 sx={{
                   aspectRatio: "4 / 3 !important",
-                  height: "252px !important", // Maybe 7px taller
+                  width: "336px !important",
+                  height: "252px !important",
                   border: "2px solid black",
                 }}
                 className="
@@ -480,6 +481,7 @@ const CardRender = ({
                   relative
                 "
               >
+                
                 <Image
                   src={cardData.cardArt || "/images/card-parts/card-art/default-art.jpg"}
                   fill={true}
@@ -687,13 +689,13 @@ const CardRender = ({
                 ? `Made by ${cardData.cardCreator}`
                 : "Card Creator"}
             </p>
-            <p
+            {/* <p
               className="fineprint-text"
             >
               © Nexus {
                 new Date().getFullYear()
               } 
-            </p>
+            </p> */}
           </Box>
         </Box>
       </Box>
