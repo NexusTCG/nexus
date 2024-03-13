@@ -471,7 +471,6 @@ const CardRender = ({
                 id="card-image"
                 sx={{
                   aspectRatio: "4 / 3 !important",
-                  width: "336px !important",
                   height: "252px !important",
                   border: "2px solid black",
                 }}

@@ -724,6 +724,12 @@ export default function NexusCardForm({
                     relative
                   "
                 >
+                   <Image
+                    src={activeCardArt || "/images/card-parts/card-art/default-art.jpg"}
+                    width={336}
+                    height={252}
+                    alt={`${formCardData.cardName} card art`}
+                  />
                   <Image
                     src={activeCardArt || "/images/card-parts/card-art/default-art.jpg"}
                     fill={true}
