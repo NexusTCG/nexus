@@ -54,25 +54,25 @@ const images = [
     src: "/images/cards/nexus-card-1.png",
     alt: "Mecha Dragon",
     name: "Mecha Dragon",
-    creator: "NilsW",
+    creator: "NexusNils",
   },
   {
     src: "/images/cards/nexus-card-2.png",
     alt: "Battlefield Medic",
     name: "Battlefield Medic",
-    creator: "NilsW",
+    creator: "NexusNils",
   },
   {
     src: "/images/cards/nexus-card-3.png",
     alt: "Vampiric Enforcer",
     name: "Vampiric Enforcer",
-    creator: "NilsW",
+    creator: "NexusNils",
   },
   {
     src: "/images/cards/nexus-card-4.png",
     alt: "Reversal Pulse",
     name: "Reversal Pulse",
-    creator: "NilsW",
+    creator: "NexusNils",
   },
 ];
 
