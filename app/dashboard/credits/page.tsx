@@ -51,19 +51,31 @@ export default function Credits() {
       setShowAlert(true);
       setTimeout(() => {
         setShowAlert(false);
-      }, 6000)
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.delete("success");
+        newUrl.searchParams.delete("canceled");
+        newUrl.searchParams.delete("message");
+        window.history.replaceState(null, '', newUrl.href);
+      }, 6000);
     } else if (query.get("canceled")) {
       setAlertInfo({
         type: "error",
         icon: <CloseIcon />,
         message: "Your order was canceled! You will not be charged."
       });
-      setShowAlert(true);
       setTimeout(() => {
         setShowAlert(false);
-      }, 6000)
+        const newUrl = new URL(window.location.href);
+        newUrl.searchParams.delete("success");
+        newUrl.searchParams.delete("canceled");
+        newUrl.searchParams.delete("message");
+        window.history.replaceState(null, '', newUrl.href);
+      }, 6000);
     }
-  }, [showAlert, alertInfo]);
+  }, [
+    showAlert, 
+    alertInfo
+  ]);
 
   useEffect(() => {
     if (userProfileData?.credits !== undefined) {
