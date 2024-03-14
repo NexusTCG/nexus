@@ -51,28 +51,28 @@ const featureIcons = [
 
 const images = [
   {
-    src: "/images/cards/common-node-yellow.png",
-    alt: "Description of image 1",
-    name: "Yellow Node",
-    creator: "Username",
+    src: "/images/cards/nexus-card-1.png",
+    alt: "Mecha Dragon",
+    name: "Mecha Dragon",
+    creator: "NilsW",
   },
   {
-    src: "/images/cards/common-node-blue.png",
-    alt: "Description of image 1",
-    name: "Blue Node",
-    creator: "Username",
+    src: "/images/cards/nexus-card-2.png",
+    alt: "Battlefield Medic",
+    name: "Battlefield Medic",
+    creator: "NilsW",
   },
   {
-    src: "/images/cards/common-node-purple.png",
-    alt: "Description of image 1",
-    name: "Purple Node",
-    creator: "Username",
+    src: "/images/cards/nexus-card-3.png",
+    alt: "Vampiric Enforcer",
+    name: "Vampiric Enforcer",
+    creator: "NilsW",
   },
   {
-    src: "/images/cards/common-node-red.png",
-    alt: "Description of image 1",
-    name: "Red Node",
-    creator: "Username",
+    src: "/images/cards/nexus-card-4.png",
+    alt: "Reversal Pulse",
+    name: "Reversal Pulse",
+    creator: "NilsW",
   },
 ];
 
