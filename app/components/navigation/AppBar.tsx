@@ -34,7 +34,7 @@ export default function AppBar() {
 
   const handleSignOut = async () => {
     setAnchorEl(null);
-    const response = await fetch(`${window.location.origin}/auth/logout-user`, {
+    const response = await fetch(`${window.location.origin}/api/auth/logout-user`, {
       method: "POST",
     });
 
@@ -163,10 +163,10 @@ export default function AppBar() {
             </MenuItem>
           </Link>
           <MenuItem
-              onClick={handleSignOut}
-            >
-              Log Out
-            </MenuItem>
+            onClick={handleSignOut}
+          >
+            Log Out
+          </MenuItem>
         </Menu>
       </Toolbar>  
     </Box>

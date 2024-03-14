@@ -55,8 +55,8 @@ export default function RootLayout(
                 text-neutral-300
               "
             >
-                {children}
-                <Analytics />
+              {children}
+              <Analytics />
             </main>
             <Script
               type="text/javascript"
