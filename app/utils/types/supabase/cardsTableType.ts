@@ -16,6 +16,7 @@ export type CardsTableType = {
     cardFlavorText: string;
     cardAttack: string;
     cardDefense: string;
+    cardUnitType?: string;
     cardRender: string;
     cardCreator: string;
     cardPrompt: string;

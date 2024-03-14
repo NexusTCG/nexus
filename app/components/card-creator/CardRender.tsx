@@ -14,6 +14,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
 import Divider from "@mui/material/Divider";
+import AdsClickIcon from '@mui/icons-material/AdsClick';
 // SVG icons
 import Speed from "@/public/images/card-parts/card-icons/speed.svg";
 import Mythic from "@/public/images/card-parts/card-icons/mythic.svg";
@@ -266,6 +267,20 @@ const CardRender = ({
                   gap-1
                 `}
               >
+                {cardData?.cardUnitType === "ranged" && (
+                  <AdsClickIcon
+                    sx={{ 
+                      fontSize: "18px", 
+                      color: "black" 
+                    }}
+                    className="
+                      bg-amber-500
+                      rounded-full
+                      border
+                      border-black
+                    "
+                  />
+                )}
                 {cardData?.cardSuperType === "mythic" && (
                   <Image
                     src={Mythic}

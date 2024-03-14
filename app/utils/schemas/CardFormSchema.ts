@@ -32,6 +32,7 @@ const CardFormSchema = z
     cardFlavorText: z.string().optional(),
     cardAttack: z.string().optional(),
     cardDefense: z.string().optional(),
+    cardUnitType: z.string().optional(),
     cardPrompt: z.string().optional(),
     cardArtPrompt: z.string().optional(),
     cardRender: z.string().optional(),

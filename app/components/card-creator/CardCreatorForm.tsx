@@ -820,6 +820,32 @@ export default function CardCreatorForm({
                   }
                 />
               )}
+              {form.cardType && form.cardType === "entity" && (
+                <FormControlLabel
+                  onChange={() => {
+                    form.cardUnitType === "melee" ? 
+                    setValue("cardUnitType", "ranged") : 
+                    setValue("cardUnitType", "melee")
+                  }}
+                  control={
+                    <Checkbox
+                      checked={form.cardUnitType === "ranged"}
+                      size="small"
+                    />
+                  } 
+                  label={
+                    <Typography
+                      variant="subtitle2"
+                      className="
+                      hover:text-neutral-400
+                        font-medium
+                      "
+                    >
+                      {form.cardUnitType === "melee" ? "Melee" : "Ranged"}
+                    </Typography>
+                  }
+                />
+              )}
               {form.cardType && form.cardType !== "event" && (
                 <FormControlLabel
                   onChange={() => {

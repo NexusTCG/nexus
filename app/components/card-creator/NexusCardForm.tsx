@@ -52,6 +52,7 @@ import Common from "@/public/images/card-parts/card-icons/card-grades/common.svg
 import Rare from "@/public/images/card-parts/card-icons/card-grades/rare.svg";
 import Epic from "@/public/images/card-parts/card-icons/card-grades/epic.svg";
 import Prime from "@/public/images/card-parts/card-icons/card-grades/prime.svg";
+import AdsClickIcon from '@mui/icons-material/AdsClick';
 
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
@@ -374,8 +375,27 @@ export default function NexusCardForm({
                     gap-1
                   `}
                 >
+                  {/* Ranged icon boolean */}
+                  {formCardData?.cardType !== "undefined" && 
+                  formCardData?.cardType?.includes("entity") && 
+                  formCardData.cardUnitType === "ranged" && (
+                    <AdsClickIcon
+                      sx={{ 
+                        fontSize: "18px", 
+                        color: "black" 
+                      }}
+                      className="
+                        bg-amber-500
+                        rounded-full
+                        border
+                        border-black
+                      "
+                    />
+                  )}
                   {/* Mythic icon boolean */}
-                  {formCardData.cardSuperType === "mythic" && (
+                  {formCardData?.cardType !== "undefined" &&
+                  formCardData?.cardType !== "event" &&
+                  formCardData.cardSuperType === "mythic" && (
                     <Image
                       src={Mythic}
                       height={14}
@@ -534,6 +554,16 @@ export default function NexusCardForm({
 
                               // Directly call field.onChange with the selectedOption
                               field.onChange(selectedOption);
+
+                              if (
+                                formCardData.cardType === "entity" && 
+                                selectedOption !== "entity"
+                              ) {
+                                setValue("cardAttack", "0");
+                                setValue("cardDefense", "0");
+                                setValue("cardSuperType", "default");
+                                setValue("cardUnitType", "melee");
+                              }
 
                               // Check if the selected option is "node" and reset fields accordingly
                               if (selectedOption === "node") {

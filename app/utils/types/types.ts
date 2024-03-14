@@ -2,6 +2,7 @@ export type CardFormDataType = {
   cardArt?: string
   cardArtPrompt?: string | null
   cardAttack?: string | null
+  cardUnitType?: string | null
   cardColor: string | null
   cardCreator?: string | null
   cardDefense?: string | null

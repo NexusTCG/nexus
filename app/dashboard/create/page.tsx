@@ -61,6 +61,7 @@ export default function Create() {
       cardFlavorText: "",
       cardAttack: "",
       cardDefense: "",
+      cardUnitType: "melee",
       cardPrompt: "",
       cardArtPrompt: "",
       cardRender: "",

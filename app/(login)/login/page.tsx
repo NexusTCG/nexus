@@ -312,9 +312,9 @@ export default function AuthForm({
           "
         />
         <Typography
-          variant="subtitle1"
+          variant="subtitle2"
           className="
-            lg:text-4xl
+            lg:text-3xl
             font-medium
             text-center
             text-white
@@ -322,9 +322,8 @@ export default function AuthForm({
             lg:block
           "
         >
-          AI-POWERED <br />
-          OPEN SOURCE <br />
-          DIGITAL TCG
+          CREAT CUSTOM CARDS. < br/>
+          EARN REVENUE SHARE.
         </Typography>
       </Box>
       <Box
