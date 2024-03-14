@@ -11,7 +11,6 @@ export default function Profile() {
   useEffect(() => {
     const redirect = async () => {
       if (userProfileData?.username) {
-        console.log(userProfileData?.username.toLowerCase());
         router.push(`/dashboard/profile/${userProfileData?.username.toLowerCase()}`);
       }
     }; 

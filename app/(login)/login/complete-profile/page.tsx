@@ -87,8 +87,6 @@ export default function CompleteProfile() {
       bio
     } = data;
 
-    console.log("Session:", session);
-    console.log("user.id:", session?.user.id);
     try {
       if (!session?.user.id) return;
       if (watchId === "") {
@@ -439,7 +437,7 @@ export default function CompleteProfile() {
                 type="submit"
                 variant="outlined"
                 disabled={isSubmitting || !isValid ? true : false}
-                color={"primary"}
+                color="primary"
                 size="large"
                 className="
                   w-full

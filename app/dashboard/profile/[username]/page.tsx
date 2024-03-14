@@ -142,8 +142,6 @@ export default function ProfileId({
 
       if (response.ok) {
         const jsonResponse = await response.json();
-        console.log("Full API Response:", jsonResponse);
-        console.log(`Data returned by API: ${jsonResponse.data}`); 
         setUserAvatarUrl(jsonResponse.data); 
         // TODO: Update user profile with new avatar URL
         // Remove setter for userAvatarUrl as its updated by useEffect
