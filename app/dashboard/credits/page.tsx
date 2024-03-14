@@ -63,6 +63,7 @@ export default function Credits() {
         icon: <CloseIcon />,
         message: "Your order was canceled! You will not be charged."
       });
+      setShowAlert(true);
       setTimeout(() => {
         setShowAlert(false);
         const newUrl = new URL(window.location.href);
