@@ -72,10 +72,7 @@ export default function Credits() {
         window.history.replaceState(null, '', newUrl.href);
       }, 6000);
     }
-  }, [
-    showAlert, 
-    alertInfo
-  ]);
+  }, []);
 
   useEffect(() => {
     if (userProfileData?.credits !== undefined) {
