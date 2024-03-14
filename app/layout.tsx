@@ -5,7 +5,8 @@ import { Inter } from "next/font/google";
 import theme from "@/app/styles/theme";
 import "@/app/styles/globals.css";
 import { PHProvider } from "@/app/providers";
-import dynamic from 'next/dynamic'
+import dynamic from 'next/dynamic';
+import Script from 'next/script';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const PostHogPageView = dynamic(() => import('@/app/lib/posthog/PostHogPageView'), {
@@ -57,6 +58,12 @@ export default function RootLayout(
                 {children}
                 <Analytics />
             </main>
+            <Script
+              type="text/javascript"
+              src="https://app.termly.io/resource-blocker/c38fdc46-d3b8-4bf8-8c5d-460cba620841?autoBlock=on"
+              strategy="beforeInteractive"
+              async
+            ></Script>
           </body>
         </ThemeProvider>
       </PHProvider>

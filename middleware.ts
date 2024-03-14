@@ -28,11 +28,11 @@ export async function middleware(
   }
 
   const {
-    data: { session },
+    data: { user: session},
     error,
   } = await supabase
     .auth
-    .getSession();
+    .getUser();
 
   if (error) {
     console.log(error);
