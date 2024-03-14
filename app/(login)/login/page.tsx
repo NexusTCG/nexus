@@ -32,6 +32,13 @@ type PasswordResetFormData = {
   resetEmail: string;
 }
 
+const legalLinks = {
+  "terms": "https://app.termly.io/document/terms-of-service/ed073254-9c41-4933-b15f-884e216e16de",
+  "privacy": "https://app.termly.io/document/privacy-policy/ad50ccf1-c965-4b23-8bdb-77a1bca4cb54",
+  "cookies": "https://app.termly.io/document/cookie-policy/a25f2c19-179e-41dd-90d1-a797291d8669",
+  "guidelines": "https://docs.google.com/document/d/1Pojoxyo1YZPLi7ZEuIzG9-RcTAUSO-C86HvU_NplY9I/edit?usp=sharing",
+}
+
 export default function AuthForm({
   searchParams,
 }: {
@@ -698,7 +705,7 @@ export default function AuthForm({
                       >
                         By signing up, you agree to our {""}
                         <Link
-                          href="/terms"
+                          href={legalLinks.terms}
                           rel="noopener noreferrer"
                           target="_blank"
                         >
@@ -712,9 +719,9 @@ export default function AuthForm({
                             Terms of Service
                           </Typography>
                         </Link>
-                        {""} and {""}
+                        {""}, {""}
                         <Link
-                          href="/policies"
+                          href={legalLinks.privacy}
                           rel="noopener noreferrer"
                           target="_blank"
                         >
@@ -725,7 +732,39 @@ export default function AuthForm({
                             hover:text-teal-400
                             "
                           >
-                            Policies
+                            Privacy Policy
+                          </Typography>
+                        </Link>
+                        {""}, {""}
+                        <Link
+                          href={legalLinks.cookies}
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          <Typography
+                            variant="caption"
+                            className="
+                            text-teal-500
+                            hover:text-teal-400
+                            "
+                          >
+                            Cookie Policy
+                          </Typography>
+                        </Link>
+                        {""}, and {""}
+                        <Link
+                          href={legalLinks.guidelines}
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          <Typography
+                            variant="caption"
+                            className="
+                            text-teal-500
+                            hover:text-teal-400
+                            "
+                          >
+                            Community Guidelines
                           </Typography>
                         </Link>
                       </Typography>
