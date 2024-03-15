@@ -531,7 +531,7 @@ const CardRender = ({
                   id="card-text"
                   variant="body1"
                 >
-                  {cardData.cardText}
+                  {cardData.cardText?.replace(/~/g, cardData.cardName || "card name")}
                 </Typography>
                 {/* Divider */}
                 {/* Flavor text */}
