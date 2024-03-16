@@ -517,7 +517,6 @@ const CardRender = ({
                   border: "2px solid black",
                   padding: "5px 7.5px",
                 }}
-                // ${colorMapping[cardColorClass as keyof typeof colorMapping]?.[50] ?? "bg-slate-50"}
                 className={`
                   bg-teal-50
                   flex
@@ -527,13 +526,21 @@ const CardRender = ({
                 `}
               >
                 {/* Card text */}
-                <Typography
-                  id="card-text"
-                  variant="body1"
-                >
-                  {cardData.cardText?.replace(/~/g, cardData.cardName || "card name")}
-                </Typography>
-                {/* Divider */}
+                {cardData.cardText && cardData.cardName
+                  ? cardData.cardText
+                      .replace(/~/g, cardData.cardName)
+                      .split('\n')
+                      .map((line, index) => (
+                        <Typography
+                          key={index}
+                          variant="body1"
+                          component="div"
+                          gutterBottom
+                        >
+                          {line}
+                        </Typography>
+                      ))
+                  : null}
                 {/* Flavor text */}
                 {cardData.cardFlavorText !== "" && (
                   <>
