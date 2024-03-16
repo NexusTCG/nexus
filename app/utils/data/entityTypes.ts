@@ -1,9 +1,4 @@
 import { EntityTypesType } from "../types/types";
-// import {
-//     Pets as PetsIcon,
-// } from '@mui/icons-material';
-
-// Swap out for database fetch / map
 
 const entityTypes: EntityTypesType[] = [
   {
@@ -30,6 +25,17 @@ const entityTypes: EntityTypesType[] = [
   },
   {
     id: 3,
+    name: "Amphibian",
+    description: "",
+    artPrompt: "",
+    primaryColors: ["", ""],
+    secondaryColors: ["", ""],
+    planets: ["", ""],
+    frequency: "",
+    role: false,
+  },
+  {
+    id: 4,
     name: "Android",
     description:
       "Human-like features, metallic or synthetic skin, visible joints and circuits. Mechanical, logical, task-oriented.",
@@ -41,7 +47,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 4,
+    id: 5,
     name: "Angel",
     description:
       "Tall, luminous beings with large wings, often glowing or radiant. Divine, ethereal, graceful, protective.",
@@ -53,7 +59,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 5,
+    id: 6,
     name: "Apparition",
     description: "",
     artPrompt: "",
@@ -64,7 +70,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 6,
+    id: 7,
     name: "Arachnid",
     description:
       "Resemble large spiders with multiple eyes and sharp fangs. Eight-legged, venomous, web-spinning.",
@@ -76,7 +82,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 7,
+    id: 8,
     name: "Artisan",
     description: "",
     artPrompt: "",
@@ -87,7 +93,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 8,
+    id: 9,
     name: "Bear",
     description:
       "Large, muscular mammals with thick fur and sharp claws. Powerful, territorial, protective.",
@@ -99,7 +105,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 9,
+    id: 10,
     name: "Beast",
     description:
       "Beast is a catch-all entity type for a diverse range of feral entities that don’t fall under any of the other entity types in the feral entity group. From large predators to smaller mammals. Wild, unpredictable, various temperaments based on species.",
@@ -111,7 +117,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 10,
+    id: 11,
     name: "Bird",
     description:
       "Feathered creatures with beaks and talons, varying in size and color. Graceful, agile, melodic, free-spirited.",
@@ -123,7 +129,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 11,
+    id: 12,
     name: "Brista",
     description:
       "Spiky skin, adapted to arid environments, often with ornate body markings. Resilient, spiritual, communal.",
@@ -135,7 +141,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 12,
+    id: 13,
     name: "Bristlyn",
     description:
       "Beings with quill-covered bodies. They can shoot these quills as a defense mechanism. Defensive, territorial, reactive.",
@@ -147,7 +153,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 13,
+    id: 14,
     name: "Cat",
     description:
       "Sleek feline creatures, varying in size and fur patterns. Graceful, agile, curious, independent.",
@@ -159,7 +165,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 14,
+    id: 15,
     name: "Cosmic",
     description: "",
     artPrompt: "",
@@ -170,7 +176,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 15,
+    id: 16,
     name: "Cultist",
     description: "",
     artPrompt: "",
@@ -181,7 +187,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 16,
+    id: 17,
     name: "Cyborg",
     description:
       "Humans with visible mechanical or electronic enhancements. Enhanced, integrated, adaptive.",
@@ -193,7 +199,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 17,
+    id: 18,
     name: "Demon",
     description:
       "Dark, often horned entities with red or black skin, sharp teeth, and glowing eyes. ",
@@ -205,7 +211,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 18,
+    id: 19,
     name: "Dinosaur",
     description:
       "Large reptiles, ranging from carnivorous with sharp teeth to herbivorous with long necks. ",
@@ -217,7 +223,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 19,
+    id: 20,
     name: "Dracan",
     description:
       "Large reptilian beings with scales, sharp teeth, and long tails. Territorial, venomous, keen-sensed.",
@@ -229,7 +235,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 20,
+    id: 21,
     name: "Dragon",
     description:
       "Winged reptiles with the ability to breathe fire, often with scales and sharp claws. Majestic, hoarding, powerful.",
@@ -241,7 +247,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 21,
+    id: 22,
     name: "Drone",
     description:
       "Mechanical entities, often flying or hovering, with various tools or sensors. Autonomous, programmed, efficient.",
@@ -253,7 +259,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 22,
+    id: 23,
     name: "Dwarf",
     description:
       "Short, sturdy humanoids with thick beards and often seen with mining tools. Stout, industrious, underground-dwelling.",
@@ -265,7 +271,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 23,
+    id: 24,
     name: "Elemental",
     description: "",
     artPrompt: "",
@@ -276,7 +282,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 24,
+    id: 25,
     name: "Elephant",
     description: "",
     artPrompt: "",
@@ -287,7 +293,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 25,
+    id: 26,
     name: "Elf",
     description:
       "Tall humanoids with pointed ears, slender bodies, and often with nature-themed attire. Graceful, nature-affine, long-lived.",
@@ -299,7 +305,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 26,
+    id: 27,
     name: "Elk",
     description: "",
     artPrompt: "",
@@ -310,7 +316,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 27,
+    id: 28,
     name: "Engineer",
     description:
       "Often seen with tools or devices, wearing protective gear or lab coats. Analytical, problem-solving, innovative.",
@@ -322,7 +328,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 28,
+    id: 29,
     name: "Explorer",
     description: "",
     artPrompt: "",
@@ -333,7 +339,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 29,
+    id: 30,
     name: "Fish",
     description:
       "Range from small, colorful fish to larger, predatory species with fins and scales. Aquatic, gilled, diverse.",
@@ -345,7 +351,19 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 30,
+    id: 31,
+    name: "Frock",
+    description:
+      "Frog-like creatures, capable of surprising feats. Covered in a protective skin, made entirely of crystal rocks.",
+    artPrompt: "",
+    primaryColors: ["", ""],
+    secondaryColors: ["", ""],
+    planets: ["", ""],
+    frequency: "",
+    role: false,
+  },
+  {
+    id: 32,
     name: "Giant",
     description:
       "Humanoids of enormous size, often with rough features and wearing primitive attire. Immensely large, slow, powerful.",
@@ -357,7 +375,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 31,
+    id: 33,
     name: "Glitch",
     description:
       "Digital anomalies, often with distorted or pixelated appearances. Erratic, unpredictable, disruptive.",
@@ -369,7 +387,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 32,
+    id: 34,
     name: "Gnome",
     description:
       "Small humanoids, often with colorful clothing, pointy hats, and a playful demeanor. Mischievous, magical, tiny.",
@@ -381,7 +399,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 33,
+    id: 35,
     name: "Goblin",
     description:
       "Small humanoids with green skin, pointy ears, and often seen with makeshift weapons. Cunning, mischievous, green-skinned.",
@@ -393,7 +411,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 34,
+    id: 36,
     name: "God",
     description:
       "Immensely powerful beings, often with auras or symbols of their dominion. Omnipotent, divine, eternal.",
@@ -405,7 +423,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 35,
+    id: 37,
     name: "Goo",
     description:
       "Often seen in white coats or uniforms, carrying medical equipment. Healing, knowledgeable, compassionate.",
@@ -417,7 +435,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 36,
+    id: 38,
     name: "Healer",
     description:
       "Often seen in white coats or uniforms, carrying medical equipment. Healing, knowledgeable, compassionate.",
@@ -429,7 +447,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 37,
+    id: 39,
     name: "Highborn",
     description:
       "Individuals of regal bearing, often wearing fine clothing or jewelry. Noble, privileged, responsible.",
@@ -441,7 +459,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 38,
+    id: 40,
     name: "Horror",
     description:
       "Entities with terrifying appearances, often with distorted or exaggerated features. Nightmarish, terrifying, malevolent.",
@@ -453,7 +471,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 39,
+    id: 41,
     name: "Human",
     description:
       "Typical human appearance, varying in skin color, height, and attire. Adaptable, diverse, social.",
@@ -465,7 +483,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 40,
+    id: 42,
     name: "Insect",
     description:
       "Range from small beetles to larger, more menacing creatures like mantises.Six-legged, diverse, often communal.",
@@ -477,7 +495,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 41,
+    id: 43,
     name: "Lycan",
     description:
       "This is an entity role exclusive to humans that transform into large, ferocious wolves during the full moon. Transformative, feral during full moon, dual-natured.",
@@ -489,7 +507,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 42,
+    id: 44,
     name: "Lynxar",
     description:
       "Cat-like humanoids with sleek bodies, sharp claws, and keen eyes. Agile, sharp-sensed, feline.",
@@ -501,7 +519,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 43,
+    id: 45,
     name: "Mercenary",
     description:
       "Armed individuals, often in battle-worn armor or camouflage. Loyal to the highest bidder, skilled, ruthless.",
@@ -513,7 +531,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 44,
+    id: 46,
     name: "Merchant",
     description:
       "Often seen with goods or a stall, wearing attire suitable for their trade. Business-savvy, trader, negotiator.",
@@ -525,7 +543,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 45,
+    id: 47,
     name: "Mutant",
     description:
       "Beings with visible genetic alterations, often with unique or exaggerated features. Genetically altered, unique, unpredictable.",
@@ -537,7 +555,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 46,
+    id: 48,
     name: "Nymph",
     description:
       "Ethereal beings often associated with specific natural landmarks, with delicate features. Nature-bound, ethereal, protective.",
@@ -549,7 +567,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 47,
+    id: 49,
     name: "Octopi",
     description:
       "Aquatic creatures with tentacles, often changing colors to blend with their surroundings. Intelligent, eight-armed, camouflaging.",
@@ -561,7 +579,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 48,
+    id: 50,
     name: "Paladin",
     description: "",
     artPrompt: "",
@@ -572,7 +590,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 49,
+    id: 51,
     name: "Phoenix",
     description:
       "Fiery birds, often with bright plumage and a radiant aura. Fiery, reborn, eternal.",
@@ -584,7 +602,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 50,
+    id: 52,
     name: "Pilot",
     description:
       "Often seen in pilot suits, with helmets or goggles, near spacecraft. Skilled, adventurous, spacefarer.",
@@ -596,7 +614,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 51,
+    id: 53,
     name: "Rodent",
     description:
       "Small mammals, often furry, with sharp teeth and whiskers. Quick, sharp-toothed, small.",
@@ -608,7 +626,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 52,
+    id: 54,
     name: "Rogue",
     description:
       "Cloaked figures, adept at moving in the shadows, often with a sly demeanor. Stealthy, cunning, independent.",
@@ -620,7 +638,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 53,
+    id: 55,
     name: "Shaman",
     description:
       "Often with tribal attire, surrounded by totems or nature symbols. Spiritual, ritualistic, nature-connected.",
@@ -632,7 +650,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 54,
+    id: 56,
     name: "Shapeshifter",
     description:
       "Beings that can take on multiple forms, often seen mid-transformation. Adaptive, deceptive, transformative.",
@@ -644,7 +662,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 55,
+    id: 57,
     name: "Soldier",
     description:
       "In uniform, often with weapons and armor, representing their faction. Disciplined, loyal, combat-ready.",
@@ -656,7 +674,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 56,
+    id: 58,
     name: "Sorcerer",
     description:
       "Robed figures, often with staffs or wands, surrounded by arcane symbols. Magical, powerful, arcane.",
@@ -668,7 +686,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 57,
+    id: 59,
     name: "Specter",
     description:
       "Ghostly figures, often translucent or glowing, with a serene or haunting demeanor. Ethereal, otherworldly, intangible.",
@@ -680,7 +698,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 58,
+    id: 60,
     name: "Talox",
     description:
       "Sturdy, armored beings known for their patience and longevity. They build vast underwater cities and are revered as ancient scholars.",
@@ -692,7 +710,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 59,
+    id: 61,
     name: "Technomancer",
     description:
       "Often seen with advanced tech devices, merging magic with technology. Technologically adept, innovative, magical.",
@@ -704,7 +722,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 60,
+    id: 62,
     name: "Telepath",
     description:
       "Often with a focused or distant gaze, sometimes with symbols or tattoos indicating their power. Psychic, intuitive, mind-reading.",
@@ -716,7 +734,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 61,
+    id: 63,
     name: "Terrahorn",
     description: "",
     artPrompt: "",
@@ -727,7 +745,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 62,
+    id: 64,
     name: "Tortoise",
     description: "",
     artPrompt: "",
@@ -738,7 +756,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 63,
+    id: 65,
     name: "Treant",
     description:
       "Large tree-like beings, often with faces or limbs, deeply connected to the forest. Nature-bound, ancient, protective.",
@@ -750,7 +768,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 64,
+    id: 66,
     name: "Vampire",
     description:
       "Pale-skinned humanoids with sharp fangs, often dressed in dark, elegant clothing. Blood-sucking, nocturnal, immortal.",
@@ -762,7 +780,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 65,
+    id: 67,
     name: "Vervai",
     description:
       "Agile, tree-dwelling beings with a deep sense of community. They're known for their curiosity and intricate treetop cities.",
@@ -774,7 +792,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 66,
+    id: 68,
     name: "Vulpen",
     description: "",
     artPrompt: "",
@@ -785,7 +803,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 67,
+    id: 69,
     name: "Warrior",
     description:
       "Armored individuals, often with weapons, showcasing battle scars or tribal markings. Brave, skilled in combat, disciplined.",
@@ -797,7 +815,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 68,
+    id: 70,
     name: "Wyrm",
     description:
       "Large dragon-like beings without wings, often seen coiled or burrowing. Ancient, powerful, serpentine.",
@@ -809,7 +827,7 @@ const entityTypes: EntityTypesType[] = [
     role: false,
   },
   {
-    id: 69,
+    id: 71,
     name: "Zombie",
     description:
       "Reanimated corpses, often with visible signs of decay, moving with a slow, shambling gait. Undead, relentless, decaying.",
