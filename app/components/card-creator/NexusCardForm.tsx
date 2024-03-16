@@ -804,7 +804,7 @@ export default function NexusCardForm({
                         rows={cardTextProps.textRows}
                         error={!!fieldState.error}
                         placeholder={
-                          !fieldState.error ? 'Type "/" to insert a keyword ability.':
+                          !fieldState.error ? "Your card's text...":
                           "Card text is required!"
                         }
                         className={clsx("w-full text-wrap",
