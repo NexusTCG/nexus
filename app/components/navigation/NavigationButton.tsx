@@ -50,7 +50,7 @@ export default function NavigationButton({
     if(routeLowerCase !== "") {
       switch (routeLowerCase) {
         case "rules":
-          setExternalLink("https://docs.google.com/document/d/1PWQd2QIsjYE5sRsFce_VBGPBQOqb7TVlIoUI-eAU10Y/edit?usp=sharing");
+          setExternalLink("https://github.com/NexusTCG/nexus/wiki/Rules");
           break;
         case "game":
       }

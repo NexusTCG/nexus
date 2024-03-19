@@ -91,7 +91,6 @@ export default function NexusCardForm({
   const [cardColorType, setCardColorType] = useState<string | null>(null);
   const [cardColor, setCardColor] = useState<string>("default");
   const [cardColorClass, setCardColorClass] = useState<string>("default");
-  // const [cardBgImage, setCardBgImage] = useState<string>("bg-[url('/images/card-parts/card-frames/other/default.PNG')]");
   // Snackbars
   const [openGradeSnackbar, setOpenGradeSnackBar] = React.useState(false);
 
