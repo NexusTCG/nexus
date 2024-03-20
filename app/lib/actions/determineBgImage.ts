@@ -6,8 +6,8 @@ export default function determineBgImage(
 ) {
 
     switch (cardColor) {
-        case "node":
-            return "bg-[url('/images/card-parts/card-frames/other/node.png')]"
+        case "anomaly":
+            return "bg-[url('/images/card-parts/card-frames/other/anomaly.png')]"
 
         case "yellow":
             if (activeCardType?.includes("object") || activeCardType?.includes("entityObject")) {

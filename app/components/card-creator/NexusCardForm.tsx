@@ -55,12 +55,14 @@ import Prime from "@/public/images/card-parts/card-icons/card-grades/prime.svg";
 import AdsClickIcon from '@mui/icons-material/AdsClick';
 
 type CardRenderProps = {
+  cardMode: string;
   cardData?: CardsTableType | CardFormDataType | null;
   showCardRender?: boolean;
   showFlavorText?: boolean;
 };
 
 export default function NexusCardForm({
+  cardMode,
   cardData,
   showCardRender,
   showFlavorText
@@ -101,10 +103,24 @@ export default function NexusCardForm({
     }, 200), []
   );
 
+  // Debounce function for cardText
+  const debouncedSetCardAnomalyModeText = useCallback(
+    debounce((value: string) => {
+      setValue("cardAnomalyModeText", value);
+    }, 200), []
+  );
+
   // Debounce function for cardFlavorText
   const debouncedSetCardFlavorText = useCallback(
     debounce((value: string) => {
       setValue("cardFlavorText", value);
+    }, 200), []
+  );
+
+   // Debounce function for cardFlavorText
+   const debouncedSetCardAnomalyModeFlavorText = useCallback(
+    debounce((value: string) => {
+      setValue("cardAnomalyModeFlavorText", value);
     }, 200), []
   );
 
@@ -321,7 +337,7 @@ export default function NexusCardForm({
               bg-cover
               bg-center
               bg-no-repeat
-              ${cardBgImage}
+              ${cardMode === "initial" ? cardBgImage : "bg-[url('/images/card-parts/card-frames/other/node.png')]"}
             `}
           >
             {/* Card header */}
@@ -334,10 +350,12 @@ export default function NexusCardForm({
                 zIndex: 5,
               }}
               className={`
-                ${colorMapping[
+                ${cardMode === "intiial" ?
+                  colorMapping[
                   cardColorClass as keyof typeof
-                  colorMapping]?.[50] ??
-                  "bg-neutral-50"
+                  colorMapping]?.[50] :
+                  "bg-neutral-50" ??
+                  "bg-slate-50"
                 }
                 flex
                 flex-col
@@ -377,7 +395,8 @@ export default function NexusCardForm({
                   {/* Ranged icon boolean */}
                   {formCardData?.cardType !== "undefined" && 
                   formCardData?.cardType?.includes("entity") && 
-                  formCardData.cardUnitType === "ranged" && (
+                  formCardData.cardUnitType === "ranged" &&
+                  cardMode === "initial" && (
                     <AdsClickIcon
                       sx={{ 
                         fontSize: "18px", 
@@ -405,20 +424,25 @@ export default function NexusCardForm({
                   {/* Card name */}
                   {!isSubmitted ? (
                     <CustomInput
-                      name="cardName"
-                      placeholder="Card name"
+                      key={cardMode} 
+                      name={cardMode === "initial" ? "cardName" : "cardAnomalyModeName"}
+                      placeholder={cardMode === "initial" ? "Card name" : "Anomaly mode name"}
                     />
                   ) : (
-                    <Typography
-                      variant="body2"
-                    >
-                      {formCardData.cardName}
-                    </Typography>
+                    cardMode === "initial" ? (
+                      <Typography variant="body2">
+                        {formCardData.cardName}
+                      </Typography>
+                    ) : (
+                      <Typography variant="body2">
+                        {formCardData.cardAnomalyModeName}
+                      </Typography>
+                    )
                   )}
                 </Box> 
                 
                 {/* Energy Cost Icons */}
-                <Box
+                {cardMode === "initial" && (<Box
                   id="energy-cost-container"
                   className="
                     flex
@@ -427,7 +451,8 @@ export default function NexusCardForm({
                     items-center
                   "
                 >
-                  {formCardData.cardType && !formCardData.cardType.includes("node") && (
+                  {formCardData.cardType && 
+                  !formCardData.cardType.includes("anomaly") && (
                     <ClickAwayListener
                       onClickAway={handleEnergyCostPopoverClose}
                     >
@@ -437,7 +462,8 @@ export default function NexusCardForm({
                             handleEnergyCostPopoverOpen={handleEnergyCostPopoverOpen}
                           />
                         )}
-                        {!isSubmitting && !isSubmitted && (
+                        {!isSubmitting && 
+                        !isSubmitted && (
                           <EnergyCostPopover
                             open={energyCostPopoverOpen}
                             anchorEl={anchorEl}
@@ -449,7 +475,7 @@ export default function NexusCardForm({
                       </>
                     </ClickAwayListener>
                   )}
-                </Box>
+                </Box>)}
               </Box>
 
               {/* Card types and speed */}
@@ -461,7 +487,13 @@ export default function NexusCardForm({
                   padding: "1px 2px"
                 }}
                 className={`
-                  ${colorMapping[cardColorClass as keyof typeof colorMapping]?.[200] ?? "bg-slate-200"}
+                  ${cardMode === "initial" ?
+                    colorMapping[
+                    cardColorClass as keyof typeof 
+                    colorMapping]?.[200] :
+                    "bg-neutral-200" ?? 
+                    "bg-slate-200"
+                  }
                   flex
                   flex-row
                   justify-between
@@ -472,6 +504,7 @@ export default function NexusCardForm({
                 `}
               >
                 {/* Rendered card types */}
+                {/* Does this do anything? */}
                 {isSubmitting && (
                   <Box
                     className="
@@ -497,8 +530,26 @@ export default function NexusCardForm({
                     )}
                   </Box>
                 )}
+                {/* Anomaly Type */}
+                {cardMode === "anomaly" && (
+                  <Box
+                    className="
+                      flex
+                      flex-row
+                      justify-start
+                      items-center
+                      gap-1
+                    "
+                  >
+                    <Typography
+                      variant="body2"
+                    >
+                      Anomaly
+                    </Typography>
+                  </Box>
+                )}
                 {/* Card types */}
-                {!isSubmitting && (
+                {!isSubmitting && cardMode === "initial" && (
                   <Box
                     id="card-header-types"
                     sx={{
@@ -577,13 +628,16 @@ export default function NexusCardForm({
                               }
                             }}
                           >
-                            {Object.entries(cardTypeOptions).map(([value, label]) => (
-                              <MenuItem key={value} value={value}>
-                                <Typography variant="body2">
-                                  {label}
-                                </Typography>
-                              </MenuItem>
-                            ))}
+                            {Object.entries(cardTypeOptions)
+                              .filter(([value]) => value !== "anomaly")
+                              .map(([value, label]) => (
+                                <MenuItem key={value} value={value}>
+                                  <Typography variant="body2">
+                                    {label}
+                                  </Typography>
+                                </MenuItem>
+                              ))
+                            }
                           </Select>
                         </FormControl>
                       )}
@@ -642,7 +696,8 @@ export default function NexusCardForm({
                                 },
                               }}
                             >
-                              {formCardData.cardType && formCardData.cardType.includes("entity") &&
+                              {formCardData.cardType && 
+                              formCardData.cardType.includes("entity") &&
                                 Object.entries(
                                   cardSubTypeOptions.entity
                                 ).map(
@@ -659,7 +714,8 @@ export default function NexusCardForm({
                                     </MenuItem>
                                   ),
                                 )}
-                              {formCardData.cardType && formCardData.cardType.includes("object") &&
+                              {formCardData.cardType && 
+                              formCardData.cardType.includes("object") &&
                                 Object.entries(
                                   cardSubTypeOptions.object
                                 ).map(
@@ -671,7 +727,8 @@ export default function NexusCardForm({
                                     </MenuItem>
                                   ),
                                 )}
-                              {formCardData.cardType && formCardData.cardType.includes("effect") &&
+                              {formCardData.cardType && 
+                              formCardData.cardType.includes("effect") &&
                                 Object.entries(
                                   cardSubTypeOptions.effect
                                 ).map(
@@ -696,7 +753,9 @@ export default function NexusCardForm({
                   </Box>
                 )}
                 {/* Speed */}
-                {formCardData.cardType && !formCardData.cardType.includes("node") && (
+                {formCardData.cardType && 
+                !formCardData.cardType.includes("node") && 
+                cardMode === "initial" &&(
                   <SpeedSelect />
                 )}
               </Box>
@@ -730,9 +789,13 @@ export default function NexusCardForm({
                   borderBottomRightRadius: "8px",
                 }}
                 className={`
-                  ${colorMapping[
-                    cardColorClass as keyof typeof colorMapping
-                  ]?.[400] ?? "bg-slate-400"}
+                  ${cardMode === "initial" ?
+                    colorMapping[
+                    cardColorClass as keyof typeof 
+                    colorMapping]?.[400] :
+                    "bg-neutral-400" ?? 
+                    "bg-slate-400"
+                  }
                   flex
                   flex-col
                   w-full
@@ -753,13 +816,13 @@ export default function NexusCardForm({
                     relative
                   "
                 >
-                   <Image
+                  {/* <Image
                     src={activeCardArt || "/images/card-parts/card-art/default-art.jpg"}
                     width={336}
                     height={252}
                     alt={`${formCardData.cardName} card art`}
-                  />
-                  <Image
+                  /> */}
+                  {cardMode === "initial" ?<Image
                     src={activeCardArt || "/images/card-parts/card-art/default-art.jpg"}
                     fill={true}
                     sizes="100%"
@@ -767,7 +830,15 @@ export default function NexusCardForm({
                     style={{
                       objectFit: "cover"
                     }}
-                  />
+                  /> : <Image
+                    src={"/images/card-parts/card-art/default-anomaly-art.webp"}
+                    fill={true}
+                    sizes="100%"
+                    alt={`${formCardData.cardAnomalyModeName} card art`}
+                    style={{
+                      objectFit: "cover"
+                    }}
+                  />}
                 </Box>
                 {/* Card text and flavor text */}
                 <Box
@@ -779,7 +850,7 @@ export default function NexusCardForm({
                     padding: "5px 7.5px",
                   }}
                   className={`
-                    ${colorMapping[cardColorClass as keyof typeof colorMapping]?.[50] ?? "bg-slate-50"}
+                    ${cardMode === "intiial" ? colorMapping[cardColorClass as keyof typeof colorMapping]?.[50] : "bg-neutral-50" ?? "bg-slate-50"}
                     flex
                     flex-col
                     text-black
@@ -787,7 +858,7 @@ export default function NexusCardForm({
                   `}
                 >
                   {/* Card text */}
-                  <Controller
+                  {cardMode === "initial" && (<Controller
                     name="cardText"
                     control={control}
                     render={({ field, fieldState }) => (
@@ -839,7 +910,62 @@ export default function NexusCardForm({
                         }}
                       />
                     )}
-                  />
+                  />)}
+
+                  {/* Anomaly Mode text */}
+                  {cardMode === "anomaly" && (<Controller
+                    name="cardAnomalyModeText"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                      <TextField
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          debouncedSetCardAnomalyModeText(e.target.value);
+                        }}
+                        multiline
+                        size="small"
+                        variant="standard"
+                        rows={cardTextProps.textRows}
+                        error={!!fieldState.error}
+                        placeholder={
+                          !fieldState.error ? "Your card's anomaly mode text...":
+                          "Card text is required!"
+                        }
+                        className={clsx("w-full text-wrap",
+                          {
+                            "!text-black": !fieldState.error,
+                            "!text-red-500": fieldState.error,
+                          }
+                        )}
+                        inputProps={{
+                          maxLength: 440,
+                          style: { 
+                            fontSize: cardTextProps.fontSize,
+                            lineHeight: cardTextProps.lineHeight,
+                            height: cardTextProps.textFieldHeight,
+                            wordWrap: "break-word",
+                          },
+                        }}
+                        sx={{
+                          '& .MuiInputBase-input': {
+                            color: 'black',
+                          },
+                          
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'black',
+                          },
+                          
+                          '&:hover .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'lightblue',
+                          },
+                          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'blue',
+                          },
+                        }}
+                      />
+                    )}
+                  />)}
 
                   {/* Divider */}
                   {cardTextProps.flavorTextVisible && 
@@ -855,7 +981,7 @@ export default function NexusCardForm({
                   
                   {/* Card flavor text */}
                   {cardTextProps.flavorTextVisible && 
-                    showFlavorText && (
+                    showFlavorText && cardMode === "initial" && (
                     <Controller
                       name="cardFlavorText"
                       control={control}
@@ -902,6 +1028,56 @@ export default function NexusCardForm({
                       )}
                     />
                   )}
+
+                  {/* Card Anamoly Mode flavor text */}
+                  {cardTextProps.flavorTextVisible && 
+                    showFlavorText && cardMode === "anomaly" && (
+                    <Controller
+                      name="cardAnomalyModeFlavorText"
+                      control={control}
+                      disabled={isSubmitting || isSubmitted}
+                      render={({ field }) => (
+                        <TextField
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            debouncedSetCardAnomalyModeFlavorText(e.target.value);
+                          }}
+                          multiline
+                          size="small"
+                          variant="standard"
+                          placeholder="The greatest anomaly flavor text you've ever read!"
+                          rows={2}
+                          className="w-full text-wrap"
+                          inputProps={{
+                            maxLength: cardTextProps.maxFlavorTextChars,
+                            style: {
+                              fontSize: cardTextProps.fontSize,
+                              lineHeight: cardTextProps.lineHeight,
+                              height: cardTextProps.flavorTextFieldHeight,
+                              fontStyle: "italic",
+                              fontWeight: 300,
+                              wordWrap: "break-word",
+                            },
+                          }}
+                          sx={{
+                            '& .MuiInputBase-input': {
+                              color: 'black',
+                            },
+                            '& .MuiOutlinedInput-notchedOutline': {
+                              borderColor: 'black',
+                            },
+                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                              borderColor: 'lightblue',
+                            },
+                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                              borderColor: 'blue',
+                            },
+                          }}
+                        />
+                      )}
+                    />
+                  )}
                 </Box>
               </Box>
             </Box>
@@ -913,17 +1089,17 @@ export default function NexusCardForm({
                 maxHeight: "45px",
                 zIndex: 1,
               }}
-              className="
-                flex
-                flex-row
-                justify-between
-                items-center
-                w-full
-                -mt-5
-              "
+              className={clsx("flex flex-row items-center w-full",
+               {
+                "justify-between -mt-5": cardMode === "initial",
+                "justify-center -mt-4": cardMode === "anomaly",
+               }
+              )}
             >
               {/* Card attack */}
-              {formCardData.cardType && formCardData.cardType.includes("entity") && (
+              {formCardData.cardType && 
+              formCardData.cardType.includes("entity") && 
+              cardMode === "initial" && (
               <Box
                 id="stats-attack"
                 className="
@@ -1106,7 +1282,8 @@ export default function NexusCardForm({
               </Box>
               {/* Card defense */}
               {formCardData.cardType && 
-              formCardData.cardType.includes("entity") && (
+              formCardData.cardType.includes("entity") && 
+              cardMode === "initial" && (
               <Box
                 id="stats-defense"
                 className="

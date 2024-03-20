@@ -8,9 +8,9 @@ export default function determineColor(
     activeCardCost: CardFormDataType["cardEnergyCost"],
     cardColorType: string
 ) {
-    if (cardColorType === "node") {
-      // If the card type is node, return node
-      return "node";
+    if (cardColorType === "anomaly") {
+      // If the card type is anomaly, return anomaly
+      return "anomaly";
     }
 
     // Get color and value pairs

@@ -15,6 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
 import Box from "@mui/material/Box";
+import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -78,8 +79,9 @@ export default function CardCreatorForm({
     activeOption: number;
   }>({
     options: [],
-    activeOption: 0,
+    activeOption: -1,
   });
+  const [cardMode, setCardMode] = useState<"initial" | "anomaly">("initial");
   // Alert states
   const [showCardRender, setShowCardRender] = useState<boolean>(false);
   const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
@@ -192,39 +194,37 @@ export default function CardCreatorForm({
           throw new Error('Network response was not ok.');
         }
   
-        const responseData = await response.json() as { imageUrl?: string };
+        const { imageUrl } = await response.json();
         
-        if (responseData.imageUrl) {
-          const imageUrl = responseData.imageUrl;
-  
+        if (imageUrl) {
           setAlertInfo({
             type: "success",
             icon: <CheckIcon />,
             message: "Artwork generated successfully!"
           });
   
-          if (userProfileData && userProfileData.id) {
+          await handleUpdateCredits();
+
+          if (
+            userProfileData && 
+            userProfileData.id
+          ) {
             posthog.capture({
               distinctId: userProfileData.id,
               event: "🎨 New Card Image Generated"
             });
           }
-  
-          await handleUpdateCredits();
-          // setGenerateArtLimit(generateArtLimit + 1);
+          
           setValue("cardArt", imageUrl);
-          setCardArtOptions(prevState => {
-            const newOptions = [...prevState.options, imageUrl];
-            const newActiveOption = newOptions.length - 1;
-            return {
-              options: newOptions,
-              activeOption: newActiveOption,
-            };
-          });
+          setCardArtOptions(prevState => ({
+            options: [...prevState.options, imageUrl],
+            activeOption: prevState.options.length,
+          }));
   
           if (cardArtOptions.options.length > 0) {
             setShowCardArtOptions(true);
           };
+          
           await trigger("cardArt");
         } else {
           throw new Error('Image URL not found in the response.');
@@ -795,6 +795,20 @@ export default function CardCreatorForm({
             <FormGroup
               row={true}
             >
+              <Tooltip title={cardMode === "initial" ? "Switch to Anomaly Mode" : "Switch to Initial Mode"}>
+                <FormControlLabel
+                  onChange={() => {
+                    setCardMode(cardMode === "initial" ? "anomaly" : "initial")
+                  }}
+                  control={
+                    <Switch
+                      defaultChecked
+                      checked={cardMode === "initial"}
+                    />
+                  } 
+                  label={cardMode === "initial" ? "Initial Mode" : "Anomaly Mode"}
+                />
+              </Tooltip>
               {form.cardText && (
                 <FormControlLabel
                   onChange={handleShowFlavorTextChange}
@@ -820,7 +834,9 @@ export default function CardCreatorForm({
                   }
                 />
               )}
-              {form.cardType && form.cardType === "entity" && (
+              {form.cardType && 
+              form.cardType === "entity" && 
+              cardMode === "initial" && (
                 <FormControlLabel
                   onChange={() => {
                     form.cardUnitType === "melee" ? 
@@ -916,11 +932,29 @@ export default function CardCreatorForm({
           >
             {/* Card Render / Form */}
             <NexusCardForm
+              cardMode={cardMode}
               cardData={cardData}
               showCardRender={showCardRender}
               showFlavorText={showFlavorText}
             />
           </div>
+
+          {cardMode === "anomaly" && (
+            <Typography
+              variant="body2"
+              className="
+                flex 
+                justify-center
+                items-center
+                w-full
+                bg-neutral-900/50
+                py-2
+                px-3
+              "
+            >
+              {"Each Nexus card has an initial mode (the card above), and an anomaly mode. Cards can be converted to its anomaly mode, so it can be played as an anomaly (resource card) instead of its initial mode card. The anamoly mode typically lets you Lock {L} the card to make energy. But a card's anomaly mode can also have other effects. The default anomaly mode, converts the card into one of the five Common Anomalies. Anything other than that is considered an Uncommon Anomaly."}
+            </Typography>
+          )}
 
           {/* Card Art Options */}
           {showCardArtOptions && (
@@ -982,7 +1016,7 @@ export default function CardCreatorForm({
                     key={index}
                     src={imageUrl}
                     fill
-                    alt={`Card art option ${index + 1}`}
+                    alt={`Card art option ${index}`}
                     onClick={handleCardArtOptionChange.bind(null, index)}
                     style={{ objectFit: "cover"}}
                     className={clsx("rounded-md border border-neutral-500 shadow-md shadow-neutral-950/50",

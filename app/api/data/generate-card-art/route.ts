@@ -1,5 +1,4 @@
 import { NextRequest } from "next/server";
-import { uploadCardArtImage } from "@/app/lib/actions/supabase-data/uploadCardArtImage";
 import fetch from "node-fetch";
 
 export const maxDuration = 45;
@@ -31,9 +30,7 @@ export async function POST(req: NextRequest) {
             const responseData = await response.json() as { data: { url: string }[] };
             const openAiImageUrl = responseData.data[0].url;
 
-            const imageUrl = await uploadCardArtImage(openAiImageUrl);
-
-            return new Response(JSON.stringify({ imageUrl }), {
+            return new Response(JSON.stringify({ imageUrl: openAiImageUrl }), {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' },
             });

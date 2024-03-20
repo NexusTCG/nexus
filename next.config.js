@@ -7,6 +7,9 @@ const nextConfig = {
         {
           hostname: 'nxqwqvpgdaksxhkhkiem.supabase.co'
         },
+        {
+          hostname: 'oaidalleapiprodscus.blob.core.windows.net'
+        },
       ]
     },
     async redirects() {

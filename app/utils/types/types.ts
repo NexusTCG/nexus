@@ -3,6 +3,9 @@ export type CardFormDataType = {
   cardArtPrompt?: string | null
   cardAttack?: string | null
   cardUnitType?: string | null
+  cardAnomalyModeText?: string | null
+  cardAnomalyModeFlavorText?: string | null
+  cardAnomalyModeName?: string | null
   cardColor: string | null
   cardCreator?: string | null
   cardDefense?: string | null
@@ -28,7 +31,7 @@ export type CardTypesType = {
   entity: string;
   effect: string;
   object: string;
-  node: string;
+  anomaly: string;
 };
 
 export type EntityTypesType = {

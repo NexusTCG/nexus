@@ -28,7 +28,10 @@ export default function Cards() {
         const data = await fetchCards({
           from: "cards",
           select: "*",
-          sortBy: { column: sort, ascending: sortOrder }
+          sortBy: { 
+            column: sort, 
+            ascending: sortOrder 
+          }
         });
         if (data) {
           const filteredData = data

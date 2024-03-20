@@ -17,6 +17,7 @@ import PostHogClient from "@/app/lib/posthog/posthog";
 import CardCreatorForm from "@/app/components/card-creator/CardCreatorForm";
 import convertCardCodeToImage from "@/app/lib/actions/convertCardCodeToImage";
 import uploadCardImage from "@/app/lib/actions/supabase-data/uploadCardImage";
+import { uploadCardArtImage } from "@/app/lib/actions/supabase-data/uploadCardArtImage";
 import { postCardToDiscord } from "@/app/lib/actions/postCardToDiscord";
 import clsx from "clsx";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -62,6 +63,9 @@ export default function Create() {
       cardAttack: "",
       cardDefense: "",
       cardUnitType: "melee",
+      cardAnomalyModeName: "",
+      cardAnomalyModeText: "",
+      cardAnomalyModeFlavorText: "",
       cardPrompt: "",
       cardArtPrompt: "",
       cardRender: "",
@@ -163,7 +167,17 @@ export default function Create() {
           console.log(`cardRenderUrl update error: ${imagePublicUrl}`)
         }
 
-        if (imagePublicUrl) {
+        let finalCardArt = data.cardArt;
+
+        if (finalCardArt) {
+          const cardArtSupabaseUrl = await uploadCardArtImage(finalCardArt);
+          if (cardArtSupabaseUrl) {
+            finalCardArt = cardArtSupabaseUrl;
+          }
+        }
+    
+        if (imagePublicUrl && finalCardArt) {
+
           // Submit form data with cardRender
           const response = await fetch("/api/data/submit-card", { 
             method: 'POST',
@@ -172,6 +186,7 @@ export default function Create() {
             },
             body: JSON.stringify({
               ...data,
+              cardArt: finalCardArt,
               cardRender: imagePublicUrl,
             }),
           });

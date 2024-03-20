@@ -17,6 +17,9 @@ export type CardsTableType = {
     cardAttack: string;
     cardDefense: string;
     cardUnitType?: string;
+    cardAnomalyModeName?: string;
+    cardAnomalyModeText?: string;
+    cardAnomalyModeFlavorText?: string;
     cardRender: string;
     cardCreator: string;
     cardPrompt: string;

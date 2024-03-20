@@ -4,7 +4,6 @@ import { EntityTypesType } from "@/app/utils/types/types";
 export const cardSuperTypeOptions = {
   default: "",
   mythic: "Mythic",
-  core: "Core",
 };
 
 export const cardTypeOptions = {
@@ -14,7 +13,7 @@ export const cardTypeOptions = {
   entityEffect: "Entity Effect",
   object: "Object",
   entityObject: "Entity Object",
-  node: "Node",
+  anomaly: "Anomaly",
 };
 
 export const cardSubTypeOptions = {
@@ -36,7 +35,7 @@ export const cardSubTypeOptions = {
 };
 
 export const cardGradeOptions = {
-  common: "Common",
+  core: "Core",
   rare: "Rare",
   epic: "Epic",
   prime: "Prime",

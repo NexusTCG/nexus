@@ -6,9 +6,9 @@ export default function determineColorType(
     activeCardType: CardFormDataType["cardType"]
 ) {
 
-    if (activeCardType?.includes("node")) {
-      // If the card type is node, return node
-      return "node";
+    if (activeCardType?.includes("anomaly")) {
+      // If the card type is anomaly, return anomaly
+      return "anomaly";
     }
 
     // Get color and value pairs
