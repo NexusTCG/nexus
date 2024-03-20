@@ -21,7 +21,7 @@ export default function SoMeButton({ channel }: SoMeButtonProps) {
   useEffect(() => {
     switch (channel.toLowerCase()) {
       case "github":
-        setSoMeLink("https://github.com/NexusTCG");
+        setSoMeLink("https://github.com/NexusTCG/nexus/wiki");
         setSoMeIcon(<GitHubIcon />);
         break;
       case "linkedin":
@@ -33,7 +33,7 @@ export default function SoMeButton({ channel }: SoMeButtonProps) {
         setSoMeIcon(<RedditIcon />);
         break;
       case "discord":
-        setSoMeLink("https://discord.gg/VGMTV996dy");
+        setSoMeLink("https://discord.gg/BZWVK4F6My");
         setSoMeIcon(<FaDiscord />);
         break;
         case "x":
