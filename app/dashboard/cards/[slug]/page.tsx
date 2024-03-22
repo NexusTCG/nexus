@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useContext
 } from "react";
+import { useRouter } from "next/navigation";
 import { DashboardContext } from "@/app/context/DashboardContext";
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
@@ -32,15 +33,15 @@ export default function Card({
 }: {
    params: { slug: string } 
 }) {
-  
+  const { userProfileData } = useContext(DashboardContext);
+  const router = useRouter();
+
   const [isCardOwner, setIsCardOwner] = useState<boolean>(false);
   const [createNewCardHref, setCreateNewCardHref] = useState<string>("/login");
   const [createNewCardHrefIcon, setCreateNewCardHrefIcon] = useState<React.ReactNode>(<LoginIcon />);
   const [cardData, setCardData] = useState<CardsTableType | null>(null);
   const [formattedDate, setFormattedDate] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
-
-  const { userProfileData } = useContext(DashboardContext);
 
   // Fetch card data from Supabase
   useEffect(() => {
@@ -66,14 +67,6 @@ export default function Card({
     loadCardData();
   }, [params.slug, userProfileData?.username]);
 
-  // Format date from card data
-  useEffect(() => {
-    if (cardData) {
-      const formattedDate = format(new Date(cardData.created_at), 'MMMM dd, yyyy');
-      setFormattedDate(formattedDate);
-    }
-  }, [cardData]);
-
   // Check if current user is the card creator
   useEffect(() => {
     if (cardData?.cardCreator === userProfileData?.username) {
@@ -82,6 +75,14 @@ export default function Card({
       setCreateNewCardHrefIcon(<DesignServicesIcon />);
     }
   }, [cardData, userProfileData?.username]);
+
+  // Format date from card data
+  useEffect(() => {
+    if (cardData) {
+      const formattedDate = format(new Date(cardData.created_at), 'MMMM dd, yyyy');
+      setFormattedDate(formattedDate);
+    }
+  }, [cardData]);
 
   function handleDownload() {
     console.log("Download button clicked");
@@ -96,8 +97,7 @@ export default function Card({
 
   function handleEdit() {
     console.log("Edit button clicked");
-    // TODO: Implement edit functionality
-    // Redirect to cards/[slug]/edit
+    router.push(`/dashboard/cards/${cardData?.id}/edit`);
   };
 
   function handleDelete() {
@@ -328,7 +328,9 @@ export default function Card({
                   />
                 )}
               </Box>
-              {userProfileData?.username === cardData?.cardCreator && cardData && (
+              {
+              isCardOwner && 
+              cardData && (
                 <Box
                   id="crud-buttons-container"
                   className="
@@ -340,7 +342,7 @@ export default function Card({
                   "
                 >
                   <IconButton
-                     disabled={true} // Disabled until edit functionality is implemented
+                    disabled={!isCardOwner}
                     aria-label="edit"
                     size="small"
                     onClick={handleEdit}
@@ -352,7 +354,7 @@ export default function Card({
                     <EditIcon />
                   </IconButton>
                   <IconButton
-                    disabled={true} // Disabled until delete functionality is implemented
+                    disabled={!isCardOwner} // Disabled until delete functionality is implemented
                     aria-label="delete"
                     size="small"
                     onClick={handleDelete}

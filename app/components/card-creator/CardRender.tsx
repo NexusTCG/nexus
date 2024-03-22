@@ -1,30 +1,34 @@
 "use client";
 
+// Hooks
 import React, {
   useState,
   useEffect,
 } from "react";
-import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
-import { CardFormDataType } from "@/app/utils/types/types";
+// Actions
 import colorMapping from "@/app/utils/data/colorMapping";
 import determineBgImage from "@/app/lib/actions/determineBgImage";
+// Types
+import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
+import { CardFormDataType } from "@/app/utils/types/types";
+// Utils
 import Image from "next/image";
 import clsx from "clsx";
+// Components
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
 import Divider from "@mui/material/Divider";
+// Icons
 import AdsClickIcon from '@mui/icons-material/AdsClick';
-// SVG icons
 import Speed from "@/public/images/card-parts/card-icons/speed.svg";
 import Mythic from "@/public/images/card-parts/card-icons/mythic.svg";
 import Attack from "@/public/images/card-parts/card-stats/attack.svg";
 import Defense from "@/public/images/card-parts/card-stats/defense.svg";
-import Common from "@/public/images/card-parts/card-icons/card-grades/common.svg";
+import Core from "@/public/images/card-parts/card-icons/card-grades/core.svg";
 import Rare from "@/public/images/card-parts/card-icons/card-grades/rare.svg";
 import Epic from "@/public/images/card-parts/card-icons/card-grades/epic.svg";
 import Prime from "@/public/images/card-parts/card-icons/card-grades/prime.svg";
-// Energy icons
 import Yellow from "@/public/images/card-parts/card-icons/card-cost/yellow.svg";
 import Blue from "@/public/images/card-parts/card-icons/card-cost/blue.svg";
 import Purple from "@/public/images/card-parts/card-icons/card-cost/purple.svg";
@@ -80,11 +84,58 @@ const CardRender = ({
       "400": "bg-slate-400",
     });
 
+    // Capitalize first letter of word
+    function capitalizeWord(
+      word: string
+    ) {
+      return word
+          .charAt(0)
+          .toUpperCase() + 
+        word
+          .slice(1)
+          .toLowerCase();
+    }
+
+    // Render cardType and cardSubType
+    function renderCardType(
+      cardData: CardsTableType | 
+      CardFormDataType | 
+      undefined |
+      null
+    ) {
+      let cardTypeText = "";
+      let cardSubTypeText = "";
+      if (cardData?.cardType) {
+        const cardType = Array
+          .isArray(cardData.cardType) ? 
+          cardData.cardType : 
+          [cardData.cardType];
+        cardTypeText = cardType
+          .map(capitalizeWord)
+          .join(" ");
+      }
+      if (
+        cardData?.cardSubType && 
+        cardData.cardSubType.length > 0
+      ) {
+        const separator = cardData.cardSubType.length > 1 ? " • " : "";
+        cardSubTypeText = cardData.cardSubType
+          .map(capitalizeWord)
+          .join(" ");
+        cardTypeText += `${separator}${cardSubTypeText}`;
+      }
+      return cardTypeText;
+    };
 
     // Determine bgColor
     useEffect(() => {
-      if (cardData?.cardColor && cardData !== null) {
-        if (cardData?.cardColor === "blue") {
+      if (
+        cardData?.cardColor && 
+        cardData !== null
+      ) {
+        if (
+          cardData?.cardColor === "blue"
+        ) {
           setBgColor({
             "50":
               colorMapping["sky"]?.[50],
@@ -93,7 +144,9 @@ const CardRender = ({
             "400":
               colorMapping["sky"]?.[400],
           })
-        } else if (cardData?.cardColor === "purple") {
+        } else if (
+          cardData?.cardColor === "purple"
+        ) {
           setBgColor({
             "50":
               colorMapping["violet"]?.[50],
@@ -102,7 +155,9 @@ const CardRender = ({
             "400":
               colorMapping["violet"]?.[400],
           })
-        } else if (cardData?.cardColor === "green") {
+        } else if (
+          cardData?.cardColor === "green"
+        ) {
           setBgColor({
             "50":
               colorMapping["lime"]?.[50],
@@ -111,7 +166,9 @@ const CardRender = ({
             "400":
               colorMapping["lime"]?.[400],
           })
-        } else if (cardData?.cardColor === "void") {
+        } else if (
+          cardData?.cardColor === "void"
+        ) {
           setBgColor({
             "50":
               colorMapping["gray"]?.[50],
@@ -135,8 +192,7 @@ const CardRender = ({
                 cardData?.cardColor as keyof typeof
               colorMapping]?.[400],
           })
-      }
-      
+        }
       }
     }, [cardData?.cardColor]);
 
@@ -146,7 +202,10 @@ const CardRender = ({
         cardData?.cardType && 
         cardData?.cardColor
       ) {
-        const cardType = Array.isArray(cardData?.cardType) ? cardData?.cardType[0] : cardData?.cardType;
+        const cardType = Array.isArray(
+          cardData?.cardType) ? 
+          cardData?.cardType[0] : 
+          cardData?.cardType;
         const newBgImage = determineBgImage(
           cardType,
           cardData?.cardColor,
@@ -177,7 +236,7 @@ const CardRender = ({
       )
     }
 
-    // High Quality Card Render
+    // Card Render
     if (cardData) {
     return (
       <Box
@@ -326,7 +385,14 @@ const CardRender = ({
               >
                 {Object.entries(cardData.cardEnergyCost ?? {})
                   .sort(([colorA], [colorB]) => {
-                    const order = ["yellow", "blue", "purple", "red", "green", "void"];
+                    const order = [
+                      "yellow", 
+                      "blue", 
+                      "purple", 
+                      "red", 
+                      "green", 
+                      "void"
+                    ];
                     return order.indexOf(colorA) - order.indexOf(colorB);
                   })
                   .map(([color, value]) =>
@@ -372,8 +438,6 @@ const CardRender = ({
                 borderRadius: "3px",
                 padding: "1px 2px"
               }}
-              // Replace bg with bg color
-              // ${colorMapping[cardColorClass as keyof typeof colorMapping]?.[200] ?? "bg-slate-200"}
               className={`
                 ${bgColor?.[200] ?? "bg-slate-200"}
                 flex
@@ -400,24 +464,15 @@ const CardRender = ({
                   gap-1
                 "
               >
-                <Typography variant="subtitle2" component="span" className="p-0 m-0">
-                  {
-                    cardData?.cardType
-                      ? Array.isArray(cardData.cardType)
-                        ? cardData.cardType.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
-                        : cardData.cardType.charAt(0).toUpperCase() + cardData.cardType.slice(1).toLowerCase()
-                      : ""
-                  } {" "}
-                  {
-                    cardData?.cardSubType ? " • " : ""
-                  }
-                  {
-                    cardData?.cardSubType
-                      ? Array.isArray(cardData.cardSubType)
-                        ? cardData.cardSubType.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
-                        : cardData.cardSubType.charAt(0).toUpperCase() + cardData.cardSubType.slice(1).toLowerCase()
-                    : ""
-                  }
+                <Typography
+                  variant="subtitle2" 
+                  component="span" 
+                  className="
+                    p-0 
+                    m-0
+                  "
+                >
+                  {renderCardType(cardData)}
                 </Typography>
               </Box>
               {/* Card Speed */}
@@ -433,7 +488,8 @@ const CardRender = ({
                 "
               >
                 {Array.from({
-                  length: cardData.cardSpeed ? parseInt(cardData.cardSpeed, 10) : 0
+                  length: cardData.cardSpeed ? 
+                  parseInt(cardData.cardSpeed, 10) : 0
                 }).map((_, index) => (
                   <Image
                     key={index}
@@ -526,21 +582,24 @@ const CardRender = ({
                 `}
               >
                 {/* Card text */}
-                {cardData.cardText && cardData.cardName
+                {
+                  cardData.cardText && 
+                  cardData.cardName
                   ? cardData.cardText
-                      .replace(/~/g, cardData.cardName)
-                      .split('\n')
-                      .map((line, index) => (
-                        <Typography
-                          key={index}
-                          variant="body1"
-                          component="div"
-                          gutterBottom
-                        >
-                          {line}
-                        </Typography>
-                      ))
-                  : null}
+                        .replace(/~/g, cardData.cardName)
+                        .split('\n')
+                        .map((line, index) => (
+                          <Typography
+                            key={index}
+                            variant="body1"
+                            component="div"
+                            gutterBottom
+                          >
+                            {line}
+                          </Typography>
+                        ))
+                    : null
+                  }
                 {/* Flavor text */}
                 {cardData.cardFlavorText !== "" && (
                   <>
@@ -579,49 +638,58 @@ const CardRender = ({
             "
           >
             {/* Card Attack */}
-            {cardData.cardType && cardData.cardType.includes("entity") && (<Box
-              id="stats-attack"
-              className="
-                flex
-                flex-col
-                justify-center
-                items-center
-                w-1/5
-                relative
-              "
-            >
-              <Typography
-                variant="body1"
-                className="
-                  flex
-                  justify-center
-                  items-center
-                  w-full
-                  absolute
-                  z-10
-                  top-0
-                  bottom-0
-                  right-0
-                  left-0
-                  text-center
-                  px-6
-                  stats-text
-                "
-              >
-                {cardData.cardAttack}
-              </Typography>
-              <Image
-                src={Attack}
-                width={60}
-                height={45}
-                alt="Card attack icon"
-              />
-            </Box>)}
+            {
+              cardData.cardType && 
+              cardData.cardType
+                .includes("entity") && (
+                <Box
+                  id="stats-attack"
+                  className="
+                    flex
+                    flex-col
+                    justify-center
+                    items-center
+                    w-1/5
+                    relative
+                  "
+                >
+                  <Typography
+                    variant="body1"
+                    className="
+                      flex
+                      justify-center
+                      items-center
+                      w-full
+                      absolute
+                      z-10
+                      top-0
+                      bottom-0
+                      right-0
+                      left-0
+                      text-center
+                      px-6
+                      stats-text
+                    "
+                  >
+                    {cardData.cardAttack}
+                  </Typography>
+                  <Image
+                    src={Attack}
+                    width={60}
+                    height={45}
+                    alt="Card attack icon"
+                  />
+                </Box>
+              )
+            }
             {/* Card grade + info */}
             <Box
               id="stats-grade-info"
               className={clsx("flex flex-col justify-center items-center",
-                cardData.cardType && !cardData.cardType.includes("entity") ? "w-full" : "w-3/5"
+                cardData.cardType && 
+                !cardData.cardType
+                  .includes("entity") ? 
+                "w-full" : "w-3/5"
               )}
             >
               {/* Card grade */}
@@ -637,12 +705,11 @@ const CardRender = ({
               >
                 {/* Card Grade */}
                 <Image
-                  // src={`/images/card-parts/card-icons/card-grades/grade-${cardData.cardGrade ? cardData.cardGrade.toLowerCase() : "common"}.png`}
                   src={
                     cardData.cardGrade === "rare" ? Rare :
                     cardData.cardGrade === "epic" ? Epic :
                     cardData.cardGrade === "prime" ? Prime :
-                    Common
+                    Core
                   }
                   height={34}
                   width={34}
@@ -656,45 +723,51 @@ const CardRender = ({
               </Box>
             </Box>
             {/* Card Defense */}
-            {cardData.cardType && cardData.cardType.includes("entity") && (
-            <Box
-              id="stats-defense"
-              className="
-                flex
-                flex-col
-                justify-center
-                items-center
-                w-1/5
-                relative
-              "
-            >
-              <Typography
-                variant="body1"
-                className="
-                  flex
-                  justify-center
-                  items-center
-                  w-full
-                  absolute
-                  z-10
-                  top-0
-                  bottom-0
-                  right-0
-                  left-0
-                  text-center
-                  px-6
-                  stats-text
-                "
-              >
-                {cardData.cardDefense}
-              </Typography>
-              <Image
-                src={Defense}
-                width={60}
-                height={45}
-                alt="Card defense icon"
-              />
-            </Box>)}
+            {
+              cardData.cardType && 
+              cardData.cardType
+                .includes("entity") && 
+                (
+                  <Box
+                    id="stats-defense"
+                    className="
+                      flex
+                      flex-col
+                      justify-center
+                      items-center
+                      w-1/5
+                      relative
+                    "
+                  >
+                    <Typography
+                      variant="body1"
+                      className="
+                        flex
+                        justify-center
+                        items-center
+                        w-full
+                        absolute
+                        z-10
+                        top-0
+                        bottom-0
+                        right-0
+                        left-0
+                        text-center
+                        px-6
+                        stats-text
+                      "
+                    >
+                      {cardData.cardDefense}
+                    </Typography>
+                    <Image
+                      src={Defense}
+                      width={60}
+                      height={45}
+                      alt="Card defense icon"
+                    />
+                  </Box>
+                )
+            }
           </Box>
           {/* Card creator & copyright */}
           <Box
@@ -707,7 +780,6 @@ const CardRender = ({
             <p
               className="fineprint-text"
             >
-              {/* Creator: {" "} */}
               {cardData.cardCreator
                 ? `Made by ${cardData.cardCreator}`
                 : "Card Creator"}

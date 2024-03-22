@@ -1,29 +1,29 @@
 export type CardFormDataType = {
-  cardArt?: string
-  cardArtPrompt?: string | null
-  cardAttack?: string | null
-  cardUnitType?: string | null
-  cardAnomalyModeText?: string | null
-  cardAnomalyModeFlavorText?: string | null
-  cardAnomalyModeName?: string | null
-  cardColor: string | null
-  cardCreator?: string | null
-  cardDefense?: string | null
+  cardAnomalyModeFlavorText?: string | null;
+  cardAnomalyModeName?: string | null;
+  cardAnomalyModeText?: string | null;
+  cardArt?: string;
+  cardArtPrompt?: string | null;
+  cardAttack?: string | null;
+  cardColor: string | null;
+  cardCreator?: string | null;
+  cardDefense?: string | null;
   cardEnergyCost?: { [key: string]: number } | null;
-  cardEnergyValue?: number | null
-  cardFlavorText?: string | null
-  cardGrade?: string
-  cardName?: string
-  cardPrompt?: string | null
-  cardRender?: string | null
-  cardSpeed?: string | null
-  cardSubType?: string[] | null
-  cardSuperType?: string | null
-  cardText?: string
-  cardType?: string
-  created_at?: string
-  id?: number
-  user_id: string
+  cardEnergyValue?: number | null;
+  cardFlavorText?: string | null;
+  cardGrade?: string;
+  cardName?: string;
+  cardPrompt?: string | null;
+  cardRender?: string | null;
+  cardSpeed?: string | null;
+  cardSubType?: string[] | null;
+  cardSuperType?: string | null;
+  cardText?: string;
+  cardType?: string;
+  cardUnitType?: string | null;
+  id?: number;
+  user_id: string;
+  created_at?: string;
 };
 
 export type CardTypesType = {

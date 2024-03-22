@@ -1,6 +1,6 @@
 import { CardFormDataType } from "@/app/utils/types/types";
 
-export default async function resetFieldsOnNode(
+export default async function resetFieldsOnAnomaly(
     activeCardCost: CardFormDataType["cardEnergyCost"]
 ) {
 

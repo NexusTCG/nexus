@@ -4,19 +4,16 @@
 import React, {
   useState,
   useEffect,
-  useContext,
+  useContext
 } from "react";
-import { 
-  useForm, 
-  FormProvider 
-} from "react-hook-form";
 import { useRouter } from "next/navigation";
-import useSession from "@/app/hooks/useSession";
+import { useForm, FormProvider } from "react-hook-form";
 import { DashboardContext } from "@/app/context/DashboardContext";
 // Actions
-import convertCardCodeToImage from "@/app/lib/actions/convertCardCodeToImage";
+import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
 import uploadCardImage from "@/app/lib/actions/supabase-data/uploadCardImage";
 import { uploadCardArtImage } from "@/app/lib/actions/supabase-data/uploadCardArtImage";
+import convertCardCodeToImage from "@/app/lib/actions/convertCardCodeToImage";
 import { postCardToDiscord } from "@/app/lib/actions/postCardToDiscord";
 // Types
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
@@ -26,10 +23,10 @@ import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 // Utils
 import PostHogClient from "@/app/lib/posthog/posthog";
+import { format } from "date-fns";
 import clsx from "clsx";
-// Custom components
-import CardCreatorForm from "@/app/components/card-creator/CardCreatorForm";
 // Components
+import CardCreatorForm from "@/app/components/card-creator/CardCreatorForm";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
@@ -45,9 +42,35 @@ import InfoIcon from "@mui/icons-material/Info";
 import SaveIcon from "@mui/icons-material/Save";
 import WarningIcon from '@mui/icons-material/Warning';
 
-export default function Create() {
+export default function EditCard({
+  params 
+}: { 
+  params: { 
+    slug: string 
+  } 
+}) {
+  // Utils
   const { userProfileData } = useContext(DashboardContext);
+  const posthog = PostHogClient();
+  const router = useRouter();
 
+  // Initial states
+  const [cardData, setCardData] = useState<CardsTableType | null>(null);
+  const [isCardOwner, setIsCardOwner] = useState<boolean>(false);
+  const [formattedDate, setFormattedDate] = useState<string | null>(null);
+  // Form submit states
+  const [postToDiscord, setPostToDiscord] = useState<boolean>(true);
+  // Feedback states
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
+  const [alertInfo, setAlertInfo] = useState<{
+    type: "success" | "error" | "info" | "warning";
+    icon: React.ReactNode;
+    message: string;
+  } | null>(null);
+
+  // Form
   const methods = useForm<CardFormDataType>({
     defaultValues: {
       user_id: "", 
@@ -69,7 +92,7 @@ export default function Create() {
       cardSubType: [""],
       cardSpeed: "1",
       cardGrade: "core",
-      cardText: "",
+      cardText: "Card text",
       cardFlavorText: "",
       cardAttack: "",
       cardDefense: "",
@@ -86,45 +109,121 @@ export default function Create() {
   });
   const {
     handleSubmit,
-    watch,
     formState: {
+      isDirty,
       isValid,
       isSubmitting,
       isSubmitted,
     },
-    setValue
   } = methods;
+  
+  // Fetch card data from Supabase
+  useEffect(() => {
+    const loadCardData = async () => {
+      const cardId = parseInt(
+        params.slug, 10
+      );
+      const cards = await fetchCards({
+        from: "cards",
+        filter: {
+          column: "id",
+          value: cardId
+        },
+      });
 
-  // Utils
-  const form = watch();
-  const posthog = PostHogClient();
-  const session = useSession();
-  const router = useRouter();
+      // Set card data & card owner state
+      if (cards && cards.length > 0) {
+        const card = cards[0];
+        setCardData(card);
+        setIsCardOwner(
+          card.cardCreator === 
+          userProfileData?.username
+        );
+      } else {
+        console.error("Card not found.");
+      }
+    };
+    loadCardData();
+  }, [
+    params.slug, 
+    userProfileData?.username
+  ]);
 
-  // States
-  const [submittedFormData, setSubmittedFormData] = useState<CardFormDataType | null>(null);
-  const [uploadedFormData, setUploadedFormData] = useState<CardsTableType | null>(null);
-  const [postToDiscord, setPostToDiscord] = useState<boolean>(true);
-  const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
-  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
-  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
-  const [alertInfo, setAlertInfo] = useState<{
-    type: "success" | "error" | "info" | "warning";
-    icon: React.ReactNode;
-    message: string;
-  } | null>(null);
+  // Check card ownership
+  useEffect(() => {
+    if (cardData && userProfileData) {
+      const creator = cardData.cardCreator;
+      const username = userProfileData.username;
 
-  // Post to Discord change handler
-  function handlePostToDiscordChange() {
-    const newPostToDiscord = !postToDiscord;
-    setPostToDiscord(newPostToDiscord);
-    setOpenSnackbar(false);
-    setSnackbarMessage(
-      newPostToDiscord ? 
-      "Posting to Discord!" : 
-      "Not posting to Discord!"
-    );
-  };
+      if (creator === username) {
+        setIsCardOwner(true);
+      } else {
+        console.error("User is not card owner.");
+        router.push(`/dashboard/cards/${params.slug}`);
+      }
+    }
+  }, [
+    cardData, 
+    userProfileData?.username
+  ]);
+
+  // Pre-populate form with card data
+  useEffect(() => {
+    if (cardData && isCardOwner) {
+      methods.reset({ 
+        cardCreator: cardData?.cardCreator,
+        cardName: cardData?.cardName,
+        cardEnergyValue: cardData?.cardEnergyValue,
+        cardEnergyCost: cardData?.cardEnergyCost,
+        cardColor: cardData?.cardColor,
+        cardArt: cardData?.cardArt,
+        cardType: cardData?.cardType,
+        cardSuperType: cardData?.cardSuperType,
+        cardSubType: cardData?.cardSubType,
+        cardSpeed: cardData?.cardSpeed,
+        cardGrade: cardData?.cardGrade,
+        cardText: cardData?.cardText,
+        cardFlavorText: cardData?.cardFlavorText,
+        cardAttack: cardData?.cardAttack,
+        cardDefense: cardData?.cardDefense,
+        cardUnitType: cardData?.cardUnitType,
+        cardAnomalyModeName: cardData?.cardAnomalyModeName,
+        cardAnomalyModeText: cardData?.cardAnomalyModeText,
+        cardAnomalyModeFlavorText: cardData?.cardAnomalyModeFlavorText,
+        cardPrompt: cardData?.cardPrompt,
+        cardArtPrompt: cardData?.cardArtPrompt,
+        cardRender: cardData?.cardRender,
+      })
+    }
+  }, [
+    methods, 
+    cardData, 
+    isCardOwner
+  ]);
+
+  // Format date from card data
+  useEffect(() => {
+    if (cardData && isCardOwner) {
+      const formattedDate = format(
+        new Date(
+          cardData.created_at
+        ), 'MMMM dd, yyyy'
+      );
+      setFormattedDate(formattedDate);
+    }
+  }, [
+    cardData, 
+    isCardOwner
+  ]);
+
+  // Re-open snackbar when message changes
+  useEffect(() => {
+    if (snackbarMessage === "") {
+      return;
+    } else if (!openSnackbar) {
+      setOpenSnackbar(true);
+    }
+  }, [snackbarMessage]);
 
   // Form submit handler
   async function onSubmit(
@@ -136,7 +235,6 @@ export default function Create() {
       message: "Submitting card..."
     });
     setShowAlertInfo(true);
-    setSubmittedFormData(data);
 
     try {
       if (document.getElementById("nexus-form-container")) {
@@ -185,7 +283,6 @@ export default function Create() {
 
           // Update state to include card id, and cardRender
           const responseData = await response.json();
-          setUploadedFormData(responseData.data);
 
           if (response.ok && responseData.data) {
             setAlertInfo({
@@ -251,41 +348,21 @@ export default function Create() {
     }
   };
 
-  // Set user_id and cardCreator
-  // values based on user session
-  useEffect(() => {
-    if (session?.user?.id) {
-      setValue(
-        "user_id",
-        session.user.id
-      );
-    }
-    if (
-      userProfileData?.username && 
-      userProfileData?.username !== 
-      undefined
-    ) {
-      setValue(
-        "cardCreator",
-        userProfileData?.username as string
-      );
-    }
-  }, [
-    session,
-    userProfileData,
-    setValue
-  ]);
-
-  // Re-open snackbar when message changes
-  useEffect(() => {
-    if (snackbarMessage === "") {
-      return;
-    } else if (!openSnackbar) {
-      setOpenSnackbar(true);
-    }
-  }, [snackbarMessage]);
+  // Post to Discord change handler
+  function handlePostToDiscordChange() {
+    const newPostToDiscord = !postToDiscord;
+    setPostToDiscord(newPostToDiscord);
+    setOpenSnackbar(false);
+    setSnackbarMessage(
+      newPostToDiscord ? 
+      "Posting to Discord!" : 
+      "Not posting to Discord!"
+    );
+  };
   
-  return (
+  console.log({ isValid, isDirty, isSubmitting, isSubmitted });
+
+  return isCardOwner && cardData ? (
     <>
       <FormProvider
         {...methods}
@@ -362,6 +439,15 @@ export default function Create() {
                     gap-0
                   "
                 >
+                  <Typography
+                    variant="h4"
+                    className="
+                      font-semibold
+                      lg:text-2xl
+                      text-xl
+                    "
+                  >Editing: {""}</Typography>
+
                   {/* Card Name */}
                   <Typography
                     variant="h4"
@@ -372,8 +458,8 @@ export default function Create() {
                     "
                   >
                     {
-                      form.cardName ? 
-                      form.cardName : 
+                      cardData.cardName ? 
+                      cardData.cardName : 
                       "Card Name"
                     }
                   </Typography>
@@ -390,11 +476,18 @@ export default function Create() {
                       by{" "}
                     </Typography>
                       {
-                        userProfileData?.username ? 
-                        userProfileData?.username : 
-                        "Card creator"
+                        cardData.cardCreator ? 
+                        cardData.cardCreator : 
+                        "Card creator" 
                       }
                   </Typography>
+                  {/* Formatted Date */}
+                  {formattedDate && (<Typography
+                    variant="overline"
+                    className="text-emerald-400"
+                  >
+                    on {formattedDate}
+                  </Typography>)}
                 </Box>
 
                 <Box
@@ -458,13 +551,12 @@ export default function Create() {
                       type="submit"
                       variant="outlined"
                       disabled={
-                        !isValid || // Commented out before
+                        !isValid ||
+                        !isDirty ||
                         isSubmitting ||
-                        isSubmitted ||
-                        form.cardType === null ||
-                        form.cardArt === "/images/card-parts/card-art/default-art.jpg"
+                        isSubmitted
                       }
-                      color={isValid ? "success" : "secondary"}
+                      color={isDirty ? "success" : "secondary"}
                       startIcon={<SaveIcon />}
                       size="large" // TODO: Dynamically change size based on screen size
                       className="
@@ -550,11 +642,7 @@ export default function Create() {
               
               {/* Card Creator Form */}
               <CardCreatorForm
-                cardData={
-                  uploadedFormData ? 
-                  uploadedFormData : 
-                  submittedFormData
-                }
+                cardData={cardData}
               />
             </Box>
           </Box>
@@ -587,5 +675,7 @@ export default function Create() {
         </Snackbar>
       )}
     </>
-  );
+  ) : (
+    <h1>You should not be here.</h1>
+  )
 }

@@ -1,19 +1,28 @@
 "use client";
 
-import React, { useState, useEffect, useContext } from "react";
+// Hooks
+import React, { 
+  useState, 
+  useEffect, 
+  useContext 
+} from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import { DashboardContext } from "@/app/context/DashboardContext";
-import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
-import { CardFormDataType } from "@/app/utils/types/types";
-import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
+// Actions
 import ConstructArtPrompt from "@/app/lib/actions/constructArtPrompt";
 import updateUserCredits from "@/app/lib/actions/supabase-data/updateUserCredits";
-import { ArtPromptAccordion, ArtPromptAccordionData } from "@/app/components/card-creator/ArtPromptAccordion";
-import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
+// Types
+import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
+import { CardFormDataType } from "@/app/utils/types/types";
+// Utils
 import PostHogClient from "@/app/lib/posthog/posthog";
+import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
 import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
+// Components
+import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
+import { ArtPromptAccordion, ArtPromptAccordionData } from "@/app/components/card-creator/ArtPromptAccordion";
 import Box from "@mui/material/Box";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
@@ -30,6 +39,7 @@ import Badge from "@mui/material/Badge";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
+// Icons
 import SendIcon from "@mui/icons-material/Send";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 import PaletteIcon from "@mui/icons-material/Palette";
@@ -46,6 +56,41 @@ type CardRenderProps = {
 export default function CardCreatorForm({
   cardData,
 }: CardRenderProps) {
+  // Utils
+  const { userProfileData } = useContext(DashboardContext);
+  const posthog = PostHogClient();
+
+  // Prompt states
+  const [currentCredits, setCurrentCredits] = useState<number>(0);
+  const [promptTab, setPromptTab] = useState(0);
+  const [artPromptSelections, setArtPromptSelections] = useState<{
+    [category: string]: string
+  }>({});
+  // API timer states
+  const [isGeneratingArt, setIsGeneratingArt] = useState(false);
+  const [timerStart, setTimerStart] = useState(0);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [intervalId, setIntervalId] = useState<number | null>(null);
+  // Card creation states
+  const [cardMode, setCardMode] = useState<"initial" | "anomaly">("initial");
+  const [showFlavorText, setShowFlavorText] = useState<boolean>(true);
+  // Card art states
+  const [showCardArtOptions, setShowCardArtOptions] = useState<boolean>(false);
+  const [cardArtOptions, setCardArtOptions] = useState<{
+    options: string[];
+    activeOption: number;
+  }>({
+    options: [],
+    activeOption: -1,
+  });
+  // Feedback states
+  const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
+  const [alertInfo, setAlertInfo] = useState<{
+    type: "success" | "error" | "info" | "warning";
+    icon: React.ReactNode;
+    message: string;
+  } | null>(null);
+
   const {
     setValue,
     control,
@@ -56,67 +101,7 @@ export default function CardCreatorForm({
       isDirty,
     },
   } = useFormContext<CardFormDataType>();
-
   const form = watch();
-  const posthog = PostHogClient();
-  const { userProfileData } = useContext(DashboardContext);
-
-  // Prompt states
-  const [promptTab, setPromptTab] = useState(0);
-  const [currentCredits, setCurrentCredits] = useState<number>(0);
-  const [isGeneratingArt, setIsGeneratingArt] = useState(false);
-  const [timerStart, setTimerStart] = useState(0);
-  const [elapsedTime, setElapsedTime] = useState(0);
-  const [intervalId, setIntervalId] = useState<number | null>(null);
-  const [artPromptSelections, setArtPromptSelections] = useState<{
-    [category: string]: string
-  }>({});
-  // Card art states
-  const [showCardArtOptions, setShowCardArtOptions] = useState<boolean>(false);
-  const [showFlavorText, setShowFlavorText] = useState<boolean>(true);
-  const [cardArtOptions, setCardArtOptions] = useState<{
-    options: string[];
-    activeOption: number;
-  }>({
-    options: [],
-    activeOption: -1,
-  });
-  const [cardMode, setCardMode] = useState<"initial" | "anomaly">("initial");
-  // Alert states
-  const [showCardRender, setShowCardRender] = useState<boolean>(false);
-  const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
-  const [alertInfo, setAlertInfo] = useState<{
-    type: "success" | "error" | "info" | "warning";
-    icon: React.ReactNode;
-    message: string;
-  } | null>(null);
-
-  useEffect(() => {
-    if (userProfileData?.credits !== undefined) {
-      setCurrentCredits(userProfileData?.credits);
-    }
-  }, [userProfileData?.credits])
-
-  // Show cardRender if data is available
-  useEffect(() => {
-    if (cardData !== null) {
-      setShowCardRender(true);
-    }
-  }, [cardData]);
-
-  // Reset timer on new art generation
-  useEffect(() => {
-    if (isGeneratingArt) {
-      setElapsedTime(0);
-    }
-  }, [isGeneratingArt]);
-
-  // Clear interval on unmount to prevent memory leaks
-  useEffect(() => {
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [intervalId]);
 
   // DALL-E API fetch with retry
   async function fetchWithRetry(
@@ -216,10 +201,16 @@ export default function CardCreatorForm({
           }
           
           setValue("cardArt", imageUrl);
-          setCardArtOptions(prevState => ({
-            options: [...prevState.options, imageUrl],
-            activeOption: prevState.options.length,
-          }));
+          setCardArtOptions(prevState => {
+            if (!prevState.options.includes(imageUrl)) {
+              return {
+                options: [...prevState.options, imageUrl],
+                activeOption: prevState.options.length,
+              };
+            } else {
+              return prevState;
+            }
+          });
   
           if (cardArtOptions.options.length > 0) {
             setShowCardArtOptions(true);
@@ -253,7 +244,6 @@ export default function CardCreatorForm({
     const userId = userProfileData?.id;
     const userCreditsChange = 1;
     const operation = "subtract";
-
     try {
       await updateUserCredits({
         userId: userId as string,
@@ -273,12 +263,13 @@ export default function CardCreatorForm({
     }
   }
 
-  // Toggle flavor text visibility
+  // Flavor visibility handler
+  // make this inline
   function handleShowFlavorTextChange() {
     setShowFlavorText(!showFlavorText);
   };
 
-  // AI prompt tab handler
+  // Prompt tab handler
   function handlePromptTabChange(
     event: React.SyntheticEvent,
     newPromptTab: number
@@ -305,7 +296,6 @@ export default function CardCreatorForm({
       ...prevState,
       activeOption: index,
     }));
-
     setValue(
       "cardArt", 
       cardArtOptions.options[index]
@@ -314,15 +304,57 @@ export default function CardCreatorForm({
 
   // Art prompt accordions
   const renderedAccordions = ArtPromptAccordionData
-    .map(({ category, title }) => (
+    .map(({ 
+      category, 
+      title 
+    }) => (
       <ArtPromptAccordion
         key={category}
-        category={category as keyof typeof ArtPromptOptions}
+        category={
+          category as keyof typeof 
+          ArtPromptOptions
+        }
         title={title}
-        selectedOptions={artPromptSelections[category] || ""}
-        onSelectionChange={handleSelectionChange}
+        selectedOptions={
+          artPromptSelections[category] || ""
+        }
+        onSelectionChange={
+          handleSelectionChange
+        }
       />
   ));
+
+  // Set initial art options
+  useEffect(() => {
+    if (cardData?.cardArt) {
+      setCardArtOptions({
+        options: [cardData.cardArt],
+        activeOption: 0,
+      });
+    }
+  }, [cardData]);
+  
+  // Set initial credits
+  useEffect(() => {
+    if (userProfileData?.credits !== undefined) {
+      setCurrentCredits(userProfileData?.credits);
+    }
+  }, [userProfileData?.credits])
+
+  // Reset timer on new art generation
+  useEffect(() => {
+    if (isGeneratingArt) {
+      setElapsedTime(0);
+    }
+  }, [isGeneratingArt]);
+
+  // Clear interval on unmount 
+  // to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [intervalId]);
 
   return (
     // Outer container
@@ -402,7 +434,6 @@ export default function CardCreatorForm({
               />
             </Tabs>
           </Box>
-
           {/* Prompt Input Fields */}
           <Box
             className="
@@ -433,11 +464,7 @@ export default function CardCreatorForm({
                 <TextField
                   {...field}
                   multiline
-                  disabled // Disabled until functionality is added
-                  // disabled={
-                  //   isSubmitting || 
-                  //   !userProfileData?.id
-                  // }
+                  disabled
                   label="AI brainstorm (coming soon)"
                   error={!!error}
                   helperText={
@@ -578,7 +605,9 @@ export default function CardCreatorForm({
                   
                   text-neutral-400"
                 >
-                  You&apos;re out of credits. Buy more credits to continue creating cards, and support the development of Nexus.
+                  You&apos;re out of credits. 
+                  Buy more credits to continue creating cards, 
+                  and support the development of Nexus.
                 </Typography>
                 <Link
                   href="/dashboard/credits"
@@ -621,7 +650,9 @@ export default function CardCreatorForm({
             </Alert>)}
 
             {/* Art Prompt Selections */}
-            {promptTab === 0 && artPromptSelections && (
+            {
+            promptTab === 0 && 
+            artPromptSelections && (
             <Box
               className="
                 flex
@@ -655,106 +686,108 @@ export default function CardCreatorForm({
             
           </Box>
           {/* Art Prompt Options Accordions */}
-          {promptTab === 0 && (<Box
-            className="
-              flex
-              flex-col
-              justify-start
-              items-start
-              bg-neutral-900
-              rounded-b-lg
-            "
-          >
-            {/* Art Prompt Options Title */}
+          {promptTab === 0 && (
             <Box
               className="
                 flex
                 flex-col
-                justify-between
-                items-center
+                justify-start
+                items-start
                 bg-neutral-900
-                w-full
-                gap-1
-                border-b
-                border-neutral-700
+                rounded-b-lg
               "
             >
-              <Box
-                className="
-                  flex
-                  flex-row
-                  justify-between
-                  items-center
-                  px-4
-                  pt-2
-                  w-full
-                "
-              >
-                <Typography
-                  variant="subtitle2"
-                  className="
-                    font-semibold
-                    text-teal-500
-                  "
-                >
-                  ART DIRECTION
-                </Typography>
-                <Typography
-                  variant="overline"
-                  component={"span"}
-                  className="
-                    text-teal-500
-                  "
-                >
-                  {Object.keys(artPromptSelections).length}
-                  <Typography
-                    variant="overline"
-                    className="
-                      text-neutral-500
-                    "
-                  >
-                    /9 selected
-                  </Typography>
-                </Typography>
-              </Box>
+              {/* Art Prompt Options Title */}
               <Box
                 className="
                   flex
                   flex-col
-                  justify-start
-                  items-start
-                  px-4
-                  pb-3
+                  justify-between
+                  items-center
+                  bg-neutral-900
                   w-full
+                  gap-1
+                  border-b
+                  border-neutral-700
                 "
               >
-                <Typography
-                  variant="body2"
+                <Box
+                  className="
+                    flex
+                    flex-row
+                    justify-between
+                    items-center
+                    px-4
+                    pt-2
+                    w-full
+                  "
                 >
-                  Select options to include them in the art generation prompt.
-                </Typography>
+                  <Typography
+                    variant="subtitle2"
+                    className="
+                      font-semibold
+                      text-teal-500
+                    "
+                  >
+                    ART DIRECTION
+                  </Typography>
+                  <Typography
+                    variant="overline"
+                    component={"span"}
+                    className="
+                      text-teal-500
+                    "
+                  >
+                    {Object.keys(artPromptSelections).length}
+                    <Typography
+                      variant="overline"
+                      className="
+                        text-neutral-500
+                      "
+                    >
+                      /9 selected
+                    </Typography>
+                  </Typography>
+                </Box>
+                <Box
+                  className="
+                    flex
+                    flex-col
+                    justify-start
+                    items-start
+                    px-4
+                    pb-3
+                    w-full
+                  "
+                >
+                  <Typography
+                    variant="body2"
+                  >
+                    Select options to include them in the art generation prompt.
+                  </Typography>
+                </Box>
+              </Box>
+              
+              {/* Prompt Options Container */}
+              <Box
+                id="art-prompt-options-container"
+                className="
+                  flex
+                  flex-row
+                  justify-center
+                  items-start
+                  flex-wrap
+                  w-full
+                  rounded-xl
+                  gap-0
+                  my-0
+                "
+              >
+                {/* Art Prompt Options Accordions */}
+                {renderedAccordions}
               </Box>
             </Box>
-            
-            {/* Prompt Options Container */}
-            <Box
-              id="art-prompt-options-container"
-              className="
-                flex
-                flex-row
-                justify-center
-                items-start
-                flex-wrap
-                w-full
-                rounded-xl
-                gap-0
-                my-0
-              "
-            >
-              {/* Art Prompt Options Accordions */}
-              {renderedAccordions}
-            </Box>
-          </Box>)}
+          )}
         </Box>
 
         {/* Card Render */}
@@ -795,10 +828,18 @@ export default function CardCreatorForm({
             <FormGroup
               row={true}
             >
-              <Tooltip title={cardMode === "initial" ? "Switch to Anomaly Mode" : "Switch to Initial Mode"}>
+              <Tooltip title={
+                cardMode === "initial" ? 
+                "Switch to Anomaly Mode" : 
+                "Switch to Initial Mode"
+              }>
                 <FormControlLabel
                   onChange={() => {
-                    setCardMode(cardMode === "initial" ? "anomaly" : "initial")
+                    setCardMode(
+                      cardMode === "initial" ? 
+                      "anomaly" : 
+                      "initial"
+                    )
                   }}
                   control={
                     <Switch
@@ -806,7 +847,11 @@ export default function CardCreatorForm({
                       checked={cardMode === "initial"}
                     />
                   } 
-                  label={cardMode === "initial" ? "Initial Mode" : "Anomaly Mode"}
+                  label={
+                    cardMode === "initial" ? 
+                    "Initial Mode" : 
+                    "Anomaly Mode"
+                  }
                 />
               </Tooltip>
               {form.cardText && (
@@ -857,7 +902,10 @@ export default function CardCreatorForm({
                         font-medium
                       "
                     >
-                      {form.cardUnitType === "melee" ? "Melee" : "Ranged"}
+                      {
+                        form.cardUnitType === "melee" ? 
+                        "Melee" : "Ranged"
+                      }
                     </Typography>
                   }
                 />
@@ -933,8 +981,6 @@ export default function CardCreatorForm({
             {/* Card Render / Form */}
             <NexusCardForm
               cardMode={cardMode}
-              cardData={cardData}
-              showCardRender={showCardRender}
               showFlavorText={showFlavorText}
             />
           </div>
@@ -994,7 +1040,12 @@ export default function CardCreatorForm({
                 gap-2
               "
             >
-              {cardArtOptions.options.map((imageUrl, index) => (
+              {cardArtOptions
+                .options
+                .map((
+                  imageUrl, 
+                  index
+                ) => (
                 <Box
                   key={index}
                   sx={{
