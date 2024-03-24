@@ -1,14 +1,14 @@
 "use server";
 
 import { createClient } from "@/app/lib/supabase/server";
-// import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
-
 // Insert a new card into the database
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest
+) {
   try {
     const cardData = await req.json();
     const cookieStore = cookies();

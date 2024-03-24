@@ -7,13 +7,15 @@ export const cardSuperTypeOptions = {
 };
 
 export const cardTypeOptions = {
-  entity: "Entity",
+  anomaly: "Anomaly",
   event: "Event",
   effect: "Effect",
+  entity: "Entity",
   entityEffect: "Entity Effect",
-  object: "Object",
   entityObject: "Entity Object",
-  anomaly: "Anomaly",
+  object: "Object",
+  outpost: "Outpost",
+  outpostObject: "Outpost Object",
 };
 
 export const cardSubTypeOptions = {

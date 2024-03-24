@@ -178,14 +178,10 @@ export default function Create() {
               cardRender: imagePublicUrl,
             }),
           });
-  
-          if (!response.ok) {
-            console.log("card submit error:", response.json());
-          };
 
-          // Update state to include card id, and cardRender
           const responseData = await response.json();
-          setUploadedFormData(responseData.data);
+
+          setUploadedFormData(responseData.data); // Delete
 
           if (response.ok && responseData.data) {
             setAlertInfo({
@@ -222,6 +218,7 @@ export default function Create() {
             }, 5000);
   
           } else {
+            console.log("card submit error:", responseData.error);
             setAlertInfo({
               type: "error",
               icon: <ErrorIcon />,

@@ -27,7 +27,7 @@ const CardFormSchema = z
     cardSuperType: z.string().optional(),
     cardSubType: z.array(z.string()).optional(),
     cardSpeed: z.string().optional(),
-    cardGrade: z.string().min(1, "Card grade is required.").default("Common"),
+    cardGrade: z.string().min(1, "Card grade is required.").default("core"),
     cardText: z.string().min(1, "Card text is required."),
     cardFlavorText: z.string().optional(),
     cardAttack: z.string().optional(),
@@ -43,7 +43,7 @@ const CardFormSchema = z
   .superRefine((data, ctx) => {
     if (
       data.cardType && 
-      !data.cardType.includes("node")
+      !data.cardType.includes("anomaly")
     ) {
       if (!data.cardEnergyCost) {
         ctx.addIssue({

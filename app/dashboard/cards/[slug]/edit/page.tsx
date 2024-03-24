@@ -73,6 +73,7 @@ export default function EditCard({
   // Form
   const methods = useForm<CardFormDataType>({
     defaultValues: {
+      id: 0,
       user_id: "", 
       cardCreator: "",
       cardName: "",
@@ -110,7 +111,6 @@ export default function EditCard({
   const {
     handleSubmit,
     formState: {
-      isDirty,
       isValid,
       isSubmitting,
       isSubmitted,
@@ -171,6 +171,8 @@ export default function EditCard({
   useEffect(() => {
     if (cardData && isCardOwner) {
       methods.reset({ 
+        id: cardData?.id,
+        user_id: cardData?.user_id,
         cardCreator: cardData?.cardCreator,
         cardName: cardData?.cardName,
         cardEnergyValue: cardData?.cardEnergyValue,
@@ -200,30 +202,6 @@ export default function EditCard({
     cardData, 
     isCardOwner
   ]);
-
-  // Format date from card data
-  useEffect(() => {
-    if (cardData && isCardOwner) {
-      const formattedDate = format(
-        new Date(
-          cardData.created_at
-        ), 'MMMM dd, yyyy'
-      );
-      setFormattedDate(formattedDate);
-    }
-  }, [
-    cardData, 
-    isCardOwner
-  ]);
-
-  // Re-open snackbar when message changes
-  useEffect(() => {
-    if (snackbarMessage === "") {
-      return;
-    } else if (!openSnackbar) {
-      setOpenSnackbar(true);
-    }
-  }, [snackbarMessage]);
 
   // Form submit handler
   async function onSubmit(
@@ -265,23 +243,19 @@ export default function EditCard({
         if (imagePublicUrl && finalCardArt) {
 
           // Submit form data with cardRender
-          const response = await fetch("/api/data/submit-card", { 
+          const response = await fetch("/api/data/update-card", { 
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
               ...data,
+              id: cardData?.id,
               cardArt: finalCardArt,
               cardRender: imagePublicUrl,
             }),
           });
   
-          if (!response.ok) {
-            console.log("card submit error:", response.json());
-          };
-
-          // Update state to include card id, and cardRender
           const responseData = await response.json();
 
           if (response.ok && responseData.data) {
@@ -319,6 +293,7 @@ export default function EditCard({
             }, 5000);
   
           } else {
+            console.log("card submit error:", responseData.error);
             setAlertInfo({
               type: "error",
               icon: <ErrorIcon />,
@@ -359,8 +334,30 @@ export default function EditCard({
       "Not posting to Discord!"
     );
   };
-  
-  console.log({ isValid, isDirty, isSubmitting, isSubmitted });
+
+  // Format date from card data
+  useEffect(() => {
+    if (cardData && isCardOwner) {
+      const formattedDate = format(
+        new Date(
+          cardData.created_at
+        ), 'MMMM dd, yyyy'
+      );
+      setFormattedDate(formattedDate);
+    }
+  }, [
+    cardData, 
+    isCardOwner
+  ]);
+
+  // Re-open snackbar when message changes
+  useEffect(() => {
+    if (snackbarMessage === "") {
+      return;
+    } else if (!openSnackbar) {
+      setOpenSnackbar(true);
+    }
+  }, [snackbarMessage]);
 
   return isCardOwner && cardData ? (
     <>
@@ -552,13 +549,12 @@ export default function EditCard({
                       variant="outlined"
                       disabled={
                         !isValid ||
-                        !isDirty ||
                         isSubmitting ||
                         isSubmitted
                       }
-                      color={isDirty ? "success" : "secondary"}
+                      color={isValid ? "success" : "secondary"}
                       startIcon={<SaveIcon />}
-                      size="large" // TODO: Dynamically change size based on screen size
+                      size="large"
                       className="
                         hover:cursor-pointer
                         hover:bg-teal-600/30

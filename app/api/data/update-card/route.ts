@@ -5,7 +5,6 @@ import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
-
 // Insert a new card into the database
 export async function POST(
   req: NextRequest
@@ -14,11 +13,15 @@ export async function POST(
     const cardData = await req.json();
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
+
+    console.log("cardData:", cardData)
   
     if (cardData) {
+      console.log("Attempting to update card.")
       const { data, error } = await supabase
       .from("cards")
       .update({
+        updated_at: new Date().toISOString(),
         cardCreator: cardData?.cardCreator,
         cardName: cardData?.cardName,
         cardEnergyValue: cardData?.cardEnergyValue,
@@ -42,10 +45,11 @@ export async function POST(
         cardArtPrompt: cardData?.cardArtPrompt,
         cardRender: cardData?.cardRender,
       })
-      .eq("id", 1)
+      .eq("id", cardData?.id)
       .select()
 
       if (error) {
+        console.log("Supabase: Error updating card.")
         console.log("Error:", error);
         return new Response(JSON.stringify({ 
           error: error.message 
@@ -55,7 +59,7 @@ export async function POST(
             'Content-Type': 'application/json',
           },
         });
-      } else if (data && data.length > 0) {
+      } else if (data) {
         console.log("Inserted card:", data[0]);
         return new Response(JSON.stringify({ 
           data: data[0] 
@@ -67,6 +71,7 @@ export async function POST(
         });
       }
     } else {
+      console.log("API: No card data.")
       console.log("Data error.");
       return new Response(JSON.stringify({ 
         error: "No data found to update."
