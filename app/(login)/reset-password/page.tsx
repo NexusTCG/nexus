@@ -1,11 +1,15 @@
 "use client";
 
+// Hooks
 import React, { useEffect, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
+import { useRouter } from "next/navigation";
+// Schemas
 import { zodResolver } from "@hookform/resolvers/zod";
 import PasswordSchema from "@/app/utils/schemas/PasswordSchema";
+// Utils
 import { createClient } from "@/app/lib/supabase/client";
-import { useRouter } from "next/navigation";
+// Components
 import Image from "next/image";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -16,10 +20,14 @@ import IconButton from "@mui/material/IconButton";
 import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
+// Icons
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 export default function ResetPassword() {
+  const supabase = createClient();
+  const router = useRouter();
+
   const [authBg, setAuthBg] = useState<number | null>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showAlert, setShowAlert] = useState<boolean>(false);
@@ -27,9 +35,6 @@ export default function ResetPassword() {
     type: "success" | "error" | "info" | "warning";
     message: string;
   } | null>(null);
-
-  const supabase = createClient();
-  const router = useRouter();
 
   const methods = useForm({
     defaultValues: {
@@ -39,7 +44,6 @@ export default function ResetPassword() {
     resolver: zodResolver(PasswordSchema),
     mode: "onChange"
   });
-
   const {
     register,
     handleSubmit,
@@ -51,36 +55,6 @@ export default function ResetPassword() {
     }
   } = methods;
   const form = watch();
-
-  // Randomize the background image
-  useEffect(() => {
-    if (authBg !== null) return;
-    const randomBg = Math.floor(Math.random() * 10) + 1;
-    setAuthBg(randomBg);
-  }, []);
-
-  // Check if passwords match
-  useEffect(() => {
-    if (form.password !== form.confirmPassword) {
-      setAlertInfo({
-        type: "error",
-        message: "Passwords do not match! Please try again."
-      });
-      setShowAlert(true);
-    } else if (
-        form.password === form.confirmPassword &&
-        form.password !== "" && form.confirmPassword !== "" &&
-        form.password.length >= 8 && form.confirmPassword.length >= 8
-      ) {
-      setAlertInfo({
-        type: "success",
-        message: "Passwords match!"
-      });
-      setShowAlert(true);
-    } else {
-      setShowAlert(false);
-    }
-  }, [form.password, form.confirmPassword]);
 
   // Password visibility toggle
   function handleClickShowPassword() {
@@ -94,7 +68,7 @@ export default function ResetPassword() {
     event.preventDefault();
   };
 
-  // Refactor function
+  // Form submit handler
   async function onSubmit(data: {
     password: string;
     confirmPassword: string;
@@ -140,6 +114,36 @@ export default function ResetPassword() {
       setShowAlert(true);
     };
   };
+
+  // Randomize the background image
+  useEffect(() => {
+    if (authBg !== null) return;
+    const randomBg = Math.floor(Math.random() * 10) + 1;
+    setAuthBg(randomBg);
+  }, []);
+
+  // Check if passwords match
+  useEffect(() => {
+    if (form.password !== form.confirmPassword) {
+      setAlertInfo({
+        type: "error",
+        message: "Passwords do not match! Please try again."
+      });
+      setShowAlert(true);
+    } else if (
+        form.password === form.confirmPassword &&
+        form.password !== "" && form.confirmPassword !== "" &&
+        form.password.length >= 8 && form.confirmPassword.length >= 8
+      ) {
+      setAlertInfo({
+        type: "success",
+        message: "Passwords match!"
+      });
+      setShowAlert(true);
+    } else {
+      setShowAlert(false);
+    }
+  }, [form.password, form.confirmPassword]);
 
   return (
     <Box

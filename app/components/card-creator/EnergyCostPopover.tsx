@@ -1,19 +1,22 @@
 "use client";
 
+// Hooks
 import React from "react";
 import { useFormContext } from "react-hook-form";
+// Utils
 import { monoColorOptions } from "@/app/utils/data/cardColorOptions";
+import Image from "next/image";
+import clsx from "clsx";
+// Components
 import Popover from "@mui/material/Popover";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Grid from "@mui/material/Grid";
+// Icons
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
-import Image from "next/image";
-import clsx from "clsx";
-// Energy icons
 import Yellow from "@/public/images/card-parts/card-icons/card-cost/yellow.svg";
 import Blue from "@/public/images/card-parts/card-icons/card-cost/blue.svg";
 import Purple from "@/public/images/card-parts/card-icons/card-cost/purple.svg";
@@ -328,7 +331,6 @@ export default function EnergyCostPopover({
                       : color === "green" ? Green
                       : color === "void" ? voidEnergyIcons[watchVoidEnergyValue]
                       : null
-                      // : `/images/card-parts/card-icons/card-cost/void-${watchCardEnergyCost.void}.PNG`
                     }
                     width={30}
                     height={30}

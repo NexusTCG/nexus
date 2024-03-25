@@ -9,7 +9,7 @@ import dynamic from 'next/dynamic';
 import Script from 'next/script';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const PostHogPageView = dynamic(() => import('@/app/lib/posthog/PostHogPageView'), {
+const PostHogPageView = dynamic(() => import('@/app/PostHogPageView'), {
   ssr: false,
 })
 

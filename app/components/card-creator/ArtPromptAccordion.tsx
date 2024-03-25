@@ -1,6 +1,10 @@
 "use client";
 
+// Hooks
 import React from "react";
+// Utils
+import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
+// Components
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -17,7 +21,6 @@ import WbSunny from "@mui/icons-material/WbSunny";
 import Mood from "@mui/icons-material/Mood";
 import LocalSee from "@mui/icons-material/LocalSee";
 import InvertColors from "@mui/icons-material/InvertColors";
-import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
 
 export type ArtPromptAccordionProps = {
   category: keyof typeof ArtPromptOptions;
@@ -60,7 +63,9 @@ export function ArtPromptAccordion({
   selectedOptions,
 }: ArtPromptAccordionProps) {
 
-  function handleChipClick(option: string) {
+  function handleChipClick(
+    option: string
+  ) {
     const isAlreadySelected = selectedOptions === option;
     onSelectionChange(category, isAlreadySelected ? "" : option);
   };

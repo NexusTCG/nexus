@@ -1,16 +1,22 @@
 "use client";
 
+// Hooks
 import React, { useEffect, useState } from "react";
 import { useForm, FormProvider, FieldValues } from "react-hook-form";
+import useSession from "@/app/hooks/useSession";
+// Schema
 import { zodResolver } from "@hookform/resolvers/zod";
-import RegisterFormSchema from "@/app/utils/schemas/RegisterFormSchema";
 import LoginFormSchema from "@/app/utils/schemas/LoginFormSchema";
+import RegisterFormSchema from "@/app/utils/schemas/RegisterFormSchema";
 import PasswordResetSchema  from "@/app/utils/schemas/PasswordResetSchema";
+// Utils
+import PostHogClient from "@/app/lib/posthog/posthog";
 import { createClient } from "@/app/lib/supabase/client";
-import OAuthButton from "@/app/components/auth/OAuthButton";
 import Image from "next/image";
 import Link from "next/link"
 import clsx from "clsx";
+// Components
+import OAuthButton from "@/app/components/auth/OAuthButton";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -25,6 +31,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import CircularProgress from "@mui/material/CircularProgress";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+// Icons
 import Check from "@mui/icons-material/Check";
 import Error from "@mui/icons-material/Error";
 
@@ -44,6 +51,10 @@ export default function AuthForm({
 }: {
   searchParams: { message: string };
 }) {
+  const posthog = PostHogClient();
+  const supabase = createClient();
+  const session = useSession();
+
   const [showSignUp, setShowSignUp] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [confirmPasswordMatch, setConfirmPasswordMatch] = useState<boolean>(false);
@@ -56,9 +67,7 @@ export default function AuthForm({
     type: "success" | "error" | "info" | "warning";
     message: string;
   } | null>(null);
-  
-  const supabase = createClient();
-  // const router = useRouter();
+
   const methods = useForm({
     defaultValues: {
       email: "",
@@ -213,7 +222,13 @@ export default function AuthForm({
         const result = await response.json();
         setShowLoginAlert(true);
         if(showSignUp) {
-          if (result.error && result.error.includes("Password is known to be weak and easy to guess, please choose a different one.")) {
+          if (
+            result.error && 
+            result.error
+              .includes(
+                "Password is known to be weak and easy to guess, please choose a different one."
+              )
+          ) {
             setAlertInfo({
               type: "error",
               message: "Your password is too easy to guess. Please choose a stronger password."
@@ -226,6 +241,23 @@ export default function AuthForm({
           });
         }
       } else if (response.ok) {
+        if (
+          session?.user.id && 
+          session?.user.id !== "undefined"
+        ) {
+          if (endpoint === "/api/auth/register-user") {
+            posthog.capture({
+              distinctId: session?.user.id,
+              event: "📝 User Signed Up"
+            })
+          } else if (endpoint === "/api/auth/login-user") {
+            posthog.capture({
+              distinctId: session.user.id,
+              event: "🔓 User Signed In"
+            })
+          }
+        }
+
         window.location.href = resultUrl;
       }
     } catch (error) {

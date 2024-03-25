@@ -1,5 +1,8 @@
-import React from 'react';
-import { Controller, useFormContext } from "react-hook-form";
+import React from "react";
+import { 
+  Controller, 
+  useFormContext 
+} from "react-hook-form";
 
 type CustomInputProps = {
     name: string;
@@ -17,7 +20,12 @@ export default function CustomInput({
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState: { error } }) => (
+      render={({ 
+        field, 
+        fieldState: { 
+          error 
+        } 
+      }) => (
         <input
           {...field}
           placeholder={placeholder}

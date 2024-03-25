@@ -1,13 +1,16 @@
 "use client";
 
+// Hooks
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import IconButton from "@mui/material/IconButton";
-import Box from "@mui/material/Box";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import Image from "next/image";
+// Utils
 import { CardFormDataType } from "@/app/utils/types/types";
-// Energy icons
+import Image from "next/image";
+// Components
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+// Icons
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Yellow from "@/public/images/card-parts/card-icons/card-cost/yellow.svg";
 import Blue from "@/public/images/card-parts/card-icons/card-cost/blue.svg";
 import Purple from "@/public/images/card-parts/card-icons/card-cost/purple.svg";

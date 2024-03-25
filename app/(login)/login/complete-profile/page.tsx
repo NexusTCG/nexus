@@ -1,15 +1,27 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+// Hooks
+import React, { 
+  useState, 
+  useEffect 
+} from "react";
+import { 
+  useForm, 
+  FormProvider 
+} from "react-hook-form";
+import { useRouter } from "next/navigation";
 import useSession from "@/app/hooks/useSession";
-import { useForm, FormProvider } from "react-hook-form";
+// Schema
 import { zodResolver } from "@hookform/resolvers/zod";
 import ProfileFormSchema from "@/app/utils/schemas/ProfileFormSchema";
+// Utils
 import { createClient } from "@/app/lib/supabase/client";
 import PostHogClient from "@/app/lib/posthog/posthog";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { debounce } from "lodash";
+import Image from "next/image";
+// Actions
+import checkUsernameUnique from "@/app/lib/actions/supabase-data/checkUsernameUnique";
+// Components
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -18,28 +30,27 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
 import Alert from "@mui/material/Alert";
+// Icons
 import CheckIcon from "@mui/icons-material/Check";
 import ErrorIcon from "@mui/icons-material/Error";
-import checkUsernameUnique from "@/app/lib/actions/supabase-data/checkUsernameUnique";
 
 export default function CompleteProfile() {
   const supabase = createClient();
   const router = useRouter();
   const session = useSession();
   const posthog = PostHogClient();
+
   const methods = useForm({
     defaultValues: {
       id: "",
       username: "",
       first_name: "",
       last_name: "",
-      // avatar_url: "",
       bio: "",
     },
     resolver: zodResolver(ProfileFormSchema),
     mode: "onChange",
   });
-
   const {
     register,
     handleSubmit,
@@ -65,7 +76,7 @@ export default function CompleteProfile() {
   const watchId = watch("id");
   const debouncedCheckUsernameUnique = debounce(checkUsernameUnique, 300);
 
-  // Randomize the background image
+  // Randomize the bg image
   useEffect(() => {
     if (authBg !== null) return;
     const randomBg = Math.floor(Math.random() * 10) + 1;
@@ -79,7 +90,6 @@ export default function CompleteProfile() {
     last_name: string,
     bio: string
   }) {
-    console.log("Form submitted:", data);
     const {
       username,
       first_name,
@@ -176,7 +186,11 @@ export default function CompleteProfile() {
       "
     >
       <Image
-        src={authBg ? `/images/auth-bg/nexus-auth-bg-${authBg}.jpg` : "/images/auth-bg/nexus-auth-bg-1.jpg"}
+        src={
+          authBg ? 
+          `/images/auth-bg/nexus-auth-bg-${authBg}.jpg` : 
+          "/images/auth-bg/nexus-auth-bg-1.jpg"
+        }
         alt="Nexus background"
         fill
         style={{
@@ -260,8 +274,13 @@ export default function CompleteProfile() {
           z-10
         "
       >
-        <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+        <FormProvider
+          {...methods}
+        >
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-full"
+        >
             <Box
               id="complete-profile-form-container"
               className="
@@ -285,15 +304,17 @@ export default function CompleteProfile() {
                   w-full
                 "
               >
-                {session?.user.email && (<Typography
-                  variant="overline"
-                  className="
-                    font-medium
-                    text-teal-500
-                  "
-                >
-                  Hi, {session?.user.email}!
-                </Typography>)}
+                {session?.user.email && (
+                  <Typography
+                    variant="overline"
+                    className="
+                      font-medium
+                      text-teal-500
+                    "
+                  >
+                    Hi, {session?.user.email}!
+                  </Typography>
+                )}
                 <Typography
                   variant="h4"
                   className="
@@ -332,9 +353,9 @@ export default function CompleteProfile() {
                     placeholder="Your username"
                     {...register("username", {
                       required: "Username is required",
-                      validate: async (
-                        value: string
-                      ) => await debouncedCheckUsernameUnique(value) || "Username is already taken."
+                      validate: async (value: string) => 
+                        await debouncedCheckUsernameUnique(value) || 
+                        "Username is already taken."
                     })}
                     error={Boolean(errors.username)}
                     type="text"
@@ -436,7 +457,11 @@ export default function CompleteProfile() {
               <Button
                 type="submit"
                 variant="outlined"
-                disabled={isSubmitting || !isValid ? true : false}
+                disabled={
+                  isSubmitting || 
+                  !isValid ? true : 
+                  false
+                }
                 color="primary"
                 size="large"
                 className="

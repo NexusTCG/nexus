@@ -1,7 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+// Hooks
+import React, { 
+  useState 
+} from "react";
+// Components
 import { Button } from "@mui/material";
+// Icons
 import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function SignOutButton() {

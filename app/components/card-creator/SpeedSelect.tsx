@@ -1,14 +1,18 @@
 "use client";
 
+// Hooks
 import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
+// Utils
+import Image from "next/image";
+import clsx from "clsx";
+// Components
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Snackbar from "@mui/material/Snackbar";
 import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
-import Image from "next/image";
-import clsx from "clsx";
+// Icons
 import Speed from "@/public/images/card-parts/card-icons/speed.svg";
 
 export default function SpeedSelect() {
