@@ -323,8 +323,8 @@ export default function Cards() {
             justify-start
             items-center
             w-full
-            lg:px-12
-            md:px-8
+            lg:px-24
+            md:px-12
             sm:px-6
             lg:mb-12
             mb-8
@@ -339,7 +339,7 @@ export default function Cards() {
             border
             border-neutral-700
             pr-4
-            py-4
+            py-2
             ml-2
             mt-4
             rounded-lg
@@ -351,8 +351,9 @@ export default function Cards() {
           <Grid
             item
             xs={6}
-            md={4}
-            lg={3}
+            sm={4}
+            md={3}
+            xl={2}
             key={card.id}
           >
             <Tooltip
@@ -371,7 +372,7 @@ export default function Cards() {
                   hover:shadow-lg
                   hover:shadow-zinc-950/25
                   hover:scale-105
-                  mb-2
+                  mb-1
                   w-full
                 "
               >
