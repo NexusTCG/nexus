@@ -1,5 +1,5 @@
 export const Keywords = {
-  keyword: {
+  adept: {
     name: "Adept",
     reminder: "This unit gets this effect while in a biome aligned with any of its energy types",
     type: "persistent",

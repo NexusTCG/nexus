@@ -879,9 +879,11 @@ export default function CardCreatorForm({
                   }
                 />
               )}
-              {form.cardType && 
-              form.cardType === "entity" && 
-              cardMode === "initial" && (
+              {form.cardType && (
+                form.cardType === "entity" || 
+                form.cardType === "entityEffect" || 
+                form.cardType === "entityObject"
+              ) && cardMode === "initial" && (
                 <FormControlLabel
                   onChange={() => {
                     form.cardUnitType === "melee" ? 

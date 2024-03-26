@@ -112,7 +112,7 @@ export default function NexusCardForm({
     }, 200), []
   );
 
-   // Debounce function for cardFlavorText
+   // Debounce function for cardAnomalyModeFlavorText
    const debouncedSetCardAnomalyModeFlavorText = useCallback(
     debounce((value: string) => {
       setValue("cardAnomalyModeFlavorText", value);
@@ -363,7 +363,7 @@ export default function NexusCardForm({
           bg-cover
           bg-center
           bg-no-repeat
-          ${cardMode === "initial" ? cardBgImage : "bg-[url('/images/card-parts/card-frames/other/node.png')]"}
+          ${cardMode === "initial" ? cardBgImage : "bg-[url('/images/card-parts/card-frames/other/anomaly.png')]"}
         `}
       >
         {/* Card header */}
@@ -1039,6 +1039,30 @@ export default function NexusCardForm({
                           wordWrap: "break-word",
                         },
                       }}
+                      InputProps={{
+                        startAdornment: 
+                          <span
+                            className={clsx("flex justify-start h-full italic mx-1 font-large", 
+                              { 
+                                "text-black/50": form.cardFlavorText === "", 
+                                "text-black": form.cardFlavorText !== "", 
+                              }
+                            )}
+                          >
+                              &quot;
+                          </span>,
+                        endAdornment: 
+                        <span
+                          className={clsx("flex justify-start h-full italic mx-1 font-large", 
+                            { 
+                              "text-black/50": form.cardFlavorText === "", 
+                              "text-black": form.cardFlavorText !== "", 
+                            }
+                          )}
+                        >
+                            &quot;
+                        </span>,
+                      }}
                       sx={{
                         '& .MuiInputBase-input': {
                           color: 'black',
@@ -1126,9 +1150,10 @@ export default function NexusCardForm({
           )}
         >
           {/* Card attack */}
-          {form.cardType && 
-          form.cardType.includes("entity") && 
-          cardMode === "initial" && (
+          {form.cardType && (
+            form.cardType.includes("entity") || 
+            form.cardType.includes("outpost")
+          ) && cardMode === "initial" && (
           <Box
             id="stats-attack"
             className="
@@ -1216,8 +1241,9 @@ export default function NexusCardForm({
           {/* Card grade + info */}
           <Box
             id="stats-grade-info"
-            className={clsx("flex flex-col justify-center items-center",
-              form.cardType && !form.cardType.includes("entity") ? "w-full" : "w-3/5"
+            className={clsx(
+              "flex flex-col justify-center items-center",
+              form.cardType && !(form.cardType.includes("entity") || form.cardType.includes("outpost")) ? "w-full" : "w-3/5"
             )}
           >
             {/* Card grade */}
@@ -1310,9 +1336,10 @@ export default function NexusCardForm({
             </Box>
           </Box>
           {/* Card defense */}
-          {form.cardType && 
-          form.cardType.includes("entity") && 
-          cardMode === "initial" && (
+          {form.cardType && (
+            form.cardType.includes("entity") || 
+            form.cardType.includes("outpost")
+          ) && cardMode === "initial" && (
           <Box
             id="stats-defense"
             className="
