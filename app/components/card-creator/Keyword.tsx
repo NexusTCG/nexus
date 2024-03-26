@@ -37,7 +37,7 @@ export default function Keyword(
             "text-indigo-500 hover:text-indigo-400": keyword.type === "persistent",
             "text-rose-500 hover:text-rose-400": keyword.type === "active",
             "text-amber-500 hover:text-amber-400": keyword.type === "reactive",
-            "italic": keyword.unique
+            "italic": keyword.unique === true
           }
         )}
       >
