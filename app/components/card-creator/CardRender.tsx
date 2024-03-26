@@ -11,9 +11,14 @@ import determineBgImage from "@/app/lib/actions/determineBgImage";
 // Types
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import { CardFormDataType } from "@/app/utils/types/types";
+
 // Utils
 import Image from "next/image";
 import clsx from "clsx";
+// Data
+import { Keywords } from "@/app/utils/data/Keywords";
+// Custom Components
+import Keyword from "@/app/components/card-creator/Keyword";
 // Components
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -94,6 +99,42 @@ const CardRender = ({
         word
           .slice(1)
           .toLowerCase();
+    }
+
+    // Utility function to render text with keywords
+    function renderTextWithKeywords(text: string, cardName: string) {
+      const keywordPattern = Object.keys(Keywords).join("|");
+      const regex = new RegExp(`\\b(${keywordPattern})\\b`, "gi");
+    
+      const processLine = (line: string, lineIndex: number) => {
+        const parts = line.split(regex);
+    
+        return parts.map((part, index) => {
+          const keywordKey = Object.keys(Keywords).find(key => key.toLowerCase() === part.toLowerCase());
+    
+          if (keywordKey) {
+            const keyword = Keywords[keywordKey];
+    
+            return (
+              <Keyword
+                key={`${lineIndex}-${index}`}
+                effect={""}
+                keyword={keyword}
+              />
+            );
+          } else {
+            // If part is not a keyword, or keywordKey is undefined, return the part as is.
+            // Also replace "~" with `cardName`
+            return <span key={`${lineIndex}-${index}`}>{part.replace(/~/g, cardName)}</span>;
+          }
+        });
+      };
+    
+      return text.split('\n').map((line, index) => (
+        <Typography key={index} variant="body1" component="div" gutterBottom>
+          {processLine(line, index)}
+        </Typography>
+      ));
     }
 
     // Render cardType and cardSubType
@@ -582,7 +623,7 @@ const CardRender = ({
                 `}
               >
                 {/* Card text */}
-                {
+                {/* {
                   cardData.cardText && 
                   cardData.cardName
                   ? cardData.cardText
@@ -599,6 +640,11 @@ const CardRender = ({
                           </Typography>
                         ))
                     : null
+                  } */}
+                  {
+                    cardData.cardText && cardData.cardName
+                      ? renderTextWithKeywords(cardData.cardText, cardData.cardName)
+                      : null
                   }
                 {/* Flavor text */}
                 {cardData.cardFlavorText !== "" && (

@@ -11,6 +11,7 @@ type KeywordType = {
     name: string;
     reminder: string;
     type: string;
+    unique: boolean;
   }
 }
 export default function Keyword(
@@ -31,15 +32,16 @@ export default function Keyword(
       <Typography
         variant="body2"
         component="span"
-        className={clsx("font-bold italic",
+        className={clsx("font-semibold",
           {
-            "text-indigo-400 hover:text-indigo-300": keyword.type === "persistent",
-            "text-rose-400 hover:text-rose-400": keyword.type === "active",
-            "text-amber-400 hover:text-amber-400": keyword.type === "reactive",
+            "text-indigo-500 hover:text-indigo-400": keyword.type === "persistent",
+            "text-rose-500 hover:text-rose-400": keyword.type === "active",
+            "text-amber-500 hover:text-amber-400": keyword.type === "reactive",
+            "italic": keyword.unique
           }
         )}
       >
-        {keyword.name}: {""}
+        {keyword.unique ? keyword.name + ": " : keyword.name + " "}
         <Typography
           variant="body2"
           component="span"

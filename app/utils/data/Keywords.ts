@@ -1,4 +1,7 @@
-export const Keywords = {
+
+import { KeywordsType } from "@/app/utils/types/types";
+
+export const Keywords: KeywordsType = {
   adept: {
     name: "Adept",
     reminder: "This unit gets this effect while in a biome aligned with any of its energy types",
@@ -16,7 +19,7 @@ export const Keywords = {
   },
   intimidate: {
     name: "Intimidate",
-    reminder: "Other, friendly [entity type] units get this effect",
+    reminder: "This unit can't be defended by defenders with less attack",
     type: "persistent",
   },
   network: {
