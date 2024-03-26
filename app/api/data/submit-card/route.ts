@@ -5,7 +5,6 @@ import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
 import { z } from "zod";
 
-// Insert a new card into the database
 export async function POST(
   req: NextRequest
 ) {

@@ -183,7 +183,10 @@ export default function Create() {
 
           setUploadedFormData(responseData.data); // Delete
 
-          if (response.ok && responseData.data) {
+          if (
+            response.ok && 
+            responseData.data
+          ) {
             setAlertInfo({
               type: "success",
               icon: <CheckIcon />,

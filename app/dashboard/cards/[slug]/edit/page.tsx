@@ -25,6 +25,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import PostHogClient from "@/app/lib/posthog/posthog";
 import { format } from "date-fns";
 import clsx from "clsx";
+// Custom Components
+import CardCreatorSkeleton from "@/app/components/card-creator/CardCreatorSkeleton";
 // Components
 import CardCreatorForm from "@/app/components/card-creator/CardCreatorForm";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -672,6 +674,6 @@ export default function EditCard({
       )}
     </>
   ) : (
-    <h1>You should not be here.</h1>
+    <CardCreatorSkeleton />
   )
 }
