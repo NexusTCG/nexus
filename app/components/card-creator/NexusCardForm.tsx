@@ -1172,7 +1172,7 @@ export default function NexusCardForm({
               disabled={isSubmitting || isSubmitted}
               render={({ field, fieldState }) => (
                 <Tooltip
-                  title="Entity attack"
+                  title="Unit attack"
                   placement="top"
                 >
                   <TextField
@@ -1357,7 +1357,7 @@ export default function NexusCardForm({
               disabled={isSubmitting || isSubmitted}
               render={({ field, fieldState }) => (
                 <Tooltip
-                  title="Entity defense"
+                  title="Unit defense"
                   placement="top"
                 >
                   <TextField

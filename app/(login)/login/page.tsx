@@ -354,7 +354,7 @@ export default function AuthForm({
             lg:block
           "
         >
-          CREAT CUSTOM CARDS. < br/>
+          CREATE CUSTOM CARDS. < br/>
           EARN REVENUE SHARE.
         </Typography>
       </Box>
