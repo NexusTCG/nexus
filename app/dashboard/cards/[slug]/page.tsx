@@ -38,9 +38,13 @@ import { FaDiscord } from "react-icons/fa";
 export default function Card({
    params 
 }: {
-   params: { slug: string } 
+   params: {
+    slug: string 
+  } 
 }) {
-  const { userProfileData } = useContext(DashboardContext);
+  const { 
+    userProfileData 
+} = useContext(DashboardContext);
   const router = useRouter();
 
   const [isCardOwner, setIsCardOwner] = useState<boolean>(false);

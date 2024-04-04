@@ -5,7 +5,7 @@ export type CardsTableType = {
     cardArt: string;
     cardArtPrompt: string;
     cardAttack: string;
-    cardEnergyAlignment: string;
+    cardEnergyAlignment: string | null;
     cardCreator: string;
     cardDefense: string;
     cardEnergyValue: number;

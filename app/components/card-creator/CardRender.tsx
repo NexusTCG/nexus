@@ -202,6 +202,17 @@ const CardRender = ({
         ) {
           setBgColor({
             "50":
+              colorMapping["yellow"]?.[50],
+            "200":
+              colorMapping["yellow"]?.[200],
+            "400":
+              colorMapping["yellow"]?.[400],
+          })
+        } else if (
+          cardData?.cardEnergyAlignment === "volatile"
+        ) {
+          setBgColor({
+            "50":
               colorMapping["sky"]?.[50],
             "200":
               colorMapping["sky"]?.[200],
@@ -218,6 +229,17 @@ const CardRender = ({
               colorMapping["violet"]?.[200],
             "400":
               colorMapping["violet"]?.[400],
+          })
+        } else if (
+          cardData?.cardEnergyAlignment === "blaze"
+        ) {
+          setBgColor({
+            "50":
+              colorMapping["red"]?.[50],
+            "200":
+              colorMapping["red"]?.[200],
+            "400":
+              colorMapping["red"]?.[400],
           })
         } else if (
           cardData?.cardEnergyAlignment === "verdant"
@@ -451,7 +473,7 @@ const CardRender = ({
                   .sort(([energyA], [energyB]) => {
                     const order = [
                       "radiant", 
-                      "radiant", 
+                      "volatile", 
                       "corrupt", 
                       "blaze", 
                       "verdant", 
@@ -468,7 +490,7 @@ const CardRender = ({
                             key={`${energy}-${i}`}
                             src={
                               energy === "radiant" ? EnergyRadiant :
-                              energy === "radiant" ? EnergyVolatile :
+                              energy === "volatile" ? EnergyVolatile :
                               energy === "corrupt" ? EnergyCorrupt :
                               energy === "blaze" ? EnergyBlaze :
                               energy === "verdant" ? EnergyVerdant :
@@ -786,7 +808,7 @@ const CardRender = ({
                   className="
                     bg-black
                     rounded-full
-                    p-0.5
+                    p-1.5
                   "
                 />
               </Box>

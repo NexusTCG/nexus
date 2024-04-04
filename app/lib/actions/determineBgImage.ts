@@ -2,10 +2,10 @@ import { CardFormDataType } from "@/app/utils/types/types";
 
 export default function determineBgImage(
     activeCardType: CardFormDataType["cardType"],
-    cardColor: string
+    cardEnergyAlignment: string
 ) {
 
-    switch (cardColor) {
+    switch (cardEnergyAlignment) {
         case "anomaly":
             return "bg-[url('/images/card-parts/card-frames/other/anomaly.jpg')]"
 
