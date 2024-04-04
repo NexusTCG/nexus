@@ -24,8 +24,6 @@ import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
 import Divider from "@mui/material/Divider";
 // Icons
-import AdsClickIcon from '@mui/icons-material/AdsClick';
-
 import EnergyRadiant from "@/public/images/card-parts/card-icons/card-cost/energy-radiant.svg";
 import EnergyVolatile from "@/public/images/card-parts/card-icons/card-cost/energy-volatile.svg";
 import EnergyCorrupt from "@/public/images/card-parts/card-icons/card-cost/energy-corrupt.svg";
@@ -54,8 +52,8 @@ import Defense from "@/public/images/card-parts/card-icons/card-stats/defense.sv
 import Speed from "@/public/images/card-parts/card-icons/speed.svg";
 import Mythic from "@/public/images/card-parts/card-icons/mythic.svg";
 
-// import RangeMelee from "@/public/images/card-parts/card-icons/range-melee.svg";
-// import RangeRanged from "@/public/images/card-parts/card-icons/range-ranged.svg";
+import RangeMelee from "@/public/images/card-parts/card-icons/range-melee.svg";
+import RangeRanged from "@/public/images/card-parts/card-icons/range-ranged.svg";
 // import StateLocked from "@/public/images/card-parts/card-icons/state-locked.svg";
 // import StateUnlocked from "@/public/images/card-parts/card-icons/state-unlocked.svg";
 
@@ -66,6 +64,7 @@ import GradePrime from "@/public/images/card-parts/card-icons/card-grades/grade-
 
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
+  cardMode: "initial" | "anomaly";
 };
 
 const voidEnergyIcons = [
@@ -89,7 +88,10 @@ const voidEnergyIcons = [
 
 const CardRender = ({
    cardData,
+   cardMode,
 }: CardRenderProps) => {
+    const [fontSize, setFontSize] = useState<string>("15px");
+    const [lineHeight, setLineHeight] = useState<string>("17px");
     const [bgImage, setBgImage] = useState<string>("");
     const [bgColor, setBgColor] = useState<Record<string, string>>({
       "50": "bg-slate-50",
@@ -154,6 +156,11 @@ const CardRender = ({
           variant="body1"
           component="div"
           gutterBottom
+          sx={{
+            fontSize: fontSize,
+            lineHeight: lineHeight,
+            wordWrap: "break-word",
+          }}
         >
           {processLine(line, index)}
         </Typography>
@@ -282,6 +289,32 @@ const CardRender = ({
       }
     }, [cardData?.cardEnergyAlignment]);
 
+    // Set card text properties
+    useEffect(() => {
+      function calculateCardTextSize(
+        textLength: number
+      ) {
+        if (textLength <= 88) {
+          // Extra Large
+          setFontSize("16.5px");
+          setLineHeight("19px");
+        } else if (textLength <= 264) {
+          // Medium
+          setFontSize("15px");
+          setLineHeight("17px");
+        } else {
+          // Extra Small
+          setFontSize("13.5px");
+          setLineHeight("15.5px");
+        }
+      };
+      if (cardData?.cardText) {
+        calculateCardTextSize(
+          cardData.cardText.length
+        );
+      }
+    }, [cardData?.cardText]);
+
     // Determine bgImage
     useEffect(() => {
       if (
@@ -324,222 +357,393 @@ const CardRender = ({
 
     // Card Render
     if (cardData) {
-    return (
-      <Box
-        id="high-quality-card-render-container"
-        sx={{
-          aspectRatio: "5 / 7",
-          width: "400px",
-          height: "560px",
-          borderRadius: "12.5px",
-          padding: "7.5px 12.5px 22px 12.5px"
-        }}
-        className="
-          relative
-          flex
-          flex-col
-          justify-start
-          items-center
-          bg-black
-          shadow-lg
-          shadow-gray-950/50
-        "
-      >
-        {/* Card frame */}
-        <Box
-          id="card-frame"
-          sx={{
-            width: "375px",
-            height: "526px",
-            borderRadius: "12.5px",
-          }}
-          className={`
-            flex
-            flex-col
-            w-full
-            bg-cover
-            bg-center
-            bg-no-repeat
-            ${
-              bgImage ?? 
-              "bg-[url('/images/card-parts/card-frames/other/default.png')]"
-            }
-          `}
-        >
-          {/* Card header */}
+      if (cardMode === "initial") {
+        return (
           <Box
-            id="card-header"
+            id="initial-mode-render-container"
             sx={{
-              maxHeight: "56px", // Increased by 8px to account for border
-              padding: "3px",
-              border: "4px solid black",
+              aspectRatio: "5 / 7",
+              width: "400px",
+              height: "560px",
+              borderRadius: "12.5px",
+              padding: "7.5px 12.5px 22px 12.5px"
             }}
-            className={`
-              ${bgColor?.[50] ?? "bg-slate-50"}
+            className="
+              relative
               flex
               flex-col
-              justify-between
+              justify-start
               items-center
-              w-full
-              z-10
-              gap-1
-            `}
+              bg-black
+              shadow-lg
+              shadow-gray-950/50
+            "
           >
-            {/* Card name and cost */}
+            {/* Card frame */}
             <Box
-              id="card-header-mythic-name-cost"
+              id="initial-mode-card-frame"
               sx={{
-                height: "20px",
+                width: "375px",
+                height: "526px",
+                borderRadius: "12.5px",
               }}
               className={`
                 flex
-                flex-row
-                justify-between
-                items-center
+                flex-col
                 w-full
-                gap-2
+                bg-cover
+                bg-center
+                bg-no-repeat
+                ${
+                  bgImage ?? 
+                  "bg-[url('/images/card-parts/card-frames/other/default.png')]"
+                }
               `}
             >
+              {/* Card header */}
               <Box
-                id="card-header-mythic-name"
+                id="initial-mode-card-header"
+                sx={{
+                  maxHeight: "56px",
+                  padding: "3px",
+                  border: "4px solid black",
+                }}
                 className={`
+                  ${bgColor?.[50] ?? "bg-slate-50"}
                   flex
-                  flex-row
-                  flex-grow
-                  justify-start
+                  flex-col
+                  justify-between
                   items-center
-                  h-full
+                  w-full
+                  z-10
                   gap-1
                 `}
               >
-                {cardData?.cardUnitType === "ranged" && (
-                  <AdsClickIcon
-                    sx={{ 
-                      fontSize: "18px", 
-                      color: "black" 
+                {/* Card name and cost */}
+                <Box
+                  id="initial-mode-card-header-mythic-name-cost"
+                  sx={{
+                    height: "20px",
+                  }}
+                  className={`
+                    flex
+                    flex-row
+                    justify-between
+                    items-center
+                    w-full
+                    gap-2
+                  `}
+                >
+                  <Box
+                    id="initial-mode-card-header-mythic-name"
+                    className={`
+                      flex
+                      flex-row
+                      flex-grow
+                      justify-start
+                      items-center
+                      h-full
+                      gap-1
+                    `}
+                  >
+                    {cardData?.cardSuperType === "mythic" && (
+                      <Image
+                        src={Mythic}
+                        height={14}
+                        width={14}
+                        alt="Mythic icon"
+                      />
+                    )}
+                    {/* Card name */}
+                    <Typography
+                      variant="subtitle1"
+                      sx={{
+                        color: "black",
+                        fontWeight: 500,
+                        fontSize: "15px",
+                        lineHeight: "20px"
+                      }}
+                    >
+                      {
+                        (cardData?.cardName ?? '')
+                          .split(" ")
+                          .map(word => word
+                            .charAt(0)
+                            .toUpperCase() + word
+                              .slice(1)
+                              .toLowerCase()
+                            )
+                          .join(" ")
+                      }
+                    </Typography>
+                  </Box> 
+                  {/* Card Energy Cost */}
+                  <Box
+                    id="initial-mode-card-energy-cost"
+                    className="
+                      flex
+                      flex-row
+                      justify-end
+                      items-center
+                      w-auto
+                      gap-0.25
+                    "
+                  >
+                    {Object.entries(cardData.cardEnergyCost ?? {})
+                      .sort((
+                        [energyA], 
+                        [energyB]
+                      ) => {
+                        const order = [
+                          "radiant", 
+                          "volatile", 
+                          "corrupt", 
+                          "blaze", 
+                          "verdant", 
+                          "void"
+                        ];
+                        return order.indexOf(energyA) - order.indexOf(energyB);
+                      })
+                      .map(([energy, value]) =>
+                        energy !== "void"
+                          ? Array.from({
+                              length: typeof value === "number" ? value : 0,
+                            }, (_, i) => (
+                              <Image
+                                key={`${energy}-${i}`}
+                                src={
+                                  energy === "radiant" ? EnergyRadiant :
+                                  energy === "volatile" ? EnergyVolatile :
+                                  energy === "corrupt" ? EnergyCorrupt :
+                                  energy === "blaze" ? EnergyBlaze :
+                                  energy === "verdant" ? EnergyVerdant :
+                                  null
+                                }
+                                width={21}
+                                height={21}
+                                alt={`${energy} energy icon`}
+                              />
+                            ))
+                          : typeof value === "number" && value > 0
+                          ? (
+                            <Image
+                              key={`void-${value}`}
+                              src={voidEnergyIcons[value]}
+                              width={21}
+                              height={21}
+                              alt={`void energy icon`}
+                            />
+                          )
+                          : null
+                      )}
+                  </Box>
+                </Box>
+      
+                {/* Card types and speed */}
+                <Box
+                  id="initial-mode-card-header-types-speed"
+                  sx={{
+                    height: "20px",
+                    borderRadius: "3px",
+                    padding: "1px 2px"
+                  }}
+                  className={`
+                    ${bgColor?.[200] ?? "bg-slate-200"}
+                    flex
+                    flex-row
+                    justify-between
+                    items-center
+                    w-full
+                    gap-1
+                    text-black
+                  `}
+                >
+                  {cardData?.cardUnitType === "melee" ? (
+                    <Image
+                      src={RangeMelee}
+                      height={15}
+                      width={15}
+                      alt="Melee icon"
+                    />
+                  ) : (
+                    <Image
+                      src={RangeRanged}
+                      height={15}
+                      width={15}
+                      alt="Ranged icon"
+                    />
+                  )}
+                  {/* Card types */}
+                  <Box
+                    id="initial-mode-card-header-types"
+                    sx={{
+                      height: "21px",
                     }}
                     className="
-                      bg-amber-500
-                      rounded-full
-                      border
-                      border-black
+                      flex
+                      flex-row
+                      justify-between
+                      items-center
+                      w-full
+                      gap-1
                     "
-                  />
-                )}
-                {cardData?.cardSuperType === "mythic" && (
-                  <Image
-                    src={Mythic}
-                    height={14}
-                    width={14}
-                    alt="Mythic icon"
-                  />
-                )}
-                {/* Card name */}
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    color: "black",
-                    fontWeight: 500,
-                    fontSize: "15px",
-                    lineHeight: "20px"
-                  }}
-                >
-                  {
-                    (cardData?.cardName ?? '')
-                      .split(" ")
-                      .map(word => word
-                        .charAt(0)
-                        .toUpperCase() + word
-                          .slice(1)
-                          .toLowerCase()
-                        )
-                      .join(" ")
-                  }
-                </Typography>
-              </Box> 
-              {/* Card Energy Cost */}
-              <Box
-                id="card-energy-cost"
-                className="
-                  flex
-                  flex-row
-                  justify-end
-                  items-center
-                  w-auto
-                  gap-0.25
-                "
-              >
-                {Object.entries(cardData.cardEnergyCost ?? {})
-                  .sort(([energyA], [energyB]) => {
-                    const order = [
-                      "radiant", 
-                      "volatile", 
-                      "corrupt", 
-                      "blaze", 
-                      "verdant", 
-                      "void"
-                    ];
-                    return order.indexOf(energyA) - order.indexOf(energyB);
-                  })
-                  .map(([energy, value]) =>
-                    energy !== "void"
-                      ? Array.from({
-                          length: typeof value === 'number' ? value : 0,
-                        }, (_, i) => (
-                          <Image
-                            key={`${energy}-${i}`}
-                            src={
-                              energy === "radiant" ? EnergyRadiant :
-                              energy === "volatile" ? EnergyVolatile :
-                              energy === "corrupt" ? EnergyCorrupt :
-                              energy === "blaze" ? EnergyBlaze :
-                              energy === "verdant" ? EnergyVerdant :
-                              null
-                            }
-                            width={21}
-                            height={21}
-                            alt={`${energy} energy icon`}
-                          />
-                        ))
-                      : typeof value === 'number' && value > 0
-                      ? (
-                        <Image
-                          key={`void-${value}`}
-                          src={voidEnergyIcons[value]}
-                          width={21}
-                          height={21}
-                          alt={`void energy icon`}
-                        />
-                      )
-                      : null
-                  )}
+                  >
+                    <Typography
+                      variant="subtitle2" 
+                      component="span" 
+                      className="
+                        p-0 
+                        m-0
+                      "
+                    >
+                      {renderCardType(cardData)}
+                    </Typography>
+                  </Box>
+                  {/* Card Speed */}
+                  <Box
+                    className="
+                      flex
+                      flex-row-reverse
+                      justify-start
+                      items-center
+                      h-full
+                      gap-0.5
+                      m-0
+                    "
+                  >
+                    {Array.from({
+                      length: cardData.cardSpeed ? 
+                      parseInt(cardData.cardSpeed, 10) : 0
+                    }).map((_, index) => (
+                      <Image
+                        key={index}
+                        src={Speed}
+                        width={10}
+                        height={15}
+                        alt="Speed icon"
+                      />
+                    ))}
+                  </Box>
+                </Box>
               </Box>
-            </Box>
-  
-            {/* Card types and speed */}
-            <Box
-              id="card-header-types-speed"
-              sx={{
-                height: "20px",
-                borderRadius: "3px",
-                padding: "1px 2px"
-              }}
-              className={`
-                ${bgColor?.[200] ?? "bg-slate-200"}
-                flex
-                flex-row
-                justify-between
-                items-center
-                w-full
-                gap-2
-                text-black
-              `}
-            >
-              {/* Card types */}
+              {/* Card image & content */}
               <Box
-                id="card-header-types"
+                id="initial-mode-card-image-content-outer"
                 sx={{
-                  height: "21px",
+                  width: "375px",
+                  height: "526px",
+                  paddingLeft: "13.5px",
+                  paddingRight: "13.5px",
+                  marginTop: "-3.75px",
+                }}
+                className={`
+                  flex
+                  flex-col
+                  w-full
+                  z-0
+                `}
+              >
+                {/* Card Image Content Inner */}
+                <Box
+                  id="initial-mode-card-image-content-inner"
+                  sx={{
+                    height: "462px !important",
+                    padding: "3px",
+                    border: "3.75px solid black",
+                    borderBottomLeftRadius: "8px",
+                    borderBottomRightRadius: "8px",
+                  }}
+                  className={`
+                    ${bgColor?.[400] ?? "bg-slate-400"}
+                    flex
+                    flex-col
+                    w-full
+                    gap-2
+                    shadow-md
+                    shadow-black/50
+                  `}
+                >
+                  {/* Card image */}
+                  <Box
+                    id="initial-mode-card-image"
+                    sx={{
+                      aspectRatio: "4 / 3 !important",
+                      height: "252px !important",
+                      border: "2px solid black",
+                    }}
+                    className="
+                      w-full
+                      overflow-hidden
+                      relative
+                    "
+                  >
+                    
+                    <Image
+                      src={
+                        cardData.cardArt || 
+                        "/images/card-parts/card-art/default-art.jpg"
+                      }
+                      fill={true}
+                      sizes="100%"
+                      alt={`${cardData.cardName} card art`}
+                      style={{
+                        objectFit: "cover"
+                      }}
+                    />
+                  </Box>
+                  {/* Card text and lore text */}
+                  <Box
+                    id="initial-mode-card-text-lore"
+                    sx={{
+                      maxWidth: "340px !important",
+                      height: "190px !important",
+                      border: "2px solid black",
+                      padding: "5px 7.5px",
+                    }}
+                    className={`
+                      bg-teal-50
+                      flex
+                      flex-col
+                      text-black
+                      gap-1
+                    `}
+                  >
+                    {/* Card text */}
+                    {
+                      cardData.cardText && 
+                      cardData.cardName ? 
+                        renderTextWithKeywords(
+                          cardData.cardText, 
+                          cardData.cardName
+                        )
+                      : null
+                    } 
+                    {/* Lore text */}
+                    {cardData.cardLoreText !== "" && (
+                      <>
+                        <Divider
+                          className="
+                            mx-4
+                            my-0.5
+                            opacity-25
+                          "
+                        />
+                        <Typography
+                          id="initial-mode-lore-text"
+                          variant="body2"
+                        >
+                          {`"${cardData.cardLoreText}"`}
+                        </Typography>
+                      </>
+                    )}
+                  </Box>
+                </Box> 
+              </Box>
+              {/* Card Stats & Grade */}
+              <Box
+                id="initial-mode-card-stats-grade-creator-info"
+                sx={{
+                  maxHeight: "45px",
                 }}
                 className="
                   flex
@@ -547,345 +751,542 @@ const CardRender = ({
                   justify-between
                   items-center
                   w-full
-                  gap-1
+                  -mt-5
+                  z-10
                 "
               >
-                <Typography
-                  variant="subtitle2" 
-                  component="span" 
-                  className="
-                    p-0 
-                    m-0
-                  "
+                {/* Card Attack */}
+                {
+                cardData.cardType && (
+                  cardData.cardType
+                    .toLowerCase()
+                    .includes("outpost") ||
+                  cardData.cardType
+                    .toLowerCase()
+                    .includes("entity")
+                ) && (
+                    <Box
+                      id="initial-mode-stats-attack"
+                      className="
+                        flex
+                        flex-col
+                        justify-center
+                        items-center
+                        w-1/5
+                        relative
+                      "
+                    >
+                      <Typography
+                        variant="body1"
+                        className="
+                          flex
+                          justify-center
+                          items-center
+                          w-full
+                          absolute
+                          z-10
+                          top-0
+                          bottom-0
+                          right-0
+                          left-0
+                          text-center
+                          px-6
+                          stats-text
+                        "
+                      >
+                        {cardData.cardAttack}
+                      </Typography>
+                      <Image
+                        src={Attack}
+                        width={60}
+                        height={45}
+                        alt="Card attack icon"
+                      />
+                    </Box>
+                  )
+                }
+                {/* Card grade + info */}
+                <Box
+                  id="initial-mode-stats-grade-info"
+                  className={clsx("flex flex-col justify-center items-center",
+                    cardData.cardType && 
+                    !cardData.cardType
+                      .toLowerCase()
+                      .includes("outpost") && 
+                    !cardData.cardType
+                      .toLowerCase()
+                      .includes("entity") ? 
+                    "w-full" : "w-3/5"
+                  )}
                 >
-                  {renderCardType(cardData)}
-                </Typography>
+                  {/* Card grade */}
+                  <Box
+                    id="initial-mode-stats-grade"
+                    className="
+                      flex
+                      flex-col
+                      justify-start
+                      items-center
+                      w-full
+                    "
+                  >
+                    {/* Card Grade */}
+                    <Image
+                      src={
+                        cardData.cardGrade === "rare" ? GradeRare :
+                        cardData.cardGrade === "epic" ? GradeEpic :
+                        cardData.cardGrade === "prime" ? GradePrime :
+                        GradeCore
+                      }
+                      height={34}
+                      width={34}
+                      alt={`${cardData.cardGrade} icon`}
+                      className="
+                        bg-black
+                        rounded-full
+                        p-1.5
+                      "
+                    />
+                  </Box>
+                </Box>
+                {/* Card Defense */}
+                {
+                  cardData.cardType && (
+                    cardData.cardType
+                      .toLowerCase()
+                      .includes("outpost") ||
+                    cardData.cardType
+                      .toLowerCase()
+                      .includes("entity")
+                  ) && (
+                      <Box
+                        id="initial-mode-stats-defense"
+                        className="
+                          flex
+                          flex-col
+                          justify-center
+                          items-center
+                          w-1/5
+                          relative
+                        "
+                      >
+                        <Typography
+                          variant="body1"
+                          className="
+                            flex
+                            justify-center
+                            items-center
+                            w-full
+                            absolute
+                            z-10
+                            top-0
+                            bottom-0
+                            right-0
+                            left-0
+                            text-center
+                            px-6
+                            stats-text
+                          "
+                        >
+                          {cardData.cardDefense}
+                        </Typography>
+                        <Image
+                          src={Defense}
+                          width={60}
+                          height={45}
+                          alt="Card defense icon"
+                        />
+                      </Box>
+                    )
+                }
               </Box>
-              {/* Card Speed */}
+              {/* Card creator */}
               <Box
-                className="
-                  flex
-                  flex-row-reverse
-                  justify-start
-                  items-center
-                  h-full
-                  gap-0.5
-                  m-0
-                "
+                className={clsx("flex flex-row justify-between items-center w-full text-xs -mt-1 px-16",
+                  {
+                    "-mt-2": 
+                      cardData.cardType && 
+                      !cardData.cardType
+                        .includes("entity") || 
+                      cardData.cardType && 
+                      !cardData.cardType
+                        .includes("outpost"),
+                  }
+                )}
               >
-                {Array.from({
-                  length: cardData.cardSpeed ? 
-                  parseInt(cardData.cardSpeed, 10) : 0
-                }).map((_, index) => (
-                  <Image
-                    key={index}
-                    src={Speed}
-                    width={10}
-                    height={15}
-                    alt="Speed icon"
-                  />
-                ))}
+                <p
+                  className="fineprint-text"
+                >
+                  {cardData.cardCreator
+                    ? `Made by ${cardData.cardCreator}`
+                    : "Card Creator"}
+                </p>
               </Box>
             </Box>
           </Box>
-          {/* Card image & content */}
+        )
+      }
+
+      // ANOMALY MODE
+      if (cardMode === "anomaly") {
+        return (
           <Box
-            id="card-image-content-outer"
+            id="anomaly-mode-render-container"
             sx={{
-              width: "375px",
-              height: "526px",
-              paddingLeft: "13.5px",
-              paddingRight: "13.5px",
-              marginTop: "-3.75px",
+              aspectRatio: "5 / 7",
+              width: "400px",
+              height: "560px",
+              borderRadius: "12.5px",
+              padding: "7.5px 12.5px 22px 12.5px"
             }}
-            className={`
+            className="
+              relative
               flex
               flex-col
-              w-full
-              z-0
-            `}
+              justify-start
+              items-center
+              bg-black
+              shadow-lg
+              shadow-gray-950/50
+            "
           >
-            {/* Card Image Content Inner */}
+            {/* Card frame */}
             <Box
-              id="card-image-content-inner"
+              id="anomaly-mode-card-frame"
               sx={{
-                height: "462px !important", // Increased by 6px to account for border
-                padding: "3px",
-                border: "3.75px solid black",
-                borderBottomLeftRadius: "8px",
-                borderBottomRightRadius: "8px",
+                width: "375px",
+                height: "526px",
+                borderRadius: "12.5px",
               }}
               className={`
-                ${bgColor?.[400] ?? "bg-slate-400"}
                 flex
                 flex-col
                 w-full
-                gap-2
-                shadow-md
-                shadow-black/50
+                bg-cover
+                bg-center
+                bg-no-repeat
+                bg-[url('/images/card-parts/card-frames/other/anomaly.jpg')]
               `}
             >
-              {/* Card image */}
+              {/* Card header */}
               <Box
-                id="card-image"
+                id="anomaly-mode-card-header"
                 sx={{
-                  aspectRatio: "4 / 3 !important",
-                  height: "252px !important",
-                  border: "2px solid black",
-                }}
-                className="
-                  w-full
-                  overflow-hidden
-                  relative
-                "
-              >
-                
-                <Image
-                  src={cardData.cardArt || "/images/card-parts/card-art/default-art.jpg"}
-                  fill={true}
-                  sizes="100%"
-                  alt={`${cardData.cardName} card art`}
-                  style={{
-                    objectFit: "cover"
-                  }}
-                />
-              </Box>
-              {/* Card text and flavor text */}
-              <Box
-                id="card-text-flavor"
-                sx={{
-                  maxWidth: "340px !important",
-                  height: "190px !important",
-                  border: "2px solid black",
-                  padding: "5px 7.5px",
+                  maxHeight: "56px",
+                  padding: "3px",
+                  border: "4px solid black",
                 }}
                 className={`
-                  bg-teal-50
+                  bg-neutral-50
                   flex
                   flex-col
-                  text-black
+                  justify-between
+                  items-center
+                  w-full
+                  z-10
                   gap-1
                 `}
               >
-                {/* Card text */}
-                {/* {
-                  cardData.cardText && 
-                  cardData.cardName
-                  ? cardData.cardText
-                        .replace(/~/g, cardData.cardName)
-                        .split('\n')
-                        .map((line, index) => (
-                          <Typography
-                            key={index}
-                            variant="body1"
-                            component="div"
-                            gutterBottom
-                          >
-                            {line}
-                          </Typography>
-                        ))
-                    : null
-                  } */}
-                  {
-                    cardData.cardText && cardData.cardName
-                      ? renderTextWithKeywords(cardData.cardText, cardData.cardName)
-                      : null
-                  }
-                {/* Flavor text */}
-                {cardData.cardLoreText !== "" && (
-                  <>
-                    <Divider
-                      className="
-                        mx-4
-                        my-0.5
-                        opacity-25
-                      "
-                    />
-                    <Typography
-                      id="flavor-text"
-                      variant="body2"
-                    >
-                      {`"${cardData.cardLoreText}"`}
-                    </Typography>
-                  </>
-                )}
-              </Box>
-            </Box> 
-          </Box>
-          {/* Card Stats & Grade */}
-          <Box
-            id="card-stats-grade-creator-info"
-            sx={{
-              maxHeight: "45px",
-            }}
-            className="
-              flex
-              flex-row
-              justify-between
-              items-center
-              w-full
-              -mt-5
-              z-10
-            "
-          >
-            {/* Card Attack */}
-            {
-              cardData.cardType && 
-              cardData.cardType
-                .includes("entity") && (
+                {/* Card name and cost */}
                 <Box
-                  id="stats-attack"
-                  className="
+                  id="anomaly-mode-card-header-mythic-name-cost"
+                  sx={{
+                    height: "20px",
+                  }}
+                  className={`
                     flex
-                    flex-col
-                    justify-center
+                    flex-row
+                    justify-between
                     items-center
-                    w-1/5
-                    relative
+                    w-full
+                    gap-2
+                  `}
+                >
+                  <Box
+                    id="anomaly-mode-card-header-mythic-name"
+                    className={`
+                      flex
+                      flex-row
+                      flex-grow
+                      justify-start
+                      items-center
+                      h-full
+                      gap-1
+                    `}
+                  >
+                    {cardData?.cardSuperType === "mythic" && (
+                      <Image
+                        src={Mythic}
+                        height={14}
+                        width={14}
+                        alt="Mythic icon"
+                      />
+                    )}
+                    {/* Card name */}
+                    <Typography
+                      variant="subtitle1"
+                      sx={{
+                        color: "black",
+                        fontWeight: 500,
+                        fontSize: "15px",
+                        lineHeight: "20px"
+                      }}
+                    >
+                      {
+                        (cardData?.cardAnomalyModeName ?? '')
+                          .split(" ")
+                          .map(word => word
+                            .charAt(0)
+                            .toUpperCase() + word
+                              .slice(1)
+                              .toLowerCase()
+                            )
+                          .join(" ")
+                      }
+                    </Typography>
+                  </Box> 
+                </Box>
+      
+                {/* Card types and speed */}
+                <Box
+                  id="anomaly-mode-card-header-types-speed"
+                  sx={{
+                    height: "20px",
+                    borderRadius: "3px",
+                    padding: "1px 2px"
+                  }}
+                  className="
+                    bg-neutral-200
+                    flex
+                    flex-row
+                    justify-between
+                    items-center
+                    w-full
+                    gap-1
+                    text-black
                   "
                 >
-                  <Typography
-                    variant="body1"
+                  {/* Card type */}
+                  <Box
+                    id="anomaly-mode-card-header-types"
+                    sx={{
+                      height: "21px",
+                    }}
                     className="
                       flex
-                      justify-center
+                      flex-row
+                      justify-between
                       items-center
                       w-full
-                      absolute
-                      z-10
-                      top-0
-                      bottom-0
-                      right-0
-                      left-0
-                      text-center
-                      px-6
-                      stats-text
+                      gap-1
                     "
                   >
-                    {cardData.cardAttack}
-                  </Typography>
-                  <Image
-                    src={Attack}
-                    width={60}
-                    height={45}
-                    alt="Card attack icon"
-                  />
+                    <Typography
+                      variant="subtitle2" 
+                      component="span" 
+                      className="
+                        p-0 
+                        m-0
+                      "
+                    >
+                      Anomaly
+                    </Typography>
+                  </Box>
+                  
                 </Box>
-              )
-            }
-            {/* Card grade + info */}
-            <Box
-              id="stats-grade-info"
-              className={clsx("flex flex-col justify-center items-center",
-                cardData.cardType && 
-                !cardData.cardType
-                  .includes("entity") ? 
-                "w-full" : "w-3/5"
-              )}
-            >
-              {/* Card grade */}
+              </Box>
+              {/* Card image & content */}
               <Box
-                id="stats-grade"
-                className="
+                id="anomaly-mode-card-image-content-outer"
+                sx={{
+                  width: "375px",
+                  height: "526px",
+                  paddingLeft: "13.5px",
+                  paddingRight: "13.5px",
+                  marginTop: "-3.75px",
+                }}
+                className={`
                   flex
                   flex-col
-                  justify-start
+                  w-full
+                  z-0
+                `}
+              >
+                {/* Card Image Content Inner */}
+                <Box
+                  id="anomaly-mode-card-image-content-inner"
+                  sx={{
+                    height: "462px !important",
+                    padding: "3px",
+                    border: "3.75px solid black",
+                    borderBottomLeftRadius: "8px",
+                    borderBottomRightRadius: "8px",
+                  }}
+                  className="
+                  bg-neutral-400
+                    flex
+                    flex-col
+                    w-full
+                    gap-2
+                    shadow-md
+                    shadow-black/50
+                  "
+                >
+                  {/* Card image */}
+                  <Box
+                    id="anomaly-mode-card-image"
+                    sx={{
+                      aspectRatio: "4 / 3 !important",
+                      height: "252px !important",
+                      border: "2px solid black",
+                    }}
+                    className="
+                      w-full
+                      overflow-hidden
+                      relative
+                    "
+                  >
+                    
+                    <Image
+                      src="/images/card-parts/card-art/default-anomaly-art.webp"
+                      fill={true}
+                      sizes="100%"
+                      alt={`${cardData.cardAnomalyModeName} card art`}
+                      style={{
+                        objectFit: "cover"
+                      }}
+                    />
+                  </Box>
+                  {/* Card text and lore text */}
+                  <Box
+                    id="anomaly-mode-card-text-lore"
+                    sx={{
+                      maxWidth: "340px !important",
+                      height: "190px !important",
+                      border: "2px solid black",
+                      padding: "5px 7.5px",
+                    }}
+                    className={`
+                      bg-teal-50
+                      flex
+                      flex-col
+                      text-black
+                      gap-1
+                    `}
+                  >
+                    {/* ANOMALY MODE: Card text */}
+                    {
+                      cardData.cardAnomalyModeText && 
+                      cardData.cardAnomalyModeText !== "" && 
+                      cardData.cardAnomalyModeName ? 
+                        renderTextWithKeywords(
+                          cardData.cardAnomalyModeText, 
+                          cardData.cardAnomalyModeName
+                        )
+                      : null
+                    }
+                    {cardData.cardAnomalyModeText === "" && (
+                      <Typography
+                        variant="body1"
+                        component="div"
+                        gutterBottom
+                        className="px-6 py-10 text-center"
+                      >
+                        When you manifest this, pick a Common Anomaly. 
+                        This card becomes that Common Anomaly.
+                      </Typography>
+                    )} 
+                    {/* Lore text */}
+                    {cardData.cardAnomalyModeLoreText !== "" && (
+                      <>
+                        <Divider
+                          className="
+                            mx-4
+                            my-0.5
+                            opacity-25
+                          "
+                        />
+                        <Typography
+                          id="anomaly-mode-lore-text"
+                          variant="body2"
+                        >
+                          {`"${cardData.cardLoreText}"`}
+                        </Typography>
+                      </>
+                    )}
+                  </Box>
+                </Box> 
+              </Box>
+              {/* Card Stats & Grade */}
+              <Box
+                id="anomaly-mode-card-stats-grade-creator-info"
+                sx={{
+                  maxHeight: "45px",
+                }}
+                className="
+                  flex
+                  flex-row
+                  justify-between
                   items-center
                   w-full
+                  -mt-5
+                  z-10
                 "
               >
-                {/* Card Grade */}
-                <Image
-                  src={
-                    cardData.cardGrade === "rare" ? GradeRare :
-                    cardData.cardGrade === "epic" ? GradeEpic :
-                    cardData.cardGrade === "prime" ? GradePrime :
-                    GradeCore
-                  }
-                  height={34}
-                  width={34}
-                  alt={`${cardData.cardGrade} icon`}
-                  className="
-                    bg-black
-                    rounded-full
-                    p-1.5
-                  "
-                />
-              </Box>
-            </Box>
-            {/* Card Defense */}
-            {
-              cardData.cardType && 
-              cardData.cardType
-                .includes("entity") && 
-                (
+                {/* Card grade + info */}
+                <Box
+                  id="anomaly-mode-stats-grade-info"
+                  className="flex flex-col justify-center items-center w-full mb-1"
+                >
+                  {/* Card grade */}
                   <Box
-                    id="stats-defense"
+                    id="anomaly-mode-stats-grade"
                     className="
                       flex
                       flex-col
                       justify-center
                       items-center
-                      w-1/5
-                      relative
+                      w-full
                     "
                   >
-                    <Typography
-                      variant="body1"
-                      className="
-                        flex
-                        justify-center
-                        items-center
-                        w-full
-                        absolute
-                        z-10
-                        top-0
-                        bottom-0
-                        right-0
-                        left-0
-                        text-center
-                        px-6
-                        stats-text
-                      "
-                    >
-                      {cardData.cardDefense}
-                    </Typography>
+                    {/* TODO: Separate card grade for anomaly */}
+                    {/* TODO: Core for Common Anomalies */}
+                    {/* Card Grade */}
                     <Image
-                      src={Defense}
-                      width={60}
-                      height={45}
-                      alt="Card defense icon"
+                      src={
+                        cardData.cardGrade === "rare" ? GradeRare :
+                        cardData.cardGrade === "epic" ? GradeEpic :
+                        cardData.cardGrade === "prime" ? GradePrime :
+                        GradeCore
+                      }
+                      height={34}
+                      width={34}
+                      alt={`${cardData.cardGrade} icon`}
+                      className="
+                        bg-black
+                        rounded-full
+                        p-1.5
+                      "
                     />
                   </Box>
-                )
-            }
+                </Box>
+              </Box>
+              {/* Card creator */}
+              <Box
+                className="flex flex-row justify-between items-center w-full text-xs px-16"
+              >
+                <p
+                  className="fineprint-text"
+                >
+                  {cardData.cardCreator
+                    ? `Made by ${cardData.cardCreator}`
+                    : "Card Creator"}
+                </p>
+              </Box>
+            </Box>
           </Box>
-          {/* Card creator & copyright */}
-          <Box
-            className={clsx("flex flex-row justify-between items-center w-full text-xs -mt-1 px-16",
-              {
-                "mt-1": cardData.cardType && !cardData.cardType.includes("entity"),
-              }
-            )}
-          >
-            <p
-              className="fineprint-text"
-            >
-              {cardData.cardCreator
-                ? `Made by ${cardData.cardCreator}`
-                : "Card Creator"}
-            </p>
-            {/* <p
-              className="fineprint-text"
-            >
-              © Nexus {
-                new Date().getFullYear()
-              } 
-            </p> */}
-          </Box>
-        </Box>
-      </Box>
-    )
+        )
+      }
   }
 };
 

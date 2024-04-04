@@ -33,16 +33,16 @@ import CircularProgress from "@mui/material/CircularProgress";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
+// import Tab from "@mui/material/Tab";
+// import Tabs from "@mui/material/Tabs";
 import Badge from "@mui/material/Badge";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 // Icons
 import SendIcon from "@mui/icons-material/Send";
-import SmartToyIcon from "@mui/icons-material/SmartToy";
-import PaletteIcon from "@mui/icons-material/Palette";
+// import SmartToyIcon from "@mui/icons-material/SmartToy";
+// import PaletteIcon from "@mui/icons-material/Palette";
 import CheckIcon from "@mui/icons-material/Check";
 import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
@@ -62,7 +62,7 @@ export default function CardCreatorForm({
 
   // Prompt states
   const [currentCredits, setCurrentCredits] = useState<number>(0);
-  const [promptTab, setPromptTab] = useState(0);
+  // const [promptTab, setPromptTab] = useState(0);
   const [artPromptSelections, setArtPromptSelections] = useState<{
     [category: string]: string
   }>({});
@@ -73,7 +73,7 @@ export default function CardCreatorForm({
   const [intervalId, setIntervalId] = useState<number | null>(null);
   // Card creation states
   const [cardMode, setCardMode] = useState<"initial" | "anomaly">("initial");
-  const [showFlavorText, setShowFlavorText] = useState<boolean>(true);
+  const [showLoreText, setShowLoreText] = useState<boolean>(true);
   // Card art states
   const [showCardArtOptions, setShowCardArtOptions] = useState<boolean>(false);
   const [cardArtOptions, setCardArtOptions] = useState<{
@@ -263,19 +263,19 @@ export default function CardCreatorForm({
     }
   }
 
-  // Flavor visibility handler
+  // Lore visibility handler
   // make this inline
-  function handleShowFlavorTextChange() {
-    setShowFlavorText(!showFlavorText);
+  function handleShowLoreTextChange() {
+    setShowLoreText(!showLoreText);
   };
 
   // Prompt tab handler
-  function handlePromptTabChange(
-    event: React.SyntheticEvent,
-    newPromptTab: number
-  ) {
-    setPromptTab(newPromptTab);
-  };
+  // function handlePromptTabChange(
+  //   event: React.SyntheticEvent,
+  //   newPromptTab: number
+  // ) {
+  //   setPromptTab(newPromptTab);
+  // };
 
   // Art prompt options handler
   const handleSelectionChange = (
@@ -405,7 +405,7 @@ export default function CardCreatorForm({
           "
         >
           {/* Prompt Tabs */}
-          <Box
+          {/* <Box
             id="card-form-prompt-tabs-container"
             className="
               flex
@@ -433,7 +433,7 @@ export default function CardCreatorForm({
                 label="Brainstorm"
               />
             </Tabs>
-          </Box>
+          </Box> */}
           {/* Prompt Input Fields */}
           <Box
             className="
@@ -450,7 +450,7 @@ export default function CardCreatorForm({
             "
           >
             {/* Input: AI prompt */}
-            {promptTab === 1 && (
+            {/* {promptTab === 1 && (
             <Controller
               name="cardPrompt"
               control={control}
@@ -479,10 +479,9 @@ export default function CardCreatorForm({
                   "
                 />
               )}
-            />)}
+            />)} */}
             
-            {/* Input: AI art prompt */}
-            {promptTab === 0 && (
+            {/* {promptTab === 0 && ( */}
             <Controller
               name="cardArtPrompt"
               control={control}
@@ -507,7 +506,7 @@ export default function CardCreatorForm({
                   label={
                     isGeneratingArt
                       ? `Generating art in ${Math.floor(elapsedTime / 1000)} seconds...`
-                      : "Art prompt"
+                      : "AI art prompt"
                   }
                   error={!!error}
                   helperText={
@@ -584,7 +583,8 @@ export default function CardCreatorForm({
                   }}
                 />
               )}
-            />)}
+            />
+            {/* )} */}
             {currentCredits === 0 && (
               <Box
                 className="
@@ -651,7 +651,7 @@ export default function CardCreatorForm({
 
             {/* Art Prompt Selections */}
             {
-            promptTab === 0 && 
+            // promptTab === 0 && 
             artPromptSelections && (
             <Box
               className="
@@ -686,7 +686,7 @@ export default function CardCreatorForm({
             
           </Box>
           {/* Art Prompt Options Accordions */}
-          {promptTab === 0 && (
+          {/* {promptTab === 0 && ( */}
             <Box
               className="
                 flex
@@ -787,7 +787,7 @@ export default function CardCreatorForm({
                 {renderedAccordions}
               </Box>
             </Box>
-          )}
+          {/* )} */}
         </Box>
 
         {/* Card Render */}
@@ -856,11 +856,11 @@ export default function CardCreatorForm({
               </Tooltip>
               {form.cardText && (
                 <FormControlLabel
-                  onChange={handleShowFlavorTextChange}
+                  onChange={handleShowLoreTextChange}
                   control={
                     <Checkbox
                       checked={
-                        showFlavorText && 
+                        showLoreText && 
                         form.cardText.length <= 352
                       }
                       size="small"
@@ -879,11 +879,13 @@ export default function CardCreatorForm({
                   }
                 />
               )}
-              {form.cardType && (
-                form.cardType === "entity" || 
-                form.cardType === "entityEffect" || 
-                form.cardType === "entityObject"
-              ) && cardMode === "initial" && (
+              {/* INITIAL MODE: Unit Range */}
+              {cardMode === "initial" &&
+               form.cardType && 
+              (
+                form.cardType.includes("entity") ||
+                form.cardType.includes("outpost")
+              ) && (
                 <FormControlLabel
                   onChange={() => {
                     form.cardUnitType === "melee" ? 
@@ -983,7 +985,7 @@ export default function CardCreatorForm({
             {/* Card Render / Form */}
             <NexusCardForm
               cardMode={cardMode}
-              showFlavorText={showFlavorText}
+              showLoreText={showLoreText}
             />
           </div>
 

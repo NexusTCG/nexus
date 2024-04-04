@@ -33,12 +33,14 @@ const CardFormSchema = z
     cardAttack: z.string().optional(),
     cardDefense: z.string().optional(),
     cardUnitType: z.string().optional(),
-    cardAnomalyModeName: z.string().optional(),
-    cardAnomalyModeFlavorText: z.string().optional(),
-    cardAnomalyModeText: z.string().optional(),
     cardPrompt: z.string().optional(),
     cardArtPrompt: z.string().optional(),
     cardRender: z.string().optional(),
+    cardAnomalyMode: z.string().optional().default("common"),
+    cardAnomalyModeName: z.string().optional(),
+    cardAnomalyModeFlavorText: z.string().optional(),
+    cardAnomalyModeText: z.string().optional(),
+    cardAnomalyModeGrade: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (

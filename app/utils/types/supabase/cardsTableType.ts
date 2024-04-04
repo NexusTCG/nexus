@@ -1,7 +1,4 @@
 export type CardsTableType = {
-    cardAnomalyModeFlavorText?: string;
-    cardAnomalyModeName?: string;
-    cardAnomalyModeText?: string;
     cardArt: string;
     cardArtPrompt: string;
     cardAttack: string;
@@ -25,4 +22,9 @@ export type CardsTableType = {
     user_id: string;
     created_at: string;
     updated_at?: string;
+    cardAnomalyMode?: string | null;
+    cardAnomalyModeName?: string;
+    cardAnomalyModeText?: string;
+    cardAnomalyModeLoreText?: string;
+    cardAnomalyModeGrade?: string | null;
 };

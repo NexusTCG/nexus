@@ -1,7 +1,4 @@
 export type CardFormDataType = {
-  cardAnomalyModeFlavorText?: string | null;
-  cardAnomalyModeName?: string | null;
-  cardAnomalyModeText?: string | null;
   cardArt?: string;
   cardArtPrompt?: string | null;
   cardAttack?: string | null;
@@ -24,6 +21,11 @@ export type CardFormDataType = {
   id?: number;
   user_id: string;
   created_at?: string;
+  cardAnomalyMode?: string | null;
+  cardAnomalyModeName?: string | null;
+  cardAnomalyModeText?: string | null;
+  cardAnomalyModeLoreText?: string | null;
+  cardAnomalyModeGrade?: string | null;
 };
 
 export type CardTypesType = {

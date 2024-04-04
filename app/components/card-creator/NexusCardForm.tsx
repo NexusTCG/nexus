@@ -47,12 +47,11 @@ import Snackbar from "@mui/material/Snackbar";
 import Divider from "@mui/material/Divider";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 // Icons
-import AdsClickIcon from '@mui/icons-material/AdsClick'; // Swap for melee and ranged icons
-
 import Mythic from "@/public/images/card-parts/card-icons/mythic.svg";
 import Attack from "@/public/images/card-parts/card-icons/card-stats/attack.svg";
 import Defense from "@/public/images/card-parts/card-icons/card-stats/defense.svg";
-
+import RangeMelee from "@/public/images/card-parts/card-icons/range-melee.svg";
+import RangeRanged from "@/public/images/card-parts/card-icons/range-ranged.svg";
 import GradeCore from "@/public/images/card-parts/card-icons/card-grades/grade-core.svg";
 import GradeRare from "@/public/images/card-parts/card-icons/card-grades/grade-rare.svg";
 import GradeEpic from "@/public/images/card-parts/card-icons/card-grades/grade-epic.svg";
@@ -60,12 +59,12 @@ import GradePrime from "@/public/images/card-parts/card-icons/card-grades/grade-
 
 type CardRenderProps = {
   cardMode: string;
-  showFlavorText?: boolean;
+  showLoreText?: boolean;
 };
 
 export default function NexusCardForm({
   cardMode,
-  showFlavorText
+  showLoreText
 }: CardRenderProps) {
 
   // Energy cost popover states
@@ -108,25 +107,25 @@ export default function NexusCardForm({
   );
 
   // Debounce function for cardLoreText
-  const debouncedSetCardFlavorText = useCallback(
+  const debouncedSetCardLoreText = useCallback(
     debounce((value: string) => {
       setValue("cardLoreText", value);
     }, 200), []
   );
 
-   // Debounce function for cardAnomalyModeFlavorText
-   const debouncedSetCardAnomalyModeFlavorText = useCallback(
+   // Debounce function for cardAnomalyModeLoreText
+   const debouncedSetCardAnomalyModeLoreText = useCallback(
     debounce((value: string) => {
-      setValue("cardAnomalyModeFlavorText", value);
+      setValue("cardAnomalyModeLoreText", value);
     }, 200), []
   );
 
   // Dynamically calculate cardText 
   // & cardLoreText styles
   // Make this a separate function
-  const calculateCardTextSize = (
+  function calculateCardTextSize(
     textLength: number
-  ) => {
+  ) {
     if (textLength <= 88) {
       // Extra Large
       return { 
@@ -134,9 +133,9 @@ export default function NexusCardForm({
         lineHeight: "19px", 
         textFieldHeight: "76px", 
         textRows: 4, 
-        flavorTextVisible: true,
-        maxFlavorTextChars: 80, 
-        flavorTextFieldHeight: "76px"
+        loreTextVisible: true,
+        maxLoreTextChars: 80, 
+        loreTextFieldHeight: "76px"
       };
     } else if (textLength <= 176) {
       // Large
@@ -145,9 +144,9 @@ export default function NexusCardForm({
         lineHeight: "19px", 
         textFieldHeight: "96px", 
         textRows: 6, 
-        flavorTextVisible: true, 
-        maxFlavorTextChars: 62,
-        flavorTextFieldHeight: "57px"
+        loreTextVisible: true, 
+        maxLoreTextChars: 62,
+        loreTextFieldHeight: "57px"
       };
     } else if (textLength <= 264) {
       // Medium
@@ -156,9 +155,9 @@ export default function NexusCardForm({
         lineHeight: "17px", 
         textFieldHeight: "120px", 
         textRows: 7, 
-        flavorTextVisible: true, 
-        maxFlavorTextChars: 50,
-        flavorTextFieldHeight: "34px"
+        loreTextVisible: true, 
+        maxLoreTextChars: 50,
+        loreTextFieldHeight: "34px"
       };
     } else if (textLength <= 352) {
       // Small
@@ -167,9 +166,9 @@ export default function NexusCardForm({
         lineHeight: "17px", 
         textFieldHeight: "172px", 
         textRows: 9, 
-        flavorTextVisible: false, 
-        maxFlavorTextChars: 0,
-        flavorTextFieldHeight: "0px"
+        loreTextVisible: false, 
+        maxLoreTextChars: 0,
+        loreTextFieldHeight: "0px"
       };
     } else {
       // Extra Small
@@ -178,9 +177,9 @@ export default function NexusCardForm({
         lineHeight: "15.5", 
         textFieldHeight: "172px", 
         textRows: 11, 
-        flavorTextVisible: false, 
-        maxFlavorTextChars: 0,
-        flavorTextFieldHeight: "0px"
+        loreTextVisible: false, 
+        maxLoreTextChars: 0,
+        loreTextFieldHeight: "0px"
       };
     }
   };
@@ -209,17 +208,29 @@ export default function NexusCardForm({
       "epic", 
       "prime"
     ];
-    const currentGrade = form.cardGrade ?? "core";
-    const currentIndex = grades.indexOf(currentGrade);
-    const nextIndex = (currentIndex + 1) % grades.length;
-    const nextGrade = grades[nextIndex];
-  
-    setValue("cardGrade", nextGrade);
-    trigger("cardGrade");
+
+    if (cardMode === "initial") {
+      const currentGrade = form.cardGrade ?? "core";
+      const currentIndex = grades.indexOf(currentGrade);
+      const nextIndex = (currentIndex + 1) % grades.length;
+      const nextGrade = grades[nextIndex];
+    
+      setValue("cardGrade", nextGrade);
+      trigger("cardGrade");
+    } else if (cardMode === "anomaly") {
+      const currentGrade = form.cardAnomalyModeGrade ?? "core";
+      const currentIndex = grades.indexOf(currentGrade);
+      const nextIndex = (currentIndex + 1) % grades.length;
+      const nextGrade = grades[nextIndex];
+    
+      setValue("cardAnomalyModeGrade", nextGrade);
+      trigger("cardAnomalyModeGrade");
+    }
     
     setOpenGradeSnackBar(true);
   }, [
     form.cardGrade, 
+    form.cardAnomalyModeGrade,
     setValue, 
     trigger, 
     setOpenGradeSnackBar
@@ -329,7 +340,6 @@ export default function NexusCardForm({
   }, [form.cardType]);
 
   return (
-    
     <Box
       id="card-border"
       sx={{
@@ -365,14 +375,17 @@ export default function NexusCardForm({
           bg-cover
           bg-center
           bg-no-repeat
-          ${cardMode === "initial" ? cardBgImage : "bg-[url('/images/card-parts/card-frames/other/anomaly.png')]"}
+          ${
+            cardMode === "initial" ? 
+            cardBgImage : "bg-[url('/images/card-parts/card-frames/other/anomaly.jpg')]"
+          }
         `}
       >
         {/* Card header */}
         <Box
           id="card-header"
           sx={{
-            maxHeight: "56px", // Increased by 8px to account for border
+            maxHeight: "56px",
             padding: "3px",
             border: "4px solid black",
             zIndex: 5,
@@ -420,24 +433,6 @@ export default function NexusCardForm({
                 gap-1
               `}
             >
-              {/* Ranged icon boolean */}
-              {form?.cardType !== "undefined" && 
-              form?.cardType?.includes("entity") && 
-              form.cardUnitType === "ranged" &&
-              cardMode === "initial" && (
-                <AdsClickIcon
-                  sx={{ 
-                    fontSize: "18px", 
-                    color: "black" 
-                  }}
-                  className="
-                    bg-amber-500
-                    rounded-full
-                    border
-                    border-black
-                  "
-                />
-              )}
               {/* Mythic icon boolean */}
               {form?.cardType !== "undefined" &&
               form?.cardType !== "event" &&
@@ -453,8 +448,14 @@ export default function NexusCardForm({
               {!isSubmitted ? (
                 <CustomInput
                   key={cardMode} 
-                  name={cardMode === "initial" ? "cardName" : "cardAnomalyModeName"}
-                  placeholder={cardMode === "initial" ? "Card name" : "Anomaly mode name"}
+                  name={
+                    cardMode === "initial" ? 
+                    "cardName" : "cardAnomalyModeName"
+                  }
+                  placeholder={
+                    cardMode === "initial" ? 
+                    "Card name" : "Anomaly mode name"
+                  }
                 />
               ) : (
                 cardMode === "initial" ? (
@@ -531,6 +532,24 @@ export default function NexusCardForm({
               text-black
             `}
           >
+            {/* Initial Mode: Range Icon */}
+            {form.cardType && 
+              (
+                form.cardType.includes("entity") || 
+                form.cardType.includes("outpost")
+              ) &&
+              cardMode === "initial" && 
+            (
+              <Image
+                src={
+                  form.cardUnitType === "melee" ? 
+                  RangeMelee : RangeRanged
+                }
+                width={15}
+                height={15}
+                alt={`${form.cardAnomalyModeName} card art`}
+              />
+            )}
             {/* Rendered card types */}
             {/* Does this do anything? */}
             {isSubmitting && (
@@ -632,8 +651,14 @@ export default function NexusCardForm({
                           field.onChange(selectedOption);
 
                           if (
-                            form.cardType === "entity" && 
-                            selectedOption !== "entity"
+                            form &&
+                            form.cardType &&
+                            (
+                              form.cardType.includes("entity") || 
+                              form.cardType.includes("outpost")
+                            ) && 
+                            selectedOption !== "entity" && 
+                            selectedOption !== "outpost"
                           ) {
                             setValue("cardAttack", "0");
                             setValue("cardDefense", "0");
@@ -641,7 +666,7 @@ export default function NexusCardForm({
                             setValue("cardUnitType", "melee");
                           }
 
-                          // Check if the selected option is "node" and reset fields accordingly
+                          // Check if the selected option is "anomaly" and reset fields
                           if (selectedOption === "anomaly") {
                             const newEnergyCost = await resetFieldsOnAnomaly(form.cardEnergyCost);
                             setValue("cardEnergyCost", newEnergyCost);
@@ -682,7 +707,6 @@ export default function NexusCardForm({
                       <FormControl
                         className={clsx("flex-grow",
                           {
-                            // "w-1/2": form.cardType && form.cardType.includes("node"),
                             "w-3/5": form.cardType && (
                               form.cardType.includes("object") || 
                               form.cardType.includes("entity") || 
@@ -780,8 +804,7 @@ export default function NexusCardForm({
             )}
             {/* Speed */}
             {form.cardType && 
-            !form.cardType.includes("node") && 
-            cardMode === "initial" &&(
+            cardMode === "initial" && (
               <SpeedSelect />
             )}
           </Box>
@@ -808,7 +831,7 @@ export default function NexusCardForm({
           <Box
             id="card-image-content-inner"
             sx={{
-              height: "462px !important", // Increased by 6px to account for border
+              height: "462px !important",
               padding: "3px",
               border: "3.75px solid black",
               borderBottomLeftRadius: "8px",
@@ -833,7 +856,7 @@ export default function NexusCardForm({
               id="card-image"
               sx={{
                 aspectRatio: "4 / 3 !important",
-                height: "252px !important", // Maybe 7px taller
+                height: "252px !important",
                 border: "2px solid black",
               }}
               className="
@@ -842,7 +865,7 @@ export default function NexusCardForm({
                 relative
               "
             >
-              {cardMode === "initial" ?<Image
+              {cardMode === "initial" ? <Image
                 src={form.cardArt || "/images/card-parts/card-art/default-art.jpg"}
                 fill={true}
                 sizes="100%"
@@ -860,9 +883,9 @@ export default function NexusCardForm({
                 }}
               />}
             </Box>
-            {/* Card text and flavor text */}
+            {/* Card text and lore text */}
             <Box
-              id="card-text-flavor"
+              id="card-text-lore"
               sx={{
                 maxWidth: "340px !important",
                 height: "190px !important",
@@ -999,8 +1022,8 @@ export default function NexusCardForm({
               />)}
 
               {/* Divider */}
-              {cardTextProps.flavorTextVisible && 
-                showFlavorText  && (
+              {cardTextProps.loreTextVisible && 
+                showLoreText  && (
                 <Divider
                   className="
                     mx-4
@@ -1010,9 +1033,9 @@ export default function NexusCardForm({
                 />
               )}
               
-              {/* Card flavor text */}
-              {cardTextProps.flavorTextVisible && 
-                showFlavorText && cardMode === "initial" && (
+              {/* Card lore text */}
+              {cardTextProps.loreTextVisible && 
+                showLoreText && cardMode === "initial" && (
                 <Controller
                   name="cardLoreText"
                   control={control}
@@ -1022,20 +1045,20 @@ export default function NexusCardForm({
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        debouncedSetCardFlavorText(e.target.value);
+                        debouncedSetCardLoreText(e.target.value);
                       }}
                       multiline
                       size="small"
                       variant="standard"
-                      placeholder="The greatest flavor text you've ever read!"
+                      placeholder="The greatest lore text you've ever read!"
                       rows={2}
                       className="w-full text-wrap"
                       inputProps={{
-                        maxLength: cardTextProps.maxFlavorTextChars,
+                        maxLength: cardTextProps.maxLoreTextChars,
                         style: {
                           fontSize: cardTextProps.fontSize,
                           lineHeight: cardTextProps.lineHeight,
-                          height: cardTextProps.flavorTextFieldHeight,
+                          height: cardTextProps.loreTextFieldHeight,
                           fontStyle: "italic",
                           fontWeight: 300,
                           wordWrap: "break-word",
@@ -1084,11 +1107,11 @@ export default function NexusCardForm({
                 />
               )}
 
-              {/* Card Anamoly Mode flavor text */}
-              {cardTextProps.flavorTextVisible && 
-                showFlavorText && cardMode === "anomaly" && (
+              {/* Card Anamoly Mode lore text */}
+              {cardTextProps.loreTextVisible && 
+                showLoreText && cardMode === "anomaly" && (
                 <Controller
-                  name="cardAnomalyModeFlavorText"
+                  name="cardAnomalyModeLoreText"
                   control={control}
                   disabled={isSubmitting || isSubmitted}
                   render={({ field }) => (
@@ -1096,20 +1119,20 @@ export default function NexusCardForm({
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        debouncedSetCardAnomalyModeFlavorText(e.target.value);
+                        debouncedSetCardAnomalyModeLoreText(e.target.value);
                       }}
                       multiline
                       size="small"
                       variant="standard"
-                      placeholder="The greatest anomaly flavor text you've ever read!"
+                      placeholder="The greatest anomaly lore text you've ever read!"
                       rows={2}
                       className="w-full text-wrap"
                       inputProps={{
-                        maxLength: cardTextProps.maxFlavorTextChars,
+                        maxLength: cardTextProps.maxLoreTextChars,
                         style: {
                           fontSize: cardTextProps.fontSize,
                           lineHeight: cardTextProps.lineHeight,
-                          height: cardTextProps.flavorTextFieldHeight,
+                          height: cardTextProps.loreTextFieldHeight,
                           fontStyle: "italic",
                           fontWeight: 300,
                           wordWrap: "break-word",
@@ -1245,7 +1268,10 @@ export default function NexusCardForm({
             id="stats-grade-info"
             className={clsx(
               "flex flex-col justify-center items-center",
-              form.cardType && !(form.cardType.includes("entity") || form.cardType.includes("outpost")) ? "w-full" : "w-3/5"
+              form.cardType && !(
+                form.cardType.includes("entity") || 
+                form.cardType.includes("outpost")
+              ) ? "w-full" : "w-3/5"
             )}
           >
             {/* Card grade */}
@@ -1263,50 +1289,96 @@ export default function NexusCardForm({
                 open={openGradeSnackbar}
                 autoHideDuration={3000}
                 onClose={handleCloseGradeSnackbar}
-                message={`Grade changed to ${form.cardGrade}!`}
+                message={cardMode === "initial" ? `Initial mode grade changed to ${form.cardGrade}!` : `Anomaly mode grade changed to ${form.cardAnomalyModeGrade}!`}
               />
-              <Tooltip
-                TransitionComponent={Fade}
-                TransitionProps={{ timeout: 600 }}
-                title={`
-                  Change grade to
-                  ${
-                    form.cardGrade === "rare" ?
-                    "epic" : form.cardGrade === "epic" ?
-                    "prime" : form.cardGrade === "prime" ?
-                    "core" : "rare"
-                  }`
-                }
-                placement="top"
-              >
-                <IconButton
-                  aria-label="add grade"
-                  disabled={isSubmitting || isSubmitted}
-                  size="large"
-                  onClick={handleGradeChange}
+              {/* Initial Mode: Grade */}
+              {cardMode === "initial" && (
+                <Tooltip
+                  TransitionComponent={Fade}
+                  TransitionProps={{ timeout: 600 }}
+                  title={`
+                    Change initial mode grade to
+                    ${
+                      form.cardGrade === "rare" ?
+                      "epic" : form.cardGrade === "epic" ?
+                      "prime" : form.cardGrade === "prime" ?
+                      "core" : "rare"
+                    }`
+                  }
+                  placement="top"
                 >
-                  <Image
-                    src={
-                      form.cardGrade === "core" ? GradeCore :
-                      form.cardGrade === "rare" ? GradeRare :
-                      form.cardGrade === "epic" ? GradeEpic :
-                      form.cardGrade === "prime" ? GradePrime :
-                      null
-                    }
-                    height={34}
-                    width={34}
-                    alt={`${form.cardGrade} icon`}
-                    className="
-                      bg-black
-                      cursor-pointer
-                      rounded-full
-                      p-0.5
-                    "
-                  />
-                </IconButton>
-              </Tooltip>
+                  <IconButton
+                    aria-label="change grade"
+                    disabled={isSubmitting || isSubmitted}
+                    size="large"
+                    onClick={handleGradeChange}
+                  >
+                    <Image
+                      src={
+                        form.cardGrade === "core" ? GradeCore :
+                        form.cardGrade === "rare" ? GradeRare :
+                        form.cardGrade === "epic" ? GradeEpic :
+                        form.cardGrade === "prime" ? GradePrime :
+                        null
+                      }
+                      height={34}
+                      width={34}
+                      alt={`${form.cardGrade} icon`}
+                      className="
+                        bg-black
+                        cursor-pointer
+                        rounded-full
+                        p-1.5
+                      "
+                    />
+                  </IconButton>
+                </Tooltip>
+              )}
+              {/* Anomaly Mode: Grade */}
+              {cardMode === "anomaly" && (
+                <Tooltip
+                  TransitionComponent={Fade}
+                  TransitionProps={{ timeout: 600 }}
+                  title={`
+                    Change anomaly mode grade to
+                    ${
+                      form.cardAnomalyModeGrade === "rare" ?
+                      "epic" : form.cardAnomalyModeGrade === "epic" ?
+                      "prime" : form.cardAnomalyModeGrade === "prime" ?
+                      "core" : "rare"
+                    }`
+                  }
+                  placement="top"
+                >
+                  <IconButton
+                    aria-label="change grade"
+                    disabled={isSubmitting || isSubmitted}
+                    size="large"
+                    onClick={handleGradeChange}
+                  >
+                    <Image
+                      src={
+                        form.cardAnomalyModeGrade === "core" ? GradeCore :
+                        form.cardAnomalyModeGrade === "rare" ? GradeRare :
+                        form.cardAnomalyModeGrade === "epic" ? GradeEpic :
+                        form.cardAnomalyModeGrade === "prime" ? GradePrime :
+                        null
+                      }
+                      height={34}
+                      width={34}
+                      alt={`${form.cardAnomalyModeGrade} icon`}
+                      className="
+                        bg-black
+                        cursor-pointer
+                        rounded-full
+                        p-1.5
+                      "
+                    />
+                  </IconButton>
+                </Tooltip>
+              )}
               
-              {/* Card creator & copyright */}
+              {/* Card creator */}
               <Box
                 className="
                   flex
@@ -1326,14 +1398,6 @@ export default function NexusCardForm({
                     ? form.cardCreator
                     : "Card Creator"}
                 </Typography>
-                {/* <Typography
-                  variant="caption"
-                  className="opacity-80"
-                >
-                  © Nexus {
-                    new Date().getFullYear()
-                  } 
-                </Typography> */}
               </Box>
             </Box>
           </Box>
