@@ -1,7 +1,7 @@
 import { CardFormDataType } from "@/app/utils/types/types";
-import { monoColorOptions } from "@/app/utils/data/cardColorOptions";
+import { monoEnergyOptions } from "@/app/utils/data/cardEnergyOptions";
 
-export default function determineColorType(
+export default function determineEnergyType(
     activeCardCost: CardFormDataType["cardEnergyCost"],
     activeCardType: CardFormDataType["cardType"]
 ) {
@@ -17,36 +17,36 @@ export default function determineColorType(
       activeCardCost ?? {}
     );
 
-    // Get non-void colors with value > 0
-    const coloredCosts = energyCostEntries
+    // Get non-void energy with value > 0
+    const nonVoidEnergyCosts = energyCostEntries
     .filter(
-      ([color, value]) =>
-      monoColorOptions.void && 
-      !monoColorOptions.void.includes(color)
+      ([energy, value]) =>
+      monoEnergyOptions.void && 
+      !monoEnergyOptions.void.includes(energy)
       && value > 0
     );
 
-    // Get void colors with value > 0
-    const colorlessCost = energyCostEntries
+    // Get void energy with value > 0
+    const voidEnergyCost = energyCostEntries
     .filter(
-      ([color, value]) =>
-      monoColorOptions.void && 
-      monoColorOptions.void.includes(color)
+      ([energy, value]) =>
+      monoEnergyOptions.void && 
+      monoEnergyOptions.void.includes(energy)
       && value > 0
     );
 
-    // Determine color type
-    if (colorlessCost.length > 0 && coloredCosts.length === 0) {
+    // Determine energy type
+    if (voidEnergyCost.length > 0 && nonVoidEnergyCosts.length === 0) {
       // If there's only void costs, return mono
       return "mono";
-    } else if (coloredCosts.length === 1) {
-      // If there's only one non-void color, return mono
+    } else if (nonVoidEnergyCosts.length === 1) {
+      // If there's only one non-void energy, return mono
       return "mono";
-    } else if (coloredCosts.length === 2) {
-      // If there's two non-void colors, return dual
+    } else if (nonVoidEnergyCosts.length === 2) {
+      // If there's two non-void energy, return dual
       return "dual";
-    } else if (coloredCosts.length >= 3) {
-      // If there's three or more non-void colors, return multi
+    } else if (nonVoidEnergyCosts.length >= 3) {
+      // If there's three or more non-void energy, return multi
       return "multi";
     }
 

@@ -11,27 +11,29 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 // Icons
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import Yellow from "@/public/images/card-parts/card-icons/card-cost/yellow.svg";
-import Blue from "@/public/images/card-parts/card-icons/card-cost/blue.svg";
-import Purple from "@/public/images/card-parts/card-icons/card-cost/purple.svg";
-import Red from "@/public/images/card-parts/card-icons/card-cost/red.svg";
-import Green from "@/public/images/card-parts/card-icons/card-cost/green.svg";
-import Void0 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
-import Void1 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
-import Void2 from "@/public/images/card-parts/card-icons/card-cost/void-2.svg";
-import Void3 from "@/public/images/card-parts/card-icons/card-cost/void-3.svg";
-import Void4 from "@/public/images/card-parts/card-icons/card-cost/void-4.svg";
-import Void5 from "@/public/images/card-parts/card-icons/card-cost/void-5.svg";
-import Void6 from "@/public/images/card-parts/card-icons/card-cost/void-6.svg";
-import Void7 from "@/public/images/card-parts/card-icons/card-cost/void-7.svg";
-import Void8 from "@/public/images/card-parts/card-icons/card-cost/void-8.svg";
-import Void9 from "@/public/images/card-parts/card-icons/card-cost/void-9.svg";
-import Void10 from "@/public/images/card-parts/card-icons/card-cost/void-10.svg";
-import Void11 from "@/public/images/card-parts/card-icons/card-cost/void-11.svg";
-import Void12 from "@/public/images/card-parts/card-icons/card-cost/void-12.svg";
-import Void13 from "@/public/images/card-parts/card-icons/card-cost/void-13.svg";
-import Void14 from "@/public/images/card-parts/card-icons/card-cost/void-14.svg";
-import Void15 from "@/public/images/card-parts/card-icons/card-cost/void-15.svg";
+
+import EnergyRadiant from "@/public/images/card-parts/card-icons/card-cost/energy-radiant.svg";
+import EnergyVolatile from "@/public/images/card-parts/card-icons/card-cost/energy-volatile.svg";
+import EnergyCorrupt from "@/public/images/card-parts/card-icons/card-cost/energy-corrupt.svg";
+import EnergyBlaze from "@/public/images/card-parts/card-icons/card-cost/energy-blaze.svg";
+import EnergyVerdant from "@/public/images/card-parts/card-icons/card-cost/energy-verdant.svg";
+
+import EnergyVoid0 from "@/public/images/card-parts/card-icons/card-cost/energy-void-0.svg";
+import EnergyVoid1 from "@/public/images/card-parts/card-icons/card-cost/energy-void-1.svg";
+import EnergyVoid2 from "@/public/images/card-parts/card-icons/card-cost/energy-void-2.svg";
+import EnergyVoid3 from "@/public/images/card-parts/card-icons/card-cost/energy-void-3.svg";
+import EnergyVoid4 from "@/public/images/card-parts/card-icons/card-cost/energy-void-4.svg";
+import EnergyVoid5 from "@/public/images/card-parts/card-icons/card-cost/energy-void-5.svg";
+import EnergyVoid6 from "@/public/images/card-parts/card-icons/card-cost/energy-void-6.svg";
+import EnergyVoid7 from "@/public/images/card-parts/card-icons/card-cost/energy-void-7.svg";
+import EnergyVoid8 from "@/public/images/card-parts/card-icons/card-cost/energy-void-8.svg";
+import EnergyVoid9 from "@/public/images/card-parts/card-icons/card-cost/energy-void-9.svg";
+import EnergyVoid10 from "@/public/images/card-parts/card-icons/card-cost/energy-void-10.svg";
+import EnergyVoid11 from "@/public/images/card-parts/card-icons/card-cost/energy-void-11.svg";
+import EnergyVoid12 from "@/public/images/card-parts/card-icons/card-cost/energy-void-12.svg";
+import EnergyVoid13 from "@/public/images/card-parts/card-icons/card-cost/energy-void-13.svg";
+import EnergyVoid14 from "@/public/images/card-parts/card-icons/card-cost/energy-void-14.svg";
+import EnergyVoid15 from "@/public/images/card-parts/card-icons/card-cost/energy-void-15.svg";
 
 type EnergyCostIconsProps = {
   handleEnergyCostPopoverOpen: (
@@ -40,22 +42,22 @@ type EnergyCostIconsProps = {
 };
 
 const voidEnergyIcons = [
-  Void0,
-  Void1,
-  Void2,
-  Void3,
-  Void4,
-  Void5,
-  Void6,
-  Void7,
-  Void8,
-  Void9,
-  Void10,
-  Void11,
-  Void12,
-  Void13,
-  Void14,
-  Void15,
+  EnergyVoid0,
+  EnergyVoid1,
+  EnergyVoid2,
+  EnergyVoid3,
+  EnergyVoid4,
+  EnergyVoid5,
+  EnergyVoid6,
+  EnergyVoid7,
+  EnergyVoid8,
+  EnergyVoid9,
+  EnergyVoid10,
+  EnergyVoid11,
+  EnergyVoid12,
+  EnergyVoid13,
+  EnergyVoid14,
+  EnergyVoid15,
 ];
 
 export default function EnergyCostIcons({
@@ -105,22 +107,22 @@ export default function EnergyCostIcons({
           "
         >
         {Object.entries(formCardData.cardEnergyCost ?? {})
-          .map(([color, value]) =>
-            color !== "void"
+          .map(([energy, value]) =>
+            energy !== "void"
               ? Array.from({ length: value }, (_, i) => (
                   <Image
-                    key={`${color}-${i}`}
+                    key={`${energy}-${i}`}
                     src={
-                      color === "yellow" ? Yellow :
-                      color === "blue" ? Blue :
-                      color === "purple" ? Purple :
-                      color === "red" ? Red :
-                      color === "green" ? Green :
+                      energy === "radiant" ? EnergyRadiant :
+                      energy === "volatile" ? EnergyVolatile :
+                      energy === "corrupt" ? EnergyCorrupt :
+                      energy === "blaze" ? EnergyBlaze :
+                      energy === "verdant" ? EnergyVerdant :
                       null
                     }
                     width={21}
                     height={21}
-                    alt={`${color} energy icon`}
+                    alt={`${energy} energy icon`}
                   />
                 ))
               : value > 0

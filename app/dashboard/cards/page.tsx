@@ -1,10 +1,15 @@
 "use client";
 
+// Hooks
 import React, { useState, useEffect } from "react";
-import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
+// Actions
 import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
+// Utils
 import Image from "next/image";
 import Link from "next/link";
+// Types
+import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
+// Components
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -13,9 +18,10 @@ import Button from "@mui/material/Button";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import { SelectChangeEvent } from '@mui/material/Select';
+// Icons
 import IconButton from "@mui/material/IconButton";
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { SelectChangeEvent } from '@mui/material/Select';
 
 export default function Cards() {
     const [cards, setCards] = useState<CardsTableType[] | null>([]);
@@ -245,10 +251,8 @@ export default function Cards() {
                     onChange={handleSortChange}
                   >
                     <MenuItem value="created_at">Date created</MenuItem>
-                    {/* <MenuItem value="cardVotes">Votes</MenuItem> */}
-                    {/* Card Names doesn't order alphabetically */}
                     <MenuItem value="cardName">Name</MenuItem>
-                    <MenuItem value="cardColor">Color</MenuItem>
+                    <MenuItem value="cardEnergyAlignment">Energy</MenuItem>
                     <MenuItem value="cardGrade">Grade</MenuItem>
                   </Select>
                 </FormControl>

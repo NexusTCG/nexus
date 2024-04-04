@@ -11,7 +11,6 @@ import determineBgImage from "@/app/lib/actions/determineBgImage";
 // Types
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import { CardFormDataType } from "@/app/utils/types/types";
-
 // Utils
 import Image from "next/image";
 import clsx from "clsx";
@@ -26,57 +25,66 @@ import Skeleton from "@mui/material/Skeleton";
 import Divider from "@mui/material/Divider";
 // Icons
 import AdsClickIcon from '@mui/icons-material/AdsClick';
+
+import EnergyRadiant from "@/public/images/card-parts/card-icons/card-cost/energy-radiant.svg";
+import EnergyVolatile from "@/public/images/card-parts/card-icons/card-cost/energy-volatile.svg";
+import EnergyCorrupt from "@/public/images/card-parts/card-icons/card-cost/energy-corrupt.svg";
+import EnergyBlaze from "@/public/images/card-parts/card-icons/card-cost/energy-blaze.svg";
+import EnergyVerdant from "@/public/images/card-parts/card-icons/card-cost/energy-verdant.svg";
+
+import EnergyVoid0 from "@/public/images/card-parts/card-icons/card-cost/energy-void-0.svg";
+import EnergyVoid1 from "@/public/images/card-parts/card-icons/card-cost/energy-void-1.svg";
+import EnergyVoid2 from "@/public/images/card-parts/card-icons/card-cost/energy-void-2.svg";
+import EnergyVoid3 from "@/public/images/card-parts/card-icons/card-cost/energy-void-3.svg";
+import EnergyVoid4 from "@/public/images/card-parts/card-icons/card-cost/energy-void-4.svg";
+import EnergyVoid5 from "@/public/images/card-parts/card-icons/card-cost/energy-void-5.svg";
+import EnergyVoid6 from "@/public/images/card-parts/card-icons/card-cost/energy-void-6.svg";
+import EnergyVoid7 from "@/public/images/card-parts/card-icons/card-cost/energy-void-7.svg";
+import EnergyVoid8 from "@/public/images/card-parts/card-icons/card-cost/energy-void-8.svg";
+import EnergyVoid9 from "@/public/images/card-parts/card-icons/card-cost/energy-void-9.svg";
+import EnergyVoid10 from "@/public/images/card-parts/card-icons/card-cost/energy-void-10.svg";
+import EnergyVoid11 from "@/public/images/card-parts/card-icons/card-cost/energy-void-11.svg";
+import EnergyVoid12 from "@/public/images/card-parts/card-icons/card-cost/energy-void-12.svg";
+import EnergyVoid13 from "@/public/images/card-parts/card-icons/card-cost/energy-void-13.svg";
+import EnergyVoid14 from "@/public/images/card-parts/card-icons/card-cost/energy-void-14.svg";
+import EnergyVoid15 from "@/public/images/card-parts/card-icons/card-cost/energy-void-15.svg";
+
+import Attack from "@/public/images/card-parts/card-icons/card-stats/attack.svg";
+import Defense from "@/public/images/card-parts/card-icons/card-stats/defense.svg";
 import Speed from "@/public/images/card-parts/card-icons/speed.svg";
 import Mythic from "@/public/images/card-parts/card-icons/mythic.svg";
-import Attack from "@/public/images/card-parts/card-stats/attack.svg";
-import Defense from "@/public/images/card-parts/card-stats/defense.svg";
-import Core from "@/public/images/card-parts/card-icons/card-grades/core.svg";
-import Rare from "@/public/images/card-parts/card-icons/card-grades/rare.svg";
-import Epic from "@/public/images/card-parts/card-icons/card-grades/epic.svg";
-import Prime from "@/public/images/card-parts/card-icons/card-grades/prime.svg";
-import Yellow from "@/public/images/card-parts/card-icons/card-cost/yellow.svg";
-import Blue from "@/public/images/card-parts/card-icons/card-cost/blue.svg";
-import Purple from "@/public/images/card-parts/card-icons/card-cost/purple.svg";
-import Red from "@/public/images/card-parts/card-icons/card-cost/red.svg";
-import Green from "@/public/images/card-parts/card-icons/card-cost/green.svg";
-import Void0 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
-import Void1 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
-import Void2 from "@/public/images/card-parts/card-icons/card-cost/void-2.svg";
-import Void3 from "@/public/images/card-parts/card-icons/card-cost/void-3.svg";
-import Void4 from "@/public/images/card-parts/card-icons/card-cost/void-4.svg";
-import Void5 from "@/public/images/card-parts/card-icons/card-cost/void-5.svg";
-import Void6 from "@/public/images/card-parts/card-icons/card-cost/void-6.svg";
-import Void7 from "@/public/images/card-parts/card-icons/card-cost/void-7.svg";
-import Void8 from "@/public/images/card-parts/card-icons/card-cost/void-8.svg";
-import Void9 from "@/public/images/card-parts/card-icons/card-cost/void-9.svg";
-import Void10 from "@/public/images/card-parts/card-icons/card-cost/void-10.svg";
-import Void11 from "@/public/images/card-parts/card-icons/card-cost/void-11.svg";
-import Void12 from "@/public/images/card-parts/card-icons/card-cost/void-12.svg";
-import Void13 from "@/public/images/card-parts/card-icons/card-cost/void-13.svg";
-import Void14 from "@/public/images/card-parts/card-icons/card-cost/void-14.svg";
-import Void15 from "@/public/images/card-parts/card-icons/card-cost/void-15.svg";
+
+// import RangeMelee from "@/public/images/card-parts/card-icons/range-melee.svg";
+// import RangeRanged from "@/public/images/card-parts/card-icons/range-ranged.svg";
+// import StateLocked from "@/public/images/card-parts/card-icons/state-locked.svg";
+// import StateUnlocked from "@/public/images/card-parts/card-icons/state-unlocked.svg";
+
+import GradeCore from "@/public/images/card-parts/card-icons/card-grades/grade-core.svg";
+import GradeRare from "@/public/images/card-parts/card-icons/card-grades/grade-rare.svg";
+import GradeEpic from "@/public/images/card-parts/card-icons/card-grades/grade-epic.svg";
+import GradePrime from "@/public/images/card-parts/card-icons/card-grades/grade-prime.svg";
 
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
 };
 
 const voidEnergyIcons = [
-  Void0,
-  Void1,
-  Void2,
-  Void3,
-  Void4,
-  Void5,
-  Void6,
-  Void7,
-  Void8,
-  Void9,
-  Void10,
-  Void11,
-  Void12,
-  Void13,
-  Void14,
-  Void15,
+  EnergyVoid0,
+  EnergyVoid1,
+  EnergyVoid2,
+  EnergyVoid3,
+  EnergyVoid4,
+  EnergyVoid5,
+  EnergyVoid6,
+  EnergyVoid7,
+  EnergyVoid8,
+  EnergyVoid9,
+  EnergyVoid10,
+  EnergyVoid11,
+  EnergyVoid12,
+  EnergyVoid13,
+  EnergyVoid14,
+  EnergyVoid15,
 ];
 
 const CardRender = ({
@@ -102,15 +110,25 @@ const CardRender = ({
     }
 
     // Utility function to render text with keywords
-    function renderTextWithKeywords(text: string, cardName: string) {
-      const keywordPattern = Object.keys(Keywords).join("|");
+    function renderTextWithKeywords(
+      text: string, 
+      cardName: string
+    ) {
+      const keywordPattern = Object
+        .keys(Keywords)
+        .join("|");
       const regex = new RegExp(`\\b(${keywordPattern})\\b`, "gi");
     
-      const processLine = (line: string, lineIndex: number) => {
+      const processLine = (
+        line: string, 
+        lineIndex: number
+      ) => {
         const parts = line.split(regex);
     
         return parts.map((part, index) => {
-          const keywordKey = Object.keys(Keywords).find(key => key.toLowerCase() === part.toLowerCase());
+          const keywordKey = Object
+            .keys(Keywords)
+            .find(key => key.toLowerCase() === part.toLowerCase());
     
           if (keywordKey) {
             const keyword = Keywords[keywordKey];
@@ -131,7 +149,12 @@ const CardRender = ({
       };
     
       return text.split('\n').map((line, index) => (
-        <Typography key={index} variant="body1" component="div" gutterBottom>
+        <Typography
+          key={index}
+          variant="body1"
+          component="div"
+          gutterBottom
+        >
           {processLine(line, index)}
         </Typography>
       ));
@@ -171,11 +194,11 @@ const CardRender = ({
     // Determine bgColor
     useEffect(() => {
       if (
-        cardData?.cardColor && 
+        cardData?.cardEnergyAlignment && 
         cardData !== null
       ) {
         if (
-          cardData?.cardColor === "blue"
+          cardData?.cardEnergyAlignment === "radiant"
         ) {
           setBgColor({
             "50":
@@ -186,7 +209,7 @@ const CardRender = ({
               colorMapping["sky"]?.[400],
           })
         } else if (
-          cardData?.cardColor === "purple"
+          cardData?.cardEnergyAlignment === "corrupt"
         ) {
           setBgColor({
             "50":
@@ -197,7 +220,7 @@ const CardRender = ({
               colorMapping["violet"]?.[400],
           })
         } else if (
-          cardData?.cardColor === "green"
+          cardData?.cardEnergyAlignment === "verdant"
         ) {
           setBgColor({
             "50":
@@ -208,7 +231,7 @@ const CardRender = ({
               colorMapping["lime"]?.[400],
           })
         } else if (
-          cardData?.cardColor === "void"
+          cardData?.cardEnergyAlignment === "void"
         ) {
           setBgColor({
             "50":
@@ -222,26 +245,26 @@ const CardRender = ({
           setBgColor({
             "50":
               colorMapping[
-                cardData?.cardColor as keyof typeof
+                cardData?.cardEnergyAlignment as keyof typeof
               colorMapping]?.[50],
             "200":
               colorMapping[
-                cardData?.cardColor as keyof typeof
+                cardData?.cardEnergyAlignment as keyof typeof
               colorMapping]?.[200],
             "400":
               colorMapping[
-                cardData?.cardColor as keyof typeof
+                cardData?.cardEnergyAlignment as keyof typeof
               colorMapping]?.[400],
           })
         }
       }
-    }, [cardData?.cardColor]);
+    }, [cardData?.cardEnergyAlignment]);
 
     // Determine bgImage
     useEffect(() => {
       if (
         cardData?.cardType && 
-        cardData?.cardColor
+        cardData?.cardEnergyAlignment
       ) {
         const cardType = Array.isArray(
           cardData?.cardType) ? 
@@ -249,13 +272,13 @@ const CardRender = ({
           cardData?.cardType;
         const newBgImage = determineBgImage(
           cardType,
-          cardData?.cardColor,
+          cardData?.cardEnergyAlignment,
         );
         setBgImage(newBgImage);
       };
     }, [
       cardData?.cardType,
-      cardData?.cardColor
+      cardData?.cardEnergyAlignment
     ]);
 
     // Skeleton Card Render
@@ -425,35 +448,35 @@ const CardRender = ({
                 "
               >
                 {Object.entries(cardData.cardEnergyCost ?? {})
-                  .sort(([colorA], [colorB]) => {
+                  .sort(([energyA], [energyB]) => {
                     const order = [
-                      "yellow", 
-                      "blue", 
-                      "purple", 
-                      "red", 
-                      "green", 
+                      "radiant", 
+                      "radiant", 
+                      "corrupt", 
+                      "blaze", 
+                      "verdant", 
                       "void"
                     ];
-                    return order.indexOf(colorA) - order.indexOf(colorB);
+                    return order.indexOf(energyA) - order.indexOf(energyB);
                   })
-                  .map(([color, value]) =>
-                    color !== "void"
+                  .map(([energy, value]) =>
+                    energy !== "void"
                       ? Array.from({
                           length: typeof value === 'number' ? value : 0,
                         }, (_, i) => (
                           <Image
-                            key={`${color}-${i}`}
+                            key={`${energy}-${i}`}
                             src={
-                              color === "yellow" ? Yellow :
-                              color === "blue" ? Blue :
-                              color === "purple" ? Purple :
-                              color === "red" ? Red :
-                              color === "green" ? Green :
+                              energy === "radiant" ? EnergyRadiant :
+                              energy === "radiant" ? EnergyVolatile :
+                              energy === "corrupt" ? EnergyCorrupt :
+                              energy === "blaze" ? EnergyBlaze :
+                              energy === "verdant" ? EnergyVerdant :
                               null
                             }
                             width={21}
                             height={21}
-                            alt={`${color} energy icon`}
+                            alt={`${energy} energy icon`}
                           />
                         ))
                       : typeof value === 'number' && value > 0
@@ -647,7 +670,7 @@ const CardRender = ({
                       : null
                   }
                 {/* Flavor text */}
-                {cardData.cardFlavorText !== "" && (
+                {cardData.cardLoreText !== "" && (
                   <>
                     <Divider
                       className="
@@ -660,7 +683,7 @@ const CardRender = ({
                       id="flavor-text"
                       variant="body2"
                     >
-                      {`"${cardData.cardFlavorText}"`}
+                      {`"${cardData.cardLoreText}"`}
                     </Typography>
                   </>
                 )}
@@ -752,10 +775,10 @@ const CardRender = ({
                 {/* Card Grade */}
                 <Image
                   src={
-                    cardData.cardGrade === "rare" ? Rare :
-                    cardData.cardGrade === "epic" ? Epic :
-                    cardData.cardGrade === "prime" ? Prime :
-                    Core
+                    cardData.cardGrade === "rare" ? GradeRare :
+                    cardData.cardGrade === "epic" ? GradeEpic :
+                    cardData.cardGrade === "prime" ? GradePrime :
+                    GradeCore
                   }
                   height={34}
                   width={34}

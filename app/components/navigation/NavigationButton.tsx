@@ -1,9 +1,17 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+// Hooks
+import React, { 
+  useEffect, 
+  useState 
+} from "react";
 import { usePathname } from 'next/navigation';
-import { Button } from "@mui/material";
+// Utils
 import Link from "next/link";
+import clsx from "clsx";
+// Components
+import { Button } from "@mui/material";
+// Icons
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import DesignServicesIcon from '@mui/icons-material/DesignServices';
@@ -16,7 +24,6 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import SpeakerNotesIcon from '@mui/icons-material/SpeakerNotes';
 import LoginIcon from '@mui/icons-material/Login';
 import PaidIcon from '@mui/icons-material/Paid';
-import clsx from "clsx";
 
 type NavigationButtonProps = {
   route: string;
@@ -57,7 +64,7 @@ export default function NavigationButton({
     }
   }, [routeLowerCase, externalLink]);
 
-  // Set color based on current pathname
+  // Set energy based on current pathname
   useEffect(() => {
     if (currentPathname.includes(routeLowerCase)) {
       setCurrentColor("primary");

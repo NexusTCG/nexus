@@ -1,17 +1,24 @@
 "use client";
 
-import React, { useState, useEffect, useContext } from "react";
-import PostHogClient from "@/app/lib/posthog/posthog";
-
-import { loadStripe } from '@stripe/stripe-js';
+// Hooks
+import React, { 
+  useState, 
+  useEffect, 
+  useContext 
+} from "react";
 import useSession from "@/app/hooks/useSession";
 import { DashboardContext } from "@/app/context/DashboardContext";
+// Utils
+import PostHogClient from "@/app/lib/posthog/posthog";
+import { loadStripe } from '@stripe/stripe-js';
 import Cal, { getCalApi } from "@calcom/embed-react";
+// Component
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import Skeleton from "@mui/material/Skeleton";
+// Icons
 import PaymentIcon from '@mui/icons-material/Payment';
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from '@mui/icons-material/Close';
@@ -248,7 +255,8 @@ export default function Credits() {
           <Typography
             variant="subtitle1"
           >
-            Credits are used to generate art for your cards. Your purchase directly supports the development of Nexus.
+            Credits are used to generate art for your cards. 
+            Your purchase directly supports the development of Nexus.
           </Typography>
           <Button
             type="submit"
@@ -332,7 +340,9 @@ export default function Credits() {
             <Typography
               variant="subtitle1"
             >
-              Get free credits by inviting your friends. For each friend you invite, you both get 10 credits. Just email their email address to referral@play.nexus.
+              Get free credits by inviting your friends. 
+              For each friend you invite, you both get 10 credits. 
+              Just email their email address to referral@play.nexus.
             </Typography>
           </Box>
         </Box>

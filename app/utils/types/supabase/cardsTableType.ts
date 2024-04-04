@@ -5,12 +5,12 @@ export type CardsTableType = {
     cardArt: string;
     cardArtPrompt: string;
     cardAttack: string;
-    cardColor: string;
+    cardEnergyAlignment: string;
     cardCreator: string;
     cardDefense: string;
     cardEnergyValue: number;
     cardEnergyCost?: { [key: string]: number };
-    cardFlavorText: string;
+    cardLoreText: string;
     cardGrade: string;
     cardName: string;
     cardPrompt: string;

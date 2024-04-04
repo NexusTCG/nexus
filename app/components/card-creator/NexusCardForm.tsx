@@ -47,14 +47,16 @@ import Snackbar from "@mui/material/Snackbar";
 import Divider from "@mui/material/Divider";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 // Icons
+import AdsClickIcon from '@mui/icons-material/AdsClick'; // Swap for melee and ranged icons
+
 import Mythic from "@/public/images/card-parts/card-icons/mythic.svg";
-import Attack from "@/public/images/card-parts/card-stats/attack.svg";
-import Defense from "@/public/images/card-parts/card-stats/defense.svg";
-import Core from "@/public/images/card-parts/card-icons/card-grades/core.svg";
-import Rare from "@/public/images/card-parts/card-icons/card-grades/rare.svg";
-import Epic from "@/public/images/card-parts/card-icons/card-grades/epic.svg";
-import Prime from "@/public/images/card-parts/card-icons/card-grades/prime.svg";
-import AdsClickIcon from '@mui/icons-material/AdsClick';
+import Attack from "@/public/images/card-parts/card-icons/card-stats/attack.svg";
+import Defense from "@/public/images/card-parts/card-icons/card-stats/defense.svg";
+
+import GradeCore from "@/public/images/card-parts/card-icons/card-grades/grade-core.svg";
+import GradeRare from "@/public/images/card-parts/card-icons/card-grades/grade-rare.svg";
+import GradeEpic from "@/public/images/card-parts/card-icons/card-grades/grade-epic.svg";
+import GradePrime from "@/public/images/card-parts/card-icons/card-grades/grade-prime.svg";
 
 type CardRenderProps = {
   cardMode: string;
@@ -71,7 +73,7 @@ export default function NexusCardForm({
   const [energyCostPopoverOpen, setEnergyCostPopOver] = useState(false);
   const [energyCostChangeCounter, setEnergyCostChangeCounter] = useState<number>(0); // Track change to force re-render
   // Card color states
-  const [cardColorType, setCardColorType] = useState<string | null>(null);
+  const [cardCostType, setCardColorType] = useState<string | null>(null);
   const [cardColor, setCardColor] = useState<string>("default");
   const [cardColorClass, setCardColorClass] = useState<string>("default");
   // Feedback states
@@ -105,10 +107,10 @@ export default function NexusCardForm({
     }, 200), []
   );
 
-  // Debounce function for cardFlavorText
+  // Debounce function for cardLoreText
   const debouncedSetCardFlavorText = useCallback(
     debounce((value: string) => {
-      setValue("cardFlavorText", value);
+      setValue("cardLoreText", value);
     }, 200), []
   );
 
@@ -120,7 +122,7 @@ export default function NexusCardForm({
   );
 
   // Dynamically calculate cardText 
-  // & cardFlavorText styles
+  // & cardLoreText styles
   // Make this a separate function
   const calculateCardTextSize = (
     textLength: number
@@ -280,25 +282,25 @@ export default function NexusCardForm({
   useEffect(() => {
     const color = determineColor(
       form.cardEnergyCost,
-      cardColorType || ""
+      cardCostType || ""
     );
     setCardColor(color);
-    setValue("cardColor", color);
+    setValue("cardEnergyAlignment", color);
   }, [
     form.cardEnergyCost,
-    cardColorType
+    cardCostType
   ]);
 
   // Determine color class 
   // based on color type and color
   useEffect(() => {
     const colorClass = determineColorClass(
-      cardColorType || "",
+      cardCostType || "",
       cardColor || ""
     );
     setCardColorClass(colorClass);
   }, [
-    cardColorType,
+    cardCostType,
     cardColor
   ]);
 
@@ -1012,7 +1014,7 @@ export default function NexusCardForm({
               {cardTextProps.flavorTextVisible && 
                 showFlavorText && cardMode === "initial" && (
                 <Controller
-                  name="cardFlavorText"
+                  name="cardLoreText"
                   control={control}
                   disabled={isSubmitting || isSubmitted}
                   render={({ field }) => (
@@ -1044,8 +1046,8 @@ export default function NexusCardForm({
                           <span
                             className={clsx("flex justify-start h-full italic mx-1 font-large", 
                               { 
-                                "text-black/50": form.cardFlavorText === "", 
-                                "text-black": form.cardFlavorText !== "", 
+                                "text-black/50": form.cardLoreText === "", 
+                                "text-black": form.cardLoreText !== "", 
                               }
                             )}
                           >
@@ -1055,8 +1057,8 @@ export default function NexusCardForm({
                         <span
                           className={clsx("flex justify-start h-full italic mx-1 font-large", 
                             { 
-                              "text-black/50": form.cardFlavorText === "", 
-                              "text-black": form.cardFlavorText !== "", 
+                              "text-black/50": form.cardLoreText === "", 
+                              "text-black": form.cardLoreText !== "", 
                             }
                           )}
                         >
@@ -1285,10 +1287,10 @@ export default function NexusCardForm({
                 >
                   <Image
                     src={
-                      form.cardGrade === "core" ? Core :
-                      form.cardGrade === "rare" ? Rare :
-                      form.cardGrade === "epic" ? Epic :
-                      form.cardGrade === "prime" ? Prime :
+                      form.cardGrade === "core" ? GradeCore :
+                      form.cardGrade === "rare" ? GradeRare :
+                      form.cardGrade === "epic" ? GradeEpic :
+                      form.cardGrade === "prime" ? GradePrime :
                       null
                     }
                     height={34}

@@ -172,19 +172,21 @@ export default function Feedback() {
               "
             />
           )}
-          {userProfileData?.username ? (<Button
-            variant="outlined"
-            color="primary"
-            disabled={!isValid || !userProfileData?.username}
-            startIcon={isSubmitting ? <CircularProgress size={24} /> : <SendIcon />}
-            type="submit"
-            size="large"
-            className="
-              w-full
-            "
-          >
-            Send request!
-          </Button>) : (
+          {userProfileData?.username ? (
+            <Button
+              variant="outlined"
+              color="primary"
+              disabled={!isValid || !userProfileData?.username}
+              startIcon={isSubmitting ? <CircularProgress size={24} /> : <SendIcon />}
+              type="submit"
+              size="large"
+              className="
+                w-full
+              "
+            >
+              Send request!
+            </Button>
+          ) : (
             <Skeleton
               variant="rectangular"
               animation="wave"

@@ -16,23 +16,29 @@ import Fade from "@mui/material/Fade";
 import Speed from "@/public/images/card-parts/card-icons/speed.svg";
 
 export default function SpeedSelect() {
-  const { setValue, watch } = useFormContext();
+  const { 
+    setValue, 
+    watch 
+  } = useFormContext();
+  const currentCardSpeed = watch("cardSpeed");
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
 
-  const currentCardSpeed = watch("cardSpeed");
-
-  const handleSpeedChange = (newSpeed: string) => {
+  function handleSpeedChange(
+    newSpeed: string
+  ) {
     setValue("cardSpeed", newSpeed);
     setOpenSnackbar(true);
   };
 
-  const handleMouseEnter = (iconSpeed: string) => {
+  function handleMouseEnter(
+    iconSpeed: string
+  ) {
     setHoveredIcon(iconSpeed);
   };
 
-  const handleMouseLeave = () => {
+ function handleMouseLeave() {
     setHoveredIcon(null);
   };
 
@@ -43,11 +49,12 @@ export default function SpeedSelect() {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpenSnackbar(false);
   };
 
-  function getOpacityClass(iconSpeed: string) {
+  function getOpacityClass(
+    iconSpeed: string
+  ) {
     const isCurrent = currentCardSpeed >= iconSpeed;
     const isHovered = hoveredIcon && hoveredIcon >= iconSpeed && hoveredIcon > currentCardSpeed;
     const isDimmedOnHover = hoveredIcon && hoveredIcon < currentCardSpeed && currentCardSpeed > iconSpeed;

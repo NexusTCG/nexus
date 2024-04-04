@@ -50,6 +50,7 @@ export const ArtPromptAccordionData = [
   { category: "technique", title: "Technique" },
   { category: "subject", title: "Subject" },
   { category: "setting", title: "Setting" },
+  // planet
   { category: "time", title: "Time" },
   { category: "weather", title: "Weather" },
   { category: "mood", title: "Mood" },

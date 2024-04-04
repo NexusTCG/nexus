@@ -4,7 +4,7 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
 // Utils
-import { monoColorOptions } from "@/app/utils/data/cardColorOptions";
+import { monoEnergyOptions } from "@/app/utils/data/cardEnergyOptions";
 import Image from "next/image";
 import clsx from "clsx";
 // Components
@@ -17,27 +17,29 @@ import Grid from "@mui/material/Grid";
 // Icons
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
-import Yellow from "@/public/images/card-parts/card-icons/card-cost/yellow.svg";
-import Blue from "@/public/images/card-parts/card-icons/card-cost/blue.svg";
-import Purple from "@/public/images/card-parts/card-icons/card-cost/purple.svg";
-import Red from "@/public/images/card-parts/card-icons/card-cost/red.svg";
-import Green from "@/public/images/card-parts/card-icons/card-cost/green.svg";
-import Void0 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
-import Void1 from "@/public/images/card-parts/card-icons/card-cost/void-1.svg";
-import Void2 from "@/public/images/card-parts/card-icons/card-cost/void-2.svg";
-import Void3 from "@/public/images/card-parts/card-icons/card-cost/void-3.svg";
-import Void4 from "@/public/images/card-parts/card-icons/card-cost/void-4.svg";
-import Void5 from "@/public/images/card-parts/card-icons/card-cost/void-5.svg";
-import Void6 from "@/public/images/card-parts/card-icons/card-cost/void-6.svg";
-import Void7 from "@/public/images/card-parts/card-icons/card-cost/void-7.svg";
-import Void8 from "@/public/images/card-parts/card-icons/card-cost/void-8.svg";
-import Void9 from "@/public/images/card-parts/card-icons/card-cost/void-9.svg";
-import Void10 from "@/public/images/card-parts/card-icons/card-cost/void-10.svg";
-import Void11 from "@/public/images/card-parts/card-icons/card-cost/void-11.svg";
-import Void12 from "@/public/images/card-parts/card-icons/card-cost/void-12.svg";
-import Void13 from "@/public/images/card-parts/card-icons/card-cost/void-13.svg";
-import Void14 from "@/public/images/card-parts/card-icons/card-cost/void-14.svg";
-import Void15 from "@/public/images/card-parts/card-icons/card-cost/void-15.svg";
+
+import EnergyRadiant from "@/public/images/card-parts/card-icons/card-cost/energy-radiant.svg";
+import EnergyVolatile from "@/public/images/card-parts/card-icons/card-cost/energy-volatile.svg";
+import EnergyCorrupt from "@/public/images/card-parts/card-icons/card-cost/energy-corrupt.svg";
+import EnergyBlaze from "@/public/images/card-parts/card-icons/card-cost/energy-blaze.svg";
+import EnergyVerdant from "@/public/images/card-parts/card-icons/card-cost/energy-verdant.svg";
+
+import EnergyVoid0 from "@/public/images/card-parts/card-icons/card-cost/energy-void-0.svg";
+import EnergyVoid1 from "@/public/images/card-parts/card-icons/card-cost/energy-void-1.svg";
+import EnergyVoid2 from "@/public/images/card-parts/card-icons/card-cost/energy-void-2.svg";
+import EnergyVoid3 from "@/public/images/card-parts/card-icons/card-cost/energy-void-3.svg";
+import EnergyVoid4 from "@/public/images/card-parts/card-icons/card-cost/energy-void-4.svg";
+import EnergyVoid5 from "@/public/images/card-parts/card-icons/card-cost/energy-void-5.svg";
+import EnergyVoid6 from "@/public/images/card-parts/card-icons/card-cost/energy-void-6.svg";
+import EnergyVoid7 from "@/public/images/card-parts/card-icons/card-cost/energy-void-7.svg";
+import EnergyVoid8 from "@/public/images/card-parts/card-icons/card-cost/energy-void-8.svg";
+import EnergyVoid9 from "@/public/images/card-parts/card-icons/card-cost/energy-void-9.svg";
+import EnergyVoid10 from "@/public/images/card-parts/card-icons/card-cost/energy-void-10.svg";
+import EnergyVoid11 from "@/public/images/card-parts/card-icons/card-cost/energy-void-11.svg";
+import EnergyVoid12 from "@/public/images/card-parts/card-icons/card-cost/energy-void-12.svg";
+import EnergyVoid13 from "@/public/images/card-parts/card-icons/card-cost/energy-void-13.svg";
+import EnergyVoid14 from "@/public/images/card-parts/card-icons/card-cost/energy-void-14.svg";
+import EnergyVoid15 from "@/public/images/card-parts/card-icons/card-cost/energy-void-15.svg";
 
 type EnergyCostPopoverProps = {
   open: boolean;
@@ -52,22 +54,22 @@ type EnergyCosts = {
 };
 
 const voidEnergyIcons = [
-  Void0,
-  Void1,
-  Void2,
-  Void3,
-  Void4,
-  Void5,
-  Void6,
-  Void7,
-  Void8,
-  Void9,
-  Void10,
-  Void11,
-  Void12,
-  Void13,
-  Void14,
-  Void15,
+  EnergyVoid0,
+  EnergyVoid1,
+  EnergyVoid2,
+  EnergyVoid3,
+  EnergyVoid4,
+  EnergyVoid5,
+  EnergyVoid6,
+  EnergyVoid7,
+  EnergyVoid8,
+  EnergyVoid9,
+  EnergyVoid10,
+  EnergyVoid11,
+  EnergyVoid12,
+  EnergyVoid13,
+  EnergyVoid14,
+  EnergyVoid15,
 ];
 
 export default function EnergyCostPopover({
@@ -93,13 +95,13 @@ export default function EnergyCostPopover({
 
   // Cost change handler
   async function handleCostChange(
-    color: string,
+    energy: string,
     delta: number
   ) {
     // Get the current energy cost values
     const energyCosts = getValues("cardEnergyCost") as EnergyCosts;
   
-    // Calculate the total of non-void colors before any changes
+    // Calculate the total of non-void energies before any changes
     const nonVoidTotalBefore = Object
       .entries(energyCosts)
       .filter(([key]) => key !== "void")
@@ -113,16 +115,16 @@ export default function EnergyCostPopover({
   
     // Determine if adding this delta will exceed the non-void or total limits
     const willExceedNonVoidLimit =
-      color !== "void" &&
+    energy !== "void" &&
       (nonVoidTotalBefore + delta > 5 ||
-      energyCosts[color] + delta > 5);
+      energyCosts[energy] + delta > 5);
 
     const willExceedTotalLimit =
       totalEnergyBefore + delta > 15;
   
     // Prevent changes that exceed limits
     if (willExceedNonVoidLimit || (
-      color === "void" && willExceedTotalLimit
+      energy === "void" && willExceedTotalLimit
     )) {
       console.log("Limit reached, cannot increase further.");
       return;
@@ -132,11 +134,11 @@ export default function EnergyCostPopover({
     let newCost = Math
       .max(
         0,
-        energyCosts[color] +
+        energyCosts[energy] +
         delta
       );
 
-    if (color !== "void") {
+    if (energy !== "void") {
       newCost = Math
         .min(newCost, 5);
     } else {
@@ -149,7 +151,7 @@ export default function EnergyCostPopover({
     // Update the energy costs with the new value
     const updatedEnergyCosts = {
       ...energyCosts,
-      [color]: newCost
+      [energy]: newCost
     };
   
     // Calculate the new total energy value
@@ -164,7 +166,7 @@ export default function EnergyCostPopover({
       // Set new values
       setValue(
         "cardEnergyCost." +
-        color, newCost, {
+        energy, newCost, {
           shouldValidate: true
         });
       setValue(
@@ -183,7 +185,7 @@ export default function EnergyCostPopover({
       );
   
       console.log(
-        `Color values: ${JSON.stringify(updatedEnergyCosts)}`
+        `Energy values: ${JSON.stringify(updatedEnergyCosts)}`
       );
       console.log(
         `Total value: ${newTotalEnergyValue}`
@@ -253,9 +255,9 @@ export default function EnergyCostPopover({
             maxWidth: 360,
           }}
         >
-          {Object.keys(monoColorOptions).map((color) => (
+          {Object.keys(monoEnergyOptions).map((energy) => (
             <Grid
-              key={color}
+              key={energy}
               item
               xs={4}
             >
@@ -263,51 +265,51 @@ export default function EnergyCostPopover({
                 className={clsx("flex flex-col justify-center items-center w-full gap-1 py-1 px-2 rounded-lg hover:shadow-md hover:shadow-gray-900/50",
                   {
                     "bg-yellow-500":
-                      color === "yellow",
+                      energy === "radiant",
                     "bg-opacity-10 hover:bg-opacity-20 border border-yellow-500/0 hover:border-yellow-500/40":
-                      color === "yellow" && watchCardEnergyCost[color] === 0,
+                      energy === "radiant" && watchCardEnergyCost[energy] === 0,
                     "bg-opacity-40 border border-yellow-500/80 shadow-sm shadow-gray-900/50":
-                      color === "yellow" && watchCardEnergyCost[color] > 0,
+                      energy === "radiant" && watchCardEnergyCost[energy] > 0,
                   },
                   {
                     "bg-sky-500":
-                      color === "blue",
+                      energy === "volatile",
                     "bg-opacity-10 hover:bg-opacity-20 border border-sky-500/0 hover:border-sky-500/40":
-                      color === "blue" && watchCardEnergyCost[color] === 0,
+                      energy === "volatile" && watchCardEnergyCost[energy] === 0,
                     "bg-opacity-40 border border-sky-500/80 shadow-sm shadow-gray-900/50":
-                      color === "blue" && watchCardEnergyCost[color] > 0,
+                      energy === "volatile" && watchCardEnergyCost[energy] > 0,
                   },
                   {
                     "bg-violet-500":
-                      color === "purple",
+                      energy === "corrupt",
                     "bg-opacity-10 hover:bg-opacity-20 border border-violet-500/0 hover:border-violet-500/40":
-                      color === "purple" && watchCardEnergyCost[color] === 0,
+                      energy === "corrupt" && watchCardEnergyCost[energy] === 0,
                     "bg-opacity-40 border border-violet-500/80 shadow-sm shadow-gray-900/50":
-                      color === "purple" && watchCardEnergyCost[color] > 0,
+                      energy === "corrupt" && watchCardEnergyCost[energy] > 0,
                   },
                   {
                     "bg-red-500":
-                      color === "red",
+                    energy === "blaze",
                     "bg-opacity-10 hover:bg-opacity-20 border border-red-500/0 hover:border-red-500/40":
-                      color === "red" && watchCardEnergyCost[color] === 0,
+                      energy === "blaze" && watchCardEnergyCost[energy] === 0,
                     "bg-opacity-40 border border-red-500/80 shadow-sm shadow-gray-900/50":
-                      color === "red" && watchCardEnergyCost[color] > 0,
+                      energy === "blaze" && watchCardEnergyCost[energy] > 0,
                   },
                   {
                     "bg-lime-500":
-                      color === "green",
+                      energy === "verdant",
                     "bg-opacity-10 hover:bg-opacity-20 border border-lime-500/0 hover:border-lime-500/40":
-                      color === "green" && watchCardEnergyCost[color] === 0,
+                      energy === "verdant" && watchCardEnergyCost[energy] === 0,
                     "bg-opacity-40 border border-lime-500/80 shadow-sm shadow-gray-900/50":
-                      color === "green" && watchCardEnergyCost[color] > 0,
+                      energy === "verdant" && watchCardEnergyCost[energy] > 0,
                   },
                   {
                     "bg-gray-500":
-                      color === "void",
+                      energy === "void",
                     "bg-opacity-10 hover:bg-opacity-20 border border-gray-500/0 hover:border-gray-500/40":
-                      color === "void" && watchCardEnergyCost[color] === 0,
+                      energy === "void" && watchCardEnergyCost[energy] === 0,
                     "bg-opacity-40 border border-ligrayme-500/80 shadow-sm shadow-gray-900/50":
-                      color === "void" && watchCardEnergyCost[color] > 0,
+                      energy === "void" && watchCardEnergyCost[energy] > 0,
                   }
                 )}
               >
@@ -324,17 +326,17 @@ export default function EnergyCostPopover({
                 >
                   <Image
                     src={
-                      color === "yellow" ? Yellow
-                      : color === "blue" ? Blue
-                      : color === "purple" ? Purple
-                      : color === "red" ? Red
-                      : color === "green" ? Green
-                      : color === "void" ? voidEnergyIcons[watchVoidEnergyValue]
+                      energy === "radiant" ? EnergyRadiant
+                      : energy === "volatile" ? EnergyVolatile
+                      : energy === "corrupt" ? EnergyCorrupt
+                      : energy === "blaze" ? EnergyBlaze
+                      : energy === "verdant" ? EnergyVerdant
+                      : energy === "void" ? voidEnergyIcons[watchVoidEnergyValue]
                       : null
                     }
                     width={30}
                     height={30}
-                    alt={`${color} energy icon`}
+                    alt={`${energy} energy icon`}
                   />
                 </Box>
 
@@ -352,27 +354,27 @@ export default function EnergyCostPopover({
                 >
                 <IconButton
                   disabled={
-                    (color !== "void" &&
-                      watchCardEnergyCost[color] >= 5
+                    (energy !== "void" &&
+                      watchCardEnergyCost[energy] >= 5
                     ) ||
-                    (color !== "void" && Object
+                    (energy !== "void" && Object
                       .entries(watchCardEnergyCost)
                       .reduce((acc, [key, val]) => {
                         return key !== "void" ?
                         acc + val : acc;
                       }, 0) >= 5
                     ) ||
-                    (color === "void" && Object
+                    (energy === "void" && Object
                       .values(watchCardEnergyCost)
                       .reduce((acc, val) =>
                         acc + val,
                         0) >= 15
                     )
                   }
-                  onClick={() => handleCostChange(color, +1)}
+                  onClick={() => handleCostChange(energy, +1)}
                   className={clsx(
                     "hover:opacity-100",
-                    watchCardEnergyCost[color] === 0 && "opacity-50",
+                    watchCardEnergyCost[energy] === 0 && "opacity-50",
                   )}
                 >
                   <AddIcon fontSize="small" />
@@ -381,19 +383,19 @@ export default function EnergyCostPopover({
                     variant="body1"
                     className={clsx(
                       "font-semibold text-gray-200 text-lg text-center",
-                      watchCardEnergyCost[color] === 0 && "opacity-50",
+                      watchCardEnergyCost[energy] === 0 && "opacity-50",
                     )}
                   >
-                    {watchCardEnergyCost[color]}
+                    {watchCardEnergyCost[energy]}
                   </Typography>
                 <IconButton
-                  disabled={watchCardEnergyCost[color] === 0}
-                  onClick={() => handleCostChange(color, -1)}
+                  disabled={watchCardEnergyCost[energy] === 0}
+                  onClick={() => handleCostChange(energy, -1)}
                   size="small"
                   className={clsx(
                     "hover:opacity-100",
-                    watchCardEnergyCost[color] === 0 && "opacity-25",
-                    watchCardEnergyCost[color] > 0 && "opacity-50",
+                    watchCardEnergyCost[energy] === 0 && "opacity-25",
+                    watchCardEnergyCost[energy] > 0 && "opacity-50",
                   )}
                 >
                   <RemoveIcon

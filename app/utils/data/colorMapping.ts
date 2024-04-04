@@ -1,3 +1,4 @@
+// Maps Tailwind CSS colors to their respective classes
 const colorMapping = {
     yellow: {
         50: "bg-yellow-50",

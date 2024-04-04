@@ -1,14 +1,20 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import IconButton from "@mui/material/IconButton";
+// Hooks
+import React, { 
+  useState, 
+  useEffect 
+} from "react";
+// Utils
 import Link from "@mui/material/Link";
+import clsx from "clsx";
+// Icons
+import IconButton from "@mui/material/IconButton";
 import GitHubIcon from '@mui/icons-material/GitHub';
 import XIcon from '@mui/icons-material/X';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import RedditIcon from '@mui/icons-material/Reddit';
 import { FaDiscord } from "react-icons/fa";
-import clsx from "clsx";
 
 type SoMeButtonProps = {
   channel: string;

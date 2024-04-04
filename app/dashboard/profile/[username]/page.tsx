@@ -1,30 +1,36 @@
 "use client";
 
+// Hooks
 import React, {
   useState,
   useEffect,
   useRef,
 } from "react";
+// Actions
 import fetchUserProfiles from "@/app/lib/actions/supabase-data/fetchUserProfilesData";
 import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
-import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
+// Utils
 import Image from "next/image";
 import Link from "next/link";
+// Types
+import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
+// Components
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
 import CircularProgress from "@mui/material/CircularProgress";
+// Icons
 import UploadIcon from '@mui/icons-material/Upload';
 
 export default function ProfileId({
   params 
 }: {
-  params: { username: string } 
+  params: { 
+    username: string 
+  } 
 }) {
-
-  // const [isProfileOwner, setIsProfileOwner] = useState<boolean>(false);
   const [userUsername, setUserUsername] = useState<string>("");
   const [userAvatarUrl, setUserAvatarUrl] = useState<string>("");
   const [userFirstName, setUserFirstName] = useState<string>("");
@@ -34,11 +40,48 @@ export default function ProfileId({
   const [userAvatarUploading, setUserAvatarUploading] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  // const user = useSession()?.user;
-
-  // const { userProfileData } = useContext(DashboardContext);
-  // const router = useRouter();
   const username = params.username;
+
+  // Handle avatar upload click
+  function handleUploadClick() {
+    fileInputRef.current?.click();
+  }
+
+  // Handle avatar upload
+  async function handleAvatarChange(
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    const file = event.target.files?.[0];
+    console.log(file);
+    if (!file) return;
+    setUserAvatarUploading(true);
+
+    try {
+      const formData = new FormData();
+      const filename = `${userUsername}-avatar.png`;
+      formData.append("file", file);
+      formData.append("filename", filename.toLowerCase());
+
+      const response = await fetch('/api/data/upload-avatar', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const jsonResponse = await response.json();
+        setUserAvatarUrl(jsonResponse.data); 
+        // TODO: Update user profile with new avatar URL
+        // Remove setter for userAvatarUrl as its updated by useEffect
+        // Make this a function instead of API call
+        // Upload new image, and set user's avatar_url in profiles table
+      } else {
+        console.error("Failed to upload avatar");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    setUserAvatarUploading(false);
+  }
 
   // Fetch user profile matching the params.slug
   useEffect(() => {
@@ -114,47 +157,6 @@ export default function ProfileId({
       fetchCardData();
     };
   }, [userUsername]);
-
-  // Handle avatar upload click
-  function handleUploadClick() {
-    fileInputRef.current?.click();
-  }
-
-  // Handle avatar upload
-  async function handleAvatarChange(
-    event: React.ChangeEvent<HTMLInputElement>
-  ) {
-    const file = event.target.files?.[0];
-    console.log(file);
-    if (!file) return;
-    setUserAvatarUploading(true);
-
-    try {
-      const formData = new FormData();
-      const filename = `${userUsername}-avatar.png`;
-      formData.append("file", file);
-      formData.append("filename", filename.toLowerCase());
-
-      const response = await fetch('/api/data/upload-avatar', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        const jsonResponse = await response.json();
-        setUserAvatarUrl(jsonResponse.data); 
-        // TODO: Update user profile with new avatar URL
-        // Remove setter for userAvatarUrl as its updated by useEffect
-        // Make this a function instead of API call
-        // Upload new image, and set user's avatar_url in profiles table
-      } else {
-        console.error("Failed to upload avatar");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    setUserAvatarUploading(false);
-  }
 
   return (
     <Box

@@ -14,12 +14,12 @@ export type Database = {
           cardArt: string
           cardArtPrompt: string | null
           cardAttack: string | null
-          cardColor: string
+          cardEnergyAlignment: string
           cardCreator: string | null
           cardDefense: string | null
           cardEnergyCost: Json | null
           cardEnergyValue: number | null
-          cardFlavorText: string | null
+          cardLoreText: string | null
           cardGrade: string | null
           cardName: string
           cardPrompt: string | null
@@ -37,12 +37,12 @@ export type Database = {
           cardArt?: string
           cardArtPrompt?: string | null
           cardAttack?: string | null
-          cardColor: string
+          cardEnergyAlignment: string
           cardCreator?: string | null
           cardDefense?: string | null
           cardEnergyCost?: Json | null
           cardEnergyValue?: number | null
-          cardFlavorText?: string | null
+          cardLoreText?: string | null
           cardGrade?: string | null
           cardName: string
           cardPrompt?: string | null
@@ -60,12 +60,12 @@ export type Database = {
           cardArt?: string
           cardArtPrompt?: string | null
           cardAttack?: string | null
-          cardColor?: string
+          cardEnergyAlignment?: string
           cardCreator?: string | null
           cardDefense?: string | null
           cardEnergyCost?: Json | null
           cardEnergyValue?: number | null
-          cardFlavorText?: string | null
+          cardLoreText?: string | null
           cardGrade?: string | null
           cardName?: string
           cardPrompt?: string | null

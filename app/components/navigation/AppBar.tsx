@@ -1,15 +1,19 @@
 "use client";
 
+// Hooks
 import React, { useState } from "react";
-import NavigationButton from "@/app/components/navigation/NavigationButton";
+// Utils
 import Image from "next/image";
 import Link from "next/link";
+// Components
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
-import { AccountCircle } from "@mui/icons-material";
+import NavigationButton from "@/app/components/navigation/NavigationButton";
+// Icons
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const primaryNavigation = [
   "create",
@@ -136,7 +140,7 @@ export default function AppBar() {
           onClick={handleMenu}
           color="inherit"
         >
-          <AccountCircle />
+          <AccountCircleIcon />
         </IconButton>
         <Menu
           id="menu-appbar"

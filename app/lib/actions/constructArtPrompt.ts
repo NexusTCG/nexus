@@ -16,7 +16,7 @@ export default async function ConstructArtPrompt(
   userPrompt: string
 ): Promise<string> {
 
-    const promptStart = "Digital painting, digital illustration, sci-fi, fantasy, rule of thirds, dynamic poses, centered focus. ";
+    const promptStart = "Digital painting, illustration, sci-fi, fantasy, rule of thirds, dynamic poses, centered focus. ";
     const style = selections.style ? `Style: ${selections.style}` : "";
     const technique = selections.technique ? `Technique: ${selections.technique}` : "";
     const subject = selections.subject ? `subject: ${selections.subject}` : "";

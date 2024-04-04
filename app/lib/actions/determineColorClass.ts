@@ -1,69 +1,70 @@
 export default function determineColorClass(
-    cardColorType: string,
-    cardColor: string
+    cardCostType: string,
+    cardEnergy: string
 ) {
-    switch (cardColorType) {
+    switch (cardCostType) {
         case "mono":
-            switch (cardColor) {
-                case "yellow":
-                    return "yellow";
+            switch (cardEnergy) {
+                case "radiant":
+                    return "radiant";
 
-                case "blue":
+                case "volatile":
                     return "sky";
 
-                case "purple":
+                case "corrupt":
                     return "violet";
 
-                case "red":
-                    return "red";
+                case "blaze":
+                    return "blaze";
 
-                case "green":
+                case "verdant":
                     return "lime";
 
+                // void
                 default:
-                    return "gray"; // void
+                    return "gray";
             };
 
         case "dual":
-            switch (cardColor) {
-                case "yellowBlue":
-                    return "yellowBlue";
+            switch (cardEnergy) {
+                case "radiantVolatile":
+                    return "radiantVolatile";
 
-                case "yellowPurple":
-                    return "yellowPurple";
+                case "radiantCorrupt":
+                    return "radiantCorrupt";
 
-                case "yellowRed":
-                    return "yellowRed";
+                case "radiantBlaze":
+                    return "radiantBlaze";
 
-                case "yellowGreen":
-                    return "yellowGreen";
+                case "radiantVerdant":
+                    return "radiantVerdant";
 
-                case "bluePurple":
-                    return "bluePurple";
+                case "volatileCorrupt":
+                    return "volatileCorrupt";
 
-                case "blueRed":
-                    return "blueRed";
+                case "volatileBlaze":
+                    return "volatileBlaze";
 
-                case "blueGreen":
-                    return "blueGreen";
+                case "volatileVerdant":
+                    return "volatilevVerdant";
 
-                case "purpleRed":
-                    return "purpleRed";
+                case "corruptBlaze":
+                    return "corruptBlaze";
 
-                case "purpleGreen":
-                    return "purpleGreen";
+                case "corruptVerdant":
+                    return "corruptVerdant";
 
                 default:
-                    return "redGreen"; // redGreen
+                    return "blazeVerdant";
             };
 
         case "multi":
             return "multi"
 
-        case "node":
-            return "node";
+        case "anomaly":
+            return "anomaly";
 
         default:
-            return "default"; // default
+            return "default";
     };
 };

@@ -1,11 +1,14 @@
 "use client";
 
 import React from "react";
+// Utils
+import Image from "next/image";
+import Link from "next/link";
+// Custom components
 import SoMeButton from "@/app/components/navigation/SoMeButton";
 import NavigationButton from "@/app/components/navigation/NavigationButton";
 import SignOutButton from "@/app/components/auth/SignOutButton"
-import Image from "next/image";
-import Link from "next/link";
+// Components
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 

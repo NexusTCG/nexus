@@ -1,5 +1,6 @@
 "use client";
 
+// Hooks
 import React, {
   useState,
   useEffect,
@@ -7,11 +8,16 @@ import React, {
 } from "react";
 import { useRouter } from "next/navigation";
 import { DashboardContext } from "@/app/context/DashboardContext";
-import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
+// Actions
 import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
-import CardRender from "@/app/components/card-creator/CardRender";
+// Utils
 import Link from "next/link";
 import { format } from 'date-fns';
+// Types
+import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
+// Custom Components
+import CardRender from "@/app/components/card-creator/CardRender";
+// Components
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -19,6 +25,7 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Skeleton from "@mui/material/Skeleton";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
+// Icons
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import IosShareIcon from "@mui/icons-material/IosShare";
@@ -105,7 +112,6 @@ export default function Card({
     // TODO: Implement delete functionality
     // Import and invoke Supabase delete function
   }
-
   // TODO: If card not found, display a message
   // TODO: If current user = card creator, allow sharing / downloading
   // TODO: If current user = card creator, allow editing

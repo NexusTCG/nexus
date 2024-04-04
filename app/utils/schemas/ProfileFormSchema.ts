@@ -16,9 +16,6 @@ const ProfileFormSchema = z.object({
     .string()
     .max(50)
     .optional(),
-  // avatar_url: z
-  //   .string()
-  //   .optional(),
   bio: z
     .string()
     .max(150)

@@ -5,12 +5,12 @@ export type CardFormDataType = {
   cardArt?: string;
   cardArtPrompt?: string | null;
   cardAttack?: string | null;
-  cardColor: string | null;
+  cardEnergyAlignment: string | null;
   cardCreator?: string | null;
   cardDefense?: string | null;
   cardEnergyCost?: { [key: string]: number } | null;
   cardEnergyValue?: number | null;
-  cardFlavorText?: string | null;
+  cardLoreText?: string | null;
   cardGrade?: string;
   cardName?: string;
   cardPrompt?: string | null;
@@ -39,19 +39,18 @@ export type EntityTypesType = {
   name: string;
   description: string;
   artPrompt: string;
-  primaryColors: string[];
-  secondaryColors: string[];
+  primaryEnergies: string[];
+  secondaryEnergies: string[];
   planets: string[];
-  frequency: string;
-  role: boolean;
+  roles: boolean;
 };
 
 export type EnergyTypesType = {
-  yellow: number;
-  blue: number;
-  purple: number;
-  red: number;
-  green: number;
+  radiant: number;
+  volatile: number;
+  corrupt: number;
+  blaze: number;
+  verdant: number;
   void: number;
 };
 

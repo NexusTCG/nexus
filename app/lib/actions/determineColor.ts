@@ -1,103 +1,102 @@
 import { CardFormDataType } from "@/app/utils/types/types";
 import {
-  monoColorOptions,
-  dualColorOptions
-} from "@/app/utils/data/cardColorOptions";
+  monoEnergyOptions,
+  dualEnergyOptions
+} from "@/app/utils/data/cardEnergyOptions";
 
-export default function determineColor(
+export default function determineEnergy(
     activeCardCost: CardFormDataType["cardEnergyCost"],
-    cardColorType: string
+    cardCostType: string
 ) {
-    if (cardColorType === "anomaly") {
-      // If the card type is anomaly, return anomaly
+    if (cardCostType === "anomaly") {
       return "anomaly";
     }
 
-    // Get color and value pairs
+    // Get energy and value pairs
     const energyCostEntries = Object
     .entries(
       activeCardCost ?? {}
     );
 
-    // Get non-void colors with value > 0
-    const coloredCosts = energyCostEntries
+    // Get non-void energys with value > 0
+    const nonVoidEnergyCosts = energyCostEntries
     .filter(
-      ([color, value]) =>
-      color !== monoColorOptions.void
+      ([energy, value]) =>
+      energy !== monoEnergyOptions.void
       && value > 0
     );
 
     // Get void colors with value > 0
-    const colorlessCost = energyCostEntries
+    const voidEnergyCosts = energyCostEntries
     .filter(
-      ([color, value]) =>
-      color === monoColorOptions.void
+      ([energy, value]) =>
+      energy === monoEnergyOptions.void
       && value > 0
     );
 
     if (
-      coloredCosts.length === 0 && 
-      colorlessCost.length > 0 && 
-      cardColorType === "mono"
+      nonVoidEnergyCosts.length === 0 && 
+      voidEnergyCosts.length > 0 && 
+      cardCostType === "mono"
     ) {
       // If there's only void costs, return void
       return "void";
 
     } else if (
-      coloredCosts && 
-      cardColorType === "mono"
+      nonVoidEnergyCosts && 
+      cardCostType === "mono"
     ) {
-      // If there's only one non-void color,
-      // find and return that color
-      const monoColor = coloredCosts
-          .find(([color]) => color !== monoColorOptions.void);
-      return monoColor ? monoColor[0] : "default";
+      // If there's only one non-void energy,
+      // find and return that energy
+      const monoEnergy = nonVoidEnergyCosts
+          .find(([energy]) => energy !== monoEnergyOptions.void);
+      return monoEnergy ? monoEnergy[0] : "default";
 
     } else if (
-      coloredCosts && 
-      cardColorType === "dual"
+      nonVoidEnergyCosts && 
+      cardCostType === "dual"
     ) {
-      // If there's two non-void colors, sort them,
-      // then find and return the dual color pair
-      const colorOrder = [
-        "yellow",
-        "blue",
-        "purple",
-        "red",
-        "green"
+      // If there's two non-void energies, sort them,
+      // then find and return the dual energy pair
+      const energyOrder = [
+        "radiant",
+        "volatile",
+        "corrupt",
+        "blaze",
+        "verdant"
       ];
 
-      // Sort the dual color pair by color order
-      const sortByColorOrder = (
-        colorA: string,
-        colorB: string
+      // Sort the dual energy pair by energy order
+      const sortByEnergyOrder = (
+        energyA: string,
+        energyB: string
       ) => {
-        const indexA = colorOrder.indexOf(colorA);
-        const indexB = colorOrder.indexOf(colorB);
+        const indexA = energyOrder.indexOf(energyA);
+        const indexB = energyOrder.indexOf(energyB);
         return indexA - indexB;
       };
 
-      // Get the sorted dual color pair
-      const activeDualColors = coloredCosts
-        .map(([color]) => color)
-        .sort((a, b) => sortByColorOrder(a, b));
+      // Get the sorted dual energy pair
+      const activeDualEnergies = nonVoidEnergyCosts
+        .map(([energy]) => energy)
+        .sort((a, b) => sortByEnergyOrder(a, b));
 
-      // Find the dual color pair
-      const colorKey = `${activeDualColors[0]}${activeDualColors[1]}`;
-      const dualColorKey = Object.keys(dualColorOptions).find(
-        key => key.toLowerCase() === colorKey.toLowerCase()
+      // Find the dual energy pair
+      const energyKey = `${activeDualEnergies[0]}${activeDualEnergies[1]}`;
+      const dualEnergyKey = Object.keys(dualEnergyOptions).find(
+        key => key.toLowerCase() === energyKey.toLowerCase()
       );
 
-      // Return the dual color pair
-      return dualColorKey
-        ? dualColorOptions[dualColorKey as keyof typeof dualColorOptions]
+      // Return the dual energy pair
+      return dualEnergyKey
+        ? dualEnergyOptions[dualEnergyKey as keyof typeof dualEnergyOptions]
         : "default";
 
     } else if (
-      coloredCosts && 
-      cardColorType === "multi"
+      nonVoidEnergyCosts && 
+      cardCostType === "multi"
     ) {
-      // If there's three or more non-void colors, return multi
+      // If there's three or more non-void energies, return multi
       return "multi"
 
     } else {
