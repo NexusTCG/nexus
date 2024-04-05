@@ -75,7 +75,9 @@ export default function AppBarLandingPage() {
               "
             />
           </Link>
-          <Link href="https://github.com/NexusTCG">
+          <Link
+            href="https://github.com/NexusTCG"
+          >
             <GitHub
               style={{
                 fontSize: "24px"
@@ -85,6 +87,20 @@ export default function AppBarLandingPage() {
                 hover:opacity-80
               "
             />
+          </Link>
+          <Link
+            href="https://github.com/NexusTCG/wiki/wiki/Rules"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="
+              w-full 
+              min-w-fit
+              font-semibold
+              text-white
+              hover:text-white/80
+            "
+          >
+            GAME RULES
           </Link>
           <NavigationButton
             route={"login"}
