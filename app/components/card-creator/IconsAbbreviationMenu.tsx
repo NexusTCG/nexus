@@ -95,6 +95,32 @@ export default function IconsAbbreviationMenu() {
             </Box>
           ))
         }
+        <Typography
+          variant="body1"
+          component="span"
+          className="
+            flex 
+            flex-row 
+            gap-2
+            text-white
+            font-semibold
+            py-2
+            px-3
+            rounded-md
+            hover:bg-neutral-900/50
+          "
+        >
+          ~ {" "}
+          <Typography
+            variant="body1"
+            className="
+              text-neutral-300
+              hover:text-neutral-300/50
+            "
+          >
+            renders the card name
+          </Typography>
+        </Typography>
       </Box>
     </Box>
   );
