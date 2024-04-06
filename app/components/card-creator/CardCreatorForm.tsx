@@ -994,8 +994,6 @@ export default function CardCreatorForm({
             />
           </div>
 
-          <IconsAbbreviationMenu />
-
           {cardMode === "anomaly" && (
             <Typography
               variant="body2"
@@ -1092,6 +1090,8 @@ export default function CardCreatorForm({
               ))}
             </Box>
           </Box>)}
+
+          <IconsAbbreviationMenu />
         </Box>
       </Box>
     </Box>
