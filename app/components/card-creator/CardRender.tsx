@@ -159,7 +159,7 @@ const CardRender = ({
                     style={{ 
                       display: "inline-block"
                     }}
-                    className="mx-0.5"
+                    className="mx-0.25"
                   />
                 </Tooltip>
               );
@@ -1078,7 +1078,7 @@ const CardRender = ({
                       />
                     )}
                     {/* Card name */}
-                    {cardData.cardAnomalyModeGrade === "uncommon" ? (
+                    {cardData.cardAnomalyMode === "uncommon" ? (
                       <Typography
                         variant="subtitle1"
                         sx={{
