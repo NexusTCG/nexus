@@ -461,7 +461,7 @@ export default function Create() {
                       type="submit"
                       variant="outlined"
                       disabled={
-                        !isValid || // Commented out before
+                        !isValid ||
                         isSubmitting ||
                         isSubmitted ||
                         form.cardType === null ||
@@ -469,7 +469,7 @@ export default function Create() {
                       }
                       color={isValid ? "success" : "secondary"}
                       startIcon={<SaveIcon />}
-                      size="large" // TODO: Dynamically change size based on screen size
+                      size="large"
                       className="
                         hover:cursor-pointer
                         hover:bg-teal-600/30

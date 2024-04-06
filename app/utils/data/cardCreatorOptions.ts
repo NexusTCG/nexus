@@ -18,6 +18,11 @@ export const cardTypeOptions = {
   outpostObject: "Outpost Object",
 };
 
+export const anomalyTypeOptions = {
+  commonAnomaly: "Common Anomaly",
+  uncommonAnomaly: "Uncommon Anomaly",
+};
+
 export const cardSubTypeOptions = {
   default: "",
   entity: Object.fromEntries(

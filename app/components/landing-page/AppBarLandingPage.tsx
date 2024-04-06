@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 // Custom components
 import NavigationButton from "@/app/components/navigation/NavigationButton";
-
 // Components
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";

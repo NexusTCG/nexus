@@ -16,12 +16,14 @@ import Image from "next/image";
 import clsx from "clsx";
 // Data
 import { Keywords } from "@/app/utils/data/Keywords";
+import { abbreviationIcons } from "@/app/utils/data/abbreviationIcons";
 // Custom Components
 import Keyword from "@/app/components/card-creator/Keyword";
 // Components
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
+import Tooltip from "@mui/material/Tooltip";
 import Divider from "@mui/material/Divider";
 // Icons
 import EnergyRadiant from "@/public/images/card-parts/card-icons/card-cost/energy-radiant.svg";
@@ -50,12 +52,18 @@ import EnergyVoid15 from "@/public/images/card-parts/card-icons/card-cost/energy
 import Attack from "@/public/images/card-parts/card-icons/card-stats/attack.svg";
 import Defense from "@/public/images/card-parts/card-icons/card-stats/defense.svg";
 import Speed from "@/public/images/card-parts/card-icons/speed.svg";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import Speed2 from "@/public/images/card-parts/card-icons/speed2.svg";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import Speed3 from "@/public/images/card-parts/card-icons/speed3.svg";
 import Mythic from "@/public/images/card-parts/card-icons/mythic.svg";
 
 import RangeMelee from "@/public/images/card-parts/card-icons/range-melee.svg";
 import RangeRanged from "@/public/images/card-parts/card-icons/range-ranged.svg";
-// import StateLocked from "@/public/images/card-parts/card-icons/state-locked.svg";
-// import StateUnlocked from "@/public/images/card-parts/card-icons/state-unlocked.svg";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import StateLocked from "@/public/images/card-parts/card-icons/state-locked.svg";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import StateUnlocked from "@/public/images/card-parts/card-icons/state-unlocked.svg";
 
 import GradeCore from "@/public/images/card-parts/card-icons/card-grades/grade-core.svg";
 import GradeRare from "@/public/images/card-parts/card-icons/card-grades/grade-rare.svg";
@@ -92,6 +100,7 @@ const CardRender = ({
 }: CardRenderProps) => {
     const [fontSize, setFontSize] = useState<string>("15px");
     const [lineHeight, setLineHeight] = useState<string>("17px");
+    const [inlineIconSize, setInlineIconSize] = useState<number>(18);
     const [bgImage, setBgImage] = useState<string>("");
     const [bgColor, setBgColor] = useState<Record<string, string>>({
       "50": "bg-slate-50",
@@ -111,59 +120,102 @@ const CardRender = ({
           .toLowerCase();
     }
 
-    // Utility function to render text with keywords
+    // Render text with keywords
     function renderTextWithKeywords(
-      text: string, 
+      text: string,
       cardName: string
     ) {
-      const keywordPattern = Object
-        .keys(Keywords)
-        .join("|");
-      const regex = new RegExp(`\\b(${keywordPattern})\\b`, "gi");
-    
+      const keywordPattern = Object.keys(Keywords).join("|");
+      const abbreviationPattern = "\\{[^{}]+\\}";
+      const combinedPattern = `(${keywordPattern})|(${abbreviationPattern})`;
+      const regex = new RegExp(combinedPattern, "gi");
+
       const processLine = (
-        line: string, 
+        line: string,
         lineIndex: number
       ) => {
         const parts = line.split(regex);
-    
+
         return parts.map((part, index) => {
-          const keywordKey = Object
-            .keys(Keywords)
-            .find(key => key.toLowerCase() === part.toLowerCase());
-    
-          if (keywordKey) {
-            const keyword = Keywords[keywordKey];
-    
+          if (
+            part && 
+            part.match(
+              new RegExp(abbreviationPattern)
+            )
+          ) {
+            const abbreviation = part;
+            const IconComponent = abbreviationIcons[
+              abbreviation as keyof typeof abbreviationIcons
+            ];
+            if (IconComponent) {
+              return (
+                <Tooltip title={IconComponent.name} key={`${lineIndex}-${index}`}>
+                  <Image
+                    src={IconComponent.src}
+                    alt={`${abbreviation} icon`}
+                    width={inlineIconSize}
+                    height={inlineIconSize}
+                    unoptimized={true}
+                    style={{ 
+                      display: "inline-block"
+                    }}
+                    className="mx-0.5"
+                  />
+                </Tooltip>
+              );
+            }
+          } else if (
+            part && 
+            part.match(new RegExp(keywordPattern))
+          ) {
+            const keywordKey = Object
+              .keys(Keywords)
+              .find(
+                key => key
+                  .toLowerCase() === 
+                  part.toLowerCase()
+              );
+            if (keywordKey) {
+              const keyword = Keywords[keywordKey];
+              return (
+                <Keyword
+                  key={`${lineIndex}-${index}`}
+                  effect=""
+                  keyword={keyword}
+                />
+              );
+            }
+          } else if (part) {
             return (
-              <Keyword
-                key={`${lineIndex}-${index}`}
-                effect={""}
-                keyword={keyword}
-              />
+              <span key={`${lineIndex}-${index}`}>
+                {part.replace(/~/g, cardName)}
+              </span>
             );
-          } else {
-            // If part is not a keyword, or keywordKey is undefined, return the part as is.
-            // Also replace "~" with `cardName`
-            return <span key={`${lineIndex}-${index}`}>{part.replace(/~/g, cardName)}</span>;
-          }
-        });
+          };
+          return null;
+        }).filter(Boolean);
       };
-    
-      return text.split('\n').map((line, index) => (
-        <Typography
-          key={index}
-          variant="body1"
-          component="div"
-          gutterBottom
-          sx={{
-            fontSize: fontSize,
-            lineHeight: lineHeight,
-            wordWrap: "break-word",
-          }}
-        >
-          {processLine(line, index)}
-        </Typography>
+
+      
+      return text
+        .split('\n')
+        .map((line, index) => (
+          <Typography
+            key={index}
+            variant="body1"
+            component="div"
+            gutterBottom
+            sx={{
+              fontSize: fontSize,
+              lineHeight: lineHeight,
+              wordWrap: "break-word",
+              display: 'flex',
+              alignItems: 'center',
+              flexWrap: 'wrap'
+            }}
+          >
+            {processLine(line, index)}
+          </Typography>
       ));
     }
 
@@ -298,14 +350,17 @@ const CardRender = ({
           // Extra Large
           setFontSize("16.5px");
           setLineHeight("19px");
+          setInlineIconSize(20);
         } else if (textLength <= 264) {
           // Medium
           setFontSize("15px");
           setLineHeight("17px");
+          setInlineIconSize(18);
         } else {
           // Extra Small
           setFontSize("13.5px");
           setLineHeight("15.5px");
+          setInlineIconSize(16);
         }
       };
       if (cardData?.cardText) {
@@ -1023,27 +1078,41 @@ const CardRender = ({
                       />
                     )}
                     {/* Card name */}
-                    <Typography
-                      variant="subtitle1"
-                      sx={{
-                        color: "black",
-                        fontWeight: 500,
-                        fontSize: "15px",
-                        lineHeight: "20px"
-                      }}
-                    >
-                      {
-                        (cardData?.cardAnomalyModeName ?? '')
-                          .split(" ")
-                          .map(word => word
-                            .charAt(0)
-                            .toUpperCase() + word
-                              .slice(1)
-                              .toLowerCase()
-                            )
-                          .join(" ")
-                      }
-                    </Typography>
+                    {cardData.cardAnomalyModeGrade === "uncommon" ? (
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          color: "black",
+                          fontWeight: 500,
+                          fontSize: "15px",
+                          lineHeight: "20px"
+                        }}
+                      >
+                        {
+                          (cardData?.cardAnomalyModeName ?? '')
+                            .split(" ")
+                            .map(word => word
+                              .charAt(0)
+                              .toUpperCase() + word
+                                .slice(1)
+                                .toLowerCase()
+                              )
+                            .join(" ")
+                        }
+                      </Typography>
+                    ) : (
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          color: "black",
+                          fontWeight: 500,
+                          fontSize: "15px",
+                          lineHeight: "20px"
+                        }}
+                      >
+                        Common Anomaly
+                      </Typography>
+                    )}
                   </Box> 
                 </Box>
       
@@ -1174,7 +1243,7 @@ const CardRender = ({
                       gap-1
                     `}
                   >
-                    {/* ANOMALY MODE: Card text */}
+                    {/* ANOMALY: Card text */}
                     {
                       cardData.cardAnomalyModeText && 
                       cardData.cardAnomalyModeText !== "" && 
@@ -1196,8 +1265,9 @@ const CardRender = ({
                         This card becomes that Common Anomaly.
                       </Typography>
                     )} 
-                    {/* Lore text */}
-                    {cardData.cardAnomalyModeLoreText !== "" && (
+                    {/* ANOMALY: Lore text */}
+                    {cardData.cardAnomalyModeLoreText !== "" &&
+                    cardData.cardAnomalyMode === "uncommon" && (
                       <>
                         <Divider
                           className="
@@ -1272,17 +1342,19 @@ const CardRender = ({
                 </Box>
               </Box>
               {/* Card creator */}
-              <Box
-                className="flex flex-row justify-between items-center w-full text-xs px-16"
-              >
-                <p
-                  className="fineprint-text"
+              {cardData.cardAnomalyMode === "uncommon" && (
+                <Box
+                  className="flex flex-row justify-between items-center w-full text-xs px-16"
                 >
-                  {cardData.cardCreator
-                    ? `Made by ${cardData.cardCreator}`
-                    : "Card Creator"}
-                </p>
-              </Box>
+                  <p
+                    className="fineprint-text"
+                  >
+                    {cardData.cardCreator
+                      ? `Made by ${cardData.cardCreator}`
+                      : "Card Creator"}
+                  </p>
+                </Box>
+              )}
             </Box>
           </Box>
         )

@@ -23,6 +23,7 @@ import { CardFormDataType } from "@/app/utils/types/types";
 import {
   cardTypeOptions,
   cardSubTypeOptions,
+  anomalyTypeOptions,
 } from "@/app/utils/data/cardCreatorOptions";
 // Utils
 import { debounce } from "lodash";
@@ -577,25 +578,7 @@ export default function NexusCardForm({
                 )}
               </Box>
             )}
-            {/* Anomaly Type */}
-            {cardMode === "anomaly" && (
-              <Box
-                className="
-                  flex
-                  flex-row
-                  justify-start
-                  items-center
-                  gap-1
-                "
-              >
-                <Typography
-                  variant="body2"
-                >
-                  Anomaly
-                </Typography>
-              </Box>
-            )}
-            {/* Card types */}
+            {/* INITIAL: Card types */}
             {!isSubmitting && cardMode === "initial" && (
               <Box
                 id="card-header-types"
@@ -620,7 +603,7 @@ export default function NexusCardForm({
                     <FormControl
                       className={clsx("flex-grow", {
                         "w-1/5": form.cardType === "entity",
-                        "w-3/5": form.cardType === "node",
+                        "w-3/5": form.cardType === "anomaly",
                       })}
                     >
                       <Select
@@ -802,6 +785,69 @@ export default function NexusCardForm({
                 )}
               </Box>
             )}
+            {/* ANOMALY: Card types */}
+            {!isSubmitting && cardMode === "anomaly" && (
+              <Box
+                id="card-header-types"
+                sx={{
+                  height: "21px",
+                }}
+                className="
+                  flex
+                  flex-row
+                  justify-between
+                  items-center
+                  gap-1
+                "
+              >
+                {/* Type */}
+                <Controller
+                  name="cardAnomalyMode"
+                  control={control}
+                  disabled={isSubmitting || isSubmitted}
+                  render={({ field }) => (
+                    <FormControl
+                      className="flex-grow"
+                    >
+                      <Select
+                        {...field}
+                        label="Anomaly Type"
+                        renderValue={(selected) => (
+                          typeof selected === "string" ? formatCardTypeName(selected) : ""
+                        )}
+                        sx={{
+                          '& .MuiInputBase-input': {
+                            color: "black",
+                            padding: "0",
+                            height: "19px",
+                            display: "flex",
+                            justifyContent: "start",
+                            alignItems: "center",
+                            fontSize: "14px",
+                            lineHeight: "19px",
+                            fontWeight: "semi-bold",
+                          },
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            border: "none",
+                            borderColor: "black",
+                          },
+                        }}
+                      >
+                        {Object.entries(anomalyTypeOptions)
+                          .map(([value, label]) => (
+                            <MenuItem key={value} value={value}>
+                              <Typography variant="body2">
+                                {label}
+                              </Typography>
+                            </MenuItem>
+                          ))
+                        }
+                      </Select>
+                    </FormControl>
+                  )}
+                />
+              </Box>
+            )}
             {/* Speed */}
             {form.cardType && 
             cardMode === "initial" && (
@@ -909,117 +955,121 @@ export default function NexusCardForm({
               `}
             >
               {/* Card text */}
-              {cardMode === "initial" && (<Controller
-                name="cardText"
-                control={control}
-                render={({ 
-                  field, 
-                  fieldState 
-                }) => (
-                  <TextField
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      debouncedSetCardText(e.target.value);
-                    }}
-                    multiline
-                    size="small"
-                    variant="standard"
-                    rows={cardTextProps.textRows}
-                    error={!!fieldState.error}
-                    placeholder={
-                      !fieldState.error ? "Your card's text...":
-                      "Card text is required!"
-                    }
-                    className={clsx("w-full text-wrap",
-                      {
-                        "!text-black": !fieldState.error,
-                        "!text-red-500": fieldState.error,
+              {cardMode === "initial" && (
+                <Controller
+                  name="cardText"
+                  control={control}
+                  render={({ 
+                    field, 
+                    fieldState 
+                  }) => (
+                    <TextField
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        debouncedSetCardText(e.target.value);
+                      }}
+                      multiline
+                      size="small"
+                      variant="standard"
+                      rows={cardTextProps.textRows}
+                      error={!!fieldState.error}
+                      placeholder={
+                        !fieldState.error ? "Your card's text...":
+                        "Card text is required!"
                       }
-                    )}
-                    inputProps={{
-                      maxLength: 440,
-                      style: { 
-                        fontSize: cardTextProps.fontSize,
-                        lineHeight: cardTextProps.lineHeight,
-                        height: cardTextProps.textFieldHeight,
-                        wordWrap: "break-word",
-                      },
-                    }}
-                    sx={{
-                      '& .MuiInputBase-input': {
-                        color: 'black',
-                      },
-                      
-                      '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'black',
-                      },
-                      
-                      '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'lightblue',
-                      },
-                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'blue',
-                      },
-                    }}
-                  />
-                )}
-              />)}
+                      className={clsx("w-full text-wrap",
+                        {
+                          "!text-black": !fieldState.error,
+                          "!text-red-500": fieldState.error,
+                        }
+                      )}
+                      inputProps={{
+                        maxLength: 440,
+                        style: { 
+                          fontSize: cardTextProps.fontSize,
+                          lineHeight: cardTextProps.lineHeight,
+                          height: cardTextProps.textFieldHeight,
+                          wordWrap: "break-word",
+                        },
+                      }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          color: 'black',
+                        },
+                        
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'black',
+                        },
+                        
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'lightblue',
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'blue',
+                        },
+                      }}
+                    />
+                  )}
+                />
+              )}
 
               {/* Anomaly Mode text */}
-              {cardMode === "anomaly" && (<Controller
-                name="cardAnomalyModeText"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <TextField
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      debouncedSetCardAnomalyModeText(e.target.value);
-                    }}
-                    multiline
-                    size="small"
-                    variant="standard"
-                    rows={cardTextProps.textRows}
-                    error={!!fieldState.error}
-                    placeholder={
-                      !fieldState.error ? "Your card's anomaly mode text...":
-                      "Card text is required!"
-                    }
-                    className={clsx("w-full text-wrap",
-                      {
-                        "!text-black": !fieldState.error,
-                        "!text-red-500": fieldState.error,
+              {cardMode === "anomaly" && (
+                <Controller
+                  name="cardAnomalyModeText"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <TextField
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        debouncedSetCardAnomalyModeText(e.target.value);
+                      }}
+                      multiline
+                      size="small"
+                      variant="standard"
+                      rows={cardTextProps.textRows}
+                      error={!!fieldState.error}
+                      placeholder={
+                        !fieldState.error ? "Your card's anomaly mode text...":
+                        "Card text is required!"
                       }
-                    )}
-                    inputProps={{
-                      maxLength: 440,
-                      style: { 
-                        fontSize: cardTextProps.fontSize,
-                        lineHeight: cardTextProps.lineHeight,
-                        height: cardTextProps.textFieldHeight,
-                        wordWrap: "break-word",
-                      },
-                    }}
-                    sx={{
-                      '& .MuiInputBase-input': {
-                        color: 'black',
-                      },
-                      
-                      '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'black',
-                      },
-                      
-                      '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'lightblue',
-                      },
-                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'blue',
-                      },
-                    }}
-                  />
-                )}
-              />)}
+                      className={clsx("w-full text-wrap",
+                        {
+                          "!text-black": !fieldState.error,
+                          "!text-red-500": fieldState.error,
+                        }
+                      )}
+                      inputProps={{
+                        maxLength: 440,
+                        style: { 
+                          fontSize: cardTextProps.fontSize,
+                          lineHeight: cardTextProps.lineHeight,
+                          height: cardTextProps.textFieldHeight,
+                          wordWrap: "break-word",
+                        },
+                      }}
+                      sx={{
+                        '& .MuiInputBase-input': {
+                          color: 'black',
+                        },
+                        
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'black',
+                        },
+                        
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'lightblue',
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'blue',
+                        },
+                      }}
+                    />
+                  )}
+                />
+              )}
 
               {/* Divider */}
               {cardTextProps.loreTextVisible && 
@@ -1379,26 +1429,29 @@ export default function NexusCardForm({
               )}
               
               {/* Card creator */}
-              <Box
-                className="
-                  flex
-                  flex-row
-                  justify-between
-                  items-center
-                  w-full
-                  text-xs
-                  -mt-4
-                "
-              >
-                <Typography
-                  variant="caption"
-                  className="opacity-80"
+              {cardMode === "initial" || 
+              form.cardAnomalyMode === "uncommonAnomaly" && (
+                <Box
+                  className="
+                    flex
+                    flex-row
+                    justify-between
+                    items-center
+                    w-full
+                    text-xs
+                    -mt-4
+                  "
                 >
-                  {form.cardCreator
-                    ? form.cardCreator
-                    : "Card Creator"}
-                </Typography>
-              </Box>
+                  <Typography
+                    variant="caption"
+                    className="opacity-80"
+                  >
+                    {form.cardCreator
+                      ? form.cardCreator
+                      : "Card Creator"}
+                  </Typography>
+                </Box>
+              )}
             </Box>
           </Box>
           {/* Card defense */}

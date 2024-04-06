@@ -20,9 +20,14 @@ import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
 import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
-// Components
+// Custom components
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
-import { ArtPromptAccordion, ArtPromptAccordionData } from "@/app/components/card-creator/ArtPromptAccordion";
+import IconsAbbreviationMenu from "@/app/components/card-creator/IconsAbbreviationMenu";
+import {
+  ArtPromptAccordion, 
+  ArtPromptAccordionData 
+} from "@/app/components/card-creator/ArtPromptAccordion";
+// Components
 import Box from "@mui/material/Box";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
@@ -988,6 +993,8 @@ export default function CardCreatorForm({
               showLoreText={showLoreText}
             />
           </div>
+
+          <IconsAbbreviationMenu />
 
           {cardMode === "anomaly" && (
             <Typography
