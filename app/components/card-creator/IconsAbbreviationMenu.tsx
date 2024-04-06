@@ -17,57 +17,84 @@ export default function IconsAbbreviationMenu() {
         flex 
         flex-col 
         justify-center 
-        items-center 
-        gap-1 
+        items-center
+        gap-2 
         w-full
+        mt-4
       "
     >
-      <Typography
-        variant="body1"
+      <Box
+        id="icons-abbreviation-title"
+        className="
+          flex 
+          flex-col 
+          justify-center 
+          items-center
+          gap-2
+          px-[5%]
+          md:px-[10%]
+          w-full
+          mb-4
+        "
       >
-        Icon abbreviations
-      </Typography>
+        <Typography
+          variant="subtitle2"
+          className="
+            font-semibold
+          "
+        >
+          ICON ABBREVIATION
+        </Typography>
+        <Typography
+          variant="body2"
+          className="text-center"
+        >
+          The abbreviations below will render the corresponding icons when used in the card creator.
+        </Typography> 
+      </Box>
       <Box
         className="
           flex 
           flex-wrap 
           justify-center 
           items-center 
-          gap-1 
-          p-4 
-          rounded-md 
-          bg-neutral-900/50
+          gap-2 
         "
       >
         {Object
           .entries(abbreviationIcons)
           .map(([key, { src, name }]) => (
-          <Box
-            key={key}
-            className="
-              flex 
-              flex-row 
-              justify-start 
-              items-center 
-              gap-1 
-              w-20
-            "
-          >
-            <Typography
-              variant="body1"
+            <Box
+              key={key}
+              className="
+                flex 
+                flex-row 
+                justify-center 
+                items-center 
+                gap-1 
+                w-20
+                py-2
+                px-3
+                rounded-md
+                hover:bg-neutral-900/50
+              "
             >
-              {key}
-            </Typography>
-            <Tooltip title={name}>
-              <Image
-                src={src} 
-                alt={key} 
-                width={20} 
-                height={20} 
-              />
-            </Tooltip>
-          </Box>
-        ))}
+              <Typography
+                variant="body1"
+              >
+                {key}: {""}
+              </Typography>
+              <Tooltip title={name}>
+                <Image
+                  src={src} 
+                  alt={key} 
+                  width={20} 
+                  height={20} 
+                />
+              </Tooltip>
+            </Box>
+          ))
+        }
       </Box>
     </Box>
   );
