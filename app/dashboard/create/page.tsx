@@ -585,7 +585,7 @@ export default function Create() {
                   flex-col
                   md:flex-row
                   justify-start
-                  items-center
+                  items-stretch
                   w-full
                   gap-4
                   md:gap-8
