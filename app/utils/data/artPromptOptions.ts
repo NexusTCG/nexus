@@ -1,3 +1,5 @@
+import { planetPrompts } from "@/app/utils/data/premadePrompts";
+
 export const ArtPromptOptions = {
   style: [
     "Abstract",
@@ -20,14 +22,15 @@ export const ArtPromptOptions = {
     "Stylized",
     "Surreal",
     "Vaporwave",
-  ],
+    "Vector art",
+  ].sort(),
   color: [
     "Black and white",
     "High contrast",
     "High saturation",
     "Monochrome",
-    "Muted colors"
-  ],
+    "Muted colors",
+  ].sort(),
   technique: [
     "Airbrush",
     "Charcoal",
@@ -44,16 +47,24 @@ export const ArtPromptOptions = {
     "Technical art",
     "Watercolor",
     "Woodcut",
-  ],
+    "3D art",
+    "Pixel art",
+    "Crayon",
+    "Finger painting",
+    "Mosaic",
+    "Calligraphy"
+  ].sort(),
   subject: [
-    "Animals",
     "No characters",
     "One character",
-    "Still life",
-    "Three+ characters",
     "Two characters",
-  ],
+    "Three+ characters",
+    "Crowd",
+  ].sort(),
+  planet: planetPrompts,
   setting: [
+    "Indoors",
+    "Outdoors",
     "City",
     "Desert",
     "Field",
@@ -62,10 +73,16 @@ export const ArtPromptOptions = {
     "Mountains",
     "Ocean",
     "Space",
+    "Facility",
+    "Labroratory",
+    "Tundra",
+    "Swamp",
+    "Cave",
+    "Fortress",
     "Underground",
     "Underwater",
     "Village",
-  ],
+  ].sort(),
   weather: [
     "Cloudy",
     "Foggy",
@@ -73,13 +90,16 @@ export const ArtPromptOptions = {
     "Snowy",
     "Stormy",
     "Sunny",
-  ],
+    "Windy",
+    "Overcast",
+    "Clear",
+  ].sort(),
   time: [
     "Day",
     "Night",
     "Sunrise",
     "Sunset",
-  ],
+  ].sort(),
   mood: [
     "Calm",
     "Chaotic",
@@ -89,13 +109,13 @@ export const ArtPromptOptions = {
     "Eerie",
     "Heroic",
     "Serious",
-    "Somber"
-  ],
+    "Somber",
+  ].sort(),
   composition: [
     "Bird's Eye View",
     "Close-Up",
     "Landscape",
     "Portrait",
     "Worm's Eye View",
-  ],
+  ].sort(),
 };

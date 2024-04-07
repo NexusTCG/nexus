@@ -52,7 +52,8 @@ import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
 import SaveIcon from "@mui/icons-material/Save";
 import WarningIcon from "@mui/icons-material/Warning";
-import TipsAndUpdates from "@mui/icons-material/TipsAndUpdates";
+import MenuBook from "@mui/icons-material/MenuBook";
+import VpnKey from "@mui/icons-material/VpnKey";
 import OpenInNew from "@mui/icons-material/OpenInNew";
 
 export default function Create() {
@@ -370,7 +371,8 @@ export default function Create() {
                   sm:pr-4
                   px-6
                   py-2
-                  lg:py-4
+                  md:py-1
+                  lg:py-2
                   bg-neutral-700/20
                   lg:bg-transparent
                 "
@@ -385,17 +387,19 @@ export default function Create() {
                     justify-between
                     items-start
                     md:items-baseline
-                    md:gap-2
                     gap-0
+                    md:gap-2
                   "
                 >
                   {/* Card Name */}
                   <Typography
-                    variant="h4"
+                    variant="subtitle1"
                     className="
                       font-semibold
-                      lg:text-2xl
-                      text-xl
+                      text-md
+                      lg:text-xl
+                      -mb-1
+                      md:mb-0
                     "
                   >
                     {
@@ -407,10 +411,16 @@ export default function Create() {
                   {/* Card Creator*/}
                   <Typography
                     variant="overline"
+                    sx={{ 
+                      fontSize: "0.725rem" 
+                    }}
                     className="text-emerald-400"
                   >
                     <Typography
                       variant="overline"
+                      sx={{ 
+                        fontSize: "0.725rem" 
+                      }}
                       className="text-neutral-400"
                       component="span"
                     >
@@ -428,10 +438,12 @@ export default function Create() {
                   id="card-submit-container"
                   className="
                     flex
-                    flex-row
-                    justify-between
-                    items-baseline
-                    gap-2
+                    flex-col-reverse
+                    md:flex-row
+                    justify-end
+                    items-end
+                    md:justify-between
+                    md:items-baseline
                   "
                 >
                   {/* Upload to Discord */}
@@ -441,6 +453,7 @@ export default function Create() {
                         checked={postToDiscord}
                         onChange={handlePostToDiscordChange}
                         disabled={isSubmitting || isSubmitted}
+                        size="small"
                       />
                     }
                     label={
@@ -452,26 +465,29 @@ export default function Create() {
                           font-medium
                           mt-1
                           gap-1
+                          text-neutral-300
                         "
                       >
-                        Post card to {""}
-                        <a
-                          href="https://discord.gg/HENgvaAmk2"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <Typography
-                            variant="caption"
-                            component="span"
-                            className="
-                            text-teal-400
-                            hover:text-teal-300
-                            hover:underline
-                            "
+                        Post to {""}
+                        <Tooltip title="Nexus' Discord Server">
+                          <a
+                            href="https://discord.gg/HENgvaAmk2"
+                            target="_blank"
+                            rel="noreferrer"
                           >
-                            Nexus&apos;s Discord
-                          </Typography>
-                        </a>
+                            <Typography
+                              variant="caption"
+                              component="span"
+                              className="
+                              text-teal-500
+                              hover:text-teal-400
+                              hover:underline
+                              "
+                            >
+                              Discord
+                            </Typography>
+                          </a>
+                        </Tooltip>
                       </Typography>
                     }
                     className={clsx("hover:opacity-100 text-sm", {
@@ -481,28 +497,30 @@ export default function Create() {
                   />
                   {/* Save button */}
                   {!isSubmitting && !showAlertInfo ? (
-                    <Button
-                      type="submit"
-                      variant="outlined"
-                      disabled={
-                        !isValid ||
-                        isSubmitting ||
-                        isSubmitted ||
-                        form.cardType === null ||
-                        form.cardArt === "/images/card-parts/card-art/default-art.jpg"
-                      }
-                      color={isValid ? "success" : "secondary"}
-                      startIcon={<SaveIcon />}
-                      size="large"
-                      className="
-                        hover:cursor-pointer
-                        hover:bg-teal-600/30
-                        hover:text-white
-                        hover:border-teal-600
-                      "
-                    >
-                      Save card
-                    </Button>
+                    <Tooltip title="Save your card">
+                      <Button
+                        type="submit"
+                        variant="outlined"
+                        size="small"
+                        disabled={
+                          !isValid ||
+                          isSubmitting ||
+                          isSubmitted ||
+                          form.cardType === null ||
+                          form.cardArt === "/images/card-parts/card-art/default-art.jpg"
+                        }
+                        color={isValid ? "success" : "secondary"}
+                        startIcon={<SaveIcon />}
+                        className="
+                          hover:cursor-pointer
+                          hover:bg-teal-600/30
+                          hover:text-white
+                          hover:border-teal-600
+                        "
+                      >
+                        Save
+                      </Button>
+                    </Tooltip>
                   ) : (
                     <Alert
                       severity={alertInfo?.type}
@@ -528,7 +546,6 @@ export default function Create() {
                 />
               )}
             </Box>
-            {/* Warning Message */}
             <Box
               id="create-form-container"
               className="
@@ -544,8 +561,10 @@ export default function Create() {
                 mb-8
                 md:mt-4
                 gap-4
+                px-6
               "
             >
+              {/* Warning Message */}
               <Box
                 id="create-form-warning"
                 className="
@@ -554,16 +573,26 @@ export default function Create() {
                   justify-start
                   items-center
                   w-full
-                  text-yellow-500
+                  text-yellow-400/80
                   bg-yellow-900/50
                   rounded-md
-                  py-2
-                  px-3
-                  gap-3
+                  py-3
+                  px-4
+                  gap-4
                 "
               >
                 <WarningIcon
                   fontSize="small"
+                  sx={{ 
+                    width: "36px", 
+                    height: "36px"
+                  }}
+                  className="
+                    bg-yellow-600/50
+                    text-yellow-200/80
+                    rounded-full
+                    p-2
+                  "
                 />
                 <Typography
                   variant="caption"
@@ -588,7 +617,6 @@ export default function Create() {
                   items-stretch
                   w-full
                   gap-4
-                  md:gap-8
                 "
               >
                 {/* Random Glossary Term */}
@@ -614,17 +642,18 @@ export default function Create() {
                       hover:text-white
                       hover:shadow-lg
                       hover:shadow-sky-600/20
+                      transition-all
                     "
                   >
-                    <TipsAndUpdates
+                    <MenuBook
                       fontSize="small"
                       sx={{ 
                         width: "36px", 
                         height: "36px"
                       }}
                       className="
-                        bg-sky-500
-                        text-white
+                        bg-sky-600
+                        text-sky-100
                         rounded-full
                         p-2
                       "
@@ -734,17 +763,18 @@ export default function Create() {
                       hover:text-white
                       hover:shadow-lg
                       hover:shadow-violet-600/20
+                      transition-all
                     "
                   >
-                    <TipsAndUpdates
+                    <VpnKey
                       fontSize="small"
                       sx={{ 
                         width: "36px", 
                         height: "36px"
                       }}
                       className="
-                        bg-violet-500
-                        text-white
+                        bg-violet-600
+                        text-violet-100
                         rounded-full
                         p-2
                       "
