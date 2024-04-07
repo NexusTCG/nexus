@@ -14,9 +14,10 @@ import updateUserCredits from "@/app/lib/actions/supabase-data/updateUserCredits
 // Types
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import { CardFormDataType } from "@/app/utils/types/types";
+// Data
+import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
 // Utils
 import PostHogClient from "@/app/lib/posthog/posthog";
-import { ArtPromptOptions } from "@/app/utils/data/artPromptOptions";
 import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
@@ -1027,18 +1028,18 @@ export default function CardCreatorForm({
             "
           >
             <Typography
-                variant="subtitle2"
-                className="
-                  text-neutral-500
-                  font-medium
-                "
-              >
-                {
-                  form.cardName ? 
-                  `${form.cardName} art options` : 
-                  "Card art options"
-                }
-              </Typography>
+              variant="subtitle2"
+              className="
+                text-neutral-500
+                font-medium
+              "
+            >
+              {
+                form.cardName ? 
+                `${form.cardName} art options` : 
+                "Card art options"
+              }
+            </Typography>
             <Box
               className="
                 flex

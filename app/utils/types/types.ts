@@ -101,3 +101,16 @@ export type KeywordsType = {
   scan: KeywordEntry;
   shift: KeywordEntry;
 };
+
+export type GameGlossaryType = {
+  id: number;
+  term: string;
+  definition: string;
+  relatedTerms: string[];
+};
+
+export type GameKeywordType = {
+  id: number;
+  keyword: string;
+  definition: string;
+};

@@ -20,10 +20,17 @@ import { uploadCardArtImage } from "@/app/lib/actions/supabase-data/uploadCardAr
 import { postCardToDiscord } from "@/app/lib/actions/postCardToDiscord";
 // Types
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
-import { CardFormDataType } from "@/app/utils/types/types";
+import { 
+  CardFormDataType, 
+  GameGlossaryType,
+  GameKeywordType,
+} from "@/app/utils/types/types";
 // Schema
 import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+// Data
+import { gameGlossary } from "@/app/utils/data/gameGlossary";
+import { gameKeywords } from "@/app/utils/data/gameKeywords";
 // Utils
 import PostHogClient from "@/app/lib/posthog/posthog";
 import clsx from "clsx";
@@ -105,6 +112,8 @@ export default function Create() {
   const router = useRouter();
 
   // States
+  const [randomGlossaryTerm, setRandomGlossaryTerm] = useState<GameGlossaryType | null>(null);
+  const [randomKeyword, setRandomKeyword] = useState<GameKeywordType | null>(null);
   const [submittedFormData, setSubmittedFormData] = useState<CardFormDataType | null>(null);
   const [uploadedFormData, setUploadedFormData] = useState<CardsTableType | null>(null);
   const [postToDiscord, setPostToDiscord] = useState<boolean>(true);
@@ -253,6 +262,17 @@ export default function Create() {
       });
     }
   };
+
+  useEffect(() => {
+    if (randomGlossaryTerm === null) {
+      const randomIndex = Math.floor(Math.random() * gameGlossary.length);
+      setRandomGlossaryTerm(gameGlossary[randomIndex]);
+    }
+    if (randomKeyword === null) {
+      const randomIndex = Math.floor(Math.random() * gameKeywords.length);
+      setRandomKeyword(gameKeywords[randomIndex]);
+    }
+  }, [randomGlossaryTerm, randomKeyword, gameGlossary, gameKeywords]);
 
   // Set user_id and cardCreator
   // values based on user session
@@ -539,17 +559,116 @@ export default function Create() {
                   fontSize="small"
                 />
                 <Typography
-                variant="caption"
+                  variant="caption"
+                  className="
+                    w-full
+                    text-xs
+                  "
+                >
+                  Do not deliberately attempt to create cards that would violate the intellectual property of others. 
+                  Such as the names or likeness of recognizable characters, places, or items from other games, movies, real life, etc. 
+                  Doing so will result in a warning or termination of your account.
+                </Typography>
+              </Box>
+              <Box
+                id="create-form-tips"
                 className="
+                  flex
+                  flex-col
+                  md:flex-row
+                  justify-start
+                  items-center
                   w-full
-                  text-xs
+                  gap-4
+                  md:gap-8
                 "
               >
-                Do not deliberately attempt to create cards that would violate the intellectual property of others. 
-                Such as the names or likeness of recognizable characters, places, or items from other games, movies, real life, etc. 
-                Doing so will result in a warning or termination of your account.
-              </Typography>
+                {randomGlossaryTerm && (
+                  <Box
+                    id="create-form-glossary"
+                    className="
+                      flex
+                      flex-row
+                      justify-start
+                      items-center
+                      w-full
+                      text-teal-500
+                      bg-teal-950/50
+                      rounded-md
+                      py-2
+                      px-3
+                      gap-3
+                    "
+                  >
+                    <WarningIcon
+                      fontSize="small"
+                    />
+                    <Typography
+                      variant="subtitle2"
+                      className="
+                        flex
+                        flex-col
+                        w-full
+                        font-medium
+                      "
+                    >
+                      Glossary term: {randomGlossaryTerm.term}
+                      <Typography
+                      variant="caption"
+                      className="
+                        w-full
+                        text-xs
+                      "
+                    >
+                      {randomGlossaryTerm.definition}
+                    </Typography>
+                    </Typography>
+                  </Box>
+                )}
+                {randomKeyword && (
+                  <Box
+                    id="create-form-keyword"
+                    className="
+                      flex
+                      flex-row
+                      justify-start
+                      items-center
+                      w-full
+                      text-teal-500
+                      bg-teal-950/50
+                      rounded-md
+                      py-2
+                      px-3
+                      gap-3
+                    "
+                  >
+                    <WarningIcon
+                      fontSize="small"
+                    />
+                    <Typography
+                      variant="subtitle2"
+                      className="
+                        flex
+                        flex-col
+                        w-full
+                        font-medium
+                      "
+                    >
+                      Keyword: {randomKeyword.keyword}
+                      <Typography
+                        variant="caption"
+                        className="
+                          w-full
+                          text-xs
+                        "
+                      >
+                        {randomKeyword.definition}
+                      </Typography>
+                    </Typography>
+                  </Box>
+                )}
               </Box>
+              
               
               {/* Card Creator Form */}
               <CardCreatorForm

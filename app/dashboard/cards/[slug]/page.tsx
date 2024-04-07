@@ -129,7 +129,6 @@ export default function Card({
         items-center
         w-full
         py-4
-        px-6
         lg:px-12
         gap-4
         bg-neutral-900
@@ -141,6 +140,8 @@ export default function Card({
         className="
           w-full
           text-neutral-500
+          px-6
+          lg:px-0
         "
       >
         <Link
@@ -180,11 +181,11 @@ export default function Card({
           items-center
           w-full
           bg-neutral-800
-          border
-          border-neutral-700
-          rounded-lg
-          shadow-xl
-          shadow-950/50
+          lg:border
+          lg:border-neutral-700
+          lg:rounded-lg
+          lg:shadow-xl
+          lg:shadow-950/50
         "
       >
         <Box
@@ -217,11 +218,14 @@ export default function Card({
                 <Box
                   id="card-render-inner-container"
                   className="
-                    flex 
-                    flex-row 
+                    flex
+                    flex-col 
+                    lg:flex-row 
                     justify-center
                     items-center
                     gap-6
+                    px-6
+                    lg:px-0
                   "
                 >
                   <Box
@@ -275,7 +279,6 @@ export default function Card({
                 </Box>
               )}
             </Box>
-            
           </Box>
           
           {/* Card Details */}
@@ -419,7 +422,7 @@ export default function Card({
                     <EditIcon />
                   </IconButton>
                   <IconButton
-                    disabled={!isCardOwner} // Disabled until delete functionality is implemented
+                    disabled={!isCardOwner} // Disabled until implemented
                     aria-label="delete"
                     size="small"
                     onClick={handleDelete}
@@ -476,7 +479,7 @@ export default function Card({
                   w-full
                 "
               >
-                Share Card
+                Share Card KSADMKAS
               </Button>
             </Box>
           </Box>

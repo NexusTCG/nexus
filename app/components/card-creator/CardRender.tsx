@@ -149,7 +149,11 @@ const CardRender = ({
             ];
             if (IconComponent) {
               return (
-                <Tooltip title={IconComponent.name} key={`${lineIndex}-${index}`}>
+                <Tooltip
+                  title={IconComponent.name}
+                  key={`${lineIndex}-${index}`}
+                  className="flex flex-wrap"
+                >
                   <Image
                     src={IconComponent.src}
                     alt={`${abbreviation} icon`}
@@ -157,9 +161,11 @@ const CardRender = ({
                     height={inlineIconSize}
                     unoptimized={true}
                     style={{ 
-                      display: "inline-block"
+                      display: "inline-block",
+                      flexShrink: 0,
+                      margin: "0 2px",
                     }}
-                    className="mx-0.25"
+                    className="mx-0.5"
                   />
                 </Tooltip>
               );
@@ -208,10 +214,14 @@ const CardRender = ({
             sx={{
               fontSize: fontSize,
               lineHeight: lineHeight,
-              wordWrap: "break-word",
               display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
               alignItems: 'center',
-              flexWrap: 'wrap'
+              flexWrap: 'nowrap',
+              whiteSpace: 'normal',
+              overflowX: 'visible',
+              // wordBreak: 'break-word',
             }}
           >
             {processLine(line, index)}
@@ -1078,7 +1088,7 @@ const CardRender = ({
                       />
                     )}
                     {/* Card name */}
-                    {cardData.cardAnomalyMode === "uncommon" ? (
+                    {cardData.cardAnomalyMode && cardData.cardAnomalyMode.toLowerCase().includes("uncommon") ? (
                       <Typography
                         variant="subtitle1"
                         sx={{
@@ -1150,16 +1160,29 @@ const CardRender = ({
                       gap-1
                     "
                   >
-                    <Typography
-                      variant="subtitle2" 
-                      component="span" 
-                      className="
-                        p-0 
-                        m-0
-                      "
-                    >
-                      Anomaly
-                    </Typography>
+                    {cardData.cardAnomalyMode && cardData.cardAnomalyMode.toLowerCase().includes("uncommon") ? (
+                      <Typography
+                        variant="subtitle2" 
+                        component="span" 
+                        className="
+                          p-0 
+                          m-0
+                        "
+                      >
+                        Uncommon Anomaly
+                      </Typography>
+                    ) : (
+                      <Typography
+                        variant="subtitle2" 
+                        component="span" 
+                        className="
+                          p-0 
+                          m-0
+                        "
+                      >
+                        Common Anomaly
+                      </Typography>
+                    )}
                   </Box>
                   
                 </Box>
