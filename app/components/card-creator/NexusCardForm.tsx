@@ -447,17 +447,32 @@ export default function NexusCardForm({
               )}
               {/* Card name */}
               {!isSubmitted ? (
-                <CustomInput
-                  key={cardMode} 
-                  name={
-                    cardMode === "initial" ? 
-                    "cardName" : "cardAnomalyModeName"
-                  }
-                  placeholder={
-                    cardMode === "initial" ? 
-                    "Card name" : "Anomaly mode name"
-                  }
-                />
+                cardMode === "anomaly" && 
+                form.cardAnomalyMode && 
+                !form.cardAnomalyMode
+                  .toLowerCase()
+                  .includes("uncommon") ? (
+                  <Typography
+                    variant="body2"
+                    className="
+                      text-black
+                    "
+                  >
+                    Common Anomaly
+                  </Typography>
+                ) : (
+                  <CustomInput
+                    key={cardMode} 
+                    name={
+                      cardMode === "initial" ? 
+                      "cardName" : "cardAnomalyModeName"
+                    }
+                    placeholder={
+                      cardMode === "initial" ? 
+                      "Card name" : "Anomaly mode name"
+                    }
+                  />
+                )
               ) : (
                 cardMode === "initial" ? (
                   <Typography variant="body2">
@@ -1019,6 +1034,10 @@ export default function NexusCardForm({
                 <Controller
                   name="cardAnomalyModeText"
                   control={control}
+                  disabled={
+                    !form.cardAnomalyMode?.toLowerCase().includes("uncommon") || 
+                    isSubmitting || isSubmitted
+                  }
                   render={({ field, fieldState }) => (
                     <TextField
                       {...field}
@@ -1032,8 +1051,11 @@ export default function NexusCardForm({
                       rows={cardTextProps.textRows}
                       error={!!fieldState.error}
                       placeholder={
-                        !fieldState.error ? "Your card's anomaly mode text...":
-                        "Card text is required!"
+                        !form.cardAnomalyMode?.toLowerCase().includes("uncommon") ? (
+                          ("This transmutes into a Common Anomaly of that your choice (Radiance, Volatility, Corruption, Blaze, Verdancy).")
+                        ) : (
+                          (!fieldState.error ? "Your card's anomaly mode text..." : "Card text is required!")
+                        )
                       }
                       className={clsx("w-full text-wrap",
                         {
@@ -1073,14 +1095,31 @@ export default function NexusCardForm({
 
               {/* Divider */}
               {cardTextProps.loreTextVisible && 
-                showLoreText  && (
-                <Divider
-                  className="
-                    mx-4
-                    my-0.5
-                    opacity-25
-                  "
-                />
+              showLoreText && (
+                cardMode === "initial" ? (
+                  <Divider
+                    className="
+                      mx-4
+                      my-0.5
+                      opacity-25
+                    "
+                  />
+                ) : (
+                  form.cardAnomalyMode && 
+                  form.cardAnomalyMode
+                    .toLowerCase()
+                    .includes("uncommon") ? (
+                    <Divider
+                      className="
+                        mx-4
+                        my-0.5
+                        opacity-25
+                      "
+                    />
+                  ) : (
+                    null
+                  )
+                )
               )}
               
               {/* Card lore text */}
@@ -1159,7 +1198,7 @@ export default function NexusCardForm({
 
               {/* Card Anamoly Mode lore text */}
               {cardTextProps.loreTextVisible && 
-                showLoreText && cardMode === "anomaly" && (
+                showLoreText && cardMode === "anomaly" && form.cardAnomalyMode && form.cardAnomalyMode.toLowerCase().includes("uncommon") && (
                 <Controller
                   name="cardAnomalyModeLoreText"
                   control={control}
