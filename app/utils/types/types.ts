@@ -113,4 +113,5 @@ export type GameKeywordType = {
   id: number;
   keyword: string;
   definition: string;
+  type: string;
 };

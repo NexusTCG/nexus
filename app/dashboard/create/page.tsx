@@ -45,12 +45,15 @@ import Snackbar from "@mui/material/Snackbar";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
+import Tooltip from "@mui/material/Tooltip";
 // Icons
 import CheckIcon from "@mui/icons-material/Check";
 import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
 import SaveIcon from "@mui/icons-material/Save";
-import WarningIcon from '@mui/icons-material/Warning';
+import WarningIcon from "@mui/icons-material/Warning";
+import TipsAndUpdates from "@mui/icons-material/TipsAndUpdates";
+import OpenInNew from "@mui/icons-material/OpenInNew";
 
 export default function Create() {
   const { userProfileData } = useContext(DashboardContext);
@@ -263,6 +266,7 @@ export default function Create() {
     }
   };
 
+  // Set random glossary term and keyword
   useEffect(() => {
     if (randomGlossaryTerm === null) {
       const randomIndex = Math.floor(Math.random() * gameGlossary.length);
@@ -517,11 +521,14 @@ export default function Create() {
                   )}
                 </Box>
               </Box>
-              {isSubmitting && (<LinearProgress
-                color="primary"
-                className="w-full"
-              />)}
+              {isSubmitting && (
+                <LinearProgress
+                  color="primary"
+                  className="w-full"
+                />
+              )}
             </Box>
+            {/* Warning Message */}
             <Box
               id="create-form-container"
               className="
@@ -570,6 +577,7 @@ export default function Create() {
                   Doing so will result in a warning or termination of your account.
                 </Typography>
               </Box>
+              {/* Game Design Tips */}
               <Box
                 id="create-form-tips"
                 className="
@@ -583,92 +591,247 @@ export default function Create() {
                   md:gap-8
                 "
               >
+                {/* Random Glossary Term */}
                 {randomGlossaryTerm && (
                   <Box
-                    id="create-form-glossary"
+                    id="random-glossary-term-container"
                     className="
                       flex
                       flex-row
                       justify-start
-                      items-center
+                      items-start
                       w-full
-                      text-teal-500
-                      bg-teal-950/50
+                      md:w-1/2
                       rounded-md
-                      py-2
-                      px-3
-                      gap-3
+                      py-3
+                      px-4
+                      gap-4
+                      bg-sky-800/50
+                      hover:bg-sky-800/80
+                      border
+                      border-sky-700/50
+                      hover:border-sky-700/80
+                      hover:text-white
+                      hover:shadow-lg
+                      hover:shadow-sky-600/20
                     "
                   >
-                    <WarningIcon
+                    <TipsAndUpdates
                       fontSize="small"
+                      sx={{ 
+                        width: "36px", 
+                        height: "36px"
+                      }}
+                      className="
+                        bg-sky-500
+                        text-white
+                        rounded-full
+                        p-2
+                      "
                     />
-                    <Typography
-                      variant="subtitle2"
+                    <Box
+                      id="random-glossary-term-content"
                       className="
                         flex
                         flex-col
                         w-full
-                        font-medium
                       "
                     >
-                      Glossary term: {randomGlossaryTerm.term}
-                      <Typography
-                      variant="caption"
-                      className="
-                        w-full
-                        text-xs
-                      "
-                    >
-                      {randomGlossaryTerm.definition}
-                    </Typography>
-                    </Typography>
-                  </Box>
-                )}
-                {randomKeyword && (
-                  <Box
-                    id="create-form-keyword"
-                    className="
-                      flex
-                      flex-row
-                      justify-start
-                      items-center
-                      w-full
-                      text-teal-500
-                      bg-teal-950/50
-                      rounded-md
-                      py-2
-                      px-3
-                      gap-3
-                    "
-                  >
-                    <WarningIcon
-                      fontSize="small"
-                    />
-                    <Typography
-                      variant="subtitle2"
-                      className="
-                        flex
-                        flex-col
-                        w-full
-                        font-medium
-                      "
-                    >
-                      Keyword: {randomKeyword.keyword}
-                      <Typography
-                        variant="caption"
+                      <Box
+                        id="random-glossary-term-header"
                         className="
+                          flex
+                          flex-row
+                          justify-between
+                          items-center
                           w-full
-                          text-xs
+                          mb-1
                         "
                       >
-                        {randomKeyword.definition}
+                        <Typography
+                          variant="caption"
+                          sx={{ fontSize: "0.625rem" }}
+                          className="text-sky-300"
+                        >
+                          RANDOM TERM
+                        </Typography>
+                        <Tooltip title="View the game glossary on GitHub.">
+                          <a
+                            href="https://github.com/NexusTCG/wiki/wiki/Glossary"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <Typography
+                              variant="caption"
+                              sx={{ fontSize: "0.625rem" }}
+                              className="
+                                flex
+                                flex-row
+                                justify-end
+                                items-center
+                                text-sky-300
+                                hover:text-sky-400
+                                hover:cursor-pointer
+                              "
+                            >
+                              Glossary
+                              <OpenInNew
+                                fontSize="small"
+                                sx={{ fontSize: "1rem" }}
+                                className="
+                                  ml-1
+                                  opacity-80
+                                "
+                              />
+                            </Typography>
+                          </a>
+                        </Tooltip>
+                      </Box>
+                      <Typography
+                        variant="subtitle2"
+                        className="
+                          flex
+                          flex-col
+                          w-full
+                          font-semibold
+                        "
+                      >
+                        {randomGlossaryTerm.term}
+                        <Typography
+                          variant="caption"
+                          className="
+                            w-full
+                            text-xs
+                            text-neutral-300
+                          "
+                        >
+                          {randomGlossaryTerm.definition}
+                        </Typography>
                       </Typography>
-                    </Typography>
+                    </Box>
+                  </Box>
+                )}
+                {/* Random Keyword */}
+                {randomKeyword && (
+                  <Box
+                    id="random-keyword-container"
+                    className="
+                      flex
+                      flex-row
+                      justify-start
+                      items-start
+                      w-full
+                      md:w-1/2
+                      rounded-md
+                      py-3
+                      px-4
+                      gap-4
+                      bg-violet-800/50
+                      hover:bg-violet-800/80
+                      border
+                      border-violet-700/50
+                      hover:border-violet-700/80
+                      hover:text-white
+                      hover:shadow-lg
+                      hover:shadow-violet-600/20
+                    "
+                  >
+                    <TipsAndUpdates
+                      fontSize="small"
+                      sx={{ 
+                        width: "36px", 
+                        height: "36px"
+                      }}
+                      className="
+                        bg-violet-500
+                        text-white
+                        rounded-full
+                        p-2
+                      "
+                    />
+                    <Box
+                      id="random-keyword-content"
+                      className="
+                        flex
+                        flex-col
+                        w-full
+                      "
+                    >
+                      <Box
+                        id="random-glossary-term-header"
+                        className="
+                          flex
+                          flex-row
+                          justify-between
+                          items-center
+                          w-full
+                          mb-1
+                        "
+                      >
+                        <Typography
+                          variant="caption"
+                          sx={{ fontSize: "0.625rem" }}
+                          className="text-violet-300"
+                        >
+                          RANDOM KEYWORD
+                        </Typography>
+                        <Tooltip title="View all keywords on GitHub.">
+                          <a
+                            href="https://github.com/NexusTCG/wiki/wiki/Keywords"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <Typography
+                              variant="caption"
+                              sx={{ fontSize: "0.625rem" }}
+                              className="
+                                flex
+                                flex-row
+                                justify-end
+                                items-center
+                                text-violet-300
+                                hover:text-violet-400
+                                hover:cursor-pointer
+                              "
+                            >
+                              Keywords
+                              <OpenInNew
+                                fontSize="small"
+                                sx={{ fontSize: "1rem" }}
+                                className="
+                                  ml-1
+                                  opacity-80
+                                "
+                              />
+                            </Typography>
+                          </a>
+                        </Tooltip>
+                      </Box>
+                      <Typography
+                        variant="subtitle2"
+                        className="
+                          flex
+                          flex-col
+                          w-full
+                          font-semibold
+                        "
+                      >
+                        {randomKeyword.keyword}
+                        <Typography
+                          variant="caption"
+                          className="
+                            w-full
+                            text-xs
+                            text-neutral-300
+                          "
+                        >
+                          {randomKeyword.definition}
+                        </Typography>
+                      </Typography>
+                    </Box>
                   </Box>
                 )}
               </Box>
-              
               
               {/* Card Creator Form */}
               <CardCreatorForm
