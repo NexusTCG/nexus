@@ -135,7 +135,7 @@ export default function NexusCardForm({
         textFieldHeight: "76px", 
         textRows: 4, 
         loreTextVisible: true,
-        maxLoreTextChars: 80, 
+        maxLoreTextChars: 352, 
         loreTextFieldHeight: "76px"
       };
     } else if (textLength <= 176) {
@@ -146,7 +146,7 @@ export default function NexusCardForm({
         textFieldHeight: "96px", 
         textRows: 6, 
         loreTextVisible: true, 
-        maxLoreTextChars: 62,
+        maxLoreTextChars: 264,
         loreTextFieldHeight: "57px"
       };
     } else if (textLength <= 264) {
@@ -157,7 +157,7 @@ export default function NexusCardForm({
         textFieldHeight: "120px", 
         textRows: 7, 
         loreTextVisible: true, 
-        maxLoreTextChars: 50,
+        maxLoreTextChars: 176,
         loreTextFieldHeight: "34px"
       };
     } else if (textLength <= 352) {
@@ -168,7 +168,7 @@ export default function NexusCardForm({
         textFieldHeight: "172px", 
         textRows: 9, 
         loreTextVisible: false, 
-        maxLoreTextChars: 0,
+        maxLoreTextChars: 88,
         loreTextFieldHeight: "0px"
       };
     } else {
