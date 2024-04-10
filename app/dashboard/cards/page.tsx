@@ -1,7 +1,10 @@
 "use client";
 
 // Hooks
-import React, { useState, useEffect } from "react";
+import React, { 
+  useState, 
+  useEffect 
+} from "react";
 // Actions
 import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
 // Utils

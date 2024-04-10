@@ -55,7 +55,8 @@ export default function AppBar() {
       sx={{
         position: "sticky",
         top: 0,
-        height: "60px"
+        height: "60px",
+        zIndex: 1000,
       }}
       className="
         flex

@@ -17,6 +17,8 @@ import { format } from 'date-fns';
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 // Custom Components
 import CardRender from "@/app/components/card-creator/CardRender";
+import CardComments from "@/app/components/card-render/CardComments";
+import CardCommentForm from "@/app/components/card-render/CardCommentForm";
 // Components
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -133,6 +135,7 @@ export default function Card({
         gap-4
         bg-neutral-900
         lg:bg-transparent
+        z-0
       "
     >
       <Breadcrumbs
@@ -142,6 +145,8 @@ export default function Card({
           text-neutral-500
           px-6
           lg:px-0
+          sticky
+          top-0
         "
       >
         <Link
@@ -192,6 +197,7 @@ export default function Card({
           className="
             flex
             flex-col
+            md:flex-row
             justify-center
             items-center
             w-full
@@ -479,12 +485,44 @@ export default function Card({
                   w-full
                 "
               >
-                Share Card KSADMKAS
+                Share Card
               </Button>
             </Box>
+            {/* Card Comments */}
+            {cardData?.id && (
+              <Box
+                id="card-comments-container"
+                className="
+                  flex
+                  flex-col
+                  justify-start
+                  items-start
+                  w-full
+                  bg-neutral-900
+                "
+              >
+                <Typography
+                  variant="h4"
+                  className="
+                    text-white
+                    font-medium
+                    mb-4
+                    ml-4
+                  "
+                >
+                  Comments
+                </Typography>
+                {/* Add Comment */}
+                <CardCommentForm cardId={cardData.id} />
+                {/* Comments */}
+                <CardComments cardId={cardData.id}/>
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>
+
+      {/* Share Modal */}
       <Modal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
