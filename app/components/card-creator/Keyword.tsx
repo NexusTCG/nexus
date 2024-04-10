@@ -31,11 +31,11 @@ export default function Keyword(
       <Typography
         variant="body2"
         component="span"
-        className={clsx("font-semibold",
+        className={clsx("font-medium",
           {
-            "text-indigo-600 hover:text-indigo-500": keyword.type === "persistent",
-            "text-rose-600 hover:text-rose-500": keyword.type === "active",
-            "text-amber-600 hover:text-amber-500": keyword.type === "reactive",
+            "text-indigo-700 hover:text-indigo-500": keyword.type === "persistent",
+            "text-rose-700 hover:text-rose-500": keyword.type === "active",
+            "text-amber-700 hover:text-amber-500": keyword.type === "reactive",
           }
         )}
         sx={{

@@ -121,6 +121,14 @@ const CardRender = ({
           .toLowerCase();
     }
 
+    // Split camelCase words
+    // Move to utility functions
+    function splitCamelCase(
+      word: string
+    ) {
+      return word.split(/(?=[A-Z])/).join(" ");
+    }
+
     // Render text with keywords
     function renderTextWithKeywords(
       text: string,
@@ -243,7 +251,6 @@ const CardRender = ({
           }
         }
 
-        // Push any remaining buffer as normal text
         if (buffer.length > 0) {
           const key = isItalic ? 'italic' : 'text';
           const Component = isItalic ? 'em' : 'span';
@@ -293,26 +300,29 @@ const CardRender = ({
     ) {
       let cardTypeText = "";
       let cardSubTypeText = "";
+
+      const splitAndCapitalize = (word: string) => 
+        splitCamelCase(word)
+          .split(' ')
+          .map(capitalizeWord)
+          .join(' ');
+
       if (cardData?.cardType) {
-        const cardType = Array
-          .isArray(cardData.cardType) ? 
+        const cardType = Array.isArray(cardData.cardType) ? 
           cardData.cardType : 
           [cardData.cardType];
         cardTypeText = cardType
-          .map(capitalizeWord)
+          .map(splitAndCapitalize)
           .join(" ");
       }
-      if (
-        cardData?.cardSubType && 
-        cardData.cardSubType.length > 0
-      ) {
-        const separator = cardData.cardSubType.length > 1 ? " • " : "";
+
+      if (cardData?.cardSubType && cardData.cardSubType.length > 0) {
         cardSubTypeText = cardData.cardSubType
-          .map(capitalizeWord)
+          .map(splitAndCapitalize)
           .join(" ");
-        cardTypeText += `${separator}${cardSubTypeText}`;
       }
-      return cardTypeText;
+
+      return cardSubTypeText ? `${cardTypeText} • ${cardSubTypeText}` : cardTypeText;
     };
 
     // Determine bgColor
