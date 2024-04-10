@@ -211,40 +211,51 @@ const CardRender = ({
       };
 
       const splitAndProcessText = (
-        text: string, 
-        lineIndex: number, 
-        lastIndex: number
+        text: string, lineIndex: number, partIndex: number
       ) => {
-        const regexToSplitText = /(\([^)]+\))/g;
-        const textParts: Array<React.ReactNode> = [];
-        let lastSubIndex = 0;
-        text.replace(
-          regexToSplitText, 
-          (subMatch, ...subArgs) => {
-          const subOffset = subArgs[subArgs.length - 2];
-          if (lastSubIndex < subOffset) {
+        const textParts = [];
+        let buffer = '';
+        let isItalic = false;
+
+        for (let i = 0; i < text.length; i++) {
+          const char = text[i];
+          if (char === '(') {
+            if (buffer.length > 0) {
+              textParts.push(<span key={`${lineIndex}-${partIndex}-text-${textParts.length}`}>{buffer}</span>);
+              buffer = '';
+            }
+            isItalic = true;
+            buffer += char;
+          } else if (char === ')' && isItalic) {
+            buffer += char;
             textParts.push(
-              text.substring(
-                lastSubIndex, subOffset
-              )
+              <span
+                key={`${lineIndex}-${partIndex}-italic-${textParts.length}`}
+                className="italic font-light"
+              >
+                {buffer}
+              </span>
             );
+            buffer = '';
+            isItalic = false;
+          } else {
+            buffer += char;
           }
-          textParts.push(
-            <span
-              key={`${lineIndex}-italic-${lastIndex}-${subOffset}`}
-              className="italic font-light"
-            >
-              {subMatch}
-            </span>
-          );
-          lastSubIndex = subOffset + subMatch.length;
-          return subMatch;
-        });
-        if (lastSubIndex < text.length) {
-          textParts.push(
-            text.substring(lastSubIndex)
-          );
         }
+
+        // Push any remaining buffer as normal text
+        if (buffer.length > 0) {
+          const key = isItalic ? 'italic' : 'text';
+          const Component = isItalic ? 'em' : 'span';
+          textParts.push(
+            <Component
+              key={`${lineIndex}-${partIndex}-${key}-${textParts.length}`}
+              className={isItalic ? "italic font-light" : ""}
+            >
+              {buffer}
+            </Component>);
+        }
+
         return textParts;
       };
       
