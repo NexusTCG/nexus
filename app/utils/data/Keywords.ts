@@ -7,6 +7,12 @@ export const Keywords: KeywordsType = {
     type: "persistent",
     unique: false,
   },
+  aftermath: {
+    name: "Aftermath",
+    reminder: "This reacts at the end of the battle phase",
+    type: "reactive",
+    unique: true,
+  },
   emanate: {
     name: "Emanate",
     reminder: "While this is in a biome, this effect applies to that biome",

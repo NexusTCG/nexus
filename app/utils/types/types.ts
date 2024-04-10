@@ -70,6 +70,7 @@ export type KeywordEntry = {
 export type KeywordsType = {
   [key: string]: KeywordEntry;
   adept: KeywordEntry;
+  aftermath: KeywordEntry;
   emanate: KeywordEntry;
   evasion: KeywordEntry;
   intimidate: KeywordEntry;

@@ -40,6 +40,10 @@ export default function Keyword(
             "italic": keyword.unique === true
           }
         )}
+        sx={{
+          minWidth: "2em",
+          display: "inline-block",
+        }}
       >
         {keyword.unique ? keyword.name + ": " : keyword.name + " "}
         <Typography

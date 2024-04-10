@@ -109,6 +109,7 @@ const CardRender = ({
     });
 
     // Capitalize first letter of word
+    // Move to utility functions
     function capitalizeWord(
       word: string
     ) {
@@ -201,7 +202,6 @@ const CardRender = ({
           return null;
         }).filter(Boolean);
       };
-
       
       return text
         .split('\n')
@@ -211,17 +211,16 @@ const CardRender = ({
             variant="body1"
             component="div"
             gutterBottom
+            className="
+              inline-block
+              text-wrap
+              whitespace-normal
+              overflow-x-visible
+              break-words
+            "
             sx={{
               fontSize: fontSize,
               lineHeight: lineHeight,
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              flexWrap: 'nowrap',
-              whiteSpace: 'normal',
-              overflowX: 'visible',
-              // wordBreak: 'break-word',
             }}
           >
             {processLine(line, index)}
