@@ -126,7 +126,9 @@ const CardRender = ({
       text: string,
       cardName: string
     ) {
-      const keywordsSorted = Object.keys(Keywords).sort((a, b) => b.length - a.length);
+      const keywordsSorted = Object
+        .keys(Keywords)
+        .sort((a, b) => b.length - a.length);
       const keywordPattern = `\\b(${keywordsSorted.join('|')})\\b`;
       const abbreviationPattern = "\\{[^{}]+\\}";
       const combinedPattern = `(${keywordPattern})|(${abbreviationPattern})`;
@@ -138,19 +140,19 @@ const CardRender = ({
       ) => {
         let lastIndex = 0;
         const parts: Array<React.ReactNode> = [];
+
         line.replace(regex, (match, ...args) => {
           const offset = args[args.length - 2];
-          if (lastIndex < offset) {
-            parts.push(
-              <span key={`${lineIndex}-text-${lastIndex}`}>
-                {
-                  line
-                    .substring(lastIndex, offset)
-                    .replace(/~/g, cardName)
-                }
-              </span>
-            );
-          }
+          const textBeforeMatch = line
+            .substring(lastIndex, offset)
+            .replace(/~/g, cardName);
+          parts.push(
+            ...splitAndProcessText(
+              textBeforeMatch, 
+              lineIndex, 
+              lastIndex
+            )
+          );
     
           const lowerMatch = match.toLowerCase();
           if (Keywords[lowerMatch]) {
@@ -194,19 +196,56 @@ const CardRender = ({
           return match;
         });
 
-        if (lastIndex < line.length) {
-          parts.push(
-            <span key={`${lineIndex}-text-${lastIndex}`}>
-              {
-                line
-                  .substring(lastIndex)
-                  .replace(/~/g, cardName)
-              }
-            </span>
-          );
-        };
+        const remainingText = line
+          .substring(lastIndex)
+          .replace(/~/g, cardName);
+        parts.push(
+          ...splitAndProcessText(
+            remainingText, 
+            lineIndex, 
+            lastIndex
+          )
+        );
 
         return parts;
+      };
+
+      const splitAndProcessText = (
+        text: string, 
+        lineIndex: number, 
+        lastIndex: number
+      ) => {
+        const regexToSplitText = /(\([^)]+\))/g;
+        const textParts: Array<React.ReactNode> = [];
+        let lastSubIndex = 0;
+        text.replace(
+          regexToSplitText, 
+          (subMatch, ...subArgs) => {
+          const subOffset = subArgs[subArgs.length - 2];
+          if (lastSubIndex < subOffset) {
+            textParts.push(
+              text.substring(
+                lastSubIndex, subOffset
+              )
+            );
+          }
+          textParts.push(
+            <span
+              key={`${lineIndex}-italic-${lastIndex}-${subOffset}`}
+              className="italic font-light"
+            >
+              {subMatch}
+            </span>
+          );
+          lastSubIndex = subOffset + subMatch.length;
+          return subMatch;
+        });
+        if (lastSubIndex < text.length) {
+          textParts.push(
+            text.substring(lastSubIndex)
+          );
+        }
+        return textParts;
       };
       
       return text
@@ -801,6 +840,7 @@ const CardRender = ({
                         <Typography
                           id="initial-mode-lore-text"
                           variant="body2"
+                          className="italic font-light"
                         >
                           {`"${cardData.cardLoreText}"`}
                         </Typography>
@@ -1306,6 +1346,7 @@ const CardRender = ({
                         />
                         <Typography
                           id="anomaly-mode-lore-text"
+                          className="italic font-light"
                           variant="body2"
                         >
                           {`"${cardData.cardLoreText}"`}
