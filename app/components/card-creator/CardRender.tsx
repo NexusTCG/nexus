@@ -126,7 +126,8 @@ const CardRender = ({
       text: string,
       cardName: string
     ) {
-      const keywordPattern = Object.keys(Keywords).join("|");
+      const keywordsSorted = Object.keys(Keywords).sort((a, b) => b.length - a.length);
+      const keywordPattern = `\\b(${keywordsSorted.join('|')})\\b`;
       const abbreviationPattern = "\\{[^{}]+\\}";
       const combinedPattern = `(${keywordPattern})|(${abbreviationPattern})`;
       const regex = new RegExp(combinedPattern, "gi");
@@ -135,25 +136,42 @@ const CardRender = ({
         line: string,
         lineIndex: number
       ) => {
-        const parts = line.split(regex);
-
-        return parts.map((part, index) => {
-          if (
-            part && 
-            part.match(
-              new RegExp(abbreviationPattern)
-            )
-          ) {
-            const abbreviation = part;
+        let lastIndex = 0;
+        const parts: Array<React.ReactNode> = [];
+        line.replace(regex, (match, ...args) => {
+          const offset = args[args.length - 2];
+          if (lastIndex < offset) {
+            parts.push(
+              <span key={`${lineIndex}-text-${lastIndex}`}>
+                {
+                  line
+                    .substring(lastIndex, offset)
+                    .replace(/~/g, cardName)
+                }
+              </span>
+            );
+          }
+    
+          const lowerMatch = match.toLowerCase();
+          if (Keywords[lowerMatch]) {
+            const keyword = Keywords[lowerMatch];
+            parts.push(
+              <Keyword
+                key={`${lineIndex}-${offset}`}
+                effect=""
+                keyword={keyword}
+              />
+            );
+          } else {
+            const abbreviation = match;
             const IconComponent = abbreviationIcons[
               abbreviation as keyof typeof abbreviationIcons
             ];
             if (IconComponent) {
-              return (
+              parts.push(
                 <Tooltip
                   title={IconComponent.name}
-                  key={`${lineIndex}-${index}`}
-                  className="flex flex-wrap"
+                  key={`${lineIndex}-${offset}`}
                 >
                   <Image
                     src={IconComponent.src}
@@ -161,46 +179,34 @@ const CardRender = ({
                     width={inlineIconSize}
                     height={inlineIconSize}
                     unoptimized={true}
-                    style={{ 
+                    style={{
                       display: "inline-block",
                       flexShrink: 0,
                       margin: "0 2px",
                     }}
-                    className="mx-0.5"
                   />
                 </Tooltip>
               );
             }
-          } else if (
-            part && 
-            part.match(new RegExp(keywordPattern))
-          ) {
-            const keywordKey = Object
-              .keys(Keywords)
-              .find(
-                key => key
-                  .toLowerCase() === 
-                  part.toLowerCase()
-              );
-            if (keywordKey) {
-              const keyword = Keywords[keywordKey];
-              return (
-                <Keyword
-                  key={`${lineIndex}-${index}`}
-                  effect=""
-                  keyword={keyword}
-                />
-              );
-            }
-          } else if (part) {
-            return (
-              <span key={`${lineIndex}-${index}`}>
-                {part.replace(/~/g, cardName)}
-              </span>
-            );
-          };
-          return null;
-        }).filter(Boolean);
+          }
+    
+          lastIndex = offset + match.length;
+          return match;
+        });
+
+        if (lastIndex < line.length) {
+          parts.push(
+            <span key={`${lineIndex}-text-${lastIndex}`}>
+              {
+                line
+                  .substring(lastIndex)
+                  .replace(/~/g, cardName)
+              }
+            </span>
+          );
+        };
+
+        return parts;
       };
       
       return text

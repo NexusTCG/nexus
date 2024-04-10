@@ -64,7 +64,6 @@ export type KeywordEntry = {
   name: string;
   reminder: string;
   type: string;
-  unique: boolean;
 };
 
 export type KeywordsType = {

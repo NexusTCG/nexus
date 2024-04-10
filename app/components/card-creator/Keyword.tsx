@@ -11,7 +11,6 @@ type KeywordType = {
     name: string;
     reminder: string;
     type: string;
-    unique: boolean;
   }
 }
 export default function Keyword(
@@ -24,8 +23,8 @@ export default function Keyword(
     <Tooltip
       title={
         effect ? 
-        `${keyword.name}: ${effect} ${keyword.reminder}` : 
-        `${keyword.name}: ${keyword.reminder}`
+        `${keyword.name} (${keyword.type}): ${effect} ${keyword.reminder}` : 
+        `${keyword.name} (${keyword.type}): ${keyword.reminder}`
       }
       placement="top"
     >
@@ -34,10 +33,9 @@ export default function Keyword(
         component="span"
         className={clsx("font-semibold",
           {
-            "text-indigo-500 hover:text-indigo-400": keyword.type === "persistent",
-            "text-rose-500 hover:text-rose-400": keyword.type === "active",
-            "text-amber-500 hover:text-amber-400": keyword.type === "reactive",
-            "italic": keyword.unique === true
+            "text-indigo-600 hover:text-indigo-500": keyword.type === "persistent",
+            "text-rose-600 hover:text-rose-500": keyword.type === "active",
+            "text-amber-600 hover:text-amber-500": keyword.type === "reactive",
           }
         )}
         sx={{
@@ -45,7 +43,7 @@ export default function Keyword(
           display: "inline-block",
         }}
       >
-        {keyword.unique ? keyword.name + ": " : keyword.name + " "}
+        {keyword.name + " "}
         <Typography
           variant="body2"
           component="span"
