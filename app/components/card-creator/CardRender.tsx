@@ -8,6 +8,8 @@ import React, {
 // Actions
 import colorMapping from "@/app/utils/data/colorMapping";
 import determineBgImage from "@/app/lib/actions/determineBgImage";
+import { splitCamelCase } from "@/app/lib/actions/utils/splitCamelCase";
+import { capitalizeWord } from "@/app/lib/actions/utils/capitalizeWord";
 // Types
 import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import { CardFormDataType } from "@/app/utils/types/types";
@@ -107,27 +109,6 @@ const CardRender = ({
       "200": "bg-slate-200",
       "400": "bg-slate-400",
     });
-
-    // Capitalize first letter of word
-    // Move to utility functions
-    function capitalizeWord(
-      word: string
-    ) {
-      return word
-          .charAt(0)
-          .toUpperCase() + 
-        word
-          .slice(1)
-          .toLowerCase();
-    }
-
-    // Split camelCase words
-    // Move to utility functions
-    function splitCamelCase(
-      word: string
-    ) {
-      return word.split(/(?=[A-Z])/).join(" ");
-    }
 
     // Render text with keywords
     function renderTextWithKeywords(

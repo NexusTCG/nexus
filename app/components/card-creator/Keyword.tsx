@@ -2,6 +2,7 @@
 
 import React from "react";
 import clsx from "clsx";
+import { capitalizeWord } from "@/app/lib/actions/utils/capitalizeWord";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 
@@ -23,8 +24,8 @@ export default function Keyword(
     <Tooltip
       title={
         effect ? 
-        `${keyword.name} (${keyword.type}): ${effect} ${keyword.reminder}` : 
-        `${keyword.name} (${keyword.type}): ${keyword.reminder}`
+        `${capitalizeWord(keyword.name.toLowerCase())} (${capitalizeWord(keyword.type.toLowerCase())}): ${effect} ${keyword.reminder}` : 
+        `${capitalizeWord(keyword.name.toLowerCase())} (${capitalizeWord(keyword.type.toLowerCase())}): ${keyword.reminder}`
       }
       placement="top"
     >
@@ -43,7 +44,7 @@ export default function Keyword(
           display: "inline-block",
         }}
       >
-        {keyword.name + " "}
+        {capitalizeWord(keyword.name.toLowerCase()) + " "}
         <Typography
           variant="body2"
           component="span"
