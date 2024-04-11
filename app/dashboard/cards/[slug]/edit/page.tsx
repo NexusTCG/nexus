@@ -108,6 +108,7 @@ export default function EditCard({
       cardAnomalyModeText: "",
       cardAnomalyModeLoreText: "",
       cardAnomalyModeGrade: "core",
+      art_prompt_options: [],
     },
     resolver: zodResolver(cardFormSchema),
     mode: "onChange",
