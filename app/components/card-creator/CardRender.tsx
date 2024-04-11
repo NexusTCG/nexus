@@ -669,7 +669,11 @@ const CardRender = ({
                     text-black
                   `}
                 >
-                  {cardData?.cardUnitType === "melee" ? (
+                  {cardData?.cardType !== undefined && 
+                  cardData?.cardUnitType === "melee" && (
+                    cardData?.cardType.includes("entity") || 
+                    cardData?.cardType.includes("outpost")
+                  ) ? (
                     <Image
                       src={RangeMelee}
                       height={15}
