@@ -132,7 +132,7 @@ export default function Card({
         items-center
         lg:items-start
         w-full
-        lg:h-[100vh]
+        h-full
         z-0
       "
     >
@@ -507,14 +507,13 @@ export default function Card({
       <Box
         id="card-page-content-container"
         className="
+          sticky 
+          top-0
           flex
           flex-col
-          justify-between
-          items-center
-          w-full
+          h-screen
           lg:max-w-[480px]
-          h-full
-          gap-4
+          w-full
           border-t
           lg:border-t-0
           border-l-0
@@ -526,7 +525,7 @@ export default function Card({
         <Box
           id="card-details-container"
           className="
-            flex
+            flex-grow
             flex-col
             justify-between
             items-start
@@ -545,20 +544,24 @@ export default function Card({
                 justify-between
                 items-start
                 w-full
-                h-full
+                overflow-y-scroll
+                max-h-[100vh]
+                scrollbar-hide
               "
             >
               <Typography
                 variant="subtitle1"
                 component="span"
                 className="
+                  sticky
+                  top-0
+                  z-10
                   flex
                   flex-row
                   justify-start
                   items-baseline
                   gap-2
                   w-full
-                  text-lg
                   text-white
                   font-medium
                   px-4
@@ -566,15 +569,13 @@ export default function Card({
                   bg-neutral-900
                   border-b
                 border-neutral-700
-                  sticky
-                  top-0
                 "
               >
                 Comments
                 <Typography
                   variant="subtitle1"
                   className="
-                    text-neutral-300
+                    text-neutral-400
                   "
                 >
                   ({commentsCount})
@@ -582,13 +583,12 @@ export default function Card({
               </Typography>
               {/* Comments */}
               <Box
+                id="comments-container"
                 className="
-                  flex
-                  flex-col
-                  justify-start
-                  items-start
+                  flex-grow
+                  overflow-y-auto
                   w-full
-                  h-full
+                  min-h-[100vh]
                 "
               >
                 <CardComments
@@ -598,14 +598,15 @@ export default function Card({
               </Box>
               {/* Add Comment */}
               <Box
+                id="add-comment-form-container"
                 className="
+                  sticky
+                  bottom-0
+                  z-10
+                  w-full
                   border-t
                   border-neutral-700
                   bg-neutral-900
-                  w-full
-                  z-10
-                  sticky
-                  bottom-0
                 "
               >
                 <CardCommentForm cardId={cardData.id} />
