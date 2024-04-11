@@ -669,24 +669,28 @@ const CardRender = ({
                     text-black
                   `}
                 >
-                  {cardData?.cardType !== undefined && 
-                  cardData?.cardUnitType === "melee" && (
+                  {/* Card range */}
+                  {cardData?.cardType !== undefined && (
                     cardData?.cardType.includes("entity") || 
                     cardData?.cardType.includes("outpost")
-                  ) ? (
-                    <Image
-                      src={RangeMelee}
-                      height={15}
-                      width={15}
-                      alt="Melee icon"
-                    />
-                  ) : (
-                    <Image
-                      src={RangeRanged}
-                      height={15}
-                      width={15}
-                      alt="Ranged icon"
-                    />
+                  ) && (
+                      <Box>
+                          {cardData?.cardUnitType === "melee" ? (
+                        <Image
+                          src={RangeMelee}
+                          height={15}
+                          width={15}
+                          alt="Melee icon"
+                        />
+                      ) : (
+                        <Image
+                          src={RangeRanged}
+                          height={15}
+                          width={15}
+                          alt="Ranged icon"
+                        />
+                      )}
+                    </Box>
                   )}
                   {/* Card types */}
                   <Box
