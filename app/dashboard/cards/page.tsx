@@ -109,8 +109,6 @@ export default function Cards() {
           items-center
           w-full
           gap-4
-          border
-          border-red-500
         "
       >
         <Box
