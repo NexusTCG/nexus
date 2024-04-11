@@ -8,7 +8,7 @@ export const Keywords: KeywordsType = {
   },
   aftermath: {
     name: "Aftermath",
-    reminder: "This effect reacts when this unit is terminated",
+    reminder: "This reacts at the end of the battle phase",
     type: "reactive",
   },
   emanate: {
@@ -23,17 +23,12 @@ export const Keywords: KeywordsType = {
   },
   intimidate: {
     name: "Intimidate",
-    reminder: "This unit can't be defended by defenders with less attack",
+    reminder: "This unit can't be defended by defenders with lower attack",
     type: "persistent",
   },
   network: {
     name: "Network",
     reminder: "While this is in a biome, friendly units in neighbouring biomes, each gains effect",
-    type: "persistent",
-  },
-  kinship: {
-    name: "Kinship",
-    reminder: "Other friendly units that share an entity type with this, get this effect",
     type: "persistent",
   },
   stealth: {
@@ -48,7 +43,7 @@ export const Keywords: KeywordsType = {
   },
   lightspeed: {
     name: "Lightspeed",
-    reminder: "This can't be targeted by actions with lower speed",
+    reminder: "This can't be targeted by actions with lower or equal speed",
     type: "persistent",
   },
   ready: {
@@ -58,17 +53,22 @@ export const Keywords: KeywordsType = {
   },
   secure: {
     name: "Secure",
-    reminder: "This unit does not lock while in a biome",
+    reminder: "This unit does not lock when attacking",
     type: "persistent",
   },
   quantum: {
     name: "Quantum",
-    reminder: "This unit can defend up to two units, in different biomes",
+    reminder: "This unit can defend an extra unit, in another biome",
     type: "persistent",
   },
   amplify: {
     name: "Amplify",
     reminder: "When you play a non-unit function, this unit temporarily gets increase 1",
+    type: "reactive",
+  },
+  chain: {
+    name: "Chain",
+    reminder: "If you have played another function this turn, add this effect",
     type: "reactive",
   },
   cleanup: {
@@ -83,7 +83,7 @@ export const Keywords: KeywordsType = {
   },
   deploy: {
     name: "Deploy",
-    reminder: "This react when this appears on the planet",
+    reminder: "This reacts when this appears on the planet",
     type: "reactive",
   },
   despawn: {
@@ -91,14 +91,19 @@ export const Keywords: KeywordsType = {
     reminder: "This reacts when this is put into a cache from the planet",
     type: "reactive",
   },
-  distort: {
-    name: "Distort",
-    reminder: "When this appears on the planet, if its an anomaly, this effect reacts",
+  encrypt: {
+    name: "Encrypt",
+    reminder: "While [condition], this unit can not be the target of an action",
     type: "reactive",
   },
   exploit: {
     name: "Exploit",
     reminder: "This reacts when this unit deals battle damage to an enemy",
+    type: "reactive",
+  },
+  firewall: {
+    name: "Firewall",
+    reminder: "Opponents must [condition], as an extra cost to target this constant with an action",
     type: "reactive",
   },
   initiate: {
@@ -108,17 +113,22 @@ export const Keywords: KeywordsType = {
   },
   transfuse: {
     name: "Transfuse",
-    reminder: "When this deals damage to a unit or target, restore that much durability to target friendly sector",
+    reminder: "When this deals damage to a unit or sector in a biome, your friendly sector in that biome gains that much durability.",
     type: "reactive",
   },
   magnetic: {
     name: "Magnetic",
-    reminder: "When another friendly entity is terminated, if it was geared, attach its gears to this entity",
+    reminder: "When another friendly unit is terminated, if it was geared, you may attached up to one of its gears to this unit",
     type: "reactive",
   },
   overpower: {
     name: "Overpower",
-    reminder: "When this deals terminal damage to an enemy unit, if it was in a biome, surplus damage is dealt to the enemy sector in that biome",
+    reminder: "When this deals terminal damage to an enemy unit in a biome, surplus damage is dealt to the enemy sector",
+    type: "reactive",
+  },
+  setup: {
+    name: "Setup",
+    reminder: "This reacts at the beginning of your battle phase",
     type: "reactive",
   },
   surge: {
@@ -131,14 +141,14 @@ export const Keywords: KeywordsType = {
     reminder: "Any damage this deals to units is terminal",
     type: "reactive",
   },
-  erase: {
+  cache: {
     name: "Erase N",
     reminder: "Cache N cards of a deck",
     type: "activated",
   },
   hack: {
     name: "Hack",
-    reminder: "Unlock target unit, temporarily take control of it. It temporarily gains ready",
+    reminder: "Unlock the target, temporarily take control of it. It temporarily gains ready",
     type: "activated",
   },
   hologram: {
@@ -154,7 +164,12 @@ export const Keywords: KeywordsType = {
   scan: {
     name: "Scan N",
     reminder: "Review N cards, bottom any of number of them, and top the rest",
-    type: "scan",
+    type: "activated",
+  },
+  global: {
+    name: "Global N",
+    reminder: "You may pay this extra cost to remove all scope limits from this card",
+    type: "activated",
   },
   shift: {
     name: "shift",
