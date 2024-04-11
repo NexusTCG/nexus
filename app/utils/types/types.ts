@@ -26,6 +26,7 @@ export type CardFormDataType = {
   cardAnomalyModeText?: string | null;
   cardAnomalyModeLoreText?: string | null;
   cardAnomalyModeGrade?: string | null;
+  art_prompt_options: string[] | null;
 };
 
 export type CardTypesType = {

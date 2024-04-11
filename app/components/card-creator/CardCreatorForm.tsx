@@ -339,6 +339,24 @@ export default function CardCreatorForm({
       });
     }
   }, [cardData]);
+
+  // Update art prompt options in form
+  useEffect(() => {
+    if (
+      artPromptSelections && 
+      Object.keys(artPromptSelections).length > 0
+    ) {  
+      setValue(
+        "art_prompt_options", 
+        Object.values(artPromptSelections)
+      );
+    } else {
+      setValue(
+        "art_prompt_options", 
+        [""]
+      );
+    }
+  }, [artPromptSelections])
   
   // Set initial credits
   useEffect(() => {

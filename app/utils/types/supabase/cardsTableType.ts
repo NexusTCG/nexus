@@ -27,4 +27,5 @@ export type CardsTableType = {
     cardAnomalyModeText?: string;
     cardAnomalyModeLoreText?: string;
     cardAnomalyModeGrade?: string | null;
+    art_prompt_options: string[] | null;
 };

@@ -17,18 +17,22 @@ import { format } from 'date-fns';
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
+import Tooltip from "@mui/material/Tooltip";
 
 type CardCommentsProps = {
   cardId: number;
+  setCommentsCount: (count: number) => void;
 }
 
 export default function CardComments({
-   cardId 
+   cardId,
+   setCommentsCount,
 }: CardCommentsProps) {
   const supabase = createClient();
   const [comments, setComments] = useState<CardCommentsTableType[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch comments
   useEffect(() => {
     if (!cardId) return;
     
@@ -41,14 +45,22 @@ export default function CardComments({
       } 
     })
       .then((data) => {
-        if (data) setComments(data);
+        if (data) {
+          setComments(data)
+          setCommentsCount(data.length);
+        };
         setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching comments:", error);
       });
-  }, [cardId]);
+  }, [
+    cardId, 
+    setCommentsCount
+  ]);
 
+  // Subscribe to realtime comments
+  // TODO: Fix this not updating properly
   useEffect(() => {
     const channel = supabase
       .channel('realtime comments')
@@ -72,7 +84,11 @@ export default function CardComments({
     return () => {
       supabase.removeChannel(channel);
     }
-  }, [supabase, comments, setComments])
+  }, [
+    supabase, 
+    comments, 
+    setComments
+  ])
 
   if (loading) {
     return (
@@ -140,12 +156,13 @@ export default function CardComments({
           justify-start
           items-start
           w-full
-          gap-1
+          gap-2
           px-4
           py-3
           border-b
-          border-neutral-800
+          border-neutral-700/50
           bg-neutral-800/50
+          hover:bg-neutral-800
         "
       >
         <Typography
@@ -168,18 +185,21 @@ export default function CardComments({
             gap-1
           "
         >
-          <Link href={`/dashboard/profile/${comment.user}`}>
-            <Typography
-              variant="body2"
-              className="
-                text-teal-500
-              "
-            >
-              {comment.user}
-            </Typography>
-          </Link>
+          <Tooltip title={`${comment.user}'s profile`}>
+            <Link href={`/dashboard/profile/${comment.user}`}>
+              <Typography
+                variant="body2"
+                className="
+                  text-teal-500
+                  hover:text-teal-400
+                "
+              >
+                {comment.user}
+              </Typography>
+            </Link>
+          </Tooltip>
           <Typography
-            variant="caption"
+            variant="body2"
             className="
               text-neutral-400
             "

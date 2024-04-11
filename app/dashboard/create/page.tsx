@@ -77,7 +77,7 @@ export default function Create() {
       cardArt: "/images/card-parts/card-art/default-art.jpg",
       cardType: "entity",
       cardSuperType: "default",
-      cardSubType: [""],
+      cardSubType: [],
       cardSpeed: "1",
       cardGrade: "core",
       cardText: "",
@@ -93,7 +93,7 @@ export default function Create() {
       cardAnomalyModeText: "",
       cardAnomalyModeLoreText: "",
       cardAnomalyModeGrade: "core",
-      
+      art_prompt_options: [],
     },
     resolver: zodResolver(cardFormSchema),
     mode: "onChange",

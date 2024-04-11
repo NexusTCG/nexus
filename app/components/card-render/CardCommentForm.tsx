@@ -21,6 +21,8 @@ import PostHogClient from "@/app/lib/posthog/posthog";
 // Components
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import { InputAdornment } from "@mui/material";
+
 
 type CardCommentFormProps = {
   cardId: number;
@@ -47,6 +49,7 @@ export default function CardCommentForm({
     handleSubmit,
     setValue,
     reset,
+    watch,
     formState: {
       isValid, 
       errors 
@@ -55,6 +58,7 @@ export default function CardCommentForm({
 
   const posthog = PostHogClient();
   const session = useSession();
+  const form = watch();
 
   // Form submit handler
   async function onSubmit(
@@ -126,7 +130,7 @@ export default function CardCommentForm({
         items-end
         w-full
         p-4
-        gap-2
+        gap-1
         border-b
           border-neutral-800
       "
@@ -140,7 +144,7 @@ export default function CardCommentForm({
         variant="outlined"
         fullWidth
         multiline
-        rows={4}
+        rows={3}
         placeholder="Write a comment..."
         className="
           w-full
@@ -151,25 +155,30 @@ export default function CardCommentForm({
           focus:shadow-outline
           focus:border-blue-300
         "
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <Button
+                type="submit"
+                variant="outlined"
+                size="small"
+                color="primary"
+                disabled={!isValid || form.comment === ""}
+                className="
+                  mt-auto
+                  px-2
+                  py-1
+                  text-white
+                  rounded
+                  shadow
+                "
+              >
+                Send
+              </Button>
+            </InputAdornment>
+          )
+        }}
       />
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        disabled={!isValid}
-        className="
-          mt-2
-          px-4
-          py-2
-          bg-blue-500
-          hover:bg-blue-600
-          text-white
-          rounded
-          shadow
-        "
-      >
-        Comment
-      </Button>
     </form>
   )
 }

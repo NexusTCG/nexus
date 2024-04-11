@@ -41,6 +41,7 @@ const CardFormSchema = z
     cardAnomalyModeFlavorText: z.string().optional(),
     cardAnomalyModeText: z.string().optional(),
     cardAnomalyModeGrade: z.string().optional(),
+    art_prompt_options: z.array(z.string()).optional(),
   })
   .superRefine((data, ctx) => {
     if (
