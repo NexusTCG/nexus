@@ -19,23 +19,23 @@ import uploadCardImage from "@/app/lib/actions/supabase-data/uploadCardImage";
 import { uploadCardArtImage } from "@/app/lib/actions/supabase-data/uploadCardArtImage";
 import { postCardToDiscord } from "@/app/lib/actions/postCardToDiscord";
 // Types
-import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
-import { 
-  CardFormDataType, 
-  GameGlossaryType,
-  GameKeywordType,
-} from "@/app/utils/types/types";
+// import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
+import { CardFormDataType } from "@/app/utils/types/types";
 // Schema
 import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 // Data
-import { gameGlossary } from "@/app/utils/data/gameGlossary";
-import { gameKeywords } from "@/app/utils/data/gameKeywords";
+import { bannerMessages } from "@/app/utils/data/bannerMessages";
 // Utils
 import PostHogClient from "@/app/lib/posthog/posthog";
 import clsx from "clsx";
 // Custom components
-import CardCreatorForm from "@/app/components/card-creator/CardCreatorForm";
+// import CardCreatorForm from "@/app/components/card-creator/CardCreatorForm";
+import ArtPromptManager from "@/app/components/card-creator/ArtPromptManager";
+import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
+import MessageBanner from "@/app/components/feedback/MessageBanner";
+import RandomGameDesignTerm from "@/app/components/card-creator/RandomGameDesignTerm";
+import IconsAbbreviationMenu from "@/app/components/card-creator/IconsAbbreviationMenu";
 // Components
 import FormControlLabel from "@mui/material/FormControlLabel";
 import LinearProgress from "@mui/material/LinearProgress";
@@ -46,19 +46,18 @@ import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Tooltip from "@mui/material/Tooltip";
+import FormGroup from "@mui/material/FormGroup";
+import Switch from "@mui/material/Switch";
 // Icons
 import CheckIcon from "@mui/icons-material/Check";
 import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
 import SaveIcon from "@mui/icons-material/Save";
-import WarningIcon from "@mui/icons-material/Warning";
-import MenuBook from "@mui/icons-material/MenuBook";
-import VpnKey from "@mui/icons-material/VpnKey";
-import OpenInNew from "@mui/icons-material/OpenInNew";
 
 export default function Create() {
   const { userProfileData } = useContext(DashboardContext);
 
+  // Shorten form value names
   const methods = useForm<CardFormDataType>({
     defaultValues: {
       user_id: "", 
@@ -100,13 +99,14 @@ export default function Create() {
   });
   const {
     handleSubmit,
+    setValue,
     watch,
     formState: {
       isValid,
+      isDirty,
       isSubmitting,
       isSubmitted,
     },
-    setValue
   } = methods;
 
   // Utils
@@ -116,17 +116,19 @@ export default function Create() {
   const router = useRouter();
 
   // States
-  const [randomGlossaryTerm, setRandomGlossaryTerm] = useState<GameGlossaryType | null>(null);
-  const [randomKeyword, setRandomKeyword] = useState<GameKeywordType | null>(null);
-  const [submittedFormData, setSubmittedFormData] = useState<CardFormDataType | null>(null);
-  const [uploadedFormData, setUploadedFormData] = useState<CardsTableType | null>(null);
+  const [cardMode, setCardMode] = useState<"initial" | "anomaly">("initial");
   const [postToDiscord, setPostToDiscord] = useState<boolean>(true);
-  const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
+  // Feedback states
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
   const [alertInfo, setAlertInfo] = useState<{
     type: "success" | "error" | "info" | "warning";
     icon: React.ReactNode;
+    message: string;
+  } | null>(null);
+  const [bannerMessage, setBannerMessage] = useState<{
+    type: "warning" | "info" | "error";
     message: string;
   } | null>(null);
 
@@ -152,7 +154,6 @@ export default function Create() {
       message: "Submitting card..."
     });
     setShowAlertInfo(true);
-    setSubmittedFormData(data);
 
     try {
       if (document.getElementById("nexus-form-container")) {
@@ -196,8 +197,6 @@ export default function Create() {
           });
 
           const responseData = await response.json();
-
-          setUploadedFormData(responseData.data); // Delete
 
           if (
             response.ok && 
@@ -267,18 +266,6 @@ export default function Create() {
     }
   };
 
-  // Set random glossary term and keyword
-  useEffect(() => {
-    if (randomGlossaryTerm === null) {
-      const randomIndex = Math.floor(Math.random() * gameGlossary.length);
-      setRandomGlossaryTerm(gameGlossary[randomIndex]);
-    }
-    if (randomKeyword === null) {
-      const randomIndex = Math.floor(Math.random() * gameKeywords.length);
-      setRandomKeyword(gameKeywords[randomIndex]);
-    }
-  }, [randomGlossaryTerm, randomKeyword, gameGlossary, gameKeywords]);
-
   // Set user_id and cardCreator
   // values based on user session
   useEffect(() => {
@@ -312,6 +299,20 @@ export default function Create() {
       setOpenSnackbar(true);
     }
   }, [snackbarMessage]);
+
+  // Set banner message
+  useEffect(() => {
+    if (!bannerMessage && bannerMessages) {
+      setBannerMessage({
+        type: bannerMessages.copyrightWarning.type,
+        message: bannerMessages.copyrightWarning.message,
+      });
+    };
+  }, [
+    bannerMessages, 
+    setBannerMessage, 
+    bannerMessage
+  ]);
   
   return (
     <>
@@ -320,61 +321,58 @@ export default function Create() {
       >
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="w-full"
+          className="
+            flex
+            flex-col
+            justify-start
+            items-start
+            w-full
+            h-[100vh]
+          "
         >
           <Box
-            id="create-container"
+            id="create-page-container"
             className="
               flex
-              flex-col
+              flex-row
               justify-start
               items-center
               w-full
-              gap-4
-              md:bg-transparent
-              bg-neutral-800
+              h-screen
             "
           >
+            {/* Center Content */}
             <Box
-              id="create-header-container"
+              id="center-content-container"
               className="
-                w-full
-                h-full
                 flex
                 flex-col
-                justify-between
+                justify-start
                 items-center
-                bg-neutral-800
-                border-b
-              border-neutral-700
-                top-0
-                sticky
-                z-20
-                md:shadow-md
-                md:shadow-neutral-900/50
+                w-full
+                overflow-y-auto
+                max-h-screen
+                scrollbar-hide
               "
             >
+              {/* Create Header */}
               <Box
                 id="create-header-content"
                 className="
+                  sticky
+                  top-0
                   flex
                   flex-row
                   justify-between
                   items-center
                   w-full
-                  gap-8
-                  lg:pl-12
-                  md:pl-8
-                  sm:pl-4
-                  lg:pr-12
-                  md:pr-8
-                  sm:pr-4
-                  px-6
+                  pl-4
+                  pr-3
                   py-2
-                  md:py-1
-                  lg:py-2
-                  bg-neutral-700/20
-                  lg:bg-transparent
+                  border-b
+                  border-neutral-700
+                  bg-neutral-900
+                  z-10
                 "
               >
                 {/* Card Name + Creator */}
@@ -382,13 +380,10 @@ export default function Create() {
                   id="card-name-creator-container"
                   className="
                     flex
-                    md:flex-row
-                    flex-col
-                    justify-between
-                    items-start
-                    md:items-baseline
-                    gap-0
-                    md:gap-2
+                    flex-row
+                    justify-start
+                    items-baseline
+                    gap-1.5
                   "
                 >
                   {/* Card Name */}
@@ -396,10 +391,7 @@ export default function Create() {
                     variant="subtitle1"
                     className="
                       font-semibold
-                      text-md
-                      lg:text-xl
-                      -mb-1
-                      md:mb-0
+                      text-white
                     "
                   >
                     {
@@ -411,20 +403,17 @@ export default function Create() {
                   {/* Card Creator*/}
                   <Typography
                     variant="overline"
-                    sx={{ 
-                      fontSize: "0.725rem" 
-                    }}
-                    className="text-emerald-400"
+                    sx={{ fontSize: "0.725rem" }}
+                    className="text-teal-400"
+                    component="span"
                   >
                     <Typography
                       variant="overline"
-                      sx={{ 
-                        fontSize: "0.725rem" 
-                      }}
-                      className="text-neutral-400"
+                      sx={{ fontSize: "0.725rem" }}
+                      className="text-neutral-300"
                       component="span"
                     >
-                      by{" "}
+                      by {" "}
                     </Typography>
                       {
                         userProfileData?.username ? 
@@ -543,338 +532,284 @@ export default function Create() {
                 <LinearProgress
                   color="primary"
                   className="w-full"
+                  sx={{ height: "2px" }}
                 />
               )}
-            </Box>
-            <Box
-              id="create-form-container"
-              className="
-                flex
-                flex-col
-                justify-start
-                items-center
-                w-full
-                lg:px-12
-                md:px-8
-                sm:px-6
-                lg:mb-12
-                mb-8
-                md:mt-4
-                gap-4
-                px-6
-              "
-            >
-              {/* Warning Message */}
+
+              {/* Additional Info */}
               <Box
-                id="create-form-warning"
-                className="
-                  flex
-                  flex-row
-                  justify-start
-                  items-center
-                  w-full
-                  text-yellow-400/80
-                  bg-yellow-900/50
-                  rounded-md
-                  py-3
-                  px-4
-                  gap-4
-                "
-              >
-                <WarningIcon
-                  fontSize="small"
-                  sx={{ 
-                    width: "36px", 
-                    height: "36px"
-                  }}
-                  className="
-                    bg-yellow-600/50
-                    text-yellow-200/80
-                    rounded-full
-                    p-2
-                  "
-                />
-                <Typography
-                  variant="caption"
-                  className="
-                    w-full
-                    text-xs
-                  "
-                >
-                  Do not deliberately attempt to create cards that would violate the intellectual property of others. 
-                  Such as the names or likeness of recognizable characters, places, or items from other games, movies, real life, etc. 
-                  Doing so will result in a warning or termination of your account.
-                </Typography>
-              </Box>
-              {/* Game Design Tips */}
-              <Box
-                id="create-form-tips"
+                id="additional-info"
                 className="
                   flex
                   flex-col
-                  md:flex-row
                   justify-start
-                  items-stretch
+                  items-center
                   w-full
                   gap-4
+                  p-4
+                  border-b
+                  border-neutral-700
                 "
               >
-                {/* Random Glossary Term */}
-                {randomGlossaryTerm && (
+                {/* Banner Message */}
+                {bannerMessage && 
+                bannerMessage !== undefined && (
+                  <MessageBanner
+                    message={bannerMessage.message}
+                    type={bannerMessage.type}
+                  />
+                )}
+                {/* Game Design Tips */}
+                <Box
+                  id="create-form-tips"
+                  className="
+                    flex
+                    flex-col
+                    md:flex-row
+                    justify-start
+                    items-stretch
+                    w-full
+                    gap-4
+                  "
+                >
+                  {/* Random Glossary Term */}
+                  <RandomGameDesignTerm
+                    type="term"
+                  />
+                  {/* Random Keyword */}
+                  <RandomGameDesignTerm
+                    type="keyword"
+                  />
+                </Box>
+                {/* Card Render */}
+                <Box
+                  id="card-render-container"
+                  className="
+                    flex
+                    flex-col
+                    justify-start
+                    items-center
+                    w-full
+                    h-full
+                    pb-6
+                    pt-2
+                    md:px-6
+                    md:pt-4
+                    md:pb-8
+                    gap-4
+                  "
+                >
+                  {/* Additional Options */}
+                  {isDirty && (
                   <Box
-                    id="random-glossary-term-container"
                     className="
                       flex
-                      flex-row
-                      justify-start
-                      items-start
+                      flex-col
+                      justify-center
+                      items-center
                       w-full
-                      md:w-1/2
-                      rounded-md
-                      py-3
-                      px-4
-                      gap-4
-                      bg-sky-800/50
-                      hover:bg-sky-800/80
-                      border
-                      border-sky-700/50
-                      hover:border-sky-700/80
-                      hover:text-white
-                      hover:shadow-lg
-                      hover:shadow-sky-600/20
-                      transition-all
                     "
                   >
-                    <MenuBook
-                      fontSize="small"
-                      sx={{ 
-                        width: "36px", 
-                        height: "36px"
-                      }}
-                      className="
-                        bg-sky-600
-                        text-sky-100
-                        rounded-full
-                        p-2
-                      "
-                    />
+                    <FormGroup
+                      row={true}
+                    >
+                      <Tooltip title={
+                        cardMode === "initial" ? 
+                        "Switch to Anomaly Mode" : 
+                        "Switch to Initial Mode"
+                      }>
+                        <FormControlLabel
+                          onChange={() => {
+                            setCardMode(
+                              cardMode === "initial" ? 
+                              "anomaly" : 
+                              "initial"
+                            )
+                          }}
+                          control={
+                            <Switch
+                              defaultChecked
+                              checked={cardMode === "initial"}
+                            />
+                          } 
+                          label={
+                            cardMode === "initial" ? 
+                            "Initial Mode" : 
+                            "Anomaly Mode"
+                          }
+                        />
+                      </Tooltip>
+                      
+                      {/* INITIAL MODE: Unit Range */}
+                      {cardMode === "initial" &&
+                      form.cardType && 
+                      (
+                        form.cardType.includes("entity") ||
+                        form.cardType.includes("outpost")
+                      ) && (
+                        <FormControlLabel
+                          onChange={() => {
+                            form.cardUnitType === "melee" ? 
+                            setValue("cardUnitType", "ranged") : 
+                            setValue("cardUnitType", "melee")
+                          }}
+                          control={
+                            <Checkbox
+                              checked={form.cardUnitType === "ranged"}
+                              size="small"
+                            />
+                          } 
+                          label={
+                            <Typography
+                              variant="subtitle2"
+                              className="
+                              hover:text-neutral-400
+                                font-medium
+                              "
+                            >
+                              {
+                                form.cardUnitType === "melee" ? 
+                                "Melee" : "Ranged"
+                              }
+                            </Typography>
+                          }
+                        />
+                      )}
+                      {form.cardType && form.cardType !== "event" && (
+                        <FormControlLabel
+                          onChange={() => {
+                            form.cardSuperType === "default" || 
+                            form.cardSuperType === "" ? 
+                            setValue("cardSuperType", "mythic") : 
+                            setValue("cardSuperType", "default")
+                          }}
+                          control={
+                            <Checkbox
+                              checked={form.cardSuperType === "mythic"}
+                              size="small"
+                            />
+                          } 
+                          label={
+                            <Typography
+                              variant="subtitle2"
+                              className="
+                              hover:text-neutral-400
+                                font-medium
+                              "
+                            >
+                              Mythic
+                            </Typography>
+                          }
+                        />
+                      )}
+                    </FormGroup>
+                    {/* Alerts */}
                     <Box
-                      id="random-glossary-term-content"
                       className="
                         flex
                         flex-col
+                        justify-start
+                        items-start
                         w-full
                       "
                     >
-                      <Box
-                        id="random-glossary-term-header"
-                        className="
-                          flex
-                          flex-row
-                          justify-between
-                          items-center
-                          w-full
-                          mb-1
-                        "
-                      >
+                      {
+                        form.cardType && 
+                        form.cardType.length === 1 && 
+                        form.cardType.includes("") && (
                         <Typography
-                          variant="caption"
-                          sx={{ fontSize: "0.625rem" }}
-                          className="text-sky-300"
-                        >
-                          RANDOM TERM
-                        </Typography>
-                        <Tooltip title="View the game glossary on GitHub.">
-                          <a
-                            href="https://github.com/NexusTCG/wiki/wiki/Glossary"
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            <Typography
-                              variant="caption"
-                              sx={{ fontSize: "0.625rem" }}
-                              className="
-                                flex
-                                flex-row
-                                justify-end
-                                items-center
-                                text-sky-300
-                                hover:text-sky-400
-                                hover:cursor-pointer
-                              "
-                            >
-                              Glossary
-                              <OpenInNew
-                                fontSize="small"
-                                sx={{ fontSize: "1rem" }}
-                                className="
-                                  ml-1
-                                  opacity-80
-                                "
-                              />
-                            </Typography>
-                          </a>
-                        </Tooltip>
-                      </Box>
-                      <Typography
-                        variant="subtitle2"
-                        className="
-                          flex
-                          flex-col
-                          w-full
-                          font-semibold
-                        "
-                      >
-                        {randomGlossaryTerm.term}
-                        <Typography
-                          variant="caption"
+                          variant="body2"
                           className="
+                            flex 
+                            justify-center
+                            items-center
                             w-full
-                            text-xs
-                            text-neutral-300
+                            py-2
+                            rounded-sm
+                            bg-red-500/20
+                            text-red-500
                           "
                         >
-                          {randomGlossaryTerm.definition}
-                        </Typography>
-                      </Typography>
+                          Card type is required!
+                        </Typography>)
+                      }
                     </Box>
-                  </Box>
-                )}
-                {/* Random Keyword */}
-                {randomKeyword && (
-                  <Box
-                    id="random-keyword-container"
-                    className="
-                      flex
-                      flex-row
-                      justify-start
-                      items-start
-                      w-full
-                      md:w-1/2
-                      rounded-md
-                      py-3
-                      px-4
-                      gap-4
-                      bg-violet-800/50
-                      hover:bg-violet-800/80
-                      border
-                      border-violet-700/50
-                      hover:border-violet-700/80
-                      hover:text-white
-                      hover:shadow-lg
-                      hover:shadow-violet-600/20
-                      transition-all
-                    "
+                  </Box>)}
+
+                  {/* Div is for screenshot */}
+                  <div 
+                    id="nexus-form-container" 
+                    style={{ 
+                      borderRadius: "12.5px" 
+                    }}
                   >
-                    <VpnKey
-                      fontSize="small"
-                      sx={{ 
-                        width: "36px", 
-                        height: "36px"
-                      }}
-                      className="
-                        bg-violet-600
-                        text-violet-100
-                        rounded-full
-                        p-2
-                      "
+                    {/* Card Render / Form */}
+                    <NexusCardForm
+                      cardMode={cardMode}
                     />
-                    <Box
-                      id="random-keyword-content"
+                  </div>
+
+                  {cardMode === "anomaly" && (
+                    <Typography
+                      variant="body2"
                       className="
-                        flex
-                        flex-col
+                        flex 
+                        justify-center
+                        items-center
                         w-full
+                        bg-neutral-900/50
+                        py-2
+                        px-3
                       "
                     >
-                      <Box
-                        id="random-glossary-term-header"
-                        className="
-                          flex
-                          flex-row
-                          justify-between
-                          items-center
-                          w-full
-                          mb-1
-                        "
-                      >
-                        <Typography
-                          variant="caption"
-                          sx={{ fontSize: "0.625rem" }}
-                          className="text-violet-300"
-                        >
-                          RANDOM KEYWORD
-                        </Typography>
-                        <Tooltip title="View all keywords on GitHub.">
-                          <a
-                            href="https://github.com/NexusTCG/wiki/wiki/Keywords"
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            <Typography
-                              variant="caption"
-                              sx={{ fontSize: "0.625rem" }}
-                              className="
-                                flex
-                                flex-row
-                                justify-end
-                                items-center
-                                text-violet-300
-                                hover:text-violet-400
-                                hover:cursor-pointer
-                              "
-                            >
-                              Keywords
-                              <OpenInNew
-                                fontSize="small"
-                                sx={{ fontSize: "1rem" }}
-                                className="
-                                  ml-1
-                                  opacity-80
-                                "
-                              />
-                            </Typography>
-                          </a>
-                        </Tooltip>
-                      </Box>
-                      <Typography
-                        variant="subtitle2"
-                        className="
-                          flex
-                          flex-col
-                          w-full
-                          font-semibold
-                        "
-                      >
-                        {randomKeyword.keyword}
-                        <Typography
-                          variant="caption"
-                          className="
-                            w-full
-                            text-xs
-                            text-neutral-300
-                          "
-                        >
-                          {randomKeyword.definition}
-                        </Typography>
-                      </Typography>
-                    </Box>
-                  </Box>
-                )}
+                      {"Each Nexus card has an initial mode (the card above), and an anomaly mode. Cards can be converted to its anomaly mode, so it can be played as an anomaly (resource card) instead of its initial mode card. The anamoly mode typically lets you Lock {L} the card to make energy. But a card's anomaly mode can also have other effects. The default anomaly mode, converts the card into one of the five Common Anomalies. Anything other than that is considered an Uncommon Anomaly."}
+                    </Typography>
+                  )}
+                </Box>
+              </Box>
+
+              <Box
+                id="abbreviations-menu-container"
+                className="
+                  flex
+                  flex-col
+                  justify-start
+                  items-start
+                  w-full
+                  gap-2
+                  p-4
+                  rounded-lg
+                  bg-neutral-900
+                "
+              >
+                <IconsAbbreviationMenu />
               </Box>
               
-              {/* Card Creator Form */}
-              <CardCreatorForm
-                cardData={
-                  uploadedFormData ? 
-                  uploadedFormData : 
-                  submittedFormData
-                }
-              />
+            </Box>
+            {/* Side Content Container */}
+            <Box
+              id="side-content-container"
+              className="
+                sticky top-0
+                flex flex-col
+                justify-start
+                items-center
+                w-full max-w-[480px]
+                min-h-screen
+                border-l border-neutral-700
+                bg-neutral-800
+                overflow-y-auto
+                scrollbar-hide
+              "
+            >
+              {/* Component That Renders All Sections */}
+              <ArtPromptManager />
             </Box>
           </Box>
         </form>
       </FormProvider>
+
+      {/* Snackbar */}
       {openSnackbar && (
         <Snackbar
           open={openSnackbar}

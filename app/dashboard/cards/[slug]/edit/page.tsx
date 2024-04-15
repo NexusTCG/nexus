@@ -28,7 +28,7 @@ import clsx from "clsx";
 // Custom Components
 import CardCreatorSkeleton from "@/app/components/card-creator/CardCreatorSkeleton";
 // Components
-import CardCreatorForm from "@/app/components/card-creator/CardCreatorForm";
+import CardCreatorForm from "@/app/components/card-creator/ArtPromptManager";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";

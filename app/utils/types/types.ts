@@ -118,3 +118,22 @@ export type GameKeywordType = {
   definition: string;
   type: string;
 };
+
+export type ArtPromptSectionOptionType = {
+  id: number;
+  title: string;
+  description?: string;
+  prompt?: string;
+  image?: string;
+}
+
+export type ArtPromptSectionType = {
+  section: string;
+  summary?: string;
+  icon: React.ElementType,
+  options: ArtPromptSectionOptionType[];
+}
+
+export type ArtPromptOptionsDataType = {
+  [section: string]: ArtPromptSectionType;
+}

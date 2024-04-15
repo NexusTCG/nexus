@@ -117,7 +117,7 @@ export default function DashboardLayout({
           lg:hidden
           block
           w-full
-          z-10
+          z-20
         "
       >
         {/* AppBar */}
@@ -132,7 +132,6 @@ export default function DashboardLayout({
           items-center
           w-full
           h-full
-          bg-neutral-900
         "
       >
          <DashboardContext.Provider
