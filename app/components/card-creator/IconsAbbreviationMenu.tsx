@@ -20,7 +20,6 @@ export default function IconsAbbreviationMenu() {
         items-center
         gap-2 
         w-full
-        mt-4
       "
     >
       <Box

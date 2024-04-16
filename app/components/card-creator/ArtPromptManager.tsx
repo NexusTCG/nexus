@@ -38,6 +38,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import ErrorIcon from "@mui/icons-material/Error";
 import InfoIcon from "@mui/icons-material/Info";
 import PaidIcon from '@mui/icons-material/Paid';
+import { ArtPromptOptionsData } from "@/app/utils/data/artPromptOptions";
 
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
@@ -352,8 +353,7 @@ useEffect(() => {
         id="card-form-container-inner"
         className="
           flex
-          flex-col-reverse
-          md:flex-row
+          flex-col
           justify-between
           items-start
           w-full
@@ -361,88 +361,7 @@ useEffect(() => {
           px-6
         "
       >
-        <Box>
-          {/* Card Art Options */}
-          {showCardArtOptions && (
-            <Box
-              className="
-                flex
-                flex-col
-                justify-start
-                items-start
-                w-full
-                gap-2
-                p-4
-                rounded-lg
-                bg-neutral-900
-              "
-            >
-              <Typography
-                variant="subtitle2"
-                className="
-                  text-neutral-500
-                  font-medium
-                "
-              >
-                {
-                  form.cardName ? 
-                  `${form.cardName} art options` : 
-                  "Card art options"
-                }
-              </Typography>
-              <Box
-                className="
-                  flex
-                  flex-row
-                  justify-center
-                  items-center
-                  w-full
-                  gap-2
-                "
-              >
-                {cardArtOptions
-                  .options
-                  .map((
-                    imageUrl, 
-                    index
-                  ) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      position: "relative",
-                      overflow: "hidden",
-                      aspectRatio: "1/1",
-                      maxHeight: "144px",
-                    }}
-                    className="
-                      flex
-                      flex-col
-                      justify-center
-                      items-center
-                      w-full
-                      gap-2
-                    "
-                  >
-                    <Image
-                      key={index}
-                      src={imageUrl}
-                      fill
-                      alt={`Card art option ${index}`}
-                      onClick={handleCardArtOptionChange.bind(null, index)}
-                      style={{ objectFit: "cover"}}
-                      className={clsx("rounded-md border border-neutral-500 shadow-md shadow-neutral-950/50",
-                        {
-                          "opacity-100 border-teal-500": index === cardArtOptions.activeOption,
-                          "opacity-25 hover:opacity-100 hover:cursor-pointer hover:shadow-neutral-950": index !== cardArtOptions.activeOption,
-                        }
-                      )}
-                    />
-                  </Box>
-                ))}
-              </Box>
-            </Box>
-          )}
-        </Box>
+        
         {/* Prompt Container */}
         <Box
           id="card-form-prompt-container"
@@ -678,6 +597,90 @@ useEffect(() => {
               </Box>
             )}
           </Box>
+          {/* Card Art Options */}
+          {showCardArtOptions && (
+            <Box
+              className="
+                flex
+                flex-col
+                justify-start
+                items-start
+                w-full
+                gap-2
+                p-4
+                rounded-lg
+                bg-neutral-900
+              "
+            >
+              <Typography
+                variant="subtitle2"
+                className="
+                  text-neutral-500
+                  font-medium
+                "
+              >
+                {
+                  form.cardName ? 
+                  `${form.cardName} art options` : 
+                  "Card art options"
+                }
+              </Typography>
+              <Box
+                className="
+                  flex
+                  flex-row
+                  justify-center
+                  items-center
+                  w-full
+                  gap-2
+                "
+              >
+                {cardArtOptions
+                  .options
+                  .map((
+                    imageUrl, 
+                    index
+                  ) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      position: "relative",
+                      overflow: "hidden",
+                      aspectRatio: "4/3",
+                      maxHeight: "400px",
+                      maxWidth: "300px",
+                      minxHeight: "100px",
+                      minWidth: "75px",
+                    }}
+                    className="
+                      flex
+                      flex-wrap
+                      flex-col
+                      justify-center
+                      items-center
+                      w-full
+                      gap-2
+                    "
+                  >
+                    <Image
+                      key={index}
+                      src={imageUrl}
+                      fill
+                      alt={`Card art option ${index}`}
+                      onClick={handleCardArtOptionChange.bind(null, index)}
+                      style={{ objectFit: "cover"}}
+                      className={clsx("rounded-sm border border-neutral-500 shadow-md shadow-neutral-950/50",
+                        {
+                          "opacity-100 border-teal-500 border-1": index === cardArtOptions.activeOption,
+                          "opacity-25 hover:opacity-100 hover:cursor-pointer hover:shadow-neutral-950": index !== cardArtOptions.activeOption,
+                        }
+                      )}
+                    />
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          )}
           {/* Art Prompt Options */}
           <Box
             className="
@@ -737,7 +740,7 @@ useEffect(() => {
                       text-neutral-500
                     "
                   >
-                    /9 selected
+                    {`/${Object.keys(ArtPromptOptionsData).length} selected`}
                   </Typography>
                 </Typography>
               </Box>
@@ -759,7 +762,6 @@ useEffect(() => {
                 </Typography>
               </Box>
             </Box>
-            
             {/* Prompt Options Container */}
             <Box
               id="art-prompt-options-container"
@@ -775,7 +777,8 @@ useEffect(() => {
                 my-0
               "
             >
-              {/* Art Prompt Options Accordions */}
+              
+              {/* Art Prompt Options Sections */}
               <ArtPromptOptionsSections
                 selectedOptions={artPromptSelections}
                 onSelectionChange={handleSelectionChange}
@@ -783,6 +786,7 @@ useEffect(() => {
             </Box>
           </Box>
         </Box>
+        
       </Box>
     </Box>
   );

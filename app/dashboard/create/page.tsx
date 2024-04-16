@@ -357,217 +357,414 @@ export default function Create() {
             >
               {/* Create Header */}
               <Box
-                id="create-header-content"
+                id="create-header-container"
                 className="
                   sticky
                   top-0
                   flex
-                  flex-row
-                  justify-between
-                  items-center
+                  flex-col
+                  justify-start
+                  items-start
                   w-full
-                  pl-4
-                  pr-3
-                  py-2
                   border-b
                   border-neutral-700
                   bg-neutral-900
                   z-10
                 "
               >
-                {/* Card Name + Creator */}
                 <Box
-                  id="card-name-creator-container"
+                  id="create-header-content"
                   className="
                     flex
                     flex-row
-                    justify-start
-                    items-baseline
-                    gap-1.5
+                    justify-between
+                    items-center
+                    w-full
+                    pl-4
+                    pr-3
+                    py-2
                   "
                 >
-                  {/* Card Name */}
-                  <Typography
-                    variant="subtitle1"
+                  {/* Card Name + Creator */}
+                  <Box
+                    id="card-name-creator-container"
                     className="
-                      font-semibold
-                      text-white
+                      flex
+                      flex-row
+                      justify-start
+                      items-baseline
+                      gap-1.5
                     "
                   >
-                    {
-                      form.cardName ? 
-                      form.cardName : 
-                      "Card Name"
-                    }
-                  </Typography>
-                  {/* Card Creator*/}
-                  <Typography
-                    variant="overline"
-                    sx={{ fontSize: "0.725rem" }}
-                    className="text-teal-400"
-                    component="span"
-                  >
+                    {/* Card Name */}
+                    <Typography
+                      variant="subtitle1"
+                      className="
+                        font-semibold
+                        text-white
+                      "
+                    >
+                      {
+                        form.cardName ? 
+                        form.cardName : 
+                        "Card Name"
+                      }
+                    </Typography>
+                    {/* Card Creator*/}
                     <Typography
                       variant="overline"
                       sx={{ fontSize: "0.725rem" }}
-                      className="text-neutral-300"
+                      className="text-teal-400"
                       component="span"
                     >
-                      by {" "}
-                    </Typography>
-                      {
-                        userProfileData?.username ? 
-                        userProfileData?.username : 
-                        "Card creator"
-                      }
-                  </Typography>
-                </Box>
-
-                <Box
-                  id="card-submit-container"
-                  className="
-                    flex
-                    flex-col-reverse
-                    md:flex-row
-                    justify-end
-                    items-end
-                    md:justify-between
-                    md:items-baseline
-                  "
-                >
-                  {/* Upload to Discord */}
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={postToDiscord}
-                        onChange={handlePostToDiscordChange}
-                        disabled={isSubmitting || isSubmitted}
-                        size="small"
-                      />
-                    }
-                    label={
                       <Typography
-                        variant="caption"
+                        variant="overline"
+                        sx={{ fontSize: "0.725rem" }}
+                        className="text-neutral-300"
                         component="span"
-                        className="
-                          w-full
-                          font-medium
-                          mt-1
-                          gap-1
-                          text-neutral-300
-                        "
                       >
-                        Post to {""}
-                        <Tooltip title="Nexus' Discord Server">
-                          <a
-                            href="https://discord.gg/HENgvaAmk2"
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            <Typography
-                              variant="caption"
-                              component="span"
-                              className="
-                              text-teal-500
-                              hover:text-teal-400
-                              hover:underline
-                              "
-                            >
-                              Discord
-                            </Typography>
-                          </a>
-                        </Tooltip>
+                        by {" "}
                       </Typography>
-                    }
-                    className={clsx("hover:opacity-100 text-sm", {
-                      "opacity-100": postToDiscord,
-                      "opacity-50": !postToDiscord,
-                    })}
-                  />
-                  {/* Save button */}
-                  {!isSubmitting && !showAlertInfo ? (
-                    <Tooltip title="Save your card">
-                      <Button
-                        type="submit"
-                        variant="outlined"
-                        size="small"
-                        disabled={
-                          !isValid ||
-                          isSubmitting ||
-                          isSubmitted ||
-                          form.cardType === null ||
-                          form.cardArt === "/images/card-parts/card-art/default-art.jpg"
+                        {
+                          userProfileData?.username ? 
+                          userProfileData?.username : 
+                          "Card creator"
                         }
-                        color={isValid ? "success" : "secondary"}
-                        startIcon={<SaveIcon />}
-                        className="
-                          hover:cursor-pointer
-                          hover:bg-teal-600/30
-                          hover:text-white
-                          hover:border-teal-600
-                        "
+                    </Typography>
+                  </Box>
+
+                  <Box
+                    id="card-submit-container"
+                    className="
+                      flex
+                      flex-col-reverse
+                      md:flex-row
+                      justify-end
+                      items-end
+                      md:justify-between
+                      md:items-baseline
+                    "
+                  >
+                    {/* Upload to Discord */}
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={postToDiscord}
+                          onChange={handlePostToDiscordChange}
+                          disabled={isSubmitting || isSubmitted}
+                          size="small"
+                        />
+                      }
+                      label={
+                        <Typography
+                          variant="caption"
+                          component="span"
+                          className="
+                            w-full
+                            font-medium
+                            mt-1
+                            gap-1
+                            text-neutral-300
+                          "
+                        >
+                          Post to {""}
+                          <Tooltip title="Nexus' Discord Server">
+                            <a
+                              href="https://discord.gg/HENgvaAmk2"
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              <Typography
+                                variant="caption"
+                                component="span"
+                                className="
+                                text-teal-500
+                                hover:text-teal-400
+                                hover:underline
+                                "
+                              >
+                                Discord
+                              </Typography>
+                            </a>
+                          </Tooltip>
+                        </Typography>
+                      }
+                      className={clsx("hover:opacity-100 text-sm", {
+                        "opacity-100": postToDiscord,
+                        "opacity-50": !postToDiscord,
+                      })}
+                    />
+                    {/* Save button */}
+                    {!isSubmitting && !showAlertInfo ? (
+                      <Tooltip title="Save your card">
+                        <Button
+                          type="submit"
+                          variant="outlined"
+                          size="small"
+                          disabled={
+                            !isValid ||
+                            isSubmitting ||
+                            isSubmitted ||
+                            form.cardType === null ||
+                            form.cardArt === "/images/card-parts/card-art/default-art.jpg"
+                          }
+                          color={isValid ? "success" : "secondary"}
+                          startIcon={<SaveIcon />}
+                          className="
+                            hover:cursor-pointer
+                            hover:bg-teal-600/30
+                            hover:text-white
+                            hover:border-teal-600
+                          "
+                        >
+                          Save
+                        </Button>
+                      </Tooltip>
+                    ) : (
+                      <Alert
+                        severity={alertInfo?.type}
+                        icon={
+                          alertInfo ? 
+                          alertInfo.icon : 
+                          undefined
+                        }
                       >
-                        Save
-                      </Button>
-                    </Tooltip>
-                  ) : (
-                    <Alert
-                      severity={alertInfo?.type}
-                      icon={
-                        alertInfo ? 
-                        alertInfo.icon : 
-                        undefined
-                      }
-                    >
-                      {
-                        alertInfo ? 
-                        alertInfo.message : 
-                        "Error"
-                      }
-                    </Alert>
-                  )}
+                        {
+                          alertInfo ? 
+                          alertInfo.message : 
+                          "Error"
+                        }
+                      </Alert>
+                    )}
+                  </Box>
                 </Box>
+                {/* Submit Loading Bar */}
+                {isSubmitting && (
+                    <LinearProgress
+                      color="primary"
+                      className="w-full h-1"
+                    />
+                  )}
               </Box>
-              {isSubmitting && (
-                <LinearProgress
-                  color="primary"
-                  className="w-full"
-                  sx={{ height: "2px" }}
+
+              {/* Banner Message */}
+              {bannerMessage && 
+              bannerMessage !== undefined && (
+                <MessageBanner
+                  message={bannerMessage.message}
+                  type={bannerMessage.type}
                 />
               )}
 
-              {/* Additional Info */}
+              {/* Card Render */}
               <Box
-                id="additional-info"
+                id="card-render-container"
                 className="
                   flex
                   flex-col
                   justify-start
                   items-center
                   w-full
+                  h-full
+                  pb-6
+                  pt-2
+                  md:px-6
+                  md:pt-4
+                  md:pb-8
                   gap-4
-                  p-4
                   border-b
                   border-neutral-700
                 "
               >
-                {/* Banner Message */}
-                {bannerMessage && 
-                bannerMessage !== undefined && (
-                  <MessageBanner
-                    message={bannerMessage.message}
-                    type={bannerMessage.type}
-                  />
-                )}
-                {/* Game Design Tips */}
+                {/* Additional Options */}
+                {isDirty && (
                 <Box
-                  id="create-form-tips"
                   className="
                     flex
                     flex-col
-                    md:flex-row
+                    justify-center
+                    items-center
+                    w-full
+                  "
+                >
+                  <FormGroup
+                    row={true}
+                  >
+                    <Tooltip title={
+                      cardMode === "initial" ? 
+                      "Switch to Anomaly Mode" : 
+                      "Switch to Initial Mode"
+                    }>
+                      <FormControlLabel
+                        onChange={() => {
+                          setCardMode(
+                            cardMode === "initial" ? 
+                            "anomaly" : 
+                            "initial"
+                          )
+                        }}
+                        control={
+                          <Switch
+                            defaultChecked
+                            checked={cardMode === "initial"}
+                          />
+                        } 
+                        label={
+                          cardMode === "initial" ? 
+                          "Initial Mode" : 
+                          "Anomaly Mode"
+                        }
+                      />
+                    </Tooltip>
+                    
+                    {/* INITIAL MODE: Unit Range */}
+                    {cardMode === "initial" &&
+                    form.cardType && 
+                    (
+                      form.cardType.includes("entity") ||
+                      form.cardType.includes("outpost")
+                    ) && (
+                      <FormControlLabel
+                        onChange={() => {
+                          form.cardUnitType === "melee" ? 
+                          setValue("cardUnitType", "ranged") : 
+                          setValue("cardUnitType", "melee")
+                        }}
+                        control={
+                          <Checkbox
+                            checked={form.cardUnitType === "ranged"}
+                            size="small"
+                          />
+                        } 
+                        label={
+                          <Typography
+                            variant="subtitle2"
+                            className="
+                            hover:text-neutral-400
+                              font-medium
+                            "
+                          >
+                            {
+                              form.cardUnitType === "melee" ? 
+                              "Melee" : "Ranged"
+                            }
+                          </Typography>
+                        }
+                      />
+                    )}
+                    {form.cardType && form.cardType !== "event" && (
+                      <FormControlLabel
+                        onChange={() => {
+                          form.cardSuperType === "default" || 
+                          form.cardSuperType === "" ? 
+                          setValue("cardSuperType", "mythic") : 
+                          setValue("cardSuperType", "default")
+                        }}
+                        control={
+                          <Checkbox
+                            checked={form.cardSuperType === "mythic"}
+                            size="small"
+                          />
+                        } 
+                        label={
+                          <Typography
+                            variant="subtitle2"
+                            className="
+                            hover:text-neutral-400
+                              font-medium
+                            "
+                          >
+                            Mythic
+                          </Typography>
+                        }
+                      />
+                    )}
+                  </FormGroup>
+                  {/* Alerts */}
+                  <Box
+                    className="
+                      flex
+                      flex-col
+                      justify-start
+                      items-start
+                      w-full
+                    "
+                  >
+                    {
+                      form.cardType && 
+                      form.cardType.length === 1 && 
+                      form.cardType.includes("") && (
+                      <Typography
+                        variant="body2"
+                        className="
+                          flex 
+                          justify-center
+                          items-center
+                          w-full
+                          py-2
+                          rounded-sm
+                          bg-red-500/20
+                          text-red-500
+                        "
+                      >
+                        Card type is required!
+                      </Typography>)
+                    }
+                  </Box>
+                </Box>)}
+
+                {/* Div is for screenshot */}
+                <div 
+                  id="nexus-form-container" 
+                  style={{ 
+                    borderRadius: "12.5px" 
+                  }}
+                >
+                  {/* Card Render / Form */}
+                  <NexusCardForm
+                    cardMode={cardMode}
+                  />
+                </div>
+
+                {cardMode === "anomaly" && (
+                  <Typography
+                    variant="body2"
+                    className="
+                      flex 
+                      justify-center
+                      items-center
+                      w-full
+                      bg-neutral-900/50
+                      py-2
+                      px-3
+                    "
+                  >
+                    {"Each Nexus card has an initial mode (the card above), and an anomaly mode. Cards can be converted to its anomaly mode, so it can be played as an anomaly (resource card) instead of its initial mode card. The anamoly mode typically lets you Lock {L} the card to make energy. But a card's anomaly mode can also have other effects. The default anomaly mode, converts the card into one of the five Common Anomalies. Anything other than that is considered an Uncommon Anomaly."}
+                  </Typography>
+                )}
+              </Box>
+
+              <Box
+                id="create-form-tips"
+                className="
+                  flex
+                  flex-col
+                  md:flex-row
+                  justify-start
+                  items-start
+                  w-full
+                  gap-4
+                  p-4
+                "
+              >
+                {/* Random Term & Keyword */}
+                <Box
+                  id="random-term-keyword-container"
+                  className="
+                    flex
+                    flex-col
                     justify-start
-                    items-stretch
+                    items-start
                     w-full
                     gap-4
                   "
@@ -581,210 +778,9 @@ export default function Create() {
                     type="keyword"
                   />
                 </Box>
-                {/* Card Render */}
-                <Box
-                  id="card-render-container"
-                  className="
-                    flex
-                    flex-col
-                    justify-start
-                    items-center
-                    w-full
-                    h-full
-                    pb-6
-                    pt-2
-                    md:px-6
-                    md:pt-4
-                    md:pb-8
-                    gap-4
-                  "
-                >
-                  {/* Additional Options */}
-                  {isDirty && (
-                  <Box
-                    className="
-                      flex
-                      flex-col
-                      justify-center
-                      items-center
-                      w-full
-                    "
-                  >
-                    <FormGroup
-                      row={true}
-                    >
-                      <Tooltip title={
-                        cardMode === "initial" ? 
-                        "Switch to Anomaly Mode" : 
-                        "Switch to Initial Mode"
-                      }>
-                        <FormControlLabel
-                          onChange={() => {
-                            setCardMode(
-                              cardMode === "initial" ? 
-                              "anomaly" : 
-                              "initial"
-                            )
-                          }}
-                          control={
-                            <Switch
-                              defaultChecked
-                              checked={cardMode === "initial"}
-                            />
-                          } 
-                          label={
-                            cardMode === "initial" ? 
-                            "Initial Mode" : 
-                            "Anomaly Mode"
-                          }
-                        />
-                      </Tooltip>
-                      
-                      {/* INITIAL MODE: Unit Range */}
-                      {cardMode === "initial" &&
-                      form.cardType && 
-                      (
-                        form.cardType.includes("entity") ||
-                        form.cardType.includes("outpost")
-                      ) && (
-                        <FormControlLabel
-                          onChange={() => {
-                            form.cardUnitType === "melee" ? 
-                            setValue("cardUnitType", "ranged") : 
-                            setValue("cardUnitType", "melee")
-                          }}
-                          control={
-                            <Checkbox
-                              checked={form.cardUnitType === "ranged"}
-                              size="small"
-                            />
-                          } 
-                          label={
-                            <Typography
-                              variant="subtitle2"
-                              className="
-                              hover:text-neutral-400
-                                font-medium
-                              "
-                            >
-                              {
-                                form.cardUnitType === "melee" ? 
-                                "Melee" : "Ranged"
-                              }
-                            </Typography>
-                          }
-                        />
-                      )}
-                      {form.cardType && form.cardType !== "event" && (
-                        <FormControlLabel
-                          onChange={() => {
-                            form.cardSuperType === "default" || 
-                            form.cardSuperType === "" ? 
-                            setValue("cardSuperType", "mythic") : 
-                            setValue("cardSuperType", "default")
-                          }}
-                          control={
-                            <Checkbox
-                              checked={form.cardSuperType === "mythic"}
-                              size="small"
-                            />
-                          } 
-                          label={
-                            <Typography
-                              variant="subtitle2"
-                              className="
-                              hover:text-neutral-400
-                                font-medium
-                              "
-                            >
-                              Mythic
-                            </Typography>
-                          }
-                        />
-                      )}
-                    </FormGroup>
-                    {/* Alerts */}
-                    <Box
-                      className="
-                        flex
-                        flex-col
-                        justify-start
-                        items-start
-                        w-full
-                      "
-                    >
-                      {
-                        form.cardType && 
-                        form.cardType.length === 1 && 
-                        form.cardType.includes("") && (
-                        <Typography
-                          variant="body2"
-                          className="
-                            flex 
-                            justify-center
-                            items-center
-                            w-full
-                            py-2
-                            rounded-sm
-                            bg-red-500/20
-                            text-red-500
-                          "
-                        >
-                          Card type is required!
-                        </Typography>)
-                      }
-                    </Box>
-                  </Box>)}
-
-                  {/* Div is for screenshot */}
-                  <div 
-                    id="nexus-form-container" 
-                    style={{ 
-                      borderRadius: "12.5px" 
-                    }}
-                  >
-                    {/* Card Render / Form */}
-                    <NexusCardForm
-                      cardMode={cardMode}
-                    />
-                  </div>
-
-                  {cardMode === "anomaly" && (
-                    <Typography
-                      variant="body2"
-                      className="
-                        flex 
-                        justify-center
-                        items-center
-                        w-full
-                        bg-neutral-900/50
-                        py-2
-                        px-3
-                      "
-                    >
-                      {"Each Nexus card has an initial mode (the card above), and an anomaly mode. Cards can be converted to its anomaly mode, so it can be played as an anomaly (resource card) instead of its initial mode card. The anamoly mode typically lets you Lock {L} the card to make energy. But a card's anomaly mode can also have other effects. The default anomaly mode, converts the card into one of the five Common Anomalies. Anything other than that is considered an Uncommon Anomaly."}
-                    </Typography>
-                  )}
-                </Box>
-              </Box>
-
-              <Box
-                id="abbreviations-menu-container"
-                className="
-                  flex
-                  flex-col
-                  justify-start
-                  items-start
-                  w-full
-                  gap-2
-                  p-4
-                  rounded-lg
-                  bg-neutral-900
-                "
-              >
+                {/* Abbreviations */}
                 <IconsAbbreviationMenu />
               </Box>
-              
             </Box>
             {/* Side Content Container */}
             <Box

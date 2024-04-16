@@ -65,7 +65,6 @@ export default function RandomGameDesignTerm({
           justify-start
           items-start
           w-full
-          md:w-1/2
           rounded-md
           py-3
           px-4
@@ -188,7 +187,6 @@ export default function RandomGameDesignTerm({
           justify-start
           items-start
           w-full
-          md:w-1/2
           rounded-md
           py-3
           px-4
