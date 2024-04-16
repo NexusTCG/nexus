@@ -333,6 +333,13 @@ export const ArtPromptOptionsData: ArtPromptOptionsDataType = {
         "prompt": "",
         "image": "/images/art-prompt-options/technique/stained-glass.jpg",
       },
+      {
+        "id": 13, 
+        "title": "Cave Painting",
+        "description": "",
+        "prompt": "",
+        "image": "/images/art-prompt-options/technique/cave-painting.jpg",
+      },
     ].sort()
   },
   lighting: {
