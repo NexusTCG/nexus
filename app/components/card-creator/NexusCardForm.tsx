@@ -653,8 +653,8 @@ export default function NexusCardForm({
                               form.cardType.includes("entity") || 
                               form.cardType.includes("outpost")
                             ) && 
-                            selectedOption !== "entity" && 
-                            selectedOption !== "outpost"
+                            !selectedOption.includes("entity") && 
+                            !selectedOption.includes("outpost")
                           ) {
                             setValue("cardAttack", "0");
                             setValue("cardDefense", "0");
