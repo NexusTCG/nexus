@@ -577,7 +577,7 @@ useEffect(() => {
                 "
               >
                 {Object.entries(artPromptSelections).map(
-                  ([category, selection]) => (
+                  ([category, selection]) => selection && (
                   <Typography
                     key={category}
                     variant="caption"

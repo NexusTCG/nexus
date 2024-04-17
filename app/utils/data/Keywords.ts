@@ -166,6 +166,11 @@ export const Keywords: KeywordsType = {
     reminder: "Review N cards, bottom any of number of them, and top the rest",
     type: "activated",
   },
+  triumph: {
+    name: "Triumph",
+    reminder: "This reacts when you win a biome",
+    type: "reactive",
+  },
   global: {
     name: "Global N",
     reminder: "You may pay this extra cost to remove all scope limits from this card",

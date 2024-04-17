@@ -60,12 +60,10 @@ import GradePrime from "@/public/images/card-parts/card-icons/card-grades/grade-
 
 type CardRenderProps = {
   cardMode: string;
-  showLoreText?: boolean;
 };
 
 export default function NexusCardForm({
   cardMode,
-  showLoreText
 }: CardRenderProps) {
 
   // Energy cost popover states
@@ -1094,8 +1092,7 @@ export default function NexusCardForm({
               )}
 
               {/* Divider */}
-              {cardTextProps.loreTextVisible && 
-              showLoreText && (
+              {cardTextProps.loreTextVisible && (
                 cardMode === "initial" ? (
                   <Divider
                     className="
@@ -1123,8 +1120,7 @@ export default function NexusCardForm({
               )}
               
               {/* Card lore text */}
-              {cardTextProps.loreTextVisible && 
-                showLoreText && cardMode === "initial" && (
+              {cardTextProps.loreTextVisible && cardMode === "initial" && (
                 <Controller
                   name="cardLoreText"
                   control={control}
@@ -1198,7 +1194,11 @@ export default function NexusCardForm({
 
               {/* Card Anamoly Mode lore text */}
               {cardTextProps.loreTextVisible && 
-                showLoreText && cardMode === "anomaly" && form.cardAnomalyMode && form.cardAnomalyMode.toLowerCase().includes("uncommon") && (
+              cardMode === "anomaly" && 
+              form.cardAnomalyMode && 
+              form.cardAnomalyMode
+                .toLowerCase()
+                .includes("uncommon") && (
                 <Controller
                   name="cardAnomalyModeLoreText"
                   control={control}
