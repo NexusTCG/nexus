@@ -136,7 +136,7 @@ export default function IconsAbbreviationMenu() {
             >
               <Typography
                 variant="body1"
-                className={clsx("absolute transition-opacity duration-300 ease-in-out",
+                className={clsx("absolute transition-opacity duration-300 ease-in-out hover:cursor-pointer",
                   {
                     "opacity-100": hovered === key,
                     "opacity-0": hovered !== key
