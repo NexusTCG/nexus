@@ -317,6 +317,8 @@ useEffect(() => {
   useEffect(() => {
     if (userProfileData?.credits !== undefined) {
       setCurrentCredits(userProfileData?.credits);
+    } else if (!userProfileData) {
+      setCurrentCredits(2);
     }
   }, [userProfileData?.credits])
 
@@ -370,14 +372,16 @@ useEffect(() => {
             top-0
             flex
             flex-col
-            h-screen
+            sm:h-screen
             lg:max-w-[480px]
             w-full
-            border-t
+            sm:border-t
             lg:border-t-0
             border-l-0
             lg:border-l
             border-neutral-700
+            mb-4
+            sm:mb-0
           "
         >
           {/* Prompt Input Fields */}

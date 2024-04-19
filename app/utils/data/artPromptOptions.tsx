@@ -440,20 +440,13 @@ export const ArtPromptOptionsData: ArtPromptOptionsDataType = {
       },
       {
         "id": 6, 
-        "title": "Warped",
-        "description": "",
-        "prompt": "",
-        "image": "",
-      },
-      {
-        "id": 7, 
         "title": "Slow shutter",
         "description": "",
         "prompt": "",
         "image": "",
       },
       {
-        "id": 8, 
+        "id": 7, 
         "title": "Bokeh",
         "description": "",
         "prompt": "",

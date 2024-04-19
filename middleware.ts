@@ -14,16 +14,22 @@ export async function middleware(
   
   const publicUrls = [
     "/reset-password",
-    "/login/complete-signup",
+    "/login",
+    "/dashboard/create",
     "/dashboard/cards/[slug]",
+    "/dashboard/cards",
+    "/dashboard/profile/[slug]",
   ];
 
   const url = request.nextUrl;
-  const path = new URL(
-    request.url).pathname;
+  const path = new URL(request.url).pathname;
 
-  if (publicUrls
-      .includes(path)) {
+  const isPublic = publicUrls.some(publicUrl => 
+    path === publicUrl || 
+    path.startsWith(publicUrl.replace('[slug]', ''))
+  );
+
+  if (isPublic) {
     return response;
   }
 

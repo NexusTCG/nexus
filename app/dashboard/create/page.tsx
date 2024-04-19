@@ -29,6 +29,7 @@ import { bannerMessages } from "@/app/utils/data/bannerMessages";
 // Utils
 import PostHogClient from "@/app/lib/posthog/posthog";
 import clsx from "clsx";
+import Link from "next/link";
 // Custom components
 // import CardCreatorForm from "@/app/components/card-creator/CardCreatorForm";
 import ArtPromptManager from "@/app/components/card-creator/ArtPromptManager";
@@ -327,18 +328,20 @@ export default function Create() {
             justify-start
             items-start
             w-full
-            h-[100vh]
+            h-full
+            sm:h-[100vh]
           "
         >
           <Box
             id="create-page-container"
             className="
               flex
-              flex-row
+              flex-col
+              sm:flex-row
               justify-start
               items-center
               w-full
-              h-screen
+              sm:h-screen
             "
           >
             {/* Center Content */}
@@ -350,8 +353,8 @@ export default function Create() {
                 justify-start
                 items-center
                 w-full
-                overflow-y-auto
-                max-h-screen
+                sm:overflow-y-auto
+                sm:max-h-screen
                 scrollbar-hide
               "
             >
@@ -428,7 +431,7 @@ export default function Create() {
                         {
                           userProfileData?.username ? 
                           userProfileData?.username : 
-                          "Card creator"
+                          "You"
                         }
                     </Typography>
                   </Box>
@@ -446,59 +449,105 @@ export default function Create() {
                     "
                   >
                     {/* Upload to Discord */}
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={postToDiscord}
-                          onChange={handlePostToDiscordChange}
-                          disabled={isSubmitting || isSubmitted}
-                          size="small"
-                        />
-                      }
-                      label={
-                        <Typography
-                          variant="caption"
-                          component="span"
-                          className="
-                            w-full
-                            font-medium
-                            mt-1
-                            gap-1
-                            text-neutral-300
-                          "
-                        >
-                          Post to {""}
-                          <Tooltip title="Nexus' Discord Server">
-                            <a
-                              href="https://discord.gg/HENgvaAmk2"
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              <Typography
-                                variant="caption"
-                                component="span"
-                                className="
-                                text-teal-500
-                                hover:text-teal-400
-                                hover:underline
-                                "
+                    {userProfileData && (
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={postToDiscord}
+                            onChange={handlePostToDiscordChange}
+                            disabled={isSubmitting || isSubmitted}
+                            size="small"
+                          />
+                        }
+                        label={
+                          <Typography
+                            variant="caption"
+                            component="span"
+                            className="
+                              w-full
+                              font-medium
+                              mt-1
+                              gap-1
+                              text-neutral-300
+                            "
+                          >
+                            Post to {""}
+                            <Tooltip title="Nexus' Discord Server">
+                              <a
+                                href="https://discord.gg/HENgvaAmk2"
+                                target="_blank"
+                                rel="noreferrer"
                               >
-                                Discord
-                              </Typography>
-                            </a>
+                                <Typography
+                                  variant="caption"
+                                  component="span"
+                                  className="
+                                  text-teal-500
+                                  hover:text-teal-400
+                                  hover:underline
+                                  "
+                                >
+                                  Discord
+                                </Typography>
+                              </a>
+                            </Tooltip>
+                          </Typography>
+                        }
+                        className={clsx("hover:opacity-100 text-sm", {
+                          "opacity-100": postToDiscord,
+                          "opacity-50": !postToDiscord,
+                        })}
+                      />
+                    )}
+                    {userProfileData ? (
+                      <>
+                        {/* Save button */}
+                        {!isSubmitting && !showAlertInfo ? (
+                          <Tooltip title="Save your card">
+                            <Button
+                              type="submit"
+                              variant="outlined"
+                              size="small"
+                              disabled={
+                                !isValid ||
+                                isSubmitting ||
+                                isSubmitted ||
+                                form.cardType === null ||
+                                form.cardArt === "/images/card-parts/card-art/default-art.jpg"
+                              }
+                              color={isValid ? "success" : "secondary"}
+                              startIcon={<SaveIcon />}
+                              className="
+                                hover:cursor-pointer
+                                hover:bg-teal-600/30
+                                hover:text-white
+                                hover:border-teal-600
+                              "
+                            >
+                              Save
+                            </Button>
                           </Tooltip>
-                        </Typography>
-                      }
-                      className={clsx("hover:opacity-100 text-sm", {
-                        "opacity-100": postToDiscord,
-                        "opacity-50": !postToDiscord,
-                      })}
-                    />
-                    {/* Save button */}
-                    {!isSubmitting && !showAlertInfo ? (
-                      <Tooltip title="Save your card">
+                        ) : (
+                          <Alert
+                            severity={alertInfo?.type}
+                            icon={
+                              alertInfo ? 
+                              alertInfo.icon : 
+                              undefined
+                            }
+                          >
+                            {
+                              alertInfo ? 
+                              alertInfo.message : 
+                              "Error"
+                            }
+                          </Alert>
+                        )}
+                      </>
+                    ) : (
+                      // Todo: Function to store card data in local storage then upload to Supabase after login
+                      <Link href="/login">
                         <Button
-                          type="submit"
                           variant="outlined"
                           size="small"
                           disabled={
@@ -517,24 +566,9 @@ export default function Create() {
                             hover:border-teal-600
                           "
                         >
-                          Save
+                          Sign up & Save
                         </Button>
-                      </Tooltip>
-                    ) : (
-                      <Alert
-                        severity={alertInfo?.type}
-                        icon={
-                          alertInfo ? 
-                          alertInfo.icon : 
-                          undefined
-                        }
-                      >
-                        {
-                          alertInfo ? 
-                          alertInfo.message : 
-                          "Error"
-                        }
-                      </Alert>
+                      </Link>
                     )}
                   </Box>
                 </Box>
@@ -749,7 +783,7 @@ export default function Create() {
                 className="
                   flex
                   flex-col
-                  md:flex-row
+                  xl:flex-row
                   justify-start
                   items-start
                   w-full
@@ -786,16 +820,23 @@ export default function Create() {
             <Box
               id="side-content-container"
               className="
-                sticky top-0
-                flex flex-col
+                sm:sticky 
+                sm:top-0
+                flex
+                flex-col
                 justify-start
                 items-center
-                w-full max-w-[480px]
-                min-h-screen
-                border-l border-neutral-700
+                w-full 
+                max-w-[480px]
+                sm:min-h-screen
+                border
+                sm:border-l 
+                border-neutral-700
                 bg-neutral-800
-                overflow-y-auto
+                sm:overflow-y-auto
                 scrollbar-hide
+                mb-6
+                sm:mb-0
               "
             >
               {/* Component That Renders All Sections */}
