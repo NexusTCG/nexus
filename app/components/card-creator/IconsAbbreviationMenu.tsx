@@ -129,6 +129,7 @@ export default function IconsAbbreviationMenu() {
                 px-3
                 rounded-md
                 hover:bg-neutral-800/80
+                hover:cursor-pointer
               "
               onMouseEnter={() => setHovered(key)}
               onMouseLeave={() => setHovered(null)}
@@ -136,7 +137,7 @@ export default function IconsAbbreviationMenu() {
             >
               <Typography
                 variant="body1"
-                className={clsx("absolute transition-opacity duration-300 ease-in-out hover:cursor-pointer",
+                className={clsx("absolute transition-opacity duration-300 ease-in-out",
                   {
                     "opacity-100": hovered === key,
                     "opacity-0": hovered !== key

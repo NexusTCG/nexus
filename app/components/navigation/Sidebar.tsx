@@ -30,8 +30,6 @@ const primaryNavigation = [
   "create",
   "cards",
   "rules",
-  "game",
-  "roadmap",
   "request",
 ]
 

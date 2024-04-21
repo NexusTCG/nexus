@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useRef,
 } from "react";
+import { useParams } from 'next/navigation'
 // Actions
 import fetchUserProfiles from "@/app/lib/actions/supabase-data/fetchUserProfilesData";
 import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
@@ -24,13 +25,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 // Icons
 import UploadIcon from '@mui/icons-material/Upload';
 
-export default function ProfileId({
-  params 
-}: {
-  params: { 
-    username: string 
-  } 
-}) {
+// { params }: { params: { username: string; }}
+export default function ProfileId() {
+  const params = useParams<{ slug: string; }>();
+  const username = params.slug;
+
   const [userUsername, setUserUsername] = useState<string>("");
   const [userAvatarUrl, setUserAvatarUrl] = useState<string>("");
   const [userFirstName, setUserFirstName] = useState<string>("");
@@ -40,7 +39,6 @@ export default function ProfileId({
   const [userAvatarUploading, setUserAvatarUploading] = useState<boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const username = params.username;
 
   // Handle avatar upload click
   function handleUploadClick() {
@@ -86,7 +84,7 @@ export default function ProfileId({
   // Fetch user profile matching the params.slug
   useEffect(() => {
     console.log('Params username:', username);
-    if (username) {
+    if (username && username !== undefined) {
       console.log(`Fetching user profile for ${username}`);
       const fetchUserData = async () => {
         try {
@@ -157,6 +155,8 @@ export default function ProfileId({
       fetchCardData();
     };
   }, [userUsername]);
+
+  console.log('User data:', username, userUsername, userAvatarUrl, userFirstName, userLastName, userBio);
 
   return (
     <Box

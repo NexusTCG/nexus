@@ -9,13 +9,22 @@ export default function Profile() {
   const router = useRouter();
 
   useEffect(() => {
-    const redirect = async () => {
+    async function redirect() {
       if (userProfileData?.username) {
         router.push(`/dashboard/profile/${userProfileData?.username.toLowerCase()}`);
       }
     }; 
     redirect();
-  }, [userProfileData?.username, router]);
+  }, [
+    userProfileData?.username, 
+    router
+  ]);
+
+  console.log(
+    "userProfileData", 
+    userProfileData, 
+    userProfileData?.username
+  );
 
   return <div>Loading...</div>;
 };

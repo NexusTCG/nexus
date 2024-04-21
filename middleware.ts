@@ -11,25 +11,28 @@ export async function middleware(
     supabase,
     response
   } = createClient(request);
+
+  const url = request.nextUrl;
+  const path = new URL(request.url).pathname;
   
   const publicUrls = [
     "/reset-password",
     "/login",
     "/dashboard/create",
-    "/dashboard/cards/[slug]",
     "/dashboard/cards",
-    "/dashboard/profile/[slug]",
+    "/dashboard/cards/[slug]",
   ];
-
-  const url = request.nextUrl;
-  const path = new URL(request.url).pathname;
 
   const isPublic = publicUrls.some(publicUrl => 
     path === publicUrl || 
     path.startsWith(publicUrl.replace('[slug]', ''))
   );
 
-  if (isPublic) {
+  const isPublicUserProfile = path
+    .startsWith('/dashboard/profile/') && 
+    path !== '/dashboard/profile';
+
+  if (isPublic || isPublicUserProfile) {
     return response;
   }
 
@@ -44,6 +47,19 @@ export async function middleware(
     console.log(error);
   }
 
+  if (
+    !session && 
+    path === "/dashboard/profile"
+  ) {
+    return NextResponse
+      .redirect(
+        new URL(
+          "/login", 
+          request.url
+        )
+      );
+  }
+
   if (session && (
     path === "/" || 
     path === "/login"
@@ -52,18 +68,8 @@ export async function middleware(
       .redirect(new URL(
         "/dashboard", 
         request.url
-      ));
-  }
-
-  if (!session && 
-    path !== "/" && 
-    path !== "/login"
-  ) {
-    return NextResponse
-      .redirect(new URL(
-        "/login", 
-        request.url
-      ));
+      )
+    );
   }
 
   // Redirect to /credits after Stripe checkout

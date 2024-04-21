@@ -19,7 +19,6 @@ import uploadCardImage from "@/app/lib/actions/supabase-data/uploadCardImage";
 import { uploadCardArtImage } from "@/app/lib/actions/supabase-data/uploadCardArtImage";
 import { postCardToDiscord } from "@/app/lib/actions/postCardToDiscord";
 // Types
-// import { CardsTableType } from "@/app/utils/types/supabase/cardsTableType";
 import { CardFormDataType } from "@/app/utils/types/types";
 // Schema
 import cardFormSchema from "@/app/utils/schemas/CardFormSchema";
@@ -31,7 +30,6 @@ import PostHogClient from "@/app/lib/posthog/posthog";
 import clsx from "clsx";
 import Link from "next/link";
 // Custom components
-// import CardCreatorForm from "@/app/components/card-creator/CardCreatorForm";
 import ArtPromptManager from "@/app/components/card-creator/ArtPromptManager";
 import NexusCardForm from "@/app/components/card-creator/NexusCardForm";
 import MessageBanner from "@/app/components/feedback/MessageBanner";
@@ -104,7 +102,6 @@ export default function Create() {
     watch,
     formState: {
       isValid,
-      isDirty,
       isSubmitting,
       isSubmitted,
     },
@@ -611,7 +608,6 @@ export default function Create() {
                 "
               >
                 {/* Additional Options */}
-                {isDirty && (
                 <Box
                   className="
                     flex
@@ -745,7 +741,7 @@ export default function Create() {
                       </Typography>)
                     }
                   </Box>
-                </Box>)}
+                </Box>
 
                 {/* Div is for screenshot */}
                 <div 

@@ -42,7 +42,6 @@ import { ArtPromptOptionsData } from "@/app/utils/data/artPromptOptions";
 
 type CardRenderProps = {
   cardData?: CardsTableType | CardFormDataType | null;
-  showCardRender?: boolean;
 };
 
 export default function ArtPromptManager({
@@ -612,8 +611,6 @@ useEffect(() => {
                 w-full
                 gap-2
                 p-4
-                rounded-lg
-                bg-neutral-900
               "
             >
               <Typography

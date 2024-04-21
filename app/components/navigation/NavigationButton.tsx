@@ -16,8 +16,8 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import DesignServicesIcon from '@mui/icons-material/DesignServices';
 import RuleIcon from '@mui/icons-material/Rule';
-import CasinoIcon from '@mui/icons-material/Casino';
-import FlagIcon from '@mui/icons-material/Flag';
+// import CasinoIcon from '@mui/icons-material/Casino';
+// import FlagIcon from '@mui/icons-material/Flag';
 import PaymentsIcon from '@mui/icons-material/Payments';
 import HelpIcon from '@mui/icons-material/Help';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -91,14 +91,14 @@ export default function NavigationButton({
         setIcon(<RuleIcon />);
         setDisabled(false);
         break;
-      case "game":
-        setIcon(<CasinoIcon />);
-        setDisabled(false);
-        break;
-      case "roadmap":
-        setIcon(<FlagIcon />);
-        setDisabled(false);
-        break;
+      // case "game":
+      //   setIcon(<CasinoIcon />);
+      //   setDisabled(false);
+      //   break;
+      // case "roadmap":
+      //   setIcon(<FlagIcon />);
+      //   setDisabled(false);
+      //   break;
       case "request":
         setIcon(<SpeakerNotesIcon />);
         setDisabled(false);
