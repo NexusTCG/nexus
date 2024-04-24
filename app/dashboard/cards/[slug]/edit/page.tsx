@@ -196,33 +196,10 @@ export default function EditCard({
   // Pre-populate form with card data
   useEffect(() => {
     if (cardData && isCardOwner) {
-      methods.reset({ 
-        id: cardData?.id,
-        user_id: cardData?.user_id,
-        cardCreator: cardData?.cardCreator,
-        cardName: cardData?.cardName,
-        cardEnergyValue: cardData?.cardEnergyValue,
-        cardEnergyCost: cardData?.cardEnergyCost,
-        cardEnergyAlignment: cardData?.cardEnergyAlignment,
-        cardArt: cardData?.cardArt,
-        cardType: cardData?.cardType,
-        cardSuperType: cardData?.cardSuperType,
-        cardSubType: cardData?.cardSubType,
-        cardSpeed: cardData?.cardSpeed,
-        cardGrade: cardData?.cardGrade,
-        cardText: cardData?.cardText,
-        cardLoreText: cardData?.cardLoreText,
-        cardAttack: cardData?.cardAttack,
-        cardDefense: cardData?.cardDefense,
-        cardUnitType: cardData?.cardUnitType,
-        cardAnomalyModeName: cardData?.cardAnomalyModeName,
-        cardAnomalyModeText: cardData?.cardAnomalyModeText,
-        cardAnomalyModeLoreText: cardData?.cardAnomalyModeLoreText,
-        cardPrompt: cardData?.cardPrompt,
-        cardArtPrompt: cardData?.cardArtPrompt,
-        cardRender: cardData?.cardRender,
-        art_prompt_options: cardData?.art_prompt_options,
-      })
+      console.log("Resetting form, cardData.id:", cardData.id)
+      methods.reset({
+        ...cardData,
+      });
     }
   }, [
     methods, 
@@ -267,19 +244,22 @@ export default function EditCard({
           }
         }
     
-        if (imagePublicUrl && finalCardArt) {
-
+        if (imagePublicUrl && finalCardArt && cardData) {
+          console.log("Requesting to update cardData:", cardData) // Debugging
+          const payload = {
+            ...data,
+            id: cardData.id,
+            cardArt: finalCardArt,
+            cardRender: imagePublicUrl,
+          };
+          console.log("Submitting with payload:", payload);
           // Submit form data with cardRender
-          const response = await fetch("/api/data/submit-card", { 
+          const response = await fetch("/api/data/update-card", { 
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-              ...data,
-              cardArt: finalCardArt,
-              cardRender: imagePublicUrl,
-            }),
+            body: JSON.stringify(payload),
           });
 
           const responseData = await response.json();

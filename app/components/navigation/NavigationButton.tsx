@@ -155,7 +155,7 @@ export default function NavigationButton({
       )}
       {!isSidebar && !disabled && (
         <Link
-          href={externalLink ? externalLink : `/dashboard/${routeLowerCase}`}
+          href={externalLink ? externalLink : routeLowerCase !== "login" ? `/dashboard/${routeLowerCase}` : "/login"}
           className="w-full"
         >
           <Button

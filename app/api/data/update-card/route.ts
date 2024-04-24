@@ -9,12 +9,24 @@ import { z } from "zod";
 export async function POST(
   req: NextRequest
 ) {
-  try {
-    const cardData = await req.json();
+    try {
+      let cardData;
+    try {
+      cardData = await req.json();
+    } catch (error) {
+      console.error("Failed to parse request body:", error);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Bad request body' 
+        }), { 
+          status: 400 
+        });
+    }
+    console.log("cardData to update:", cardData); // Debugging
+    const rawBody = await req.text(); // Debugging
+    console.log("Raw request body:", rawBody); // Debugging
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
-
-    console.log("cardData:", cardData)
   
     if (cardData) {
       console.log("Attempting to update card.")
@@ -44,6 +56,7 @@ export async function POST(
         cardPrompt: cardData?.cardPrompt,
         cardArtPrompt: cardData?.cardArtPrompt,
         cardRender: cardData?.cardRender,
+        art_prompt_options: cardData?.art_prompt_options,
       })
       .eq("id", cardData?.id)
       .select()
