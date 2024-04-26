@@ -9,85 +9,97 @@ import { z } from "zod";
 export async function POST(
   req: NextRequest
 ) {
-    try {
-      let cardData;
-    try {
-      cardData = await req.json();
-    } catch (error) {
-      console.error("Failed to parse request body:", error);
-      return new Response(
-        JSON.stringify({ 
-          error: 'Bad request body' 
-        }), { 
-          status: 400 
-        });
-    }
-    console.log("cardData to update:", cardData); // Debugging
-    const rawBody = await req.text(); // Debugging
-    console.log("Raw request body:", rawBody); // Debugging
+    const cardData = await req.json();
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
   
-    if (cardData) {
-      console.log("Attempting to update card.")
-      const { data, error } = await supabase
-      .from("cards")
-      .update({
-        updated_at: new Date().toISOString(),
-        cardCreator: cardData?.cardCreator,
-        cardName: cardData?.cardName,
-        cardEnergyValue: cardData?.cardEnergyValue,
-        cardEnergyCost: cardData?.cardEnergyCost,
-        cardColor: cardData?.cardColor,
-        cardArt: cardData?.cardArt,
-        cardType: cardData?.cardType,
-        cardSuperType: cardData?.cardSuperType,
-        cardSubType: cardData?.cardSubType,
-        cardSpeed: cardData?.cardSpeed,
-        cardGrade: cardData?.cardGrade,
-        cardText: cardData?.cardText,
-        cardFlavorText: cardData?.cardFlavorText,
-        cardAttack: cardData?.cardAttack,
-        cardDefense: cardData?.cardDefense,
-        cardUnitType: cardData?.cardUnitType,
-        cardAnomalyModeName: cardData?.cardAnomalyModeName,
-        cardAnomalyModeText: cardData?.cardAnomalyModeText,
-        cardAnomalyModeFlavorText: cardData?.cardAnomalyModeFlavorText,
-        cardPrompt: cardData?.cardPrompt,
-        cardArtPrompt: cardData?.cardArtPrompt,
-        cardRender: cardData?.cardRender,
-        art_prompt_options: cardData?.art_prompt_options,
-      })
-      .eq("id", cardData?.id)
-      .select()
-
-      if (error) {
-        console.log("Supabase: Error updating card.")
-        console.log("Error:", error);
+    try {
+      if (cardData) {
+        console.log("Attempting to update card:", cardData)
+        const { data, error } = await supabase
+        .from("cards")
+        .update({
+          // id
+          // user_id
+          // cardCreator
+          cardName: cardData?.cardName,
+          cardEnergyValue: cardData?.cardEnergyValue,
+          cardEnergyCost: cardData?.cardEnergyCost,
+          cardEnergyAlignment: cardData?.cardEnergyAlignment,
+          cardArt: cardData?.cardArt,
+          cardType: cardData?.cardType,
+          cardSuperType: cardData?.cardSuperType,
+          cardSubType: cardData?.cardSubType,
+          cardSpeed: cardData?.cardSpeed,
+          cardGrade: cardData?.cardGrade,
+          cardText: cardData?.cardText,
+          cardLoreText: cardData?.cardLoreText,
+          cardAttack: cardData?.cardAttack,
+          cardDefense: cardData?.cardDefense,
+          cardUnitType: cardData?.cardUnitType,
+          cardPrompt: cardData?.cardPrompt,
+          cardArtPrompt: cardData?.cardArtPrompt,
+          cardRender: cardData?.cardRender,
+          cardAnomalyModeName: cardData?.cardAnomalyModeName,
+          cardAnomalyModeText: cardData?.cardAnomalyModeText,
+          cardAnomalyModeLoreText: cardData?.cardAnomalyModeLoreText,
+          cardAnomalyModeGrade: cardData?.cardAnomalyModeGrade,
+          art_prompt_options: cardData?.art_prompt_options,
+          // created_at
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", cardData?.id)
+        .select()
+  
+        if (error) {
+          console.log("Supabase: Error updating card.")
+          console.log("Error:", error);
+          return new Response(JSON.stringify({ 
+            error: error.message 
+          }), {
+            status: 400,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+        } else if (data) {
+          console.log("Inserted card:", data[0]);
+          return new Response(JSON.stringify({ 
+            data: data[0] 
+          }), {
+            status: 200,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+        }
+      } else {
+        console.log("API: No card data.")
+        console.log("Data error.");
         return new Response(JSON.stringify({ 
-          error: error.message 
+          error: "No data found to update."
+        }), {
+          status: 500,
+          headers: { 
+            'Content-Type': 'application/json'
+          },
+        });
+      }
+    } catch (error) {
+      console.log("Catch zod error:", error);
+      if (error instanceof z.ZodError) {
+        return new Response(JSON.stringify({ 
+          error: error.flatten 
         }), {
           status: 400,
           headers: {
             'Content-Type': 'application/json',
           },
         });
-      } else if (data) {
-        console.log("Inserted card:", data[0]);
-        return new Response(JSON.stringify({ 
-          data: data[0] 
-        }), {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
       }
-    } else {
-      console.log("API: No card data.")
-      console.log("Data error.");
+      console.log("Catch error:", error);
       return new Response(JSON.stringify({ 
-        error: "No data found to update."
+        error: 'An unexpected error occurred'
       }), {
         status: 500,
         headers: { 
@@ -95,35 +107,14 @@ export async function POST(
         },
       });
     }
-  } catch (error) {
-    console.log("Catch zod error:", error);
-    if (error instanceof z.ZodError) {
-      return new Response(JSON.stringify({ 
-        error: error.flatten 
-      }), {
-        status: 400,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-    }
-    console.log("Catch error:", error);
+    console.log("No response is returned");
     return new Response(JSON.stringify({ 
-      error: 'An unexpected error occurred'
+      error: 'No response is returned'
     }), {
       status: 500,
       headers: { 
         'Content-Type': 'application/json'
       },
-    });
-  }
-  console.log("No response is returned");
-  return new Response(JSON.stringify({ 
-    error: 'No response is returned'
-  }), {
-    status: 500,
-    headers: { 
-      'Content-Type': 'application/json'
-    },
-  });
+    }
+  );
 }

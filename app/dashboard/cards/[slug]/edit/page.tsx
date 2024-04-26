@@ -16,7 +16,6 @@ import { DashboardContext } from "@/app/context/DashboardContext";
 import convertCardCodeToImage from "@/app/lib/actions/convertCardCodeToImage";
 import uploadCardImage from "@/app/lib/actions/supabase-data/uploadCardImage";
 import { uploadCardArtImage } from "@/app/lib/actions/supabase-data/uploadCardArtImage";
-import { postCardToDiscord } from "@/app/lib/actions/postCardToDiscord";
 import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData"
 // Types
 import { CardFormDataType } from "@/app/utils/types/types";
@@ -29,7 +28,6 @@ import { bannerMessages } from "@/app/utils/data/bannerMessages";
 // Utils
 import PostHogClient from "@/app/lib/posthog/posthog";
 import { format } from "date-fns";
-import clsx from "clsx";
 import Link from "next/link";
 // Custom components
 import ArtPromptManager from "@/app/components/card-creator/ArtPromptManager";
@@ -43,7 +41,6 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import LinearProgress from "@mui/material/LinearProgress";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
-import Snackbar from "@mui/material/Snackbar";
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
@@ -111,6 +108,7 @@ export default function EditCard({
     watch,
     formState: {
       isValid,
+      isDirty,
       isSubmitting,
       isSubmitted,
     },
@@ -119,19 +117,15 @@ export default function EditCard({
   // Utils
   const form = watch();
   const posthog = PostHogClient();
-  const { userProfileData } = useContext(DashboardContext);
-  
   const router = useRouter();
+  const { userProfileData } = useContext(DashboardContext);
 
   // Initial states
   const [cardData, setCardData] = useState<CardsTableType | null>(null);
   const [isCardOwner, setIsCardOwner] = useState<boolean>(false);
   const [cardMode, setCardMode] = useState<"initial" | "anomaly">("initial");
-  const [postToDiscord, setPostToDiscord] = useState<boolean>(true);
   const [formattedDate, setFormattedDate] = useState<string | null>(null);
   // Feedback states
-  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
-  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [showAlertInfo, setShowAlertInfo] = useState<boolean>(false);
   const [alertInfo, setAlertInfo] = useState<{
     type: "success" | "error" | "info" | "warning";
@@ -214,7 +208,7 @@ export default function EditCard({
     setAlertInfo({
       type: "info",
       icon: <InfoIcon />,
-      message: "Submitting card..."
+      message: "Updating card..."
     });
     setShowAlertInfo(true);
 
@@ -236,7 +230,6 @@ export default function EditCard({
         }
 
         let finalCardArt = data.cardArt;
-
         if (finalCardArt) {
           const cardArtSupabaseUrl = await uploadCardArtImage(finalCardArt);
           if (cardArtSupabaseUrl) {
@@ -244,11 +237,15 @@ export default function EditCard({
           }
         }
     
-        if (imagePublicUrl && finalCardArt && cardData) {
-          console.log("Requesting to update cardData:", cardData) // Debugging
+        if (
+          cardData?.id
+          && imagePublicUrl
+          && finalCardArt !== data.cardArt
+        ) {
+          console.log("Requesting to update cardData:", data) // Debugging
           const payload = {
             ...data,
-            id: cardData.id,
+            id: cardData?.id,
             cardArt: finalCardArt,
             cardRender: imagePublicUrl,
           };
@@ -271,28 +268,15 @@ export default function EditCard({
             setAlertInfo({
               type: "success",
               icon: <CheckIcon />,
-              message: "Card submitted successfully! Redirecting..."
+              message: "Card updated successfully! Redirecting..."
             });
             
             // Track event in PostHog
             if (responseData.data) {
               posthog.capture({
                 distinctId: responseData.data.id,
-                event: "🎉 New Card Submitted"
+                event: "🔄 Card Updated"
               })
-            }
-            
-            // Post to Discord
-            if (
-              postToDiscord && 
-              responseData.data
-            ) {
-              postCardToDiscord({
-                cardName: responseData.data.cardName,
-                cardRender: responseData.data.cardRender,
-                cardCreator: responseData.data.cardCreator,
-                cardIdUrl: `https://www.play.nexus/dashboard/cards/${responseData.data.id}`
-              });
             }
 
             // Redirect to card page
@@ -332,18 +316,6 @@ export default function EditCard({
     }
   };
 
-  // Post to Discord change handler
-  function handlePostToDiscordChange() {
-    const newPostToDiscord = !postToDiscord;
-    setPostToDiscord(newPostToDiscord);
-    setOpenSnackbar(false);
-    setSnackbarMessage(
-      newPostToDiscord ? 
-      "Posting to Discord!" : 
-      "Not posting to Discord!"
-    );
-  };
-
   // Format date from card data
   useEffect(() => {
     if (cardData && isCardOwner) {
@@ -358,15 +330,6 @@ export default function EditCard({
     cardData, 
     isCardOwner
   ]);
-
-  // Re-open snackbar when message changes
-  useEffect(() => {
-    if (snackbarMessage === "") {
-      return;
-    } else if (!openSnackbar) {
-      setOpenSnackbar(true);
-    }
-  }, [snackbarMessage]);
 
   // Set banner message
   useEffect(() => {
@@ -524,57 +487,6 @@ export default function EditCard({
                       md:items-baseline
                     "
                   >
-                    {/* Upload to Discord */}
-                    {userProfileData && (
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={postToDiscord}
-                            onChange={handlePostToDiscordChange}
-                            disabled={isSubmitting || isSubmitted}
-                            size="small"
-                          />
-                        }
-                        label={
-                          <Typography
-                            variant="caption"
-                            component="span"
-                            className="
-                              w-full
-                              font-medium
-                              mt-1
-                              gap-1
-                              text-neutral-300
-                            "
-                          >
-                            Post to {""}
-                            <Tooltip title="Nexus' Discord Server">
-                              <a
-                                href="https://discord.gg/HENgvaAmk2"
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                <Typography
-                                  variant="caption"
-                                  component="span"
-                                  className="
-                                  text-teal-500
-                                  hover:text-teal-400
-                                  hover:underline
-                                  "
-                                >
-                                  Discord
-                                </Typography>
-                              </a>
-                            </Tooltip>
-                          </Typography>
-                        }
-                        className={clsx("hover:opacity-100 text-sm", {
-                          "opacity-100": postToDiscord,
-                          "opacity-50": !postToDiscord,
-                        })}
-                      />
-                    )}
                     {userProfileData ? (
                       <>
                         {/* Save button */}
@@ -586,6 +498,7 @@ export default function EditCard({
                               size="small"
                               disabled={
                                 !isValid ||
+                                !isDirty ||
                                 isSubmitting ||
                                 isSubmitted ||
                                 form.cardType === null ||
@@ -628,6 +541,7 @@ export default function EditCard({
                           size="small"
                           disabled={
                             !isValid ||
+                            !isDirty ||
                             isSubmitting ||
                             isSubmitted ||
                             form.cardType === null ||
@@ -922,34 +836,6 @@ export default function EditCard({
           </Box>
         </form>
       </FormProvider>
-
-      {/* Snackbar */}
-      {openSnackbar && (
-        <Snackbar
-          open={openSnackbar}
-          autoHideDuration={5000}
-          onClose={() => setOpenSnackbar(false)}
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right"
-          }}
-        >
-          <Alert
-            onClose={() => setOpenSnackbar(false)}
-            severity={
-              postToDiscord ? 
-              "success" : 
-              "error"
-            }
-            className="
-              w-full
-              rounded-md
-            "
-          >
-            {snackbarMessage}
-          </Alert>
-        </Snackbar>
-      )}
     </>
   ) : (
     <CardCreatorSkeleton />
