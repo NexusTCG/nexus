@@ -59,14 +59,13 @@ export default function Create() {
   // Shorten form value names
   const methods = useForm<CardFormDataType>({
     defaultValues: {
-      user_id: "",
       username: "",
       im_name: "",
       im_type: "entity",
       im_sub_type: [""],
       im_super_type: "default",
       im_grade: "core",
-      im_text: "Card text",
+      im_text: "",
       im_lore_text: "",
       im_card_prompt: "",
       im_art_prompt: "",
@@ -196,8 +195,8 @@ export default function Create() {
             },
             body: JSON.stringify({
               ...data,
-              cardArt: finalCardArt,
-              cardRender: imagePublicUrl,
+              im_art: finalCardArt,
+              im_render: imagePublicUrl,
             }),
           });
 
@@ -508,28 +507,30 @@ export default function Create() {
                         {/* Save button */}
                         {!isSubmitting && !showAlertInfo ? (
                           <Tooltip title="Save your card">
-                            <Button
-                              type="submit"
-                              variant="outlined"
-                              size="small"
-                              disabled={
-                                !isValid ||
-                                isSubmitting ||
-                                isSubmitted ||
-                                form.im_type === null ||
-                                form.im_art === "/images/card-parts/card-art/default-art.jpg"
-                              }
-                              color={isValid ? "success" : "secondary"}
-                              startIcon={<SaveIcon />}
-                              className="
-                                hover:cursor-pointer
-                                hover:bg-teal-600/30
-                                hover:text-white
-                                hover:border-teal-600
-                              "
-                            >
-                              Save
-                            </Button>
+                            <>
+                              <Button
+                                type="submit"
+                                variant="outlined"
+                                size="small"
+                                disabled={
+                                  !isValid ||
+                                  isSubmitting ||
+                                  isSubmitted ||
+                                  form.im_type === null ||
+                                  form.im_art === "/images/card-parts/card-art/default-art.jpg"
+                                }
+                                color={isValid ? "success" : "secondary"}
+                                startIcon={<SaveIcon />}
+                                className="
+                                  hover:cursor-pointer
+                                  hover:bg-teal-600/30
+                                  hover:text-white
+                                  hover:border-teal-600
+                                "
+                              >
+                                Save
+                              </Button>
+                            </>
                           </Tooltip>
                         ) : (
                           <Alert
@@ -642,7 +643,7 @@ export default function Create() {
                         }}
                         control={
                           <Switch
-                            defaultChecked
+                            // defaultChecked
                             checked={cardMode === "initial"}
                           />
                         } 

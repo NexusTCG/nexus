@@ -5,8 +5,7 @@ export default function determineEnergyType(
     im_energy_cost: CardFormDataType["im_energy_cost"],
     im_type: CardFormDataType["im_type"]
 ) {
-
-    if (im_type?.includes("anomaly")) {
+    if (im_type?.toLowerCase().includes("anomaly")) {
       // If the card type is anomaly, return anomaly
       return "anomaly";
     }

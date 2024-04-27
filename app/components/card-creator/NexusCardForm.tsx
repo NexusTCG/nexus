@@ -92,28 +92,28 @@ export default function NexusCardForm({
   const activeCardText = watch("im_text") || "";
 
   // Debounce function for cardText
-  const debouncedSetCardText = useCallback(
+  const debouncedSetImText = useCallback(
     debounce((value: string) => {
       setValue("im_text", value);
     }, 200), []
   );
 
   // Debounce function for cardText
-  const debouncedSetCardAnomalyModeText = useCallback(
+  const debouncedSetAmText = useCallback(
     debounce((value: string) => {
       setValue("am_text", value);
     }, 200), []
   );
 
   // Debounce function for cardLoreText
-  const debouncedSetCardLoreText = useCallback(
+  const debouncedSetImLoreText = useCallback(
     debounce((value: string) => {
       setValue("im_lore_text", value);
     }, 200), []
   );
 
    // Debounce function for cardAnomalyModeLoreText
-   const debouncedSetCardAnomalyModeLoreText = useCallback(
+   const debouncedSetAmLoreText = useCallback(
     debounce((value: string) => {
       setValue("am_lore_text", value);
     }, 200), []
@@ -191,16 +191,17 @@ export default function NexusCardForm({
   );
 
   // Handle energy cost popover
-  const handleEnergyCostPopoverOpen = useCallback(() => {
-    setEnergyCostPopOver(true);
+  const handleEnergyCostPopoverOpen = useCallback(
+    () => {setEnergyCostPopOver(true);
   }, []);
   
-  const handleEnergyCostPopoverClose = useCallback(() => {
-    setEnergyCostPopOver(false);
+  const handleEnergyCostPopoverClose = useCallback(
+    () => {setEnergyCostPopOver(false);
   }, []);
 
   // Handle grade change
-  const handleGradeChange = useCallback(() => {
+  const handleGradeChange = useCallback(
+    () => {
     const grades = [
       "core", 
       "rare", 
@@ -276,9 +277,8 @@ export default function NexusCardForm({
   useEffect(() => {
     const colorType = determineColorType(
       form.im_energy_cost,
-      // form.im_type === "" ? 
-      // undefined : 
-      form.im_type
+      form.im_type === "" ? 
+      undefined : form.im_type
     );
     setCardColorType(colorType);
   }, [
@@ -317,10 +317,10 @@ export default function NexusCardForm({
   // Determine card bg image 
   // based on card type and color
   const cardBgImage = useMemo(() => {
+
     return determineBgImage(
-      // form.im_type === "" ? 
-      // undefined : 
-      form.im_type, 
+      form.im_type === "" ? 
+      undefined : form.im_type,
       cardColor || ""
     );
   }, [
@@ -336,7 +336,7 @@ export default function NexusCardForm({
     ) {
       setValue("im_sub_type", [""]);
     }
-  }, [form.im_sub_type]);
+  }, [form.im_type]);
 
   return (
     <Box
@@ -485,7 +485,8 @@ export default function NexusCardForm({
             </Box> 
             
             {/* Energy Cost Icons */}
-            {cardMode === "initial" && (<Box
+            {cardMode === "initial" && (
+            <Box
               id="energy-cost-container"
               className="
                 flex
@@ -494,8 +495,7 @@ export default function NexusCardForm({
                 items-center
               "
             >
-              {form.im_type && 
-              !form.im_type.includes("anomaly") && (
+              {form.im_type && (
                 <ClickAwayListener
                   onClickAway={handleEnergyCostPopoverClose}
                 >
@@ -565,7 +565,6 @@ export default function NexusCardForm({
               />
             )}
             {/* Rendered card types */}
-            {/* Does this do anything? */}
             {isSubmitting && (
               <Box
                 className="
@@ -616,7 +615,6 @@ export default function NexusCardForm({
                     <FormControl
                       className={clsx("flex-grow", {
                         "w-1/5": form.im_type === "entity",
-                        "w-3/5": form.im_type === "anomaly",
                       })}
                     >
                       <Select
@@ -980,7 +978,7 @@ export default function NexusCardForm({
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        debouncedSetCardText(e.target.value);
+                        debouncedSetImText(e.target.value);
                       }}
                       multiline
                       size="small"
@@ -1041,7 +1039,7 @@ export default function NexusCardForm({
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        debouncedSetCardAnomalyModeText(e.target.value);
+                        debouncedSetAmText(e.target.value);
                       }}
                       multiline
                       size="small"
@@ -1130,7 +1128,7 @@ export default function NexusCardForm({
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        debouncedSetCardLoreText(e.target.value);
+                        debouncedSetImLoreText(e.target.value);
                       }}
                       multiline
                       size="small"
@@ -1208,7 +1206,7 @@ export default function NexusCardForm({
                       {...field}
                       onChange={(e) => {
                         field.onChange(e);
-                        debouncedSetCardAnomalyModeLoreText(e.target.value);
+                        debouncedSetAmLoreText(e.target.value);
                       }}
                       multiline
                       size="small"
@@ -1396,31 +1394,33 @@ export default function NexusCardForm({
                   }
                   placement="top"
                 >
-                  <IconButton
-                    aria-label="change grade"
-                    disabled={isSubmitting || isSubmitted}
-                    size="large"
-                    onClick={handleGradeChange}
-                  >
-                    <Image
-                      src={
-                        form.im_grade === "core" ? GradeCore :
-                        form.im_grade === "rare" ? GradeRare :
-                        form.im_grade === "epic" ? GradeEpic :
-                        form.im_grade === "prime" ? GradePrime :
-                        null
-                      }
-                      height={34}
-                      width={34}
-                      alt={`${form.im_grade} icon`}
-                      className="
-                        bg-black
-                        cursor-pointer
-                        rounded-full
-                        p-1.5
-                      "
-                    />
-                  </IconButton>
+                  <>
+                    <IconButton
+                      aria-label="change grade"
+                      disabled={isSubmitting || isSubmitted}
+                      size="large"
+                      onClick={handleGradeChange}
+                    >
+                      <Image
+                        src={
+                          form.im_grade === "core" ? GradeCore :
+                          form.im_grade === "rare" ? GradeRare :
+                          form.im_grade === "epic" ? GradeEpic :
+                          form.im_grade === "prime" ? GradePrime :
+                          null
+                        }
+                        height={34}
+                        width={34}
+                        alt={`${form.im_grade} icon`}
+                        className="
+                          bg-black
+                          cursor-pointer
+                          rounded-full
+                          p-1.5
+                        "
+                      />
+                    </IconButton>
+                  </>
                 </Tooltip>
               )}
               {/* Anomaly Mode: Grade */}
@@ -1439,37 +1439,42 @@ export default function NexusCardForm({
                   }
                   placement="top"
                 >
-                  <IconButton
-                    aria-label="change grade"
-                    disabled={isSubmitting || isSubmitted}
-                    size="large"
-                    onClick={handleGradeChange}
-                  >
-                    <Image
-                      src={
-                        form.am_grade === "core" ? GradeCore :
-                        form.am_grade === "rare" ? GradeRare :
-                        form.am_grade === "epic" ? GradeEpic :
-                        form.am_grade === "prime" ? GradePrime :
-                        null
-                      }
-                      height={34}
-                      width={34}
-                      alt={`${form.am_grade} icon`}
-                      className="
-                        bg-black
-                        cursor-pointer
-                        rounded-full
-                        p-1.5
-                      "
-                    />
-                  </IconButton>
+                  <>
+                    <IconButton
+                      aria-label="change grade"
+                      disabled={isSubmitting || isSubmitted}
+                      size="large"
+                      onClick={handleGradeChange}
+                    >
+                      <Image
+                        src={
+                          form.am_grade === "core" ? GradeCore :
+                          form.am_grade === "rare" ? GradeRare :
+                          form.am_grade === "epic" ? GradeEpic :
+                          form.am_grade === "prime" ? GradePrime :
+                          null
+                        }
+                        height={34}
+                        width={34}
+                        alt={`${form.am_grade} icon`}
+                        className="
+                          bg-black
+                          cursor-pointer
+                          rounded-full
+                          p-1.5
+                        "
+                      />
+                    </IconButton>
+                  </>
                 </Tooltip>
               )}
               
               {/* Card creator */}
               {cardMode === "initial" || 
-              form.am_type === "uncommonAnomaly" && (
+              form.am_type !== undefined &&
+              form.am_type
+                .toLowerCase()
+                .includes("uncommon") && (
                 <Box
                   className="
                     flex
@@ -1495,8 +1500,12 @@ export default function NexusCardForm({
           </Box>
           {/* Card defense */}
           {form.im_type && (
-            form.im_type.includes("entity") || 
-            form.im_type.includes("outpost")
+            form.im_type
+              .toLowerCase()
+              .includes("entity") || 
+            form.im_type
+              .toLowerCase()
+              .includes("outpost")
           ) && cardMode === "initial" && (
           <Box
             id="stats-defense"

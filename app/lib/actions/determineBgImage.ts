@@ -4,16 +4,18 @@ export default function determineBgImage(
     im_type: CardFormDataType["im_type"],
     im_energy_alignment: string
 ) {
+    const imType = im_type?.toLowerCase();
 
-    switch (im_energy_alignment) {
+    if (imType !== undefined) {
+      switch (im_energy_alignment) {
         case "anomaly":
             return "bg-[url('/images/card-parts/card-frames/other/anomaly.jpg')]"
 
         case "radiant":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/mono/object/object-radiant.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/mono/effect/effect-radiant.jpg')]";
 
             } else {
@@ -21,10 +23,10 @@ export default function determineBgImage(
             };
 
         case "volatile":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/mono/object/object-volatile.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/mono/effect/effect-volatile.jpg')]";
 
             } else {
@@ -32,10 +34,10 @@ export default function determineBgImage(
             };
 
         case "corrupt":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/mono/object/object-corrupt.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/mono/effect/effect-corrupt.jpg')]";
 
             } else {
@@ -43,10 +45,10 @@ export default function determineBgImage(
             };
 
         case "blaze":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/mono/object/object-blaze.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/mono/effect/effect-blaze.jpg')]";
 
             } else {
@@ -54,10 +56,10 @@ export default function determineBgImage(
             };
             
         case "verdant":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/mono/object/object-verdant.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/mono/effect/effect-verdant.jpg')]";
 
             } else {
@@ -65,10 +67,10 @@ export default function determineBgImage(
             };
 
         case "void":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/mono/object/object-void.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/mono/effect/effect-void.jpg')]";
 
             } else {
@@ -76,10 +78,10 @@ export default function determineBgImage(
             }
 
         case "radiantVolatile":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-radiant-volatile.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-radiant-volatile.jpg')]";
 
             } else {
@@ -87,10 +89,10 @@ export default function determineBgImage(
             };
 
         case "radiantCorrupt":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-radiant-corrupt.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-radiant-corrupt.jpg')]";
 
             } else {
@@ -98,10 +100,10 @@ export default function determineBgImage(
             };
 
         case "radiantBlaze":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-radiant-blaze.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-radiant-blaze.jpg')]";
 
             } else {
@@ -109,10 +111,10 @@ export default function determineBgImage(
             };
 
         case "radiantVerdant":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-radiant-verdant.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-radiant-verdant.jpg')]";
 
             } else {
@@ -120,10 +122,10 @@ export default function determineBgImage(
             };
 
         case "volatileCorrupt":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-volatile-corrupt.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-volatile-corrupt.jpg')]";
 
             } else {
@@ -131,10 +133,10 @@ export default function determineBgImage(
             };
 
         case "volatileBlaze":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-volatile-blaze.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-volatile-blaze.jpg')]";
 
             } else {
@@ -142,10 +144,10 @@ export default function determineBgImage(
             };
 
         case "volatileVerdant":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-volatile-verdant.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-volatile-verdant.jpg')]";
 
             } else {
@@ -153,10 +155,10 @@ export default function determineBgImage(
             };
 
         case "corruptBlaze":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-corrupt-blaze.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-corrupt-blaze.jpg')]";
 
             } else {
@@ -164,10 +166,10 @@ export default function determineBgImage(
             };
 
         case "corruptVerdant":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-corrupt-verdant.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-corrupt-verdant.jpg')]";
 
             } else {
@@ -175,10 +177,10 @@ export default function determineBgImage(
             };
 
         case "blazeVerdant":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/object/object-blaze-verdant.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/dual/effect/effect-blaze-verdant.jpg')]";
 
             } else {
@@ -186,10 +188,10 @@ export default function determineBgImage(
             };
 
         case "multi":
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/other/object/object-multi.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/other/effect/effect-multi.jpg')]";
 
             } else {
@@ -197,13 +199,14 @@ export default function determineBgImage(
             };
 
         default:
-            if (im_type?.includes("object") || im_type?.includes("entityObject")) {
+            if (imType?.includes("object") || (imType?.includes("entity") && imType?.includes("object"))) {
                 return "bg-[url('/images/card-parts/card-frames/other/object/object-default.jpg')]";
 
-            } else if (im_type?.includes("effect") || im_type?.includes("entityEffect")) {
+            } else if (imType?.includes("effect") || (imType?.includes("entity") && imType?.includes("effect"))) {
                 return "bg-[url('/images/card-parts/card-frames/other/effect/effect-default.jpg')]";
 
             };
             return "bg-[url('/images/card-parts/card-frames/other/default.jpg')]";
+      };
     };
 };

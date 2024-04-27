@@ -1,22 +1,22 @@
 export type CardFormDataType = {
   // Base Card Data
-  user_id: string;
-  username: string; // cardCreator
+  user_id?: string;
+  username?: string; // cardCreator
   // Initial Mode Card Data
-  im_name: string; // cardName
-  im_type: string; // cardType
+  im_name?: string; // cardName
+  im_type?: string; // cardType
   im_sub_type?: string[] | null; // cardSubType
   im_super_type?: string | null; // cardSuperType
-  im_grade: string; // cardAnomalyModeGrade
+  im_grade?: string; // cardAnomalyModeGrade
   im_text?: string; // cardText
   im_lore_text?: string | null; // cardLoreText
   im_card_prompt?: string | null; // cardPrompt
   im_art_prompt?: string | null; // cardArtPrompt
   im_art_prompt_options?: string[] | null; // art_prompt_options
-  im_art: string; // cardArt
+  im_art?: string; // cardArt
   im_render?: string | null; // cardRender
-  im_energy_value: number; // cardEnergyValue
-  im_energy_cost: { [key: string]: number } | null; // cardEnergyCost
+  im_energy_value?: number; // cardEnergyValue
+  im_energy_cost?: { [key: string]: number } | null; // cardEnergyCost
   im_energy_alignment?: string | null; // cardEnergyAlignment
   im_unit_attack?: string | null; // cardAttack
   im_unit_defense?: string | null; // cardDefense

@@ -534,29 +534,31 @@ export default function EditCard({
                         {/* Save button */}
                         {!isSubmitting && !showAlertInfo ? (
                           <Tooltip title="Save your card">
-                            <Button
-                              type="submit"
-                              variant="outlined"
-                              size="small"
-                              disabled={
-                                !isValid ||
-                                // !isDirty ||
-                                isSubmitting ||
-                                isSubmitted ||
-                                form.im_type === null ||
-                                form.im_art === "/images/card-parts/card-art/default-art.jpg"
-                              }
-                              color={isValid ? "success" : "secondary"}
-                              startIcon={<SaveIcon />}
-                              className="
-                                hover:cursor-pointer
-                                hover:bg-teal-600/30
-                                hover:text-white
-                                hover:border-teal-600
-                              "
-                            >
-                              Save
-                            </Button>
+                            <>
+                              <Button
+                                type="submit"
+                                variant="outlined"
+                                size="small"
+                                disabled={
+                                  !isValid ||
+                                  // !isDirty ||
+                                  isSubmitting ||
+                                  isSubmitted ||
+                                  form.im_type === null ||
+                                  form.im_art === "/images/card-parts/card-art/default-art.jpg"
+                                }
+                                color={isValid ? "success" : "secondary"}
+                                startIcon={<SaveIcon />}
+                                className="
+                                  hover:cursor-pointer
+                                  hover:bg-teal-600/30
+                                  hover:text-white
+                                  hover:border-teal-600
+                                "
+                              >
+                                Save
+                              </Button>
+                            </>
                           </Tooltip>
                         ) : (
                           <Alert
