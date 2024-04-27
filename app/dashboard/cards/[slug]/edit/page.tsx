@@ -71,7 +71,7 @@ export default function EditCard({
       im_sub_type: [""],
       im_super_type: "default",
       im_grade: "core",
-      im_text: "Card text",
+      im_text: "",
       im_lore_text: "",
       im_card_prompt: "",
       im_art_prompt: "",
