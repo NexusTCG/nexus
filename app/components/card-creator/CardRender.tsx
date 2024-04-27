@@ -440,7 +440,9 @@ const CardRender = ({
           cardType,
           cardData?.im_energy_alignment,
         );
-        setBgImage(newBgImage);
+        if (newBgImage !== undefined) {
+          setBgImage(newBgImage);
+        };
       };
     }, [
       cardData?.im_type,
