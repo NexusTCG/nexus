@@ -64,12 +64,22 @@ export default function EditCard({
   // Form
   const methods = useForm<CardFormDataType>({
     defaultValues: {
-      id: 0,
-      user_id: "", 
-      cardCreator: "",
-      cardName: "",
-      cardEnergyValue: 0,
-      cardEnergyCost: {
+      user_id: "",
+      username: "",
+      im_name: "",
+      im_type: "entity",
+      im_sub_type: [""],
+      im_super_type: "default",
+      im_grade: "core",
+      im_text: "Card text",
+      im_lore_text: "",
+      im_card_prompt: "",
+      im_art_prompt: "",
+      im_art_prompt_options: [],
+      im_art: "/images/card-parts/card-art/default-art.jpg",
+      im_render: "",
+      im_energy_value: 0,
+      im_energy_cost: {
         radiant: 0,
         volatile: 0,
         corrupt: 0,
@@ -77,27 +87,23 @@ export default function EditCard({
         verdant: 0,
         void: 0,
       },
-      cardEnergyAlignment: "",
-      cardArt: "/images/card-parts/card-art/default-art.jpg",
-      cardType: "entity",
-      cardSuperType: "default",
-      cardSubType: [""],
-      cardSpeed: "1",
-      cardGrade: "core",
-      cardText: "Card text",
-      cardLoreText: "",
-      cardAttack: "",
-      cardDefense: "",
-      cardUnitType: "melee",
-      cardPrompt: "",
-      cardArtPrompt: "",
-      cardRender: "",
-      cardAnomalyMode: "common",
-      cardAnomalyModeName: "",
-      cardAnomalyModeText: "",
-      cardAnomalyModeLoreText: "",
-      cardAnomalyModeGrade: "core",
-      art_prompt_options: [],
+      im_energy_alignment: "",
+      im_unit_attack: "",
+      im_unit_defense: "",
+      im_unit_range: "melee",
+      im_speed: "1",
+      am_name: "",
+      am_type: "common",
+      am_sub_type: "",
+      am_super_type: "",
+      am_grade: "core",
+      am_text: "",
+      am_lore_text: "",
+      am_card_prompt: "",
+      am_art_prompt: "",
+      am_art_prompt_options: [],
+      am_art: "/images/card-parts/card-art/default-anomaly-art.web",
+      am_render: "",
     },
     resolver: zodResolver(cardFormSchema),
     mode: "onChange",
@@ -156,7 +162,7 @@ export default function EditCard({
         const card = cards[0];
         setCardData(card);
         setIsCardOwner(
-          card.cardCreator === 
+          card.username === 
           userProfileData?.username
         );
       } else {
@@ -172,7 +178,7 @@ export default function EditCard({
   // Check card ownership
   useEffect(() => {
     if (cardData && userProfileData) {
-      const creator = cardData.cardCreator;
+      const creator = cardData.username;
       const username = userProfileData.username;
 
       if (creator === username) {
@@ -192,7 +198,39 @@ export default function EditCard({
     if (cardData && isCardOwner) {
       console.log("Resetting form, cardData.id:", cardData.id)
       methods.reset({
-        ...cardData,
+        user_id: cardData.user_id,
+        username: cardData.username,
+        im_name: cardData.im_name,
+        im_type: cardData.im_type,
+        im_sub_type: cardData.im_sub_type,
+        im_super_type: cardData.im_super_type,
+        im_grade: cardData.im_grade,
+        im_text: cardData.im_text,
+        im_lore_text: cardData.im_lore_text,
+        im_card_prompt: cardData.im_card_prompt,
+        im_art_prompt: cardData.im_art_prompt,
+        im_art_prompt_options: cardData.im_art_prompt_options,
+        im_art: cardData.im_art,
+        im_render: cardData.im_render,
+        im_energy_value: cardData.im_energy_value,
+        im_energy_cost: cardData.im_energy_cost,
+        im_energy_alignment: cardData.im_energy_alignment,
+        im_unit_attack: cardData.im_unit_attack,
+        im_unit_defense: cardData.im_unit_defense,
+        im_unit_range: cardData.im_unit_range,
+        im_speed: cardData.im_speed,
+        am_name: cardData.am_name,
+        am_type: cardData.am_type,
+        am_sub_type: cardData.am_sub_type,
+        am_super_type: cardData.am_super_type,
+        am_grade: cardData.am_grade,
+        am_text: cardData.am_text,
+        am_lore_text: cardData.am_lore_text,
+        am_card_prompt: cardData.am_card_prompt,
+        am_art_prompt: cardData.am_art_prompt,
+        am_art_prompt_options: cardData.am_art_prompt_options,
+        am_art: cardData.am_art,
+        am_render: cardData.am_render,
       });
     }
   }, [
@@ -229,7 +267,7 @@ export default function EditCard({
           console.log(`cardRenderUrl update error: ${imagePublicUrl}`)
         }
 
-        let finalCardArt = data.cardArt;
+        let finalCardArt = data.im_art;
         if (finalCardArt) {
           const cardArtSupabaseUrl = await uploadCardArtImage(finalCardArt);
           if (cardArtSupabaseUrl) {
@@ -240,7 +278,7 @@ export default function EditCard({
         if (
           cardData?.id
           && imagePublicUrl
-          && finalCardArt !== data.cardArt
+          && finalCardArt !== data.im_art
         ) {
           console.log("Requesting to update cardData:", data) // Debugging
           const payload = {
@@ -318,7 +356,11 @@ export default function EditCard({
 
   // Format date from card data
   useEffect(() => {
-    if (cardData && isCardOwner) {
+    if (
+      cardData && 
+      isCardOwner && 
+      cardData.created_at
+    ) {
       const formattedDate = format(
         new Date(
           cardData.created_at
@@ -438,8 +480,8 @@ export default function EditCard({
                       "
                     >
                       {
-                        form.cardName ? 
-                        form.cardName : 
+                        form.im_name ? 
+                        form.im_name : 
                         "Card Name"
                       }
                     </Typography>
@@ -498,11 +540,11 @@ export default function EditCard({
                               size="small"
                               disabled={
                                 !isValid ||
-                                !isDirty ||
+                                // !isDirty ||
                                 isSubmitting ||
                                 isSubmitted ||
-                                form.cardType === null ||
-                                form.cardArt === "/images/card-parts/card-art/default-art.jpg"
+                                form.im_type === null ||
+                                form.im_art === "/images/card-parts/card-art/default-art.jpg"
                               }
                               color={isValid ? "success" : "secondary"}
                               startIcon={<SaveIcon />}
@@ -544,8 +586,8 @@ export default function EditCard({
                             !isDirty ||
                             isSubmitting ||
                             isSubmitted ||
-                            form.cardType === null ||
-                            form.cardArt === "/images/card-parts/card-art/default-art.jpg"
+                            form.im_type === null ||
+                            form.im_art === "/images/card-parts/card-art/default-art.jpg"
                           }
                           color={isValid ? "success" : "secondary"}
                           startIcon={<SaveIcon />}
@@ -642,20 +684,20 @@ export default function EditCard({
                     
                     {/* INITIAL MODE: Unit Range */}
                     {cardMode === "initial" &&
-                    form.cardType && 
+                    form.im_type && 
                     (
-                      form.cardType.includes("entity") ||
-                      form.cardType.includes("outpost")
+                      form.im_type.includes("entity") ||
+                      form.im_type.includes("outpost")
                     ) && (
                       <FormControlLabel
                         onChange={() => {
-                          form.cardUnitType === "melee" ? 
-                          setValue("cardUnitType", "ranged") : 
-                          setValue("cardUnitType", "melee")
+                          form.im_unit_range === "melee" ? 
+                          setValue("im_unit_range", "ranged") : 
+                          setValue("im_unit_range", "melee")
                         }}
                         control={
                           <Checkbox
-                            checked={form.cardUnitType === "ranged"}
+                            checked={form.im_unit_range === "ranged"}
                             size="small"
                           />
                         } 
@@ -668,24 +710,24 @@ export default function EditCard({
                             "
                           >
                             {
-                              form.cardUnitType === "melee" ? 
+                              form.im_unit_range === "melee" ? 
                               "Melee" : "Ranged"
                             }
                           </Typography>
                         }
                       />
                     )}
-                    {form.cardType && form.cardType !== "event" && (
+                    {form.im_type && form.im_type !== "event" && (
                       <FormControlLabel
                         onChange={() => {
-                          form.cardSuperType === "default" || 
-                          form.cardSuperType === "" ? 
-                          setValue("cardSuperType", "mythic") : 
-                          setValue("cardSuperType", "default")
+                          form.im_super_type === "default" || 
+                          form.im_super_type === "" ? 
+                          setValue("im_super_type", "mythic") : 
+                          setValue("im_super_type", "default")
                         }}
                         control={
                           <Checkbox
-                            checked={form.cardSuperType === "mythic"}
+                            checked={form.im_super_type === "mythic"}
                             size="small"
                           />
                         } 
@@ -714,9 +756,9 @@ export default function EditCard({
                     "
                   >
                     {
-                      form.cardType && 
-                      form.cardType.length === 1 && 
-                      form.cardType.includes("") && (
+                      form.im_type && 
+                      form.im_type.length === 1 && 
+                      form.im_type.includes("") && (
                       <Typography
                         variant="body2"
                         className="

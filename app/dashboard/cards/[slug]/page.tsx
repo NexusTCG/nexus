@@ -84,7 +84,7 @@ export default function Card({
         const card = cards[0];
         setCardData(card);
         setIsCardOwner(
-          card.cardCreator === 
+          card.username === 
           userProfileData?.username
         );
       } else {
@@ -100,7 +100,7 @@ export default function Card({
   // Check if current user is the card creator
   useEffect(() => {
     if (
-      cardData?.cardCreator === 
+      cardData?.username === 
       userProfileData?.username
     ) {
       setIsCardOwner(true);
@@ -112,7 +112,10 @@ export default function Card({
 
   // Format date from card data
   useEffect(() => {
-    if (cardData) {
+    if (
+      cardData && 
+      cardData.created_at
+    ) {
       const formattedDate = format(
         new Date(cardData.created_at), 
         "MMMM dd, yyyy"
@@ -184,7 +187,7 @@ export default function Card({
                 text-neutral-200
               "
             >
-              {cardData?.cardName.toUpperCase() || "CARD NAME"}
+              {cardData?.im_name.toUpperCase() || "CARD NAME"}
             </Typography>
           ) : (
             <Skeleton
@@ -312,7 +315,7 @@ export default function Card({
                   text-white
                 "
               >
-                {cardData?.cardName}
+                {cardData?.im_name}
               </Typography>
             ) : (
               <Skeleton
@@ -420,8 +423,8 @@ export default function Card({
                 "
               >
                 by {""}
-                <Tooltip title={`${cardData?.cardCreator}'s profile`}>
-                  <Link href={`/dashboard/profile/${cardData?.cardCreator}`}>
+                <Tooltip title={`${cardData?.username}'s profile`}>
+                  <Link href={`/dashboard/profile/${cardData?.username}`}>
                     <Typography
                       variant="overline"
                       className="
@@ -431,7 +434,7 @@ export default function Card({
                         hover:text-teal-400
                       "
                     >
-                      {cardData?.cardCreator}
+                      {cardData?.username}
                     </Typography>
                   </Link>
                 </Tooltip>
@@ -446,7 +449,7 @@ export default function Card({
             )}
           </Box>
           {/* Card art prompt */}
-          {cardData?.art_prompt_options && (
+          {cardData?.im_art_prompt_options && (
             <Box
               id="card-art-prompt"
               className="
@@ -481,7 +484,9 @@ export default function Card({
                   gap-1
                 "
               >
-                {cardData.art_prompt_options.sort().map((option, index) => (
+                {cardData.im_art_prompt_options
+                  .sort()
+                  .map((option, index) => (
                   <Typography
                     key={index}
                     variant="caption"
@@ -668,7 +673,7 @@ export default function Card({
                 text-white
               "
             >
-              Share {cardData?.cardName || "card"}
+              Share {cardData?.im_name || "card"}
               {/* Share on Discord */}
               {/* Share on Reddit */}
               {/* Share on X */}

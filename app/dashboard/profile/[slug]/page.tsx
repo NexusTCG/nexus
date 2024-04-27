@@ -139,10 +139,10 @@ export default function ProfileId() {
           if (data) {
             const filteredData = data
               .filter(card =>
-                card.cardRender !== null &&
-                card.cardRender !== "" &&
-                card.cardCreator !== null &&
-                card.cardCreator !== ""
+                card.im_render !== null &&
+                card.im_render !== "" &&
+                card.username !== null &&
+                card.username !== ""
               );
             setCards(filteredData);
           } else {
@@ -351,7 +351,7 @@ export default function ProfileId() {
           key={card.id}
         >
           {<Tooltip
-            title={`${card.cardName} by ${card.cardCreator}`}
+            title={`${card.im_name} by ${card.username}`}
             arrow
           >
             <Link
@@ -373,14 +373,16 @@ export default function ProfileId() {
                     mb-2
                   "
                 >
-                  <Image
-                    src={card.cardRender}
-                    alt={card.cardName}
-                    fill
-                    style={{
-                      objectFit: "cover"
-                    }}
-                  />
+                  {card.im_render && (
+                    <Image
+                      src={card.im_render}
+                      alt={card.im_name}
+                      fill
+                      style={{
+                        objectFit: "cover"
+                      }}
+                    />
+                  )}
                 {/* Link to cards/[slug]/edit */}
                 {/* {isProfileOwner && (<EditIcon />)}  */}
               </Box>

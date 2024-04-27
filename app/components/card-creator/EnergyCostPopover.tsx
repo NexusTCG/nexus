@@ -89,8 +89,8 @@ export default function EnergyCostPopover({
 
   // const open = Boolean(anchorEl);
   const id = open ? "energy-cost-popover" : undefined;
-  const watchCardEnergyCost = watch("cardEnergyCost") as EnergyCosts;
-  const watchCardEnergyValue = watch("cardEnergyValue");
+  const watchCardEnergyCost = watch("im_energy_cost") as EnergyCosts;
+  const watchCardEnergyValue = watch("im_energy_value");
   const watchVoidEnergyValue = watchCardEnergyCost.void;
 
   // Cost change handler
@@ -99,7 +99,7 @@ export default function EnergyCostPopover({
     delta: number
   ) {
     // Get the current energy cost values
-    const energyCosts = getValues("cardEnergyCost") as EnergyCosts;
+    const energyCosts = getValues("im_energy_cost") as EnergyCosts;
   
     // Calculate the total of non-void energies before any changes
     const nonVoidTotalBefore = Object
@@ -165,19 +165,19 @@ export default function EnergyCostPopover({
     if (newTotalEnergyValue <= 15) {
       // Set new values
       setValue(
-        "cardEnergyCost." +
+        "im_energy_cost." +
         energy, newCost, {
           shouldValidate: true
         });
       setValue(
-        "cardEnergyValue",
+        "im_energy_value",
         newTotalEnergyValue, {
           shouldValidate: true
         });
       
       // Trigger validation
-      await trigger("cardEnergyCost");
-      await trigger("cardEnergyValue");
+      await trigger("im_energy_cost");
+      await trigger("im_energy_value");
   
       // Force card re-render by tracking each change
       setEnergyCostChangeCounter(

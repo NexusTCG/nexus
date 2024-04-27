@@ -142,7 +142,7 @@ export default function ArtPromptManager({
     userProfileData &&
     userProfileData.credits !== undefined &&
     userProfileData.credits > 0 && 
-    form.cardArtPrompt
+    form.im_art_prompt
   ) {
       setAlertInfo({
         type: "info",
@@ -152,7 +152,7 @@ export default function ArtPromptManager({
       
       try {
         const constructedArtPrompt = await ConstructArtPrompt(
-          artPromptSelections, form.cardArtPrompt
+          artPromptSelections, form.im_art_prompt
         );
   
         const response = await fetchWithRetry(
@@ -189,7 +189,7 @@ export default function ArtPromptManager({
             });
           }
           
-          setValue("cardArt", imageUrl);
+          setValue("im_art", imageUrl);
           setCardArtOptions(prevState => {
             if (!prevState.options.includes(imageUrl)) {
               return {
@@ -205,7 +205,7 @@ export default function ArtPromptManager({
             setShowCardArtOptions(true);
           };
           
-          await trigger("cardArt");
+          await trigger("im_art");
         } else {
           throw new Error('Image URL not found in the response.');
         }
@@ -272,16 +272,16 @@ export default function ArtPromptManager({
       activeOption: index,
     }));
     setValue(
-      "cardArt", 
+      "im_art", 
       cardArtOptions.options[index]
     );
   };
 
   // Set initial art options
   useEffect(() => {
-    if (cardData?.cardArt) {
+    if (cardData?.im_art) {
       setCardArtOptions({
-        options: [cardData.cardArt],
+        options: [cardData.im_art],
         activeOption: 0,
       });
     }
@@ -298,12 +298,12 @@ useEffect(() => {
       .values(artPromptSelections)
       .filter(v => v !== null) as string[];
     setValue(
-      "art_prompt_options", 
+      "im_art_prompt_options", 
       filteredValues.length > 0 ? filteredValues : [""]
     );
   } else {
     setValue(
-      "art_prompt_options", 
+      "im_art_prompt_options", 
       [""]
     );
   }
@@ -399,7 +399,7 @@ useEffect(() => {
             "
           >
             <Controller
-              name="cardArtPrompt"
+              name="im_art_prompt"
               control={control}
               defaultValue=""
               render={({
@@ -499,7 +499,7 @@ useEffect(() => {
                 />
               )}
             />
-            {/* )} */}
+            {/* Credits */}
             {currentCredits === 0 && (
               <Box
                 className="
@@ -621,8 +621,8 @@ useEffect(() => {
                 "
               >
                 {
-                  form.cardName ? 
-                  `${form.cardName} art options` : 
+                  form.im_name ? 
+                  `${form.im_name} art options` : 
                   "Card art options"
                 }
               </Typography>

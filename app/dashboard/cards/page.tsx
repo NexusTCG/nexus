@@ -45,10 +45,10 @@ export default function Cards() {
         if (data) {
           const filteredData = data
             .filter(card =>
-              card.cardRender !== null &&
-              card.cardRender !== "" &&
-              card.cardCreator !== null &&
-              card.cardCreator !== ""
+              card.im_render !== null &&
+              card.im_render !== "" &&
+              card.username !== null &&
+              card.username !== ""
             );
           setCards(filteredData);
         }
@@ -88,10 +88,10 @@ export default function Cards() {
         if (data) {
           const filteredData = data
             .filter(card =>
-              card.cardRender !== null &&
-              card.cardRender !== "" &&
-              card.cardCreator !== null &&
-              card.cardCreator !== ""
+              card.im_render !== null &&
+              card.im_render !== "" &&
+              card.username !== null &&
+              card.username !== ""
             );
           setCards(filteredData);
         }
@@ -364,7 +364,7 @@ export default function Cards() {
             key={card.id}
           >
             <Tooltip
-              title={`${card.cardName} by ${card.cardCreator}`}
+              title={`${card.im_name} by ${card.username}`}
               arrow
             >
               <Box
@@ -386,12 +386,14 @@ export default function Cards() {
                 <Link
                   href={`/dashboard/cards/${card.id}`}
                 >
-                  <Image
-                    src={card.cardRender}
-                    alt={card.cardName}
-                    fill
-                    style={{ objectFit: "cover" }}
-                  />
+                  {card.im_render && (
+                    <Image
+                      src={card.im_render}
+                      alt={card.im_name}
+                      fill
+                      style={{ objectFit: "cover" }}
+                    />
+                  )}
                 </Link>
               </Box>
             </Tooltip>

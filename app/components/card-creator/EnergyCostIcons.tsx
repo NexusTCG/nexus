@@ -70,10 +70,10 @@ export default function EnergyCostIcons({
   return (
     <>
       {((
-        formCardData.cardEnergyValue === 0 &&
-        formCardData.cardType &&
-        formCardData.cardType.includes("anomaly")) ||
-        Object.values(formCardData.cardEnergyCost ?? {}
+        formCardData.im_energy_value === 0 &&
+        formCardData.im_type &&
+        formCardData.im_type.includes("anomaly")) ||
+        Object.values(formCardData.im_energy_cost ?? {}
       ).every(value => value === 0)) ? (
         <IconButton
           aria-label="add cost"
@@ -91,7 +91,7 @@ export default function EnergyCostIcons({
       ) : null}
 
       {Object.values(
-        formCardData.cardEnergyCost ?? {}
+        formCardData.im_energy_cost ?? {}
       ).some(value => value > 0) && (
         <Box
           onClick={handleEnergyCostPopoverOpen}
@@ -106,7 +106,7 @@ export default function EnergyCostIcons({
             hover:opacity-80
           "
         >
-        {Object.entries(formCardData.cardEnergyCost ?? {})
+        {Object.entries(formCardData.im_energy_cost ?? {})
           .map(([energy, value]) =>
             energy !== "void"
               ? Array.from({ length: value }, (_, i) => (

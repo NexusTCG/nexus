@@ -89,39 +89,39 @@ export default function NexusCardForm({
   },
   } = useFormContext<CardFormDataType>();
   const form = watch();
-  const activeCardText = watch("cardText") || "";
+  const activeCardText = watch("im_text") || "";
 
   // Debounce function for cardText
   const debouncedSetCardText = useCallback(
     debounce((value: string) => {
-      setValue("cardText", value);
+      setValue("im_text", value);
     }, 200), []
   );
 
   // Debounce function for cardText
   const debouncedSetCardAnomalyModeText = useCallback(
     debounce((value: string) => {
-      setValue("cardAnomalyModeText", value);
+      setValue("am_text", value);
     }, 200), []
   );
 
   // Debounce function for cardLoreText
   const debouncedSetCardLoreText = useCallback(
     debounce((value: string) => {
-      setValue("cardLoreText", value);
+      setValue("im_lore_text", value);
     }, 200), []
   );
 
    // Debounce function for cardAnomalyModeLoreText
    const debouncedSetCardAnomalyModeLoreText = useCallback(
     debounce((value: string) => {
-      setValue("cardAnomalyModeLoreText", value);
+      setValue("am_lore_text", value);
     }, 200), []
   );
 
-  // Dynamically calculate cardText 
-  // & cardLoreText styles
-  // Make this a separate function
+  // Dynamically calculate 
+  // im_text and im_lore_text styles
+  // TODO: Make this a separate function
   function calculateCardTextSize(
     textLength: number
   ) {
@@ -209,27 +209,27 @@ export default function NexusCardForm({
     ];
 
     if (cardMode === "initial") {
-      const currentGrade = form.cardGrade ?? "core";
+      const currentGrade = form.im_grade ?? "core";
       const currentIndex = grades.indexOf(currentGrade);
       const nextIndex = (currentIndex + 1) % grades.length;
       const nextGrade = grades[nextIndex];
     
-      setValue("cardGrade", nextGrade);
-      trigger("cardGrade");
+      setValue("im_grade", nextGrade);
+      trigger("im_grade");
     } else if (cardMode === "anomaly") {
-      const currentGrade = form.cardAnomalyModeGrade ?? "core";
+      const currentGrade = form.am_grade ?? "core";
       const currentIndex = grades.indexOf(currentGrade);
       const nextIndex = (currentIndex + 1) % grades.length;
       const nextGrade = grades[nextIndex];
     
-      setValue("cardAnomalyModeGrade", nextGrade);
-      trigger("cardAnomalyModeGrade");
+      setValue("am_grade", nextGrade);
+      trigger("am_grade");
     }
     
     setOpenGradeSnackBar(true);
   }, [
-    form.cardGrade, 
-    form.cardAnomalyModeGrade,
+    form.im_grade, 
+    form.am_grade,
     setValue, 
     trigger, 
     setOpenGradeSnackBar
@@ -275,15 +275,15 @@ export default function NexusCardForm({
   // Determine color type based on cost
   useEffect(() => {
     const colorType = determineColorType(
-      form.cardEnergyCost,
-      form.cardType === "" ? 
-      undefined : 
-      form.cardType
+      form.im_energy_cost,
+      // form.im_type === "" ? 
+      // undefined : 
+      form.im_type
     );
     setCardColorType(colorType);
   }, [
-    form.cardEnergyCost,
-    form.cardType,
+    form.im_energy_cost,
+    form.im_type,
     energyCostChangeCounter
   ]);
 
@@ -291,13 +291,13 @@ export default function NexusCardForm({
   // based on cost and color type
   useEffect(() => {
     const color = determineColor(
-      form.cardEnergyCost,
+      form.im_energy_cost,
       cardCostType || ""
     );
     setCardColor(color);
-    setValue("cardEnergyAlignment", color);
+    setValue("im_energy_alignment", color);
   }, [
-    form.cardEnergyCost,
+    form.im_energy_cost,
     cardCostType
   ]);
 
@@ -318,25 +318,25 @@ export default function NexusCardForm({
   // based on card type and color
   const cardBgImage = useMemo(() => {
     return determineBgImage(
-      form.cardType === "" ? 
-      undefined : 
-      form.cardType, 
+      // form.im_type === "" ? 
+      // undefined : 
+      form.im_type, 
       cardColor || ""
     );
   }, [
-    form.cardType, 
+    form.im_type, 
     cardColor
   ]);
 
   // On cardType change: Clear cardSubType
   useEffect(() => {
     if (
-      form.cardSubType && 
-      form.cardSubType.length > 0
+      form.im_sub_type && 
+      form.im_sub_type.length > 0
     ) {
-      setValue("cardSubType", [""]);
+      setValue("im_sub_type", [""]);
     }
-  }, [form.cardType]);
+  }, [form.im_sub_type]);
 
   return (
     <Box
@@ -433,9 +433,9 @@ export default function NexusCardForm({
               `}
             >
               {/* Mythic icon boolean */}
-              {form?.cardType !== "undefined" &&
-              form?.cardType !== "event" &&
-              form.cardSuperType === "mythic" && (
+              {form?.im_type !== "undefined" &&
+              form?.im_type !== "event" &&
+              form.im_super_type === "mythic" && (
                 <Image
                   src={Mythic}
                   height={14}
@@ -446,8 +446,8 @@ export default function NexusCardForm({
               {/* Card name */}
               {!isSubmitted ? (
                 cardMode === "anomaly" && 
-                form.cardAnomalyMode && 
-                !form.cardAnomalyMode
+                form.am_type && 
+                !form.am_type
                   .toLowerCase()
                   .includes("uncommon") ? (
                   <Typography
@@ -463,7 +463,7 @@ export default function NexusCardForm({
                     key={cardMode} 
                     name={
                       cardMode === "initial" ? 
-                      "cardName" : "cardAnomalyModeName"
+                      "im_name" : "am_name"
                     }
                     placeholder={
                       cardMode === "initial" ? 
@@ -474,11 +474,11 @@ export default function NexusCardForm({
               ) : (
                 cardMode === "initial" ? (
                   <Typography variant="body2">
-                    {form.cardName}
+                    {form.im_name}
                   </Typography>
                 ) : (
                   <Typography variant="body2">
-                    {form.cardAnomalyModeName}
+                    {form.am_name}
                   </Typography>
                 )
               )}
@@ -494,8 +494,8 @@ export default function NexusCardForm({
                 items-center
               "
             >
-              {form.cardType && 
-              !form.cardType.includes("anomaly") && (
+              {form.im_type && 
+              !form.im_type.includes("anomaly") && (
                 <ClickAwayListener
                   onClickAway={handleEnergyCostPopoverClose}
                 >
@@ -547,21 +547,21 @@ export default function NexusCardForm({
             `}
           >
             {/* Initial Mode: Range Icon */}
-            {form.cardType && 
+            {form.im_type && 
               (
-                form.cardType.includes("entity") || 
-                form.cardType.includes("outpost")
+                form.im_type.includes("entity") || 
+                form.im_type.includes("outpost")
               ) &&
               cardMode === "initial" && 
             (
               <Image
                 src={
-                  form.cardUnitType === "melee" ? 
+                  form.im_unit_range === "melee" ? 
                   RangeMelee : RangeRanged
                 }
                 width={15}
                 height={15}
-                alt={`${form.cardAnomalyModeName} card art`}
+                alt={`${form.am_name} card art`}
               />
             )}
             {/* Rendered card types */}
@@ -579,14 +579,14 @@ export default function NexusCardForm({
                 <Typography
                   variant="body2"
                 >
-                  {form.cardType}
+                  {form.im_type}
                 </Typography>
 
-                {form?.cardSubType && (
+                {form?.im_sub_type && (
                   <Typography
                     variant="body2"
                   >
-                  {" "} – {form.cardSubType.join(" ")}
+                  {" "} – {form.im_sub_type.join(" ")}
                   </Typography>
                 )}
               </Box>
@@ -609,14 +609,14 @@ export default function NexusCardForm({
               >
                 {/* Type */}
                 <Controller
-                  name="cardType"
+                  name="im_type"
                   control={control}
                   disabled={isSubmitting || isSubmitted}
                   render={({ field }) => (
                     <FormControl
                       className={clsx("flex-grow", {
-                        "w-1/5": form.cardType === "entity",
-                        "w-3/5": form.cardType === "anomaly",
+                        "w-1/5": form.im_type === "entity",
+                        "w-3/5": form.im_type === "anomaly",
                       })}
                     >
                       <Select
@@ -648,29 +648,29 @@ export default function NexusCardForm({
 
                           if (
                             form &&
-                            form.cardType &&
+                            form.im_type &&
                             (
-                              form.cardType.includes("entity") || 
-                              form.cardType.includes("outpost")
+                              form.im_type.includes("entity") || 
+                              form.im_type.includes("outpost")
                             ) && 
                             !selectedOption.includes("entity") && 
                             !selectedOption.includes("outpost")
                           ) {
-                            setValue("cardAttack", "0");
-                            setValue("cardDefense", "0");
-                            setValue("cardSuperType", "default");
-                            setValue("cardUnitType", "melee");
+                            setValue("im_unit_attack", "0");
+                            setValue("im_unit_defense", "0");
+                            setValue("im_unit_range", "melee");
+                            setValue("im_super_type", "default");
                           }
 
                           // Check if the selected option is "anomaly" and reset fields
                           if (selectedOption === "anomaly") {
-                            const newEnergyCost = await resetFieldsOnAnomaly(form.cardEnergyCost);
-                            setValue("cardEnergyCost", newEnergyCost);
-                            setValue("cardEnergyValue", 0);
-                            setValue("cardSpeed", "");
-                            setValue("cardSubType", [""]);
-                            if (form.cardSuperType !== "mythic") {
-                              setValue("cardSuperType", "");
+                            const newEnergyCost = await resetFieldsOnAnomaly(form.im_energy_cost);
+                            setValue("im_energy_cost", newEnergyCost);
+                            setValue("im_energy_value", 0);
+                            setValue("im_speed", "");
+                            setValue("im_sub_type", [""]);
+                            if (form.im_super_type !== "mythic") {
+                              setValue("im_super_type", "");
                             }
                           }
                         }}
@@ -691,22 +691,22 @@ export default function NexusCardForm({
                 />
 
                 {/* Sub type */}
-                {form.cardType && (
-                  form.cardType.includes("object") || 
-                  form.cardType.includes("entity") || 
-                  form.cardType.includes("effect")
+                {form.im_type && (
+                  form.im_type.includes("object") || 
+                  form.im_type.includes("entity") || 
+                  form.im_type.includes("effect")
                 ) && (
                   <Controller
-                    name="cardSubType"
+                    name="im_sub_type"
                     control={control}
                     render={({ field }) => (
                       <FormControl
                         className={clsx("flex-grow",
                           {
-                            "w-3/5": form.cardType && (
-                              form.cardType.includes("object") || 
-                              form.cardType.includes("entity") || 
-                              form.cardType.includes("effect")
+                            "w-3/5": form.im_type && (
+                              form.im_type.includes("object") || 
+                              form.im_type.includes("entity") || 
+                              form.im_type.includes("effect")
                             )
                           }
                         )}
@@ -742,8 +742,8 @@ export default function NexusCardForm({
                             },
                           }}
                         >
-                          {form.cardType && 
-                          form.cardType.includes("entity") &&
+                          {form.im_type && 
+                          form.im_type.includes("entity") &&
                             Object.entries(
                               cardSubTypeOptions.entity
                             ).map(
@@ -760,8 +760,8 @@ export default function NexusCardForm({
                                 </MenuItem>
                               ),
                             )}
-                          {form.cardType && 
-                          form.cardType.includes("object") &&
+                          {form.im_type && 
+                          form.im_type.includes("object") &&
                             Object.entries(
                               cardSubTypeOptions.object
                             ).map(
@@ -773,8 +773,8 @@ export default function NexusCardForm({
                                 </MenuItem>
                               ),
                             )}
-                          {form.cardType && 
-                          form.cardType.includes("effect") &&
+                          {form.im_type && 
+                          form.im_type.includes("effect") &&
                             Object.entries(
                               cardSubTypeOptions.effect
                             ).map(
@@ -815,7 +815,7 @@ export default function NexusCardForm({
               >
                 {/* Type */}
                 <Controller
-                  name="cardAnomalyMode"
+                  name="am_type"
                   control={control}
                   disabled={isSubmitting || isSubmitted}
                   render={({ field }) => (
@@ -862,7 +862,7 @@ export default function NexusCardForm({
               </Box>
             )}
             {/* Speed */}
-            {form.cardType && 
+            {form.im_type && 
             cardMode === "initial" && (
               <SpeedSelect />
             )}
@@ -925,10 +925,10 @@ export default function NexusCardForm({
               "
             >
               {cardMode === "initial" ? <Image
-                src={form.cardArt || "/images/card-parts/card-art/default-art.jpg"}
+                src={form.im_art || "/images/card-parts/card-art/default-art.jpg"}
                 fill={true}
                 sizes="100%"
-                alt={`${form.cardName} card art`}
+                alt={`${form.im_name} card art`}
                 style={{
                   objectFit: "cover"
                 }}
@@ -936,7 +936,7 @@ export default function NexusCardForm({
                 src={"/images/card-parts/card-art/default-anomaly-art.webp"}
                 fill={true}
                 sizes="100%"
-                alt={`${form.cardAnomalyModeName} card art`}
+                alt={`${form.am_name} card art`}
                 style={{
                   objectFit: "cover"
                 }}
@@ -970,7 +970,7 @@ export default function NexusCardForm({
               {/* Card text */}
               {cardMode === "initial" && (
                 <Controller
-                  name="cardText"
+                  name="im_text"
                   control={control}
                   render={({ 
                     field, 
@@ -1030,10 +1030,10 @@ export default function NexusCardForm({
               {/* Anomaly Mode text */}
               {cardMode === "anomaly" && (
                 <Controller
-                  name="cardAnomalyModeText"
+                  name="am_text"
                   control={control}
                   disabled={
-                    !form.cardAnomalyMode?.toLowerCase().includes("uncommon") || 
+                    !form.am_type?.toLowerCase().includes("uncommon") || 
                     isSubmitting || isSubmitted
                   }
                   render={({ field, fieldState }) => (
@@ -1049,7 +1049,7 @@ export default function NexusCardForm({
                       rows={cardTextProps.textRows}
                       error={!!fieldState.error}
                       placeholder={
-                        !form.cardAnomalyMode?.toLowerCase().includes("uncommon") ? (
+                        !form.am_type?.toLowerCase().includes("uncommon") ? (
                           ("This transmutes into a Common Anomaly of that your choice (Radiance, Volatility, Corruption, Blaze, Verdancy).")
                         ) : (
                           (!fieldState.error ? "Your card's anomaly mode text..." : "Card text is required!")
@@ -1102,8 +1102,8 @@ export default function NexusCardForm({
                     "
                   />
                 ) : (
-                  form.cardAnomalyMode && 
-                  form.cardAnomalyMode
+                  form.am_type && 
+                  form.am_type
                     .toLowerCase()
                     .includes("uncommon") ? (
                     <Divider
@@ -1122,7 +1122,7 @@ export default function NexusCardForm({
               {/* Card lore text */}
               {cardTextProps.loreTextVisible && cardMode === "initial" && (
                 <Controller
-                  name="cardLoreText"
+                  name="im_lore_text"
                   control={control}
                   disabled={isSubmitting || isSubmitted}
                   render={({ field }) => (
@@ -1154,8 +1154,8 @@ export default function NexusCardForm({
                           <span
                             className={clsx("flex justify-start h-full italic mx-1 font-large", 
                               { 
-                                "text-black/50": form.cardLoreText === "", 
-                                "text-black": form.cardLoreText !== "", 
+                                "text-black/50": form.im_lore_text === "", 
+                                "text-black": form.im_lore_text !== "", 
                               }
                             )}
                           >
@@ -1165,8 +1165,8 @@ export default function NexusCardForm({
                         <span
                           className={clsx("flex justify-start h-full italic mx-1 font-large", 
                             { 
-                              "text-black/50": form.cardLoreText === "", 
-                              "text-black": form.cardLoreText !== "", 
+                              "text-black/50": form.im_lore_text === "", 
+                              "text-black": form.im_lore_text !== "", 
                             }
                           )}
                         >
@@ -1195,12 +1195,12 @@ export default function NexusCardForm({
               {/* Card Anamoly Mode lore text */}
               {cardTextProps.loreTextVisible && 
               cardMode === "anomaly" && 
-              form.cardAnomalyMode && 
-              form.cardAnomalyMode
+              form.am_type && 
+              form.am_type
                 .toLowerCase()
                 .includes("uncommon") && (
                 <Controller
-                  name="cardAnomalyModeLoreText"
+                  name="am_lore_text"
                   control={control}
                   disabled={isSubmitting || isSubmitted}
                   render={({ field }) => (
@@ -1264,9 +1264,9 @@ export default function NexusCardForm({
           )}
         >
           {/* Card attack */}
-          {form.cardType && (
-            form.cardType.includes("entity") || 
-            form.cardType.includes("outpost")
+          {form.im_type && (
+            form.im_type.includes("entity") || 
+            form.im_type.includes("outpost")
           ) && cardMode === "initial" && (
           <Box
             id="stats-attack"
@@ -1281,7 +1281,7 @@ export default function NexusCardForm({
             "
           >
             <Controller
-              name="cardAttack"
+              name="im_unit_attack"
               control={control}
               disabled={isSubmitting || isSubmitted}
               render={({ field, fieldState }) => (
@@ -1357,9 +1357,9 @@ export default function NexusCardForm({
             id="stats-grade-info"
             className={clsx(
               "flex flex-col justify-center items-center",
-              form.cardType && !(
-                form.cardType.includes("entity") || 
-                form.cardType.includes("outpost")
+              form.im_type && !(
+                form.im_type.includes("entity") || 
+                form.im_type.includes("outpost")
               ) ? "w-full" : "w-3/5"
             )}
           >
@@ -1378,7 +1378,7 @@ export default function NexusCardForm({
                 open={openGradeSnackbar}
                 autoHideDuration={3000}
                 onClose={handleCloseGradeSnackbar}
-                message={cardMode === "initial" ? `Initial mode grade changed to ${form.cardGrade}!` : `Anomaly mode grade changed to ${form.cardAnomalyModeGrade}!`}
+                message={cardMode === "initial" ? `Initial mode grade changed to ${form.im_grade}!` : `Anomaly mode grade changed to ${form.am_grade}!`}
               />
               {/* Initial Mode: Grade */}
               {cardMode === "initial" && (
@@ -1388,9 +1388,9 @@ export default function NexusCardForm({
                   title={`
                     Change initial mode grade to
                     ${
-                      form.cardGrade === "rare" ?
-                      "epic" : form.cardGrade === "epic" ?
-                      "prime" : form.cardGrade === "prime" ?
+                      form.im_grade === "rare" ?
+                      "epic" : form.im_grade === "epic" ?
+                      "prime" : form.im_grade === "prime" ?
                       "core" : "rare"
                     }`
                   }
@@ -1404,15 +1404,15 @@ export default function NexusCardForm({
                   >
                     <Image
                       src={
-                        form.cardGrade === "core" ? GradeCore :
-                        form.cardGrade === "rare" ? GradeRare :
-                        form.cardGrade === "epic" ? GradeEpic :
-                        form.cardGrade === "prime" ? GradePrime :
+                        form.im_grade === "core" ? GradeCore :
+                        form.im_grade === "rare" ? GradeRare :
+                        form.im_grade === "epic" ? GradeEpic :
+                        form.im_grade === "prime" ? GradePrime :
                         null
                       }
                       height={34}
                       width={34}
-                      alt={`${form.cardGrade} icon`}
+                      alt={`${form.im_grade} icon`}
                       className="
                         bg-black
                         cursor-pointer
@@ -1431,9 +1431,9 @@ export default function NexusCardForm({
                   title={`
                     Change anomaly mode grade to
                     ${
-                      form.cardAnomalyModeGrade === "rare" ?
-                      "epic" : form.cardAnomalyModeGrade === "epic" ?
-                      "prime" : form.cardAnomalyModeGrade === "prime" ?
+                      form.am_grade === "rare" ?
+                      "epic" : form.am_grade === "epic" ?
+                      "prime" : form.am_grade === "prime" ?
                       "core" : "rare"
                     }`
                   }
@@ -1447,15 +1447,15 @@ export default function NexusCardForm({
                   >
                     <Image
                       src={
-                        form.cardAnomalyModeGrade === "core" ? GradeCore :
-                        form.cardAnomalyModeGrade === "rare" ? GradeRare :
-                        form.cardAnomalyModeGrade === "epic" ? GradeEpic :
-                        form.cardAnomalyModeGrade === "prime" ? GradePrime :
+                        form.am_grade === "core" ? GradeCore :
+                        form.am_grade === "rare" ? GradeRare :
+                        form.am_grade === "epic" ? GradeEpic :
+                        form.am_grade === "prime" ? GradePrime :
                         null
                       }
                       height={34}
                       width={34}
-                      alt={`${form.cardAnomalyModeGrade} icon`}
+                      alt={`${form.am_grade} icon`}
                       className="
                         bg-black
                         cursor-pointer
@@ -1469,7 +1469,7 @@ export default function NexusCardForm({
               
               {/* Card creator */}
               {cardMode === "initial" || 
-              form.cardAnomalyMode === "uncommonAnomaly" && (
+              form.am_type === "uncommonAnomaly" && (
                 <Box
                   className="
                     flex
@@ -1485,8 +1485,8 @@ export default function NexusCardForm({
                     variant="caption"
                     className="opacity-80"
                   >
-                    {form.cardCreator
-                      ? form.cardCreator
+                    {form.username
+                      ? form.username
                       : "Card Creator"}
                   </Typography>
                 </Box>
@@ -1494,9 +1494,9 @@ export default function NexusCardForm({
             </Box>
           </Box>
           {/* Card defense */}
-          {form.cardType && (
-            form.cardType.includes("entity") || 
-            form.cardType.includes("outpost")
+          {form.im_type && (
+            form.im_type.includes("entity") || 
+            form.im_type.includes("outpost")
           ) && cardMode === "initial" && (
           <Box
             id="stats-defense"
@@ -1510,7 +1510,7 @@ export default function NexusCardForm({
             "
           >
             <Controller
-              name="cardDefense"
+              name="im_unit_defense"
               control={control}
               disabled={isSubmitting || isSubmitted}
               render={({ field, fieldState }) => (

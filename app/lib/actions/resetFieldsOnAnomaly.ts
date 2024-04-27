@@ -1,11 +1,11 @@
 import { CardFormDataType } from "@/app/utils/types/types";
 
 export default async function resetFieldsOnAnomaly(
-    activeCardCost: CardFormDataType["cardEnergyCost"]
+    im_energy_cost: CardFormDataType["im_energy_cost"]
 ) {
 
     const resetCosts = Object.keys(
-        activeCardCost || {}
+        im_energy_cost || {}
     ).reduce<{
         [key: string]: number
     }>((acc, key) => {

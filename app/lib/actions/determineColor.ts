@@ -5,7 +5,7 @@ import {
 } from "@/app/utils/data/cardEnergyOptions";
 
 export default function determineEnergy(
-    activeCardCost: CardFormDataType["cardEnergyCost"],
+    im_energy_cost: CardFormDataType["im_energy_cost"],
     cardCostType: string
 ) {
     if (cardCostType === "anomaly") {
@@ -15,7 +15,7 @@ export default function determineEnergy(
     // Get energy and value pairs
     const energyCostEntries = Object
     .entries(
-      activeCardCost ?? {}
+      im_energy_cost ?? {}
     );
 
     // Get non-void energys with value > 0

@@ -20,7 +20,7 @@ export default function SpeedSelect() {
     setValue, 
     watch 
   } = useFormContext();
-  const currentCardSpeed = watch("cardSpeed");
+  const currentCardSpeed = watch("im_speed");
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
@@ -28,7 +28,7 @@ export default function SpeedSelect() {
   function handleSpeedChange(
     newSpeed: string
   ) {
-    setValue("cardSpeed", newSpeed);
+    setValue("im_speed", newSpeed);
     setOpenSnackbar(true);
   };
 

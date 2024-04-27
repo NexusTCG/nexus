@@ -288,17 +288,17 @@ const CardRender = ({
           .map(capitalizeWord)
           .join(' ');
 
-      if (cardData?.cardType) {
-        const cardType = Array.isArray(cardData.cardType) ? 
-          cardData.cardType : 
-          [cardData.cardType];
+      if (cardData?.im_type) {
+        const cardType = Array.isArray(cardData.im_type) ? 
+          cardData.im_type : 
+          [cardData.im_type];
         cardTypeText = cardType
           .map(splitAndCapitalize)
           .join(" ");
       }
 
-      if (cardData?.cardSubType && cardData.cardSubType.length > 0) {
-        cardSubTypeText = cardData.cardSubType
+      if (cardData?.im_sub_type && cardData.im_sub_type.length > 0) {
+        cardSubTypeText = cardData.im_sub_type
           .map(splitAndCapitalize)
           .join(" ");
       }
@@ -309,11 +309,11 @@ const CardRender = ({
     // Determine bgColor
     useEffect(() => {
       if (
-        cardData?.cardEnergyAlignment && 
+        cardData?.im_energy_alignment && 
         cardData !== null
       ) {
         if (
-          cardData?.cardEnergyAlignment === "radiant"
+          cardData?.im_energy_alignment === "radiant"
         ) {
           setBgColor({
             "50":
@@ -324,7 +324,7 @@ const CardRender = ({
               colorMapping["yellow"]?.[400],
           })
         } else if (
-          cardData?.cardEnergyAlignment === "volatile"
+          cardData?.im_energy_alignment === "volatile"
         ) {
           setBgColor({
             "50":
@@ -335,7 +335,7 @@ const CardRender = ({
               colorMapping["sky"]?.[400],
           })
         } else if (
-          cardData?.cardEnergyAlignment === "corrupt"
+          cardData?.im_energy_alignment === "corrupt"
         ) {
           setBgColor({
             "50":
@@ -346,7 +346,7 @@ const CardRender = ({
               colorMapping["violet"]?.[400],
           })
         } else if (
-          cardData?.cardEnergyAlignment === "blaze"
+          cardData?.im_energy_alignment === "blaze"
         ) {
           setBgColor({
             "50":
@@ -357,7 +357,7 @@ const CardRender = ({
               colorMapping["red"]?.[400],
           })
         } else if (
-          cardData?.cardEnergyAlignment === "verdant"
+          cardData?.im_energy_alignment === "verdant"
         ) {
           setBgColor({
             "50":
@@ -368,7 +368,7 @@ const CardRender = ({
               colorMapping["lime"]?.[400],
           })
         } else if (
-          cardData?.cardEnergyAlignment === "void"
+          cardData?.im_energy_alignment === "void"
         ) {
           setBgColor({
             "50":
@@ -382,20 +382,20 @@ const CardRender = ({
           setBgColor({
             "50":
               colorMapping[
-                cardData?.cardEnergyAlignment as keyof typeof
+                cardData?.im_energy_alignment as keyof typeof
               colorMapping]?.[50],
             "200":
               colorMapping[
-                cardData?.cardEnergyAlignment as keyof typeof
+                cardData?.im_energy_alignment as keyof typeof
               colorMapping]?.[200],
             "400":
               colorMapping[
-                cardData?.cardEnergyAlignment as keyof typeof
+                cardData?.im_energy_alignment as keyof typeof
               colorMapping]?.[400],
           })
         }
       }
-    }, [cardData?.cardEnergyAlignment]);
+    }, [cardData?.im_energy_alignment]);
 
     // Set card text properties
     useEffect(() => {
@@ -419,32 +419,32 @@ const CardRender = ({
           setInlineIconSize(16);
         }
       };
-      if (cardData?.cardText) {
+      if (cardData?.im_text) {
         calculateCardTextSize(
-          cardData.cardText.length
+          cardData.im_text.length
         );
       }
-    }, [cardData?.cardText]);
+    }, [cardData?.im_text]);
 
     // Determine bgImage
     useEffect(() => {
       if (
-        cardData?.cardType && 
-        cardData?.cardEnergyAlignment
+        cardData?.im_type && 
+        cardData?.im_energy_alignment
       ) {
         const cardType = Array.isArray(
-          cardData?.cardType) ? 
-          cardData?.cardType[0] : 
-          cardData?.cardType;
+          cardData?.im_type) ? 
+          cardData?.im_type[0] : 
+          cardData?.im_type;
         const newBgImage = determineBgImage(
           cardType,
-          cardData?.cardEnergyAlignment,
+          cardData?.im_energy_alignment,
         );
         setBgImage(newBgImage);
       };
     }, [
-      cardData?.cardType,
-      cardData?.cardEnergyAlignment
+      cardData?.im_type,
+      cardData?.im_energy_alignment
     ]);
 
     // Skeleton Card Render
@@ -557,7 +557,7 @@ const CardRender = ({
                       gap-1
                     `}
                   >
-                    {cardData?.cardSuperType === "mythic" && (
+                    {cardData?.im_super_type === "mythic" && (
                       <Image
                         src={Mythic}
                         height={14}
@@ -576,7 +576,7 @@ const CardRender = ({
                       }}
                     >
                       {
-                        (cardData?.cardName ?? '')
+                        (cardData?.im_name ?? '')
                           .split(" ")
                           .map(word => word
                             .charAt(0)
@@ -600,7 +600,7 @@ const CardRender = ({
                       gap-0.25
                     "
                   >
-                    {Object.entries(cardData.cardEnergyCost ?? {})
+                    {Object.entries(cardData.im_energy_cost ?? {})
                       .sort((
                         [energyA], 
                         [energyB]
@@ -670,12 +670,12 @@ const CardRender = ({
                   `}
                 >
                   {/* Card range */}
-                  {cardData?.cardType !== undefined && (
-                    cardData?.cardType.includes("entity") || 
-                    cardData?.cardType.includes("outpost")
+                  {cardData?.im_type !== undefined && (
+                    cardData?.im_type.includes("entity") || 
+                    cardData?.im_type.includes("outpost")
                   ) && (
                       <Box>
-                          {cardData?.cardUnitType === "melee" ? (
+                          {cardData?.im_unit_range === "melee" ? (
                         <Image
                           src={RangeMelee}
                           height={15}
@@ -731,8 +731,8 @@ const CardRender = ({
                     "
                   >
                     {Array.from({
-                      length: cardData.cardSpeed ? 
-                      parseInt(cardData.cardSpeed, 10) : 0
+                      length: cardData.im_speed ? 
+                      parseInt(cardData.im_speed, 10) : 0
                     }).map((_, index) => (
                       <Image
                         key={index}
@@ -799,12 +799,12 @@ const CardRender = ({
                     
                     <Image
                       src={
-                        cardData.cardArt || 
+                        cardData.im_art || 
                         "/images/card-parts/card-art/default-art.jpg"
                       }
                       fill={true}
                       sizes="100%"
-                      alt={`${cardData.cardName} card art`}
+                      alt={`${cardData.im_name} card art`}
                       style={{
                         objectFit: "cover"
                       }}
@@ -829,16 +829,16 @@ const CardRender = ({
                   >
                     {/* Card text */}
                     {
-                      cardData.cardText && 
-                      cardData.cardName ? 
+                      cardData.im_text && 
+                      cardData.im_name ? 
                         renderTextWithKeywords(
-                          cardData.cardText, 
-                          cardData.cardName
+                          cardData.im_text, 
+                          cardData.im_name
                         )
                       : null
                     } 
                     {/* Lore text */}
-                    {cardData.cardLoreText !== "" && (
+                    {cardData.im_lore_text !== "" && (
                       <>
                         <Divider
                           className="
@@ -852,7 +852,7 @@ const CardRender = ({
                           variant="body2"
                           className="italic font-light"
                         >
-                          {`"${cardData.cardLoreText}"`}
+                          {`"${cardData.im_lore_text}"`}
                         </Typography>
                       </>
                     )}
@@ -877,11 +877,11 @@ const CardRender = ({
               >
                 {/* Card Attack */}
                 {
-                cardData.cardType && (
-                  cardData.cardType
+                cardData.im_type && (
+                  cardData.im_type
                     .toLowerCase()
                     .includes("outpost") ||
-                  cardData.cardType
+                  cardData.im_type
                     .toLowerCase()
                     .includes("entity")
                 ) && (
@@ -914,7 +914,7 @@ const CardRender = ({
                           stats-text
                         "
                       >
-                        {cardData.cardAttack}
+                        {cardData.im_unit_attack}
                       </Typography>
                       <Image
                         src={Attack}
@@ -929,11 +929,11 @@ const CardRender = ({
                 <Box
                   id="initial-mode-stats-grade-info"
                   className={clsx("flex flex-col justify-center items-center",
-                    cardData.cardType && 
-                    !cardData.cardType
+                    cardData.im_type && 
+                    !cardData.im_type
                       .toLowerCase()
                       .includes("outpost") && 
-                    !cardData.cardType
+                    !cardData.im_type
                       .toLowerCase()
                       .includes("entity") ? 
                     "w-full" : "w-3/5"
@@ -953,14 +953,14 @@ const CardRender = ({
                     {/* Card Grade */}
                     <Image
                       src={
-                        cardData.cardGrade === "rare" ? GradeRare :
-                        cardData.cardGrade === "epic" ? GradeEpic :
-                        cardData.cardGrade === "prime" ? GradePrime :
+                        cardData.im_grade === "rare" ? GradeRare :
+                        cardData.im_grade === "epic" ? GradeEpic :
+                        cardData.im_grade === "prime" ? GradePrime :
                         GradeCore
                       }
                       height={34}
                       width={34}
-                      alt={`${cardData.cardGrade} icon`}
+                      alt={`${cardData.im_grade} icon`}
                       className="
                         bg-black
                         rounded-full
@@ -971,11 +971,11 @@ const CardRender = ({
                 </Box>
                 {/* Card Defense */}
                 {
-                  cardData.cardType && (
-                    cardData.cardType
+                  cardData.im_type && (
+                    cardData.im_type
                       .toLowerCase()
                       .includes("outpost") ||
-                    cardData.cardType
+                    cardData.im_type
                       .toLowerCase()
                       .includes("entity")
                   ) && (
@@ -1008,7 +1008,7 @@ const CardRender = ({
                             stats-text
                           "
                         >
-                          {cardData.cardDefense}
+                          {cardData.im_unit_defense}
                         </Typography>
                         <Image
                           src={Defense}
@@ -1025,11 +1025,11 @@ const CardRender = ({
                 className={clsx("flex flex-row justify-between items-center w-full text-xs -mt-1 px-16",
                   {
                     "-mt-2": 
-                      cardData.cardType && 
-                      !cardData.cardType
+                      cardData.im_type && 
+                      !cardData.im_type
                         .includes("entity") || 
-                      cardData.cardType && 
-                      !cardData.cardType
+                      cardData.im_type && 
+                      !cardData.im_type
                         .includes("outpost"),
                   }
                 )}
@@ -1037,8 +1037,8 @@ const CardRender = ({
                 <p
                   className="fineprint-text"
                 >
-                  {cardData.cardCreator
-                    ? `Made by ${cardData.cardCreator}`
+                  {cardData.username
+                    ? `Made by ${cardData.username}`
                     : "Card Creator"}
                 </p>
               </Box>
@@ -1134,7 +1134,7 @@ const CardRender = ({
                       gap-1
                     `}
                   >
-                    {cardData?.cardSuperType === "mythic" && (
+                    {cardData?.im_super_type === "mythic" && (
                       <Image
                         src={Mythic}
                         height={14}
@@ -1143,7 +1143,7 @@ const CardRender = ({
                       />
                     )}
                     {/* Card name */}
-                    {cardData.cardAnomalyMode && cardData.cardAnomalyMode.toLowerCase().includes("uncommon") ? (
+                    {cardData.am_type && cardData.am_type.toLowerCase().includes("uncommon") ? (
                       <Typography
                         variant="subtitle1"
                         sx={{
@@ -1154,7 +1154,7 @@ const CardRender = ({
                         }}
                       >
                         {
-                          (cardData?.cardAnomalyModeName ?? '')
+                          (cardData?.am_name ?? '')
                             .split(" ")
                             .map(word => word
                               .charAt(0)
@@ -1215,7 +1215,7 @@ const CardRender = ({
                       gap-1
                     "
                   >
-                    {cardData.cardAnomalyMode && cardData.cardAnomalyMode.toLowerCase().includes("uncommon") ? (
+                    {cardData.am_type && cardData.am_type.toLowerCase().includes("uncommon") ? (
                       <Typography
                         variant="subtitle2" 
                         component="span" 
@@ -1298,7 +1298,7 @@ const CardRender = ({
                       src="/images/card-parts/card-art/default-anomaly-art.webp"
                       fill={true}
                       sizes="100%"
-                      alt={`${cardData.cardAnomalyModeName} card art`}
+                      alt={`${cardData.am_name} card art`}
                       style={{
                         objectFit: "cover"
                       }}
@@ -1323,16 +1323,16 @@ const CardRender = ({
                   >
                     {/* ANOMALY: Card text */}
                     {
-                      cardData.cardAnomalyModeText && 
-                      cardData.cardAnomalyModeText !== "" && 
-                      cardData.cardAnomalyModeName ? 
+                      cardData.am_text && 
+                      cardData.am_text !== "" && 
+                      cardData.am_name ? 
                         renderTextWithKeywords(
-                          cardData.cardAnomalyModeText, 
-                          cardData.cardAnomalyModeName
+                          cardData.am_text, 
+                          cardData.am_name
                         )
                       : null
                     }
-                    {cardData.cardAnomalyModeText === "" && (
+                    {cardData.am_text === "" && (
                       <Typography
                         variant="body1"
                         component="div"
@@ -1344,8 +1344,8 @@ const CardRender = ({
                       </Typography>
                     )} 
                     {/* ANOMALY: Lore text */}
-                    {cardData.cardAnomalyModeLoreText !== "" &&
-                    cardData.cardAnomalyMode === "uncommon" && (
+                    {cardData.am_lore_text !== "" &&
+                    cardData.am_type === "uncommon" && (
                       <>
                         <Divider
                           className="
@@ -1359,7 +1359,7 @@ const CardRender = ({
                           className="italic font-light"
                           variant="body2"
                         >
-                          {`"${cardData.cardLoreText}"`}
+                          {`"${cardData.am_lore_text}"`}
                         </Typography>
                       </>
                     )}
@@ -1403,14 +1403,14 @@ const CardRender = ({
                     {/* Card Grade */}
                     <Image
                       src={
-                        cardData.cardGrade === "rare" ? GradeRare :
-                        cardData.cardGrade === "epic" ? GradeEpic :
-                        cardData.cardGrade === "prime" ? GradePrime :
+                        cardData.am_grade === "rare" ? GradeRare :
+                        cardData.am_grade === "epic" ? GradeEpic :
+                        cardData.am_grade === "prime" ? GradePrime :
                         GradeCore
                       }
                       height={34}
                       width={34}
-                      alt={`${cardData.cardGrade} icon`}
+                      alt={`${cardData.am_grade} icon`}
                       className="
                         bg-black
                         rounded-full
@@ -1421,15 +1421,15 @@ const CardRender = ({
                 </Box>
               </Box>
               {/* Card creator */}
-              {cardData.cardAnomalyMode === "uncommon" && (
+              {cardData.am_type === "uncommon" && (
                 <Box
                   className="flex flex-row justify-between items-center w-full text-xs px-16"
                 >
                   <p
                     className="fineprint-text"
                   >
-                    {cardData.cardCreator
-                      ? `Made by ${cardData.cardCreator}`
+                    {cardData.username
+                      ? `Made by ${cardData.username}`
                       : "Card Creator"}
                   </p>
                 </Box>

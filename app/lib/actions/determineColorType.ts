@@ -2,11 +2,11 @@ import { CardFormDataType } from "@/app/utils/types/types";
 import { monoEnergyOptions } from "@/app/utils/data/cardEnergyOptions";
 
 export default function determineEnergyType(
-    activeCardCost: CardFormDataType["cardEnergyCost"],
-    activeCardType: CardFormDataType["cardType"]
+    im_energy_cost: CardFormDataType["im_energy_cost"],
+    im_type: CardFormDataType["im_type"]
 ) {
 
-    if (activeCardType?.includes("anomaly")) {
+    if (im_type?.includes("anomaly")) {
       // If the card type is anomaly, return anomaly
       return "anomaly";
     }
@@ -14,7 +14,7 @@ export default function determineEnergyType(
     // Get color and value pairs
     const energyCostEntries = Object
     .entries(
-      activeCardCost ?? {}
+      im_energy_cost ?? {}
     );
 
     // Get non-void energy with value > 0
