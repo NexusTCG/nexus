@@ -3,7 +3,7 @@
 export async function postCardToDiscord(card: {
   cardName?: string;
   cardRender?: string;
-  cardCreator?: string;
+  username?: string;
   cardIdUrl?: string;
 }) {
   const webhookUrl = process.env.DISCORD_WEBHOOK_URL!;
@@ -14,7 +14,7 @@ export async function postCardToDiscord(card: {
     console.log(`Posting card render to Discord: ${cardRender}`)
 
     const message = {
-      content: `${card.cardName} by ${card.cardCreator}! ${card.cardIdUrl}`,
+      content: `${card.cardName} by ${card.username}! ${card.cardIdUrl}`,
       embeds: [{
         image: {
           url: cardRender

@@ -226,9 +226,9 @@ export default function Create() {
               responseData.data
             ) {
               postCardToDiscord({
-                cardName: responseData.data.cardName,
-                cardRender: responseData.data.cardRender,
-                cardCreator: responseData.data.cardCreator,
+                cardName: responseData.data.im_name,
+                cardRender: responseData.data.im_render,
+                username: responseData.data.username,
                 cardIdUrl: `https://www.play.nexus/dashboard/cards/${responseData.data.id}`
               });
             }

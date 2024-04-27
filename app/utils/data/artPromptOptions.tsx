@@ -845,7 +845,7 @@ export const ArtPromptOptionsData: ArtPromptOptionsDataType = {
         "image": "",
       },
       {
-        "id": 8, 
+        "id": 9, 
         "title": "Clear",
         "description": "",
         "prompt": "",

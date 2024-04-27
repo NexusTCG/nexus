@@ -24,7 +24,8 @@ const CardFormSchema = z
     im_name: z.string()
       .min(1, "Card name is required."),
     im_type: z.string()
-      .min(1, "Card type is required."),
+      .min(1, "Card type is required.")
+      .default("entity"),
     im_sub_type: z.array(z.string()).optional(),
     im_super_type: z.string().optional(),
     im_grade: z.string()
