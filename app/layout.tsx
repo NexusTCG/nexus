@@ -2,6 +2,7 @@ import React from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { Analytics } from "@vercel/analytics/react";
 import { Inter } from "next/font/google";
+import type { Metadata } from 'next'
 import theme from "@/app/styles/theme";
 import "@/app/styles/globals.css";
 import { PHProvider } from "@/app/providers";
@@ -19,11 +20,65 @@ const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
 
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Nexus TCG",
-  description:
-    "Nexus is a digital trading card game where players can make the cards they play.",
+  keywords: [
+    "TCG", 
+    "Trading Card Game",
+    "Trading Card Games",
+    "Card Game",
+    "Card Games",
+    "Custom Card",
+    "Custom Cards", 
+    "AI",
+    "Artificial Intelligence",
+    "Generate AI",
+    "AI card generator",
+    "AI custom card",
+    "AI custom TCG card",
+    "AI TCG",
+    "Nexus", 
+    "Nexus TCG",
+    "Nexus Trading Card Game",
+    "Nexus Card Creator",
+    "Nexus Card Generator",
+    "Nexus Discord",
+    "create trading cards online",
+    "create custom trading cards",
+    "how to create trading cards",
+    "how to make trading cards",
+    "how to create custom trading cards",
+    "how to make custom trading cards",
+    "DALL-E gaming",
+    "ChatGPT gaming",
+    "generative AI card game",
+    "alternative to Magic the Gathering",
+    "alternative to Yu-Gi-Oh",
+    "alternative to Pokemon",
+    "alternative to Hearthstone",
+    "alternative to MTG",
+    "alternative to YGO",
+    "alternative to PTCG",
+    "Magic the Gathering is expensive",
+    "Yu-Gi-Oh is expensive",
+    "Pokemon is expensive",
+    "Hearthstone is expensive",
+    "MTG is expensive",
+    "TCG community",
+    "trading card game community",
+    "how to create your own digital cards with AI",
+  ],
+  title: {
+    default: "Nexus TCG",
+    template: `%s | Nexus TCG`,
+  },
+  openGraph: {
+    description: "Nexus is a digital TCG where players can make playable custom cards with the help of AI.",
+    images: [
+      "https://play.nexus/opengraph-image.png", 
+      "https://play.nexus/twitter-image.png"
+    ],
+  }
 };
 
 type RootLayoutProps = {

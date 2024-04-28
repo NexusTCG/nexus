@@ -69,13 +69,13 @@ export default function Card({
 
   // Fetch card data
   useEffect(() => {
-    const loadCardData = async () => {
-      const cardId = parseInt(params.slug, 10);
+    async function loadCardData() {
+      const cardSlug = parseInt(params.slug, 10);
       const cards = await fetchCards({
         from: "cards",
         filter: {
           column: "id",
-          value: cardId
+          value: cardSlug
         },
       });
 
@@ -336,51 +336,57 @@ export default function Card({
               "
             >
               <Tooltip title="Share">
-                <IconButton
-                  disabled={true} // Disabled until implemented
-                  aria-label="share"
-                  size="small"
-                  onClick={handleShare}
-                  className="
-                    opacity-50
-                    hover:opacity-100
-                  "
-                >
-                  <IosShareIcon />
-                </IconButton>
+                <>
+                  <IconButton
+                    disabled={true} // Disabled until implemented
+                    aria-label="share"
+                    size="small"
+                    onClick={handleShare}
+                    className="
+                      opacity-50
+                      hover:opacity-100
+                    "
+                  >
+                    <IosShareIcon />
+                  </IconButton>
+                </>
               </Tooltip>
               {isCardOwner && 
               cardData && (
                 <>
                   <Tooltip title="Edit">
-                    <IconButton
-                      disabled={!isCardOwner}
-                      aria-label="edit"
-                      size="small"
-                      onClick={handleEdit}
-                      className="
-                        opacity-50
-                        hover:opacity-100
-                      "
-                    >
-                      <EditIcon />
-                    </IconButton>
+                    <>
+                      <IconButton
+                        disabled={!isCardOwner}
+                        aria-label="edit"
+                        size="small"
+                        onClick={handleEdit}
+                        className="
+                          opacity-50
+                          hover:opacity-100
+                        "
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </>
                   </Tooltip>
                   <Tooltip title="Delete">
-                    <IconButton
-                      //  disabled={!isCardOwner} Disabled until implemented
-                      disabled={true}
-                      aria-label="delete"
-                      size="small"
-                      onClick={handleDelete}
-                      className="
-                        opacity-50
-                        hover:opacity-100
-                        hover:text-red-500
-                      "
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                    <>
+                      <IconButton
+                        //  disabled={!isCardOwner} Disabled until implemented
+                        disabled={true}
+                        aria-label="delete"
+                        size="small"
+                        onClick={handleDelete}
+                        className="
+                          opacity-50
+                          hover:opacity-100
+                          hover:text-red-500
+                        "
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </>
                   </Tooltip>
                 </>
               )}
