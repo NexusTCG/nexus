@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import useSession from "@/app/hooks/useSession";
 // Utils
 import Image from "next/image";
 import Link from "next/link";
@@ -27,19 +28,20 @@ const soMeChannels = [
 ]
 
 const primaryNavigation = [
-  "create",
-  "cards",
-  "rules",
-  "request",
-]
+  { path: "create", requiresSession: false },
+  { path: "cards", requiresSession: false },
+  { path: "rules", requiresSession: false },
+  { path: "request", requiresSession: true },
+];
 
 const secondaryNavigation = [
-  "profile",
-  "contact",
-  "credits",
-]
+  { path: "profile", requiresSession: true },
+  { path: "contact", requiresSession: true },
+  { path: "credits", requiresSession: true },
+];
 
 export default function Sidebar() {
+  const session = useSession();
 
   return (
     <Box
@@ -123,8 +125,14 @@ export default function Sidebar() {
               gap-4
             "
           >
-            {soMeChannels.map((channel, index) => {
-              return <SoMeButton key={index} channel={channel} />
+            {soMeChannels.map(
+              (channel, index) => {
+              return (
+                <SoMeButton
+                  key={index}
+                  channel={channel}
+                />
+              )
             })}
           </Box>
         </Box>
@@ -142,15 +150,19 @@ export default function Sidebar() {
           "
         >
           {primaryNavigation.map(
-            (route, index) => {
-            return (
-              <NavigationButton
-                key={index}
-                route={route}
-                type="sidebar"
-              />
-            )
-          })}
+              (route, index) => {
+                if (route.requiresSession && !session) {
+                  return null;
+                } else {
+                  return (
+                    <NavigationButton
+                      key={index}
+                      route={route.path}
+                      type="sidebar"
+                    />
+                  )
+                }
+            })}
         </Box>
       </Box>
 
@@ -178,16 +190,23 @@ export default function Sidebar() {
             gap-2
           "
         >
-          {secondaryNavigation.map((route, index) => {
-            return (
-              <NavigationButton
-                key={index}
-                route={route}
-                type="sidebar"
-              />
-            )
-          })}
-          <SignOutButton /> 
+          {secondaryNavigation.map(
+              (route, index) => {
+                if (route.requiresSession && !session) {
+                  return null;
+                } else {
+                  return (
+                    <NavigationButton
+                      key={index}
+                      route={route.path}
+                      type="sidebar"
+                    />
+                  )
+                }
+            })}
+          {session && (
+            <SignOutButton />
+          )}
         </Box>
         <Box
           id="legal-links"

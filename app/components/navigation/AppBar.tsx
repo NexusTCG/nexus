@@ -2,6 +2,7 @@
 
 // Hooks
 import React, { useState } from "react";
+import useSession from "@/app/hooks/useSession";
 // Utils
 import Image from "next/image";
 import Link from "next/link";
@@ -16,14 +17,16 @@ import NavigationButton from "@/app/components/navigation/NavigationButton";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const primaryNavigation = [
-  "create",
-  "cards",
-  "rules",
-  "contact",
-  "credits",
+  { path: "create", requiresSession: false },
+  { path: "cards", requiresSession: false },
+  { path: "rules", requiresSession: false },
+  { path: "contact", requiresSession: true },
+  { path: "credits", requiresSession: true },
 ];
 
 export default function AppBar() {
+  const session = useSession();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   function handleMenu(
@@ -36,7 +39,7 @@ export default function AppBar() {
     setAnchorEl(null);
   };
 
-  const handleSignOut = async () => {
+  async function handleSignOut() {
     setAnchorEl(null);
     const response = await fetch(`${window.location.origin}/api/auth/logout-user`, {
       method: "POST",
@@ -121,28 +124,34 @@ export default function AppBar() {
           >
             {primaryNavigation.map(
               (route, index) => {
-              return (
-                <NavigationButton
-                  key={index}
-                  route={route}
-                  type="appbar"
-                />
-              )
+                if (route.requiresSession && !session) {
+                  return null;
+                } else {
+                  return (
+                    <NavigationButton
+                      key={index}
+                      route={route.path}
+                      type="appbar"
+                    />
+                  )
+                }
             })}
           </Box>
         </Box>
         
         {/* Secondary Navigation */}
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="menu-appbar"
-          aria-haspopup="true"
-          onClick={handleMenu}
-          color="inherit"
-        >
-          <AccountCircleIcon />
-        </IconButton>
+        {session && (
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenu}
+            color="inherit"
+          >
+            <AccountCircleIcon />
+          </IconButton>
+        )}
         <Menu
           id="menu-appbar"
           anchorEl={anchorEl}

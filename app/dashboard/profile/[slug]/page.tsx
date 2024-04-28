@@ -131,7 +131,7 @@ export default function ProfileId() {
               ascending: false
             },
             filter: {
-              column: "cardCreator",
+              column: "username",
               value: userUsername,
               method: "ilike"
             }

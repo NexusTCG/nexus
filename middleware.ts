@@ -51,6 +51,22 @@ export async function middleware(
     !session && 
     path === "/dashboard/profile"
   ) {
+    console.log("Route requires you to be logged in.")
+    return NextResponse
+      .redirect(
+        new URL(
+          "/login", 
+          request.url
+        )
+      );
+  } else if (
+    !session &&
+    (
+      path.toLowerCase().includes("credits") || 
+      path.toLowerCase().includes("contact")
+    ) 
+  ) {
+    console.log("Route requires you to be logged in.")
     return NextResponse
       .redirect(
         new URL(

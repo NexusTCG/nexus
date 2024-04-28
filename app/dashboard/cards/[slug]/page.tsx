@@ -7,6 +7,7 @@ import React, {
   useContext
 } from "react";
 import { useRouter } from "next/navigation";
+import useSession from "@/app/hooks/useSession";
 import { DashboardContext } from "@/app/context/DashboardContext";
 // Actions
 import fetchCards from "@/app/lib/actions/supabase-data/fetchCardData";
@@ -40,9 +41,8 @@ export default function Card({
     slug: string 
   } 
 }) {
-  const { 
-    userProfileData 
-} = useContext(DashboardContext);
+  const { userProfileData } = useContext(DashboardContext);
+  const session = useSession();
   const router = useRouter();
 
   const [commentsCount, setCommentsCount] = useState<number>(0);
@@ -602,20 +602,24 @@ export default function Card({
                 />
               </Box>
               {/* Add Comment */}
-              <Box
-                id="add-comment-form-container"
-                className="
-                  sticky
-                  bottom-0
-                  z-10
-                  w-full
-                  border-t
-                  border-neutral-700
-                  bg-neutral-900
-                "
-              >
-                <CardCommentForm cardId={cardData.id} />
-              </Box>
+              {session && (
+                <Box
+                  id="add-comment-form-container"
+                  className="
+                    sticky
+                    bottom-0
+                    z-10
+                    w-full
+                    border-t
+                    border-neutral-700
+                    bg-neutral-900
+                  "
+                >
+                  <CardCommentForm
+                    cardId={cardData.id}
+                  />
+                </Box>
+              )}
             </Box>
           )}
         </Box>

@@ -33,7 +33,7 @@ export default function Cards() {
     const [sortOrder, setSortOrder] = useState(false);
 
     useEffect(() => {
-      const fetchData = async () => {
+      async function fetchData() {
         const data = await fetchCards({
           from: "cards",
           select: "*",
