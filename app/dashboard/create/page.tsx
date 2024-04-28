@@ -86,7 +86,7 @@ export default function Create() {
       im_unit_defense: "",
       im_unit_range: "melee",
       im_speed: "1",
-      am_name: "",
+      am_name: "Common Anomaly",
       am_type: "common",
       am_sub_type: "",
       am_super_type: "",

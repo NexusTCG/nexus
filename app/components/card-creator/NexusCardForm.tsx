@@ -277,8 +277,7 @@ export default function NexusCardForm({
   useEffect(() => {
     const colorType = determineColorType(
       form.im_energy_cost,
-      form.im_type === "" ? 
-      undefined : form.im_type
+      form.im_type,
     );
     setCardColorType(colorType);
   }, [
@@ -319,8 +318,7 @@ export default function NexusCardForm({
   const cardBgImage = useMemo(() => {
 
     return determineBgImage(
-      form.im_type === "" ? 
-      undefined : form.im_type,
+      form.im_type,
       cardColor || ""
     );
   }, [

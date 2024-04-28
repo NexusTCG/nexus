@@ -63,12 +63,13 @@ export default function EditCard({
   // Form
   const methods = useForm<CardFormDataType>({
     defaultValues: {
+      id: 0,
       user_id: "",
       username: "",
       im_name: "",
       im_type: "entity",
-      im_sub_type: [""],
-      im_super_type: "default",
+      im_sub_type: [],
+      im_super_type: "",
       im_grade: "core",
       im_text: "",
       im_lore_text: "",
@@ -91,7 +92,7 @@ export default function EditCard({
       im_unit_defense: "",
       im_unit_range: "melee",
       im_speed: "1",
-      am_name: "",
+      am_name: "Common Anomaly",
       am_type: "common",
       am_sub_type: "",
       am_super_type: "",
@@ -144,7 +145,7 @@ export default function EditCard({
 
   // Fetch card data from Supabase
   useEffect(() => {
-    const loadCardData = async () => {
+    async function loadCardData() {
       const cardId = parseInt(
         params.slug, 10
       );
@@ -196,13 +197,74 @@ export default function EditCard({
   useEffect(() => {
     if (cardData && isCardOwner) {
       console.log("Resetting form, cardData.id:", cardData.id)
-      methods.reset({ ...cardData });
+      methods.reset({ 
+        id: cardData?.id,
+        user_id: cardData?.user_id,
+        username: cardData?.username,
+        im_name: cardData?.im_name,
+        im_type: cardData?.im_type,
+        im_sub_type: cardData?.im_sub_type,
+        im_super_type: cardData?.im_super_type,
+        im_grade: cardData?.im_grade,
+        im_text: cardData?.im_text,
+        im_lore_text: cardData?.im_lore_text,
+        im_card_prompt: cardData?.im_card_prompt,
+        im_art_prompt: cardData?.im_art_prompt,
+        im_art_prompt_options: cardData?.im_art_prompt_options,
+        im_art: cardData?.im_art,
+        im_render: cardData?.im_render,
+        im_energy_value: cardData?.im_energy_value,
+        im_energy_cost: cardData?.im_energy_cost,
+        im_energy_alignment: cardData?.im_energy_alignment,
+        im_unit_attack: cardData?.im_unit_attack,
+        im_unit_defense: cardData?.im_unit_defense,
+        im_unit_range: cardData?.im_unit_range,
+        im_speed: cardData?.im_speed,
+        am_name: cardData?.am_name,
+        am_type: cardData?.am_type,
+        am_sub_type: cardData?.am_sub_type,
+        am_super_type: cardData?.am_super_type,
+        am_grade: cardData?.am_grade,
+        am_text: cardData?.am_text,
+        am_lore_text: cardData?.am_lore_text,
+        am_card_prompt: cardData?.am_card_prompt,
+        am_art_prompt: cardData?.am_art_prompt,
+        am_art_prompt_options: cardData?.am_art_prompt_options,
+        am_art: cardData?.am_art,
+        am_render: cardData?.am_render,
+      });
     }
   }, [
-    methods.reset, 
+    methods, 
     cardData, 
     isCardOwner
   ]);
+
+  // Set banner message
+  useEffect(() => {
+    if (!bannerMessage && bannerMessages) {
+      setBannerMessage({
+        type: bannerMessages.copyrightWarning.type,
+        message: bannerMessages.copyrightWarning.message,
+      });
+    };
+  }, [
+    bannerMessages, 
+    setBannerMessage, 
+    bannerMessage
+  ]);
+
+  // Debugging
+  useEffect(() => {
+    if (cardData) {
+      console.log("Card data:", cardData)
+      console.log("Form data:", form)
+      console.log("isValid:", isValid)
+      console.log("isDirty:", isDirty)
+      console.log("isSubmitting:", isSubmitting)
+      console.log("isSubmitted:", isSubmitted)
+    }
+  }, [cardData, form])
 
   // Form submit handler
   async function onSubmit(
@@ -336,20 +398,6 @@ export default function EditCard({
   }, [
     cardData, 
     isCardOwner
-  ]);
-
-  // Set banner message
-  useEffect(() => {
-    if (!bannerMessage && bannerMessages) {
-      setBannerMessage({
-        type: bannerMessages.copyrightWarning.type,
-        message: bannerMessages.copyrightWarning.message,
-      });
-    };
-  }, [
-    bannerMessages, 
-    setBannerMessage, 
-    bannerMessage
   ]);
 
   return isCardOwner && cardData ? (
@@ -506,11 +554,10 @@ export default function EditCard({
                                 size="small"
                                 disabled={
                                   !isValid ||
-                                  // !isDirty ||
+                                  !isDirty ||
                                   isSubmitting ||
                                   isSubmitted ||
-                                  form.im_type === null ||
-                                  form.im_art === "/images/card-parts/card-art/default-art.jpg"
+                                  form.im_art.toLowerCase().includes("default-art")
                                 }
                                 color={isValid ? "success" : "secondary"}
                                 startIcon={<SaveIcon />}
@@ -553,8 +600,7 @@ export default function EditCard({
                             !isDirty ||
                             isSubmitting ||
                             isSubmitted ||
-                            form.im_type === null ||
-                            form.im_art === "/images/card-parts/card-art/default-art.jpg"
+                            form.im_art.toLowerCase().includes("default-art")
                           }
                           color={isValid ? "success" : "secondary"}
                           startIcon={<SaveIcon />}
