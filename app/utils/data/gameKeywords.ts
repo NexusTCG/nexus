@@ -171,8 +171,8 @@ export const gameKeywords = [
   },
   {
     "id": 30, 
-    "keyword": "Cache N", 
-    "definition": "Cache [N] (Put the top N cards of a deck into its owners cache).",
+    "keyword": "Erase N", 
+    "definition": "Erase [N] (Put the top N cards of a deck into its owners cache).",
     "type": "active",
   },
   {

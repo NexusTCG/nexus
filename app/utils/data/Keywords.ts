@@ -141,7 +141,7 @@ export const Keywords: KeywordsType = {
     reminder: "Any damage this deals to units is terminal",
     type: "reactive",
   },
-  cache: {
+  erase: {
     name: "Erase N",
     reminder: "Cache N cards of a deck",
     type: "activated",

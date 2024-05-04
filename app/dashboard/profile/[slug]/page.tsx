@@ -331,23 +331,18 @@ export default function ProfileId() {
         container
         spacing={2}
         className="
-          bg-neutral-800
-          border
-          border-neutral-700
           pr-4
           ml-2
           mt-4
-          rounded-lg
-          shadow-xl
-          shadow-red
         "
       >
         {cards?.map((card) => (
         <Grid
           item
           xs={6}
-          md={4}
-          lg={3}
+          sm={4}
+          md={3}
+          xl={2}
           key={card.id}
         >
           {<Tooltip

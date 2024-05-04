@@ -106,7 +106,7 @@ export type KeywordsType = {
   overpower: KeywordEntry;
   surge: KeywordEntry;
   virus: KeywordEntry;
-  cache: KeywordEntry;
+  erase: KeywordEntry;
   hack: KeywordEntry;
   hologram: KeywordEntry;
   overclock: KeywordEntry;
