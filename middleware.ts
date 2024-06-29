@@ -16,8 +16,8 @@ export async function middleware(
   const path = new URL(request.url).pathname;
   
   const publicUrls = [
-    "/reset-password",
     "/login",
+    "/reset-password",
     "/dashboard/create",
     "/dashboard/cards",
     "/dashboard/cards/[slug]",
@@ -37,21 +37,18 @@ export async function middleware(
   }
 
   const {
-    data: { user: session},
-    error,
+    data: { 
+      user: session
+    }
   } = await supabase
     .auth
     .getUser();
-
-  if (error) {
-    console.log(error);
-  }
 
   if (
     !session && 
     path === "/dashboard/profile"
   ) {
-    console.log("Route requires you to be logged in.")
+    // Redirect to login if user is not logged in
     return NextResponse
       .redirect(
         new URL(
@@ -66,7 +63,7 @@ export async function middleware(
       path.toLowerCase().includes("contact")
     ) 
   ) {
-    console.log("Route requires you to be logged in.")
+    // Redirect to login if user is not logged in
     return NextResponse
       .redirect(
         new URL(
@@ -103,7 +100,7 @@ export async function middleware(
     );
     destination.search = url.search; 
     return NextResponse.redirect(destination);
-}
+  }
 
   return response;
 }

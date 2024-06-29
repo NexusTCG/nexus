@@ -4,7 +4,9 @@ import { createClient } from "@/app/lib/supabase/server";
 import type { NextRequest } from "next/server";
 import { cookies } from "next/headers";
 
-export async function GET(req: NextRequest) {
+export async function GET(
+  req: NextRequest
+) {
   const url = new URL(req.url);
   const code = url.searchParams.get("code");
 
@@ -56,7 +58,7 @@ export async function GET(req: NextRequest) {
       );
     }
   }
-  console.log("No code found")
+  
   // If no code, redirect to login
   return Response.redirect(
     `${url.origin}/login`

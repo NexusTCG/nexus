@@ -66,17 +66,6 @@ export default function NexusCardForm({
   cardMode,
 }: CardRenderProps) {
 
-  // Energy cost popover states
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [energyCostPopoverOpen, setEnergyCostPopOver] = useState(false);
-  const [energyCostChangeCounter, setEnergyCostChangeCounter] = useState<number>(0); // Track change to force re-render
-  // Card color states
-  const [cardCostType, setCardColorType] = useState<string | null>(null);
-  const [cardColor, setCardColor] = useState<string>("default");
-  const [cardColorClass, setCardColorClass] = useState<string>("default");
-  // Feedback states
-  const [openGradeSnackbar, setOpenGradeSnackBar] = React.useState(false);
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {
     setValue,
@@ -90,6 +79,17 @@ export default function NexusCardForm({
   } = useFormContext<CardFormDataType>();
   const form = watch();
   const activeCardText = watch("im_text") || "";
+
+  // Energy cost popover states
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [energyCostPopoverOpen, setEnergyCostPopOver] = useState(false);
+  const [energyCostChangeCounter, setEnergyCostChangeCounter] = useState<number>(0); // Track change to force re-render
+  // Card color states
+  const [cardCostType, setCardColorType] = useState<string | null>(null);
+  const [cardColor, setCardColor] = useState<string>("default");
+  const [cardColorClass, setCardColorClass] = useState<string>("default");
+  // Feedback states
+  const [openGradeSnackbar, setOpenGradeSnackBar] = React.useState(false);
 
   // Debounce function for cardText
   const debouncedSetImText = useCallback(

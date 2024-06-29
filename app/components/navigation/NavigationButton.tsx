@@ -24,6 +24,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import SpeakerNotesIcon from '@mui/icons-material/SpeakerNotes';
 import LoginIcon from '@mui/icons-material/Login';
 import PaidIcon from '@mui/icons-material/Paid';
+import LocalPlayIcon from '@mui/icons-material/LocalPlay';
 
 type NavigationButtonProps = {
   route: string;
@@ -59,12 +60,15 @@ export default function NavigationButton({
         case "rules":
           setExternalLink("https://github.com/NexusTCG/wiki/wiki/Rules");
           break;
+        case "playtest":
+          setExternalLink("https://cal.com/nexus-tcg/playtest-90?month=2024-07&date=2024-07-01");
+          break;
         case "game":
       }
     }
   }, [routeLowerCase, externalLink]);
 
-  // Set energy based on current pathname
+  // Set color based on current pathname
   useEffect(() => {
     if (currentPathname.includes(routeLowerCase)) {
       setCurrentColor("primary");
@@ -89,6 +93,10 @@ export default function NavigationButton({
         break;
       case "rules":
         setIcon(<RuleIcon />);
+        setDisabled(false);
+        break;
+      case "playtest":
+        setIcon(<LocalPlayIcon />);
         setDisabled(false);
         break;
       // case "game":

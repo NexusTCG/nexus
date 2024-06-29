@@ -32,6 +32,7 @@ const primaryNavigation = [
   { path: "cards", requiresSession: false },
   { path: "rules", requiresSession: false },
   { path: "request", requiresSession: true },
+  { path: "playtest", requiresSession: true },
 ];
 
 const secondaryNavigation = [
