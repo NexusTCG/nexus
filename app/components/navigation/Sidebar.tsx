@@ -24,7 +24,8 @@ const soMeChannels = [
   "github",
   "discord",
   "x",
-  "linkedin"
+  "linkedin",
+  "twitch",
 ]
 
 const primaryNavigation = [

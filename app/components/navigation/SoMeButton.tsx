@@ -15,6 +15,7 @@ import XIcon from '@mui/icons-material/X';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import RedditIcon from '@mui/icons-material/Reddit';
 import { FaDiscord } from "react-icons/fa";
+import { FaTwitch } from "react-icons/fa";
 
 type SoMeButtonProps = {
   channel: string;
@@ -42,7 +43,11 @@ export default function SoMeButton({ channel }: SoMeButtonProps) {
         setSoMeLink("https://discord.gg/BZWVK4F6My");
         setSoMeIcon(<FaDiscord />);
         break;
-        case "x":
+      case "twitch":
+        setSoMeLink("https://www.twitch.tv/nexus_tcg/about");
+        setSoMeIcon(<FaTwitch />);
+        break;
+      case "x":
         setSoMeLink("https://twitter.com/PlayNexusTcg");
         setSoMeIcon(<XIcon />);
     }
