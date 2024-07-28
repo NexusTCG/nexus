@@ -56,6 +56,8 @@ import SaveIcon from "@mui/icons-material/Save";
 export default function Create() {
   const { userProfileData } = useContext(DashboardContext);
 
+  console.log("userProfileData", userProfileData);
+
   // Shorten form value names
   const methods = useForm<CardFormDataType>({
     defaultValues: {
