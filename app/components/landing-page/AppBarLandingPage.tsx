@@ -63,7 +63,7 @@ export default function AppBarLandingPage() {
             gap-6
           "
         >
-          <Link href="https://discord.gg/8t6XjdUuqH">
+          <Link href="https://discord.gg/wVtZJuxfQN">
             <FaDiscord
               style={{
                 fontSize: "24px"
@@ -74,9 +74,7 @@ export default function AppBarLandingPage() {
               "
             />
           </Link>
-          <Link
-            href="https://github.com/NexusTCG"
-          >
+          <Link href="https://github.com/NexusTCG">
             <GitHub
               style={{
                 fontSize: "24px"
