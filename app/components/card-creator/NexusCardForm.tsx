@@ -403,7 +403,6 @@ export default function NexusCardForm({
             gap-1
           `}
         >
-          {/* Card name and cost */}
           <Box
             id="card-header-mythic-name-cost"
             sx={{
